@@ -22,8 +22,8 @@
 
 package com.liferay.jbpm.handler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import org.jbpm.graph.def.ActionHandler;
 import org.jbpm.graph.exe.ExecutionContext;
@@ -45,6 +45,6 @@ public class UpdateBooksActionHandler implements ActionHandler {
 	}
 
 	private static final Log _log =
-		LogFactory.getLog(UpdateBooksActionHandler.class);
+		LogFactoryUtil.getLog(UpdateBooksActionHandler.class);
 
 }
