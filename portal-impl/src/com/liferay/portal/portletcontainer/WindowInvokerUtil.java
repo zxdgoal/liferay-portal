@@ -62,6 +62,10 @@ public class WindowInvokerUtil {
 		PortletID portletID = new PortletID(
 			portletApp.getServletContextName(), portlet.getPortletName());
 
+		if (portlet.isRemote()){
+			portletID = null;
+		}
+
 		EntityID portletEntityId = new EntityID(portletID);
 
 		portletEntityId.setPortletWindowName(portlet.getPortletId());
