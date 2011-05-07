@@ -19,9 +19,13 @@ import com.liferay.portal.kernel.messaging.proxy.ProxyMode;
 
 /**
  * @author Bruno Farache
+ * @author Raymond Augé
  */
 @MessagingProxy(mode = ProxyMode.SYNC)
 public interface IndexSearcher {
+
+	public Hits search(SearchContext searchContext, Query query)
+		throws SearchException;
 
 	public Hits search(
 			long companyId, Query query, Sort[] sort, int start, int end)
