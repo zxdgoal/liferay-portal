@@ -57,6 +57,7 @@ import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLAppHelperThreadLocal;
+import com.liferay.portlet.documentlibrary.util.comparator.DLFileEntryOrderByComparator;
 import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.io.File;
@@ -188,6 +189,20 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 		finally {
 			DLAppHelperThreadLocal.setEnabled(dlAppHelperEnabled);
 		}
+	}
+
+	@Override
+	public Folder addPortletFolder(
+			long groupId, long userId, String portletId, long parentFolderId,
+			String folderName, ServiceContext serviceContext)
+		throws PortalException {
+
+		Repository repository = addPortletRepository(
+			groupId, portletId, serviceContext);
+
+		return addPortletFolder(
+			userId, repository.getRepositoryId(), parentFolderId, folderName,
+			serviceContext);
 	}
 
 	@Override
@@ -377,20 +392,22 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 	@Override
 	public List<FileEntry> getPortletFileEntries(
 		long groupId, long folderId, int status, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<FileEntry> obc) {
 
 		return toFileEntries(
 			DLFileEntryLocalServiceUtil.getFileEntries(
-				groupId, folderId, status, start, end, obc));
+				groupId, folderId, status, start, end,
+				DLFileEntryOrderByComparator.getOrderByComparator(obc)));
 	}
 
 	@Override
 	public List<FileEntry> getPortletFileEntries(
-		long groupId, long folderId, OrderByComparator obc) {
+		long groupId, long folderId, OrderByComparator<FileEntry> obc) {
 
 		return toFileEntries(
 			DLFileEntryLocalServiceUtil.getFileEntries(
-				groupId, folderId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, obc));
+				groupId, folderId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				DLFileEntryOrderByComparator.getOrderByComparator(obc)));
 	}
 
 	@Override

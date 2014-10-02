@@ -22,10 +22,10 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.search.BaseSearchTestCase;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
@@ -122,6 +122,11 @@ public class BookmarksEntrySearchTest extends BaseSearchTestCase {
 	}
 
 	@Override
+	protected void deleteBaseModel(long primaryKey) throws Exception {
+		BookmarksEntryServiceUtil.deleteEntry(primaryKey);
+	}
+
+	@Override
 	protected Class<?> getBaseModelClass() {
 		return BookmarksEntry.class;
 	}
@@ -152,7 +157,12 @@ public class BookmarksEntrySearchTest extends BaseSearchTestCase {
 
 	@Override
 	protected String getSearchKeywords() {
-		return "Test";
+		return "Entry";
+	}
+
+	@Override
+	protected void moveBaseModelToTrash(long primaryKey) throws Exception {
+		BookmarksEntryServiceUtil.moveEntryToTrash(primaryKey);
 	}
 
 	@Override
@@ -171,6 +181,19 @@ public class BookmarksEntrySearchTest extends BaseSearchTestCase {
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 		return hits.getLength();
+	}
+
+	@Override
+	protected BaseModel<?> updateBaseModel(
+			BaseModel<?> baseModel, String keywords,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		BookmarksEntry entry = (BookmarksEntry)baseModel;
+
+		entry.setName(keywords);
+
+		return BookmarksTestUtil.updateEntry(entry, keywords);
 	}
 
 }

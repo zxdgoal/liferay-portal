@@ -38,10 +38,6 @@
 		}
 	}
 
-	.lfr-nav-sortable > a > span {
-		padding-left: 28px;
-	}
-
 	.drag-handle {
 		background-color: #555;
 
@@ -58,16 +54,6 @@
 		text-align: center;
 		top: 2px;
 		width: 1em;
-	}
-
-	@include respond-to(desktop) {
-		.lfr-nav-sortable > a > span {
-			padding-left: 0;
-		}
-
-		.drag-handle {
-			display: none;
-		}
 	}
 
 	.lfr-nav-updateable {
@@ -93,6 +79,9 @@
 				}
 
 				.add-page-editor-input {
+					left: 5px;
+					position: relative;
+					top: 2px;
 					width: 70%;
 					z-index: 1;
 				}
@@ -120,6 +109,22 @@
 	}
 }
 
+.touch .modify-pages {
+	.lfr-nav-sortable > a > span {
+		padding-left: 28px;
+	}
+
+	@include respond-to(desktop) {
+		.lfr-nav-sortable > a > span {
+			padding-left: 0;
+		}
+
+		.drag-handle {
+			display: none;
+		}
+	}
+}
+
 .nav {
 	li .toolbar {
 		margin-top: 5px;
@@ -128,41 +133,53 @@
 
 /* ---------- General navigation ---------- */
 
-.nav.list-group {
-	li > a {
-		&:focus, &:hover {
-			background-color: #E5F5FC;
-			color: #009AE5;
+.navigation-pane {
+	.body-row {
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+		width: 100%;
+
+		ul li a .icon {
+			float: left;
+			margin-right: 5px;
 		}
 	}
 
-	> .active {
-		border-width: 1px 0 0 0;
+	.lfr-component {
+		margin-left: 0;
+	}
 
-		> a {
-			&, &:focus, &:hover {
-				background-color: #60BFEF;
-				border: 1px solid #60BFEF;
-				color: #FFF;
+	.navigation-entry {
+		position: relative;
+
+		&.folder.error {
+			display: block;
+			padding: 6px 8px;
+		}
+
+		.browse-folder, .nav-item-label {
+			@include ellipsis;
+		}
+
+		.overlay.entry-action {
+			bottom: 0;
+			display: block;
+			overflow: hidden;
+			position: absolute;
+			right: 0;
+			top: 0;
+
+			.btn {
+				border-width: 0;
+				margin: 0;
+				padding: 11px 14px;
+
+				@include respond-to(desktop) {
+					padding: 11px;
+				}
 			}
 		}
-	}
-
-	.list-group-item {
-		padding: 0;
-
-		&.nav-header {
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-	}
-}
-
-.navigation-pane .app-view-navigation-entry .overlay.entry-action .btn {
-	padding: 11px 14px;
-
-	@include respond-to(desktop) {
-		padding: 14px 10px;
 	}
 }
 

@@ -323,6 +323,44 @@ public class ResourcePermissionLocalServiceImpl
 		}
 	}
 
+	@Override
+	public Map<Long, Set<String>> getAvailableResourcePermissionActionIds(
+		long companyId, String name, int scope, String primKey,
+		Collection<String> actionIds) {
+
+		if (actionIds.isEmpty()) {
+			return Collections.emptyMap();
+		}
+
+		List<ResourcePermission> resourcePermissions = getResourcePermissions(
+			companyId, name, scope, primKey);
+
+		Map<Long, Set<String>> roleIdsToActionIds =
+			new HashMap<Long, Set<String>>(resourcePermissions.size());
+
+		for (ResourcePermission resourcePermission : resourcePermissions) {
+			if (resourcePermission.getActionIds() == 0) {
+				continue;
+			}
+
+			Set<String> availableActionIds = new HashSet<String>(
+				actionIds.size());
+
+			for (String actionId : actionIds) {
+				if (resourcePermission.hasActionId(actionId)) {
+					availableActionIds.add(actionId);
+				}
+			}
+
+			if (availableActionIds.size() > 0) {
+				roleIdsToActionIds.put(
+					resourcePermission.getRoleId(), availableActionIds);
+			}
+		}
+
+		return roleIdsToActionIds;
+	}
+
 	/**
 	 * Returns the intersection of action IDs the role has permission at the
 	 * scope to perform on resources of the type.
@@ -368,48 +406,19 @@ public class ResourcePermissionLocalServiceImpl
 		return availableActionIds;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             #getAvailableResourcePermissionActionIds(
+	 *             long, String, int, String, Collection)}
+	 */
+	@Deprecated
 	@Override
 	public Map<Long, Set<String>> getAvailableResourcePermissionActionIds(
-			long companyId, String name, int scope, String primKey,
-			long[] roleIds, Collection<String> actionIds)
-		throws PortalException {
+		long companyId, String name, int scope, String primKey, long[] roleIds,
+		Collection<String> actionIds) {
 
-		List<ResourcePermission> resourcePermissions =
-			resourcePermissionPersistence.findByC_N_S_P_R(
-				companyId, name, scope, primKey, roleIds);
-
-		if (resourcePermissions.isEmpty()) {
-			return Collections.emptyMap();
-		}
-
-		Map<Long, Set<String>> roleIdsToActionIds =
-			new HashMap<Long, Set<String>>();
-
-		for (ResourcePermission resourcePermission : resourcePermissions) {
-			long roleId = resourcePermission.getRoleId();
-
-			Set<String> availableActionIds = roleIdsToActionIds.get(roleId);
-
-			if (availableActionIds != null) {
-				continue;
-			}
-
-			availableActionIds = new HashSet<String>();
-
-			roleIdsToActionIds.put(roleId, availableActionIds);
-
-			for (String actionId : actionIds) {
-				ResourceAction resourceAction =
-					resourceActionLocalService.getResourceAction(
-						name, actionId);
-
-				if (hasActionId(resourcePermission, resourceAction)) {
-					availableActionIds.add(actionId);
-				}
-			}
-		}
-
-		return roleIdsToActionIds;
+		return getAvailableResourcePermissionActionIds(
+			companyId, name, scope, primKey, new ArrayList<String>(actionIds));
 	}
 
 	/**
@@ -599,13 +608,47 @@ public class ResourcePermissionLocalServiceImpl
 			List<Resource> resources, long[] roleIds, String actionId)
 		throws PortalException {
 
+		if (roleIds.length == 0) {
+			return false;
+		}
+
+		int size = resources.size();
+
+		if (size < 2) {
+			throw new IllegalArgumentException(
+				"The list of resources must contain at least two values");
+		}
+
+		Resource firstResource = resources.get(0);
+
+		if (firstResource.getScope() != ResourceConstants.SCOPE_INDIVIDUAL) {
+			throw new IllegalArgumentException(
+				"The first resource must be an individual scope");
+		}
+
+		Resource lastResource = resources.get(size - 1);
+
+		if (lastResource.getScope() != ResourceConstants.SCOPE_COMPANY) {
+			throw new IllegalArgumentException(
+				"The last resource must be a company scope");
+		}
+
+		// See LPS-47464
+
+		if (resourcePermissionPersistence.countByC_N_S_P(
+				firstResource.getCompanyId(), firstResource.getName(),
+				firstResource.getScope(), firstResource.getPrimKey()) < 1) {
+
+			return false;
+		}
+
 		// Iterate the list of resources in reverse order to test permissions
 		// from company scope to individual scope because it is more likely that
 		// a permission is assigned at a higher scope. Optimizing this method to
 		// one SQL call may actually slow things down since most of the calls
 		// will pull from the cache after the first request.
 
-		for (int i = resources.size() - 1; i >= 0; i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			Resource resource = resources.get(i);
 
 			if (hasResourcePermission(
@@ -695,6 +738,10 @@ public class ResourcePermissionLocalServiceImpl
 			long[] roleIds, String actionId)
 		throws PortalException {
 
+		if (roleIds.length == 0) {
+			return false;
+		}
+
 		ResourceAction resourceAction =
 			resourceActionLocalService.getResourceAction(name, actionId);
 
@@ -742,14 +789,18 @@ public class ResourcePermissionLocalServiceImpl
 			long[] roleIds, String actionId)
 		throws PortalException {
 
+		boolean[] hasResourcePermissions = new boolean[roleIds.length];
+
+		if (roleIds.length == 0) {
+			return hasResourcePermissions;
+		}
+
 		ResourceAction resourceAction =
 			resourceActionLocalService.getResourceAction(name, actionId);
 
 		List<ResourcePermission> resourcePermissions =
 			resourcePermissionPersistence.findByC_N_S_P_R(
 				companyId, name, scope, primKey, roleIds);
-
-		boolean[] hasResourcePermissions = new boolean[roleIds.length];
 
 		if (resourcePermissions.isEmpty()) {
 			return hasResourcePermissions;

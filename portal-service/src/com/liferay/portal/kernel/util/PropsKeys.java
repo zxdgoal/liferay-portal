@@ -55,6 +55,8 @@ public interface PropsKeys {
 
 	public static final String ADMIN_MAIL_HOST_NAMES = "admin.mail.host.names";
 
+	public static final String ADMIN_OBFUSCATED_PROPERTIES = "admin.obfuscated.properties";
+
 	public static final String ADMIN_RESERVED_EMAIL_ADDRESSES = "admin.reserved.email.addresses";
 
 	public static final String ADMIN_RESERVED_SCREEN_NAMES = "admin.reserved.screen.names";
@@ -64,12 +66,6 @@ public interface PropsKeys {
 	public static final String AIM_LOGIN = "aim.login";
 
 	public static final String AIM_PASSWORD = "aim.password";
-
-	public static final String AMAZON_ACCESS_KEY_ID = "amazon.access.key.id";
-
-	public static final String AMAZON_ASSOCIATE_TAG = "amazon.associate.tag";
-
-	public static final String AMAZON_SECRET_ACCESS_KEY = "amazon.secret.access.key";
 
 	public static final String ANNOUNCEMENTS_EMAIL_BODY = "announcements.email.body";
 
@@ -815,7 +811,11 @@ public interface PropsKeys {
 
 	public static final String DL_REPOSITORY_IMPL = "dl.repository.impl";
 
+	public static final String DL_SHOW_HIDDEN_MOUNT_FOLDERS = "dl.show.hidden.mount.folders";
+
 	public static final String DL_SHOW_LIFERAY_SYNC_MESSAGE = "dl.show.liferay.sync.message";
+
+	public static final String DL_STORE_ADVANCED_FILE_SYSTEM_ROOT_DIR = "dl.store.advanced.file.system.root.dir";
 
 	public static final String DL_STORE_ANTIVIRUS_ENABLED = "dl.store.antivirus.enabled";
 
@@ -875,11 +875,15 @@ public interface PropsKeys {
 
 	public static final String DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_REPEATABLE = "dynamic.data.mapping.structure.private.field.repeatable";
 
+	public static final String DYNAMIC_DATA_MAPPING_TEMPLATE_FORCE_AUTOGENERATE_KEY = "dynamic.data.mapping.template.force.autogenerate.key";
+
 	public static final String DYNAMIC_DATA_MAPPING_TEMPLATE_LANGUAGE_CONTENT = "dynamic.data.mapping.template.language.content";
 
 	public static final String DYNAMIC_DATA_MAPPING_TEMPLATE_LANGUAGE_DEFAULT = "dynamic.data.mapping.template.language.default";
 
 	public static final String DYNAMIC_RESOURCE_SERVLET_ALLOWED_PATHS = "dynamic.resource.servlet.allowed.paths";
+
+	public static final String EDITOR_INLINE_EDITING_ENABLED = "editor.inline.editing.enabled";
 
 	public static final String EDITOR_WYSIWYG_DEFAULT = "editor.wysiwyg.default";
 
@@ -1033,6 +1037,8 @@ public interface PropsKeys {
 
 	public static final String IMAGE_HOOK_IMPL = "image.hook.impl";
 
+	public static final String IMAGE_IO_USE_DISK_CACHE = "image.io.use.disk.cache";
+
 	public static final String IMAGEMAGICK_ENABLED = "imagemagick.enabled";
 
 	public static final String IMAGEMAGICK_GLOBAL_SEARCH_PATH = "imagemagick.global.search.path";
@@ -1063,6 +1069,8 @@ public interface PropsKeys {
 
 	public static final String INDEX_SEARCH_HIGHLIGHT_FRAGMENT_SIZE = "index.search.highlight.fragment.size";
 
+	public static final String INDEX_SEARCH_HIGHLIGHT_REQUIRE_FIELD_MATCH = "index.search.highlight.require.field.match";
+
 	public static final String INDEX_SEARCH_HIGHLIGHT_SNIPPET_SIZE = "index.search.highlight.snippet.size";
 
 	public static final String INDEX_SEARCH_LIMIT = "index.search.limit";
@@ -1084,6 +1092,8 @@ public interface PropsKeys {
 	public static final String INDEX_SEARCH_SPELL_CHECKER_DICTIONARY = "index.search.spell.checker.dictionary";
 
 	public static final String INDEX_SEARCH_SPELL_CHECKER_SUPPORTED_LOCALES = "index.search.spell.checker.supported.locales";
+
+	public static final String INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE = "index.search.writer.max.queue.size";
 
 	public static final String INDEX_SORTABLE_TEXT_FIELDS = "index.sortable.text.fields";
 
@@ -1118,12 +1128,6 @@ public interface PropsKeys {
 	public static final String INTRABAND_WELDER_SOCKET_SO_TIMEOUT = "intraband.welder.socket.so.timeout";
 
 	public static final String INTRABAND_WELDER_SOCKET_TCP_NO_DELAY = "intraband.welder.socket.tcp.no.delay";
-
-	public static final String INVITATION_EMAIL_MAX_RECIPIENTS = "invitation.email.max.recipients";
-
-	public static final String INVITATION_EMAIL_MESSAGE_BODY = "invitation.email.message.body";
-
-	public static final String INVITATION_EMAIL_MESSAGE_SUBJECT = "invitation.email.message.subject";
 
 	public static final String INVOKER_FILTER_CHAIN_SIZE = "invoker.filter.chain.cache.size";
 
@@ -1198,6 +1202,8 @@ public interface PropsKeys {
 	public static final String JOURNAL_ARTICLE_FORM_TRANSLATE = "journal.article.form.translate";
 
 	public static final String JOURNAL_ARTICLE_FORM_UPDATE = "journal.article.form.update";
+
+	public static final String JOURNAL_ARTICLE_INDEX_ALL_VERSIONS = "journal.articles.index.all.versions";
 
 	public static final String JOURNAL_ARTICLE_STORAGE_TYPE = "journal.article.storage.type";
 
@@ -1278,8 +1284,6 @@ public interface PropsKeys {
 	public static final String JOURNAL_TEMPLATE_LANGUAGE_CONTENT = "journal.template.language.content";
 
 	public static final String JOURNAL_TRANSFORMER_LISTENER = "journal.transformer.listener";
-
-	public static final String JSON_DESERIALIZER_STRICT_MODE = "json.deserializer.strict.mode";
 
 	public static final String JSON_SERVICE_AUTH_TOKEN_ENABLED = "json.service.auth.token.enabled";
 
@@ -1377,6 +1381,8 @@ public interface PropsKeys {
 
 	public static final String LAYOUT_SET_PROTOTYPE_MERGE_LOCK_MAX_TIME = "layout.set.prototype.merge.lock.max.time";
 
+	public static final String LAYOUT_SET_PROTOTYPE_PROPAGATE_LOGO = "layout.set.prototype.propagate.logo";
+
 	public static final String LAYOUT_SHOW_HTTP_STATUS = "layout.show.http.status";
 
 	public static final String LAYOUT_SHOW_PORTLET_ACCESS_DENIED = "layout.show.portlet.access.denied";
@@ -1392,8 +1398,6 @@ public interface PropsKeys {
 	public static final String LAYOUT_STATIC_PORTLETS_START = "layout.static.portlets.start.";
 
 	public static final String LAYOUT_TEMPLATE_CACHE_ENABLED = "layout.template.cache.enabled";
-
-	public static final String LAYOUT_TYPES = "layout.types";
 
 	public static final String LAYOUT_URL = "layout.url";
 
@@ -1795,17 +1799,17 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = "module.framework.system.packages.extra";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = "module.framework.web.extender.default.servlet.packages";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_DEFAULT_SERVLET_PACKAGES = "module.framework.web.generator.default.servlet.packages";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_EXCLUDED_PATHS = "module.framework.web.extender.excluded.paths";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_EXCLUDED_PATHS = "module.framework.web.generator.excluded.paths";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_GENERATED_WABS_STORE = "module.framework.web.extender.generated.wabs.store";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_GENERATED_WABS_STORE = "module.framework.web.generator.generated.wabs.store";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_GENERATED_WABS_STORE_DIR = "module.framework.web.extender.generated.wabs.store.dir";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_GENERATED_WABS_STORE_DIR = "module.framework.web.generator.generated.wabs.store.dir";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS = "module.framework.web.extender.headers.";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_HEADERS = "module.framework.web.generator.headers.";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_JSP_COMPILER_DEPENDENCIES = "module.framework.web.extender.jsp.compiler.dependencies";
+	public static final String MODULE_FRAMEWORK_WEB_GENERATOR_JSP_COMPILER_DEPENDENCIES = "module.framework.web.generator.jsp.compiler.dependencies";
 
 	public static final String MONITORING_PORTAL_REQUEST = "monitoring.portal.request";
 
@@ -2039,8 +2043,6 @@ public interface PropsKeys {
 
 	public static final String PERMISSIONS_ROLE_RESOURCE_PERMISSION_QUERY_THRESHOLD = "permissions.role.resource.permission.query.threshold";
 
-	public static final String PERMISSIONS_THREAD_LOCAL_CACHE_MAX_SIZE = "permissions.thread.local.cache.max.size";
-
 	public static final String PERMISSIONS_VIEW_DYNAMIC_INHERITANCE = "permissions.view.dynamic.inheritance";
 
 	public static final String PHONE_NUMBER_FORMAT_IMPL = "phone.number.format.impl";
@@ -2062,8 +2064,6 @@ public interface PropsKeys {
 	public static final String POLLER_NOTIFICATIONS_TIMEOUT = "poller.notifications.timeout";
 
 	public static final String POLLER_REQUEST_TIMEOUT = "poller.request.timeout";
-
-	public static final String POLLS_PUBLISH_TO_LIVE_BY_DEFAULT = "polls.publish.to.live.by.default";
 
 	public static final String POP_SERVER_NOTIFICATIONS_ENABLED = "pop.server.notifications.enabled";
 
@@ -2541,7 +2541,11 @@ public interface PropsKeys {
 
 	public static final String THEME_CSS_FAST_LOAD = "theme.css.fast.load";
 
+	public static final String THEME_CSS_FAST_LOAD_CHECK_REQUEST_PARAMETER = "theme.css.fast.load.check.request.parameter";
+
 	public static final String THEME_IMAGES_FAST_LOAD = "theme.images.fast.load";
+
+	public static final String THEME_IMAGES_FAST_LOAD_CHECK_REQUEST_PARAMETER = "theme.images.fast.load.check.request.parameter";
 
 	public static final String THEME_JSP_OVERRIDE_ENABLED = "theme.jsp.override.enabled";
 
@@ -2587,7 +2591,11 @@ public interface PropsKeys {
 
 	public static final String TRASH_SEARCH_LIMIT = "trash.search.limit";
 
+	public static final String TUNNELING_SERVLET_ENCRYPTION_ALGORITHM = "tunneling.servlet.encryption.algorithm";
+
 	public static final String TUNNELING_SERVLET_SHARED_SECRET = "tunneling.servlet.shared.secret";
+
+	public static final String TUNNELING_SERVLET_SHARED_SECRET_HEX = "tunneling.servlet.shared.secret.hex";
 
 	public static final String UPGRADE_DATABASE_TRANSACTIONS_DISABLED = "upgrade.database.transactions.disabled";
 
@@ -2828,6 +2836,8 @@ public interface PropsKeys {
 	public static final String WIKI_RSS_ENABLED = "wiki.rss.enabled";
 
 	public static final String XML_VALIDATION_ENABLED = "xml.validation.enabled";
+
+	public static final String XSL_TEMPLATE_SECURE_PROCESSING_ENABLED = "xsl.template.secure.processing.enabled";
 
 	public static final String XUGGLER_ENABLED = "xuggler.enabled";
 

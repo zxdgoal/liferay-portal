@@ -36,9 +36,9 @@ import com.liferay.portal.service.BaseService;
  * @see com.liferay.portlet.blogs.service.impl.BlogsEntryServiceImpl
  * @generated
  */
-@ProviderType
 @AccessControlled
 @JSONWebService
+@ProviderType
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
 public interface BlogsEntryService extends BaseService {
@@ -49,26 +49,12 @@ public interface BlogsEntryService extends BaseService {
 	 */
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public java.lang.String getBeanIdentifier();
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
-
-	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addEntry(String, String,
 	String, String, int, int, int, int, int, boolean, boolean,
 	String[], boolean, String, String, InputStream,
 	ServiceContext)}
 	*/
-	@Deprecated
+	@java.lang.Deprecated
 	public com.liferay.portlet.blogs.model.BlogsEntry addEntry(
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, int displayDateMonth, int displayDateDay,
@@ -81,19 +67,24 @@ public interface BlogsEntryService extends BaseService {
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public com.liferay.portlet.blogs.model.BlogsEntry addEntry(
-		java.lang.String title, java.lang.String deckTitle,
+		java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
-		boolean smallImage, java.lang.String smallImageURL,
-		java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public void deleteEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException;
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getCompanyEntries(
@@ -173,12 +164,25 @@ public interface BlogsEntryService extends BaseService {
 	public void restoreEntryFromTrash(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier);
+
 	public void subscribe(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public void unsubscribe(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #updateEntry(long, String,
+	String, String, String, int, int, int, int, int, boolean,
+	boolean, String[], boolean, String, long, ServiceContext)}
+	*/
+	@java.lang.Deprecated
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
 		long entryId, java.lang.String title, java.lang.String description,
 		java.lang.String content, int displayDateMonth, int displayDateDay,
@@ -191,14 +195,12 @@ public interface BlogsEntryService extends BaseService {
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
-		long entryId, java.lang.String title, java.lang.String deckTitle,
+		long entryId, java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
-		boolean smallImage, java.lang.String smallImageURL,
-		java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException;
 }

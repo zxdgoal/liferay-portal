@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchUserTrackerPathException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserTrackerPath;
 import com.liferay.portal.model.impl.UserTrackerPathImpl;
 import com.liferay.portal.model.impl.UserTrackerPathModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.UserTrackerPathPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see UserTrackerPathUtil
  * @generated
  */
+@ProviderType
 public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrackerPath>
 	implements UserTrackerPathPersistence {
 	/*
@@ -154,7 +152,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public List<UserTrackerPath> findByUserTrackerId(long userTrackerId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<UserTrackerPath> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -264,7 +262,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public UserTrackerPath findByUserTrackerId_First(long userTrackerId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserTrackerPath> orderByComparator)
 		throws NoSuchUserTrackerPathException {
 		UserTrackerPath userTrackerPath = fetchByUserTrackerId_First(userTrackerId,
 				orderByComparator);
@@ -294,7 +292,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public UserTrackerPath fetchByUserTrackerId_First(long userTrackerId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTrackerPath> orderByComparator) {
 		List<UserTrackerPath> list = findByUserTrackerId(userTrackerId, 0, 1,
 				orderByComparator);
 
@@ -315,7 +313,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public UserTrackerPath findByUserTrackerId_Last(long userTrackerId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserTrackerPath> orderByComparator)
 		throws NoSuchUserTrackerPathException {
 		UserTrackerPath userTrackerPath = fetchByUserTrackerId_Last(userTrackerId,
 				orderByComparator);
@@ -345,7 +343,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public UserTrackerPath fetchByUserTrackerId_Last(long userTrackerId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTrackerPath> orderByComparator) {
 		int count = countByUserTrackerId(userTrackerId);
 
 		if (count == 0) {
@@ -374,7 +372,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	@Override
 	public UserTrackerPath[] findByUserTrackerId_PrevAndNext(
 		long userTrackerPathId, long userTrackerId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserTrackerPath> orderByComparator)
 		throws NoSuchUserTrackerPathException {
 		UserTrackerPath userTrackerPath = findByPrimaryKey(userTrackerPathId);
 
@@ -405,7 +403,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 
 	protected UserTrackerPath getByUserTrackerId_PrevAndNext(Session session,
 		UserTrackerPath userTrackerPath, long userTrackerId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserTrackerPath> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1073,7 +1071,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 */
 	@Override
 	public List<UserTrackerPath> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTrackerPath> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1209,25 +1207,6 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	 * Initializes the user tracker path persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.UserTrackerPath")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<UserTrackerPath>> listenersList = new ArrayList<ModelListener<UserTrackerPath>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<UserTrackerPath>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1246,11 +1225,11 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No UserTrackerPath exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No UserTrackerPath exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(UserTrackerPathPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(UserTrackerPathPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"path"
 			});
-	private static UserTrackerPath _nullUserTrackerPath = new UserTrackerPathImpl() {
+	private static final UserTrackerPath _nullUserTrackerPath = new UserTrackerPathImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1262,7 +1241,8 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 			}
 		};
 
-	private static CacheModel<UserTrackerPath> _nullUserTrackerPathCacheModel = new NullCacheModel();
+	private static final CacheModel<UserTrackerPath> _nullUserTrackerPathCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<UserTrackerPath>,
 		MVCCModel {

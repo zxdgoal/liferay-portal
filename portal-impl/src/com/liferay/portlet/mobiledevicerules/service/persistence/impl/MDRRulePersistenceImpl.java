@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.mobiledevicerules.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.mobiledevicerules.NoSuchRuleException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.mobiledevicerules.service.persistence.MDRRulePersiste
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see MDRRuleUtil
  * @generated
  */
+@ProviderType
 public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	implements MDRRulePersistence {
 	/*
@@ -149,7 +147,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public List<MDRRule> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -269,7 +267,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByUuid_First(uuid, orderByComparator);
 
 		if (mdrRule != null) {
@@ -297,7 +296,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		List<MDRRule> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -317,7 +316,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (mdrRule != null) {
@@ -345,7 +345,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -373,7 +373,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule[] findByUuid_PrevAndNext(long ruleId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = findByPrimaryKey(ruleId);
 
 		Session session = null;
@@ -402,7 +403,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	}
 
 	protected MDRRule getByUuid_PrevAndNext(Session session, MDRRule mdrRule,
-		String uuid, OrderByComparator orderByComparator, boolean previous) {
+		String uuid, OrderByComparator<MDRRule> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -926,7 +928,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public List<MDRRule> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<MDRRule> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1056,7 +1058,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByUuid_C_First(uuid, companyId, orderByComparator);
 
 		if (mdrRule != null) {
@@ -1088,7 +1091,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		List<MDRRule> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1110,7 +1113,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
 
 		if (mdrRule != null) {
@@ -1142,7 +1146,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1171,7 +1175,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule[] findByUuid_C_PrevAndNext(long ruleId, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<MDRRule> orderByComparator)
 		throws NoSuchRuleException {
 		MDRRule mdrRule = findByPrimaryKey(ruleId);
 
@@ -1201,8 +1205,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	}
 
 	protected MDRRule getByUuid_C_PrevAndNext(Session session, MDRRule mdrRule,
-		String uuid, long companyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		String uuid, long companyId,
+		OrderByComparator<MDRRule> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1477,7 +1481,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public List<MDRRule> findByRuleGroupId(long ruleGroupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<MDRRule> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1583,7 +1587,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByRuleGroupId_First(ruleGroupId,
 				orderByComparator);
 
@@ -1612,7 +1617,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		List<MDRRule> list = findByRuleGroupId(ruleGroupId, 0, 1,
 				orderByComparator);
 
@@ -1633,7 +1638,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule findByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator) throws NoSuchRuleException {
+		OrderByComparator<MDRRule> orderByComparator)
+		throws NoSuchRuleException {
 		MDRRule mdrRule = fetchByRuleGroupId_Last(ruleGroupId, orderByComparator);
 
 		if (mdrRule != null) {
@@ -1661,7 +1667,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule fetchByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		int count = countByRuleGroupId(ruleGroupId);
 
 		if (count == 0) {
@@ -1689,7 +1695,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public MDRRule[] findByRuleGroupId_PrevAndNext(long ruleId,
-		long ruleGroupId, OrderByComparator orderByComparator)
+		long ruleGroupId, OrderByComparator<MDRRule> orderByComparator)
 		throws NoSuchRuleException {
 		MDRRule mdrRule = findByPrimaryKey(ruleId);
 
@@ -1719,8 +1725,8 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	}
 
 	protected MDRRule getByRuleGroupId_PrevAndNext(Session session,
-		MDRRule mdrRule, long ruleGroupId, OrderByComparator orderByComparator,
-		boolean previous) {
+		MDRRule mdrRule, long ruleGroupId,
+		OrderByComparator<MDRRule> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2488,7 +2494,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 */
 	@Override
 	public List<MDRRule> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRule> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2624,25 +2630,6 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	 * Initializes the m d r rule persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.mobiledevicerules.model.MDRRule")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<MDRRule>> listenersList = new ArrayList<ModelListener<MDRRule>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<MDRRule>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2661,11 +2648,11 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MDRRule exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MDRRule exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(MDRRulePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(MDRRulePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "type"
 			});
-	private static MDRRule _nullMDRRule = new MDRRuleImpl() {
+	private static final MDRRule _nullMDRRule = new MDRRuleImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2677,7 +2664,7 @@ public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 			}
 		};
 
-	private static CacheModel<MDRRule> _nullMDRRuleCacheModel = new CacheModel<MDRRule>() {
+	private static final CacheModel<MDRRule> _nullMDRRuleCacheModel = new CacheModel<MDRRule>() {
 			@Override
 			public MDRRule toEntityModel() {
 				return _nullMDRRule;

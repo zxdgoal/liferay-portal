@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchPasswordTrackerException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PasswordTracker;
 import com.liferay.portal.model.impl.PasswordTrackerImpl;
 import com.liferay.portal.model.impl.PasswordTrackerModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.PasswordTrackerPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see PasswordTrackerUtil
  * @generated
  */
+@ProviderType
 public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<PasswordTracker>
 	implements PasswordTrackerPersistence {
 	/*
@@ -152,7 +150,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public List<PasswordTracker> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -258,7 +256,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public PasswordTracker findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<PasswordTracker> orderByComparator)
 		throws NoSuchPasswordTrackerException {
 		PasswordTracker passwordTracker = fetchByUserId_First(userId,
 				orderByComparator);
@@ -288,7 +286,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public PasswordTracker fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordTracker> orderByComparator) {
 		List<PasswordTracker> list = findByUserId(userId, 0, 1,
 				orderByComparator);
 
@@ -309,7 +307,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public PasswordTracker findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<PasswordTracker> orderByComparator)
 		throws NoSuchPasswordTrackerException {
 		PasswordTracker passwordTracker = fetchByUserId_Last(userId,
 				orderByComparator);
@@ -339,7 +337,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public PasswordTracker fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordTracker> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -367,7 +365,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public PasswordTracker[] findByUserId_PrevAndNext(long passwordTrackerId,
-		long userId, OrderByComparator orderByComparator)
+		long userId, OrderByComparator<PasswordTracker> orderByComparator)
 		throws NoSuchPasswordTrackerException {
 		PasswordTracker passwordTracker = findByPrimaryKey(passwordTrackerId);
 
@@ -398,7 +396,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 
 	protected PasswordTracker getByUserId_PrevAndNext(Session session,
 		PasswordTracker passwordTracker, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<PasswordTracker> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1064,7 +1062,7 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 */
 	@Override
 	public List<PasswordTracker> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1200,25 +1198,6 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	 * Initializes the password tracker persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.PasswordTracker")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<PasswordTracker>> listenersList = new ArrayList<ModelListener<PasswordTracker>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<PasswordTracker>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1237,11 +1216,11 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PasswordTracker exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PasswordTracker exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(PasswordTrackerPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(PasswordTrackerPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"password"
 			});
-	private static PasswordTracker _nullPasswordTracker = new PasswordTrackerImpl() {
+	private static final PasswordTracker _nullPasswordTracker = new PasswordTrackerImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1253,7 +1232,8 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 			}
 		};
 
-	private static CacheModel<PasswordTracker> _nullPasswordTrackerCacheModel = new NullCacheModel();
+	private static final CacheModel<PasswordTracker> _nullPasswordTrackerCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<PasswordTracker>,
 		MVCCModel {

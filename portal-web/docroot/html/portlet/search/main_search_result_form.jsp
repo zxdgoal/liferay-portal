@@ -68,7 +68,7 @@ if (assetRendererFactory != null) {
 		viewFullContentURL.setParameter("urlTitle", assetRenderer.getUrlTitle());
 	}
 
-	if (viewInContext) {
+	if (viewInContext || !assetEntry.isVisible()) {
 		inheritRedirect = true;
 
 		String viewFullContentURLString = viewFullContentURL.toString();
@@ -76,6 +76,8 @@ if (assetRendererFactory != null) {
 		viewFullContentURLString = HttpUtil.setParameter(viewFullContentURLString, "redirect", currentURL);
 
 		viewURL = assetRenderer.getURLViewInContext(liferayPortletRequest, liferayPortletResponse, viewFullContentURLString);
+
+		viewURL = AssetUtil.checkViewURL(assetEntry, viewInContext, viewURL, currentURL, themeDisplay);
 	}
 	else {
 		viewURL = viewFullContentURL.toString();
@@ -125,6 +127,15 @@ if (summary != null) {
 	<span class="asset-entry">
 		<span class="asset-entry-type">
 			<%= ResourceActionsUtil.getModelResource(themeDisplay.getLocale(), className) %>
+
+			<c:if test="<%= locale != summary.getLocale() %>">
+
+				<%
+				Locale summaryLocale = summary.getLocale();
+				%>
+
+				<liferay-ui:icon image='<%= "../language/" + LocaleUtil.toLanguageId(summaryLocale) %>' message='<%= LanguageUtil.format(locale, "this-result-comes-from-the-x-version-of-this-content", summaryLocale.getDisplayLanguage(locale), false) %>' />
+			</c:if>
 		</span>
 
 		<span class="asset-entry-title">
@@ -136,7 +147,7 @@ if (summary != null) {
 				<liferay-ui:icon
 					iconCssClass="icon-download-alt"
 					label="<%= false %>"
-					message='<%= LanguageUtil.format(pageContext, "download-x", HtmlUtil.escape(summary.getTitle()), false) %>'
+					message='<%= LanguageUtil.format(request, "download-x", HtmlUtil.escape(summary.getTitle()), false) %>'
 					url="<%= downloadURL %>"
 				/>
 			</c:if>
@@ -188,45 +199,65 @@ if (summary != null) {
 					<div class="asset-entry-categories">
 
 						<%
+						Map<Long, List<AssetCategory>> assetCategoriesMap = new HashMap<Long, List<AssetCategory>>();
+
+						Locale assetCategoryLocale = locale;
+
+						if (locale != summary.getLocale()) {
+							assetCategoryLocale = summary.getLocale();
+						}
+
 						for (int i = 0; i < assetCategoryIds.length; i++) {
 							long assetCategoryId = GetterUtil.getLong(assetCategoryIds[i]);
 
-							AssetCategory assetCategory = null;
+							AssetCategory assetCategory = AssetCategoryLocalServiceUtil.fetchCategory(assetCategoryId);
 
-							try {
-								assetCategory = AssetCategoryLocalServiceUtil.getCategory(assetCategoryId);
-							}
-							catch (NoSuchCategoryException nsce) {
-							}
-
-							if (assetCategory == null) {
+							if ((assetCategory == null) || !permissionChecker.hasPermission(assetCategory.getGroupId(), assetCategory.getModelClassName(), assetCategory.getPrimaryKey(), ActionKeys.VIEW)) {
 								continue;
 							}
 
-							AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getVocabulary(assetCategory.getVocabularyId());
+							List<AssetCategory> assetCategories = assetCategoriesMap.get(assetCategory.getVocabularyId());
 
-							PortletURL categoryURL = PortletURLUtil.clone(portletURL, renderResponse);
+							if (assetCategories == null) {
+								assetCategories = new ArrayList<AssetCategory>();
+							}
 
-							categoryURL.setParameter(Field.ASSET_CATEGORY_IDS, String.valueOf(assetCategory.getCategoryId()));
-						%>
+							assetCategories.add(assetCategory);
 
-							<c:if test="<%= i == 0 %>">
-								<div class="taglib-asset-categories-summary">
-									<%= HtmlUtil.escape(assetVocabulary.getTitle(locale)) %>:
-							</c:if>
-
-							<a class="asset-category" href="<%= categoryURL.toString() %>">
-								<%= _buildAssetCategoryPath(assetCategory, locale) %>
-							</a>
-
-							<c:if test="<%= (i + 1) == assetCategoryIds.length %>">
-								</div>
-							</c:if>
-
-						<%
+							assetCategoriesMap.put(assetCategory.getVocabularyId(), assetCategories);
 						}
 						%>
 
+						<div class="taglib-asset-categories-summary">
+
+							<%
+							for (Map.Entry<Long, List<AssetCategory>> entry : assetCategoriesMap.entrySet()) {
+								long assetVocabularyId = entry.getKey();
+
+								AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getVocabulary(assetVocabularyId);
+							%>
+
+								<%= HtmlUtil.escape(assetVocabulary.getTitle(assetCategoryLocale)) %>:
+
+								<%
+								List<AssetCategory> assetCategories = entry.getValue();
+
+								for (AssetCategory assetCategory : assetCategories) {
+									PortletURL assetCategoryURL = PortletURLUtil.clone(portletURL, renderResponse);
+
+									assetCategoryURL.setParameter(Field.ASSET_CATEGORY_IDS, String.valueOf(assetCategory.getCategoryId()));
+								%>
+
+									<a class="asset-category" href="<%= assetCategoryURL.toString() %>">
+										<%= _buildAssetCategoryPath(assetCategory, assetCategoryLocale) %>
+									</a>
+
+							<%
+								}
+							}
+							%>
+
+						</div>
 					</div>
 				</c:if>
 			</div>

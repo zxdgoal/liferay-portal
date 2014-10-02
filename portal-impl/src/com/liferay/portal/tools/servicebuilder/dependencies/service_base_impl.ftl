@@ -1,5 +1,7 @@
 package ${packagePath}.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -97,6 +99,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 	@Deprecated
 </#if>
 
+	@ProviderType
 	public abstract class ${entity.name}LocalServiceBaseImpl extends BaseLocalServiceImpl implements ${entity.name}LocalService, IdentifiableBean {
 
 		/*
@@ -217,8 +220,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		 * @return the matching rows
 		 */
 		@Override
-		@SuppressWarnings("rawtypes")
-		public List dynamicQuery(DynamicQuery dynamicQuery) {
+		public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 			return ${entity.varName}Persistence.findWithDynamicQuery(dynamicQuery);
 		}
 
@@ -235,8 +237,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		 * @return the range of matching rows
 		 */
 		@Override
-		@SuppressWarnings("rawtypes")
-		public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+		public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
 			return ${entity.varName}Persistence.findWithDynamicQuery(dynamicQuery, start, end);
 		}
 
@@ -254,8 +255,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		 * @return the ordered range of matching rows
 		 */
 		@Override
-		@SuppressWarnings("rawtypes")
-		public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end, OrderByComparator orderByComparator) {
+		public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start, int end, OrderByComparator<T> orderByComparator) {
 			return ${entity.varName}Persistence.findWithDynamicQuery(dynamicQuery, start, end, orderByComparator);
 		}
 
@@ -289,7 +289,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 			return ${entity.varName}Persistence.fetchByPrimaryKey(${entity.PKVarName});
 		}
 
-		<#if entity.hasUuid() && entity.hasColumn("companyId")>
+		<#if entity.hasUuid() && entity.hasColumn("companyId") && (!entity.hasColumn("groupId") || (entity.name == "Group"))>
 			/**
 			 * Returns the ${entity.humanName} with the matching UUID and company.
 			 *
@@ -500,7 +500,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		 */
 		@Override
 		public PersistedModel deletePersistedModel(PersistedModel persistedModel) throws PortalException {
-			return delete${entity.name}((${entity.name})persistedModel);
+			return ${entity.varName}LocalService.delete${entity.name}((${entity.name})persistedModel);
 		}
 
 		@Override
@@ -509,24 +509,36 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		}
 
 		<#if entity.hasUuid() && entity.hasColumn("companyId")>
-			/**
-			 * Returns the ${entity.humanName} with the matching UUID and company.
-			 *
-			 * @param uuid the ${entity.humanName}'s UUID
-			 * @param  companyId the primary key of the company
-			 * @return the matching ${entity.humanName}
-			<#list serviceBaseExceptions as exception>
-			<#if exception == "PortalException">
-			 * @throws PortalException if a matching ${entity.humanName} could not be found
+			<#if entity.hasColumn("groupId") && (entity.name != "Group")>
+				@Override
+				public List<${entity.name}> get${entity.names}ByUuidAndCompanyId(String uuid, long companyId) {
+					return ${entity.varName}Persistence.findByUuid_C(uuid, companyId);
+				}
+
+				@Override
+				public List<${entity.name}> get${entity.names}ByUuidAndCompanyId(String uuid, long companyId, int start, int end, OrderByComparator<${entity.name}> orderByComparator) {
+					return ${entity.varName}Persistence.findByUuid_C(uuid, companyId, start, end, orderByComparator);
+				}
 			<#else>
-			 * @throws ${exception}
+				/**
+				 * Returns the ${entity.humanName} with the matching UUID and company.
+				 *
+				 * @param uuid the ${entity.humanName}'s UUID
+				 * @param  companyId the primary key of the company
+				 * @return the matching ${entity.humanName}
+				<#list serviceBaseExceptions as exception>
+				<#if exception == "PortalException">
+				 * @throws PortalException if a matching ${entity.humanName} could not be found
+				<#else>
+				 * @throws ${exception}
+				</#if>
+				</#list>
+				 */
+				@Override
+				public ${entity.name} get${entity.name}ByUuidAndCompanyId(String uuid, long companyId) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
+					return ${entity.varName}Persistence.findByUuid_C_First(uuid, companyId, null);
+				}
 			</#if>
-			</#list>
-			 */
-			@Override
-			public ${entity.name} get${entity.name}ByUuidAndCompanyId(String uuid, long companyId) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
-				return ${entity.varName}Persistence.findByUuid_C_First(uuid, companyId, null);
-			}
 		</#if>
 
 		<#if entity.hasUuid() && entity.hasColumn("groupId") && (entity.name != "Group")>
@@ -791,7 +803,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 				</#list>
 				 */
 				@Override
-				public List<${entity.name}> get${tempEntity.name}${entity.names}(${tempEntity.PKClassName} ${tempEntity.PKVarName}, int start, int end, OrderByComparator orderByComparator) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
+				public List<${entity.name}> get${tempEntity.name}${entity.names}(${tempEntity.PKClassName} ${tempEntity.PKVarName}, int start, int end, OrderByComparator<${entity.name}> orderByComparator) <#if (serviceBaseExceptions?size gt 0)>throws ${stringUtil.merge(serviceBaseExceptions)} </#if>{
 					return ${tempEntity.varName}Persistence.get${entity.names}(${tempEntity.PKVarName}, start, end, orderByComparator);
 				}
 

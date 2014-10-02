@@ -40,12 +40,32 @@ import java.util.TreeSet;
  */
 public class ShoppingSettings {
 
+	public static final String[] ALL_KEYS = {
+		"alternativeShipping", "ccTypes", "currencyId", "emailFromAddress",
+		"emailFromName", "emailOrderConfirmationBody",
+		"emailOrderConfirmationSubject", "emailOrderShippingBody",
+		"emailOrderShippingSubject", "insurance", "insuranceFormula",
+		"minOrder", "paypalEmailAddress", "shipping", "shippingFormula",
+		"taxRate", "taxState", "emailOrderConfirmationEnabled",
+		"emailOrderShippingEnabled"
+	};
+
 	public static final String CC_NONE = "none";
 
 	public static final String[] CC_TYPES =
 		{"visa", "mastercard", "discover", "amex"};
 
 	public static final String[] CURRENCY_IDS;
+
+	public static final double[] INSURANCE_RANGE = {
+		0.01, 9.99, 10.00, 49.99, 50.00, 99.99, 100.00, 199.99, 200.00,
+		Double.POSITIVE_INFINITY
+	};
+
+	public static final double[] SHIPPING_RANGE = {
+		0.01, 9.99, 10.00, 49.99, 50.00, 99.99, 100.00, 199.99, 200.00,
+		Double.POSITIVE_INFINITY
+	};
 
 	static {
 		String[] ids = null;
@@ -76,16 +96,6 @@ public class ShoppingSettings {
 			CURRENCY_IDS = ids;
 		}
 	}
-
-	public static final double[] INSURANCE_RANGE = {
-		0.01, 9.99, 10.00, 49.99, 50.00, 99.99, 100.00, 199.99, 200.00,
-		Double.POSITIVE_INFINITY
-	};
-
-	public static final double[] SHIPPING_RANGE = {
-		0.01, 9.99, 10.00, 49.99, 50.00, 99.99, 100.00, 199.99, 200.00,
-		Double.POSITIVE_INFINITY
-	};
 
 	public static ShoppingSettings getInstance(long groupId)
 		throws PortalException {
@@ -323,7 +333,9 @@ public class ShoppingSettings {
 		return fallbackKeys;
 	}
 
-	private static final String[] _MULTI_VALUED_KEYS = {};
+	private static final String[] _MULTI_VALUED_KEYS = {
+		"ccTypes", "insurance", "shipping"
+	};
 
 	static {
 		SettingsFactory settingsFactory =

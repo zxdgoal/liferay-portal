@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
+import com.liferay.portal.kernel.exception.LoggedExceptionInInitializerError;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
@@ -90,8 +91,8 @@ import org.springframework.web.context.ContextLoaderListener;
  */
 public class PortalContextLoaderListener extends ContextLoaderListener {
 
-	public static String getPortalServlerContextName() {
-		return _portalServlerContextName;
+	public static String getPortalServletContextName() {
+		return _portalServletContextName;
 	}
 
 	public static String getPortalServletContextPath() {
@@ -199,16 +200,16 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		final ServletContext servletContext =
 			servletContextEvent.getServletContext();
 
-		_portalServlerContextName = servletContext.getServletContextName();
+		_portalServletContextName = servletContext.getServletContextName();
 
-		if (_portalServlerContextName == null) {
-			_portalServlerContextName = StringPool.BLANK;
+		if (_portalServletContextName == null) {
+			_portalServletContextName = StringPool.BLANK;
 		}
 
 		if (ServerDetector.isJetty() &&
-			_portalServlerContextName.equals(StringPool.SLASH)) {
+			_portalServletContextName.equals(StringPool.SLASH)) {
 
-			_portalServlerContextName = StringPool.BLANK;
+			_portalServletContextName = StringPool.BLANK;
 		}
 
 		_portalServletContextPath = servletContext.getContextPath();
@@ -216,7 +217,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		if (ServerDetector.isWebSphere() &&
 			_portalServletContextPath.isEmpty()) {
 
-			_portalServlerContextName = StringPool.BLANK;
+			_portalServletContextName = StringPool.BLANK;
 		}
 
 		ClassPathUtil.initializeClassPaths(servletContext);
@@ -264,7 +265,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			EntityCacheUtil.clearCache();
 			EntityCacheUtil.clearLocalCache();
 			PermissionCacheUtil.clearCache();
-			PermissionCacheUtil.clearLocalCache();
 			TemplateResourceLoaderUtil.clearCache();
 			WikiCacheUtil.clearCache(0);
 
@@ -278,9 +278,9 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		ClassLoader portalClassLoader = ClassLoaderUtil.getPortalClassLoader();
 
-		ClassLoaderPool.register(_portalServlerContextName, portalClassLoader);
+		ClassLoaderPool.register(_portalServletContextName, portalClassLoader);
 
-		ServletContextPool.put(_portalServlerContextName, servletContext);
+		ServletContextPool.put(_portalServletContextName, servletContext);
 
 		BeanLocatorImpl beanLocatorImpl = new BeanLocatorImpl(
 			portalClassLoader, applicationContext);
@@ -338,7 +338,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			Map<Class<?>, PropertyDescriptor[]>
 				filteredPropertyDescriptorsCache =
 					(Map<Class<?>, PropertyDescriptor[]>)
-						_filteredPropertyDescriptorsCacheField.get(
+						_FILTERED_PROPERTY_DESCRIPTORS_CACHE_FIELD.get(
 							autowireCapableBeanFactory);
 
 			filteredPropertyDescriptorsCache.clear();
@@ -355,27 +355,28 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		}
 	}
 
+	private static final Field _FILTERED_PROPERTY_DESCRIPTORS_CACHE_FIELD;
+
 	private static Log _log = LogFactoryUtil.getLog(
 		PortalContextLoaderListener.class);
 
-	private static Field _filteredPropertyDescriptorsCacheField;
-	private static String _portalServlerContextName = StringPool.BLANK;
+	private static String _portalServletContextName = StringPool.BLANK;
 	private static String _portalServletContextPath = StringPool.SLASH;
-
-	private IndexerPostProcessorRegistry _indexerPostProcessorRegistry;
-	private SchedulerEntryRegistry _schedulerEntryRegistry;
-	private ServiceWrapperRegistry _serviceWrapperRegistry;
 
 	static {
 		try {
-			_filteredPropertyDescriptorsCacheField =
+			_FILTERED_PROPERTY_DESCRIPTORS_CACHE_FIELD =
 				ReflectionUtil.getDeclaredField(
 					AbstractAutowireCapableBeanFactory.class,
 					"filteredPropertyDescriptorsCache");
 		}
 		catch (Exception e) {
-			_log.error(e, e);
+			throw new LoggedExceptionInInitializerError(e);
 		}
 	}
+
+	private IndexerPostProcessorRegistry _indexerPostProcessorRegistry;
+	private SchedulerEntryRegistry _schedulerEntryRegistry;
+	private ServiceWrapperRegistry _serviceWrapperRegistry;
 
 }

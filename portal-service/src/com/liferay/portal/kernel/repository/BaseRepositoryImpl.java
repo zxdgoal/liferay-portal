@@ -117,10 +117,10 @@ public abstract class BaseRepositoryImpl
 	}
 
 	@Override
-	public void deleteFolder(long parentFolderId, String title)
+	public void deleteFolder(long parentFolderId, String name)
 		throws PortalException {
 
-		Folder folder = getFolder(parentFolderId, title);
+		Folder folder = getFolder(parentFolderId, name);
 
 		deleteFolder(folder.getFolderId());
 	}
@@ -164,24 +164,24 @@ public abstract class BaseRepositoryImpl
 	@Override
 	public List<Folder> getFolders(
 			long parentFolderId, int status, boolean includeMountfolders,
-			int start, int end, OrderByComparator obc)
+			int start, int end, OrderByComparator<Folder> obc)
 		throws PortalException {
 
 		return getFolders(parentFolderId, includeMountfolders, start, end, obc);
 	}
 
 	public abstract List<Object> getFoldersAndFileEntries(
-		long folderId, int start, int end, OrderByComparator obc);
+		long folderId, int start, int end, OrderByComparator<?> obc);
 
 	public abstract List<Object> getFoldersAndFileEntries(
 			long folderId, String[] mimeTypes, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<?> obc)
 		throws PortalException;
 
 	@Override
 	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
 		long folderId, int status, boolean includeMountFolders, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<?> obc) {
 
 		return getFoldersAndFileEntries(folderId, start, end, obc);
 	}
@@ -190,7 +190,7 @@ public abstract class BaseRepositoryImpl
 	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
 			long folderId, int status, String[] mimeTypes,
 			boolean includeMountFolders, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<?> obc)
 		throws PortalException {
 
 		return getFoldersAndFileEntries(folderId, mimeTypes, start, end, obc);
@@ -260,7 +260,7 @@ public abstract class BaseRepositoryImpl
 	@Override
 	public List<FileEntry> getRepositoryFileEntries(
 			long userId, long rootFolderId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		return getFileEntries(rootFolderId, start, end, obc);
@@ -269,7 +269,7 @@ public abstract class BaseRepositoryImpl
 	@Override
 	public List<FileEntry> getRepositoryFileEntries(
 			long userId, long rootFolderId, String[] mimeTypes, int status,
-			int start, int end, OrderByComparator obc)
+			int start, int end, OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		return getFileEntries(rootFolderId, mimeTypes, start, end, obc);
@@ -300,8 +300,7 @@ public abstract class BaseRepositoryImpl
 	}
 
 	@Override
-	public abstract void initRepository()
-		throws PortalException;
+	public abstract void initRepository() throws PortalException;
 
 	@Override
 	public <T extends Capability> boolean isCapabilityProvided(
@@ -406,10 +405,10 @@ public abstract class BaseRepositoryImpl
 	}
 
 	@Override
-	public void unlockFolder(long parentFolderId, String title, String lockUuid)
+	public void unlockFolder(long parentFolderId, String name, String lockUuid)
 		throws PortalException {
 
-		Folder folder = getFolder(parentFolderId, title);
+		Folder folder = getFolder(parentFolderId, name);
 
 		unlockFolder(folder.getFolderId(), lockUuid);
 	}
@@ -453,7 +452,7 @@ public abstract class BaseRepositoryImpl
 
 	protected void clearManualCheckInRequired(
 			long fileEntryId, ServiceContext serviceContext)
-		throws NoSuchRepositoryEntryException, SystemException {
+		throws NoSuchRepositoryEntryException {
 
 		boolean webDAVCheckInMode = GetterUtil.getBoolean(
 			serviceContext.getAttribute(DL.WEBDAV_CHECK_IN_MODE));
@@ -479,7 +478,7 @@ public abstract class BaseRepositoryImpl
 
 	protected void setManualCheckInRequired(
 			long fileEntryId, ServiceContext serviceContext)
-		throws NoSuchRepositoryEntryException, SystemException {
+		throws NoSuchRepositoryEntryException {
 
 		boolean manualCheckInRequired = GetterUtil.getBoolean(
 			serviceContext.getAttribute(DL.MANUAL_CHECK_IN_REQUIRED));

@@ -15,7 +15,6 @@
 package com.liferay.portal.kernel.repository;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.repository.capabilities.CapabilityProvider;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -30,7 +29,7 @@ import java.util.List;
 /**
  * @author Alexander Chow
  */
-public interface LocalRepository extends CapabilityProvider {
+public interface LocalRepository extends DocumentRepository {
 
 	public FileEntry addFileEntry(
 			long userId, long folderId, String sourceFileName, String mimeType,
@@ -45,41 +44,35 @@ public interface LocalRepository extends CapabilityProvider {
 		throws PortalException;
 
 	public Folder addFolder(
-			long userId, long parentFolderId, String title, String description,
+			long userId, long parentFolderId, String name, String description,
 			ServiceContext serviceContext)
 		throws PortalException;
 
 	public void deleteAll() throws PortalException;
 
-	public void deleteFileEntry(long fileEntryId)
-		throws PortalException;
+	public void deleteFileEntry(long fileEntryId) throws PortalException;
 
-	public void deleteFolder(long folderId)
-		throws PortalException;
+	public void deleteFolder(long folderId) throws PortalException;
 
-	public FileEntry getFileEntry(long fileEntryId)
-		throws PortalException;
+	public FileEntry getFileEntry(long fileEntryId) throws PortalException;
 
 	public FileEntry getFileEntry(long folderId, String title)
 		throws PortalException;
 
-	public FileEntry getFileEntryByUuid(String uuid)
-		throws PortalException;
+	public FileEntry getFileEntryByUuid(String uuid) throws PortalException;
 
 	public FileVersion getFileVersion(long fileVersionId)
 		throws PortalException;
 
-	public Folder getFolder(long folderId)
-		throws PortalException;
+	public Folder getFolder(long folderId) throws PortalException;
 
-	public Folder getFolder(long parentFolderId, String title)
+	public Folder getFolder(long parentFolderId, String name)
 		throws PortalException;
 
 	public List<FileEntry> getRepositoryFileEntries(
-			long rootFolderId, int start, int end, OrderByComparator obc)
+			long rootFolderId, int start, int end,
+			OrderByComparator<FileEntry> obc)
 		throws PortalException;
-
-	public long getRepositoryId();
 
 	public FileEntry moveFileEntry(
 			long userId, long fileEntryId, long newFolderId,
@@ -111,8 +104,8 @@ public interface LocalRepository extends CapabilityProvider {
 		throws PortalException;
 
 	public Folder updateFolder(
-			long folderId, long parentFolderId, String title,
-			String description, ServiceContext serviceContext)
+			long folderId, long parentFolderId, String name, String description,
+			ServiceContext serviceContext)
 		throws PortalException;
 
 }

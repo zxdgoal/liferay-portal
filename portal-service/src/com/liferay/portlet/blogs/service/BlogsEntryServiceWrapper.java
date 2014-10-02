@@ -33,26 +33,6 @@ public class BlogsEntryServiceWrapper implements BlogsEntryService,
 	}
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _blogsEntryService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_blogsEntryService.setBeanIdentifier(beanIdentifier);
-	}
-
-	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addEntry(String, String,
 	String, String, int, int, int, int, int, boolean, boolean,
 	String[], boolean, String, String, InputStream,
@@ -79,27 +59,34 @@ public class BlogsEntryServiceWrapper implements BlogsEntryService,
 
 	@Override
 	public com.liferay.portlet.blogs.model.BlogsEntry addEntry(
-		java.lang.String title, java.lang.String deckTitle,
+		java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
-		boolean smallImage, java.lang.String smallImageURL,
-		java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _blogsEntryService.addEntry(title, deckTitle, description,
+		return _blogsEntryService.addEntry(title, subtitle, description,
 			content, displayDateMonth, displayDateDay, displayDateYear,
 			displayDateHour, displayDateMinute, allowPingbacks,
-			allowTrackbacks, trackbacks, smallImage, smallImageURL,
-			smallImageFileName, smallImageInputStream, serviceContext);
+			allowTrackbacks, trackbacks, imageSelector, serviceContext);
 	}
 
 	@Override
 	public void deleteEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_blogsEntryService.deleteEntry(entryId);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _blogsEntryService.getBeanIdentifier();
 	}
 
 	@Override
@@ -226,6 +213,16 @@ public class BlogsEntryServiceWrapper implements BlogsEntryService,
 		_blogsEntryService.restoreEntryFromTrash(entryId);
 	}
 
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_blogsEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	@Override
 	public void subscribe(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -238,6 +235,12 @@ public class BlogsEntryServiceWrapper implements BlogsEntryService,
 		_blogsEntryService.unsubscribe(groupId);
 	}
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #updateEntry(long, String,
+	String, String, String, int, int, int, int, int, boolean,
+	boolean, String[], boolean, String, long, ServiceContext)}
+	*/
+	@Deprecated
 	@Override
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
 		long entryId, java.lang.String title, java.lang.String description,
@@ -258,21 +261,18 @@ public class BlogsEntryServiceWrapper implements BlogsEntryService,
 
 	@Override
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
-		long entryId, java.lang.String title, java.lang.String deckTitle,
+		long entryId, java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
-		boolean smallImage, java.lang.String smallImageURL,
-		java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _blogsEntryService.updateEntry(entryId, title, deckTitle,
+		return _blogsEntryService.updateEntry(entryId, title, subtitle,
 			description, content, displayDateMonth, displayDateDay,
 			displayDateYear, displayDateHour, displayDateMinute,
-			allowPingbacks, allowTrackbacks, trackbacks, smallImage,
-			smallImageURL, smallImageFileName, smallImageInputStream,
+			allowPingbacks, allowTrackbacks, trackbacks, imageSelector,
 			serviceContext);
 	}
 

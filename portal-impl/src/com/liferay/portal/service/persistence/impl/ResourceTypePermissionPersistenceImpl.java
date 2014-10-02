@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchResourceTypePermissionException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceTypePermission;
 import com.liferay.portal.model.impl.ResourceTypePermissionImpl;
 import com.liferay.portal.model.impl.ResourceTypePermissionModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.ResourceTypePermissionPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see ResourceTypePermissionUtil
  * @generated
  */
+@ProviderType
 public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<ResourceTypePermission>
 	implements ResourceTypePermissionPersistence {
 	/*
@@ -152,7 +150,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public List<ResourceTypePermission> findByRoleId(long roleId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<ResourceTypePermission> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -258,7 +256,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission findByRoleId_First(long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = fetchByRoleId_First(roleId,
 				orderByComparator);
@@ -288,7 +286,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission fetchByRoleId_First(long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		List<ResourceTypePermission> list = findByRoleId(roleId, 0, 1,
 				orderByComparator);
 
@@ -309,7 +307,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission findByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = fetchByRoleId_Last(roleId,
 				orderByComparator);
@@ -339,7 +337,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission fetchByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		int count = countByRoleId(roleId);
 
 		if (count == 0) {
@@ -368,7 +366,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	@Override
 	public ResourceTypePermission[] findByRoleId_PrevAndNext(
 		long resourceTypePermissionId, long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = findByPrimaryKey(resourceTypePermissionId);
 
@@ -399,7 +397,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 	protected ResourceTypePermission getByRoleId_PrevAndNext(Session session,
 		ResourceTypePermission resourceTypePermission, long roleId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ResourceTypePermission> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -651,7 +650,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	@Override
 	public List<ResourceTypePermission> findByC_N_R(long companyId,
 		String name, long roleId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -787,7 +786,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission findByC_N_R_First(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator)
+		String name, long roleId,
+		OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = fetchByC_N_R_First(companyId,
 				name, roleId, orderByComparator);
@@ -825,7 +825,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission fetchByC_N_R_First(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator) {
+		String name, long roleId,
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		List<ResourceTypePermission> list = findByC_N_R(companyId, name,
 				roleId, 0, 1, orderByComparator);
 
@@ -848,7 +849,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission findByC_N_R_Last(long companyId, String name,
-		long roleId, OrderByComparator orderByComparator)
+		long roleId, OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = fetchByC_N_R_Last(companyId,
 				name, roleId, orderByComparator);
@@ -886,7 +887,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public ResourceTypePermission fetchByC_N_R_Last(long companyId,
-		String name, long roleId, OrderByComparator orderByComparator) {
+		String name, long roleId,
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		int count = countByC_N_R(companyId, name, roleId);
 
 		if (count == 0) {
@@ -917,7 +919,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	@Override
 	public ResourceTypePermission[] findByC_N_R_PrevAndNext(
 		long resourceTypePermissionId, long companyId, String name,
-		long roleId, OrderByComparator orderByComparator)
+		long roleId, OrderByComparator<ResourceTypePermission> orderByComparator)
 		throws NoSuchResourceTypePermissionException {
 		ResourceTypePermission resourceTypePermission = findByPrimaryKey(resourceTypePermissionId);
 
@@ -948,7 +950,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 	protected ResourceTypePermission getByC_N_R_PrevAndNext(Session session,
 		ResourceTypePermission resourceTypePermission, long companyId,
-		String name, long roleId, OrderByComparator orderByComparator,
+		String name, long roleId,
+		OrderByComparator<ResourceTypePermission> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -2088,7 +2091,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 */
 	@Override
 	public List<ResourceTypePermission> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceTypePermission> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2219,25 +2222,6 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	 * Initializes the resource type permission persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.ResourceTypePermission")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ResourceTypePermission>> listenersList = new ArrayList<ModelListener<ResourceTypePermission>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ResourceTypePermission>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2256,8 +2240,8 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ResourceTypePermission exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ResourceTypePermission exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ResourceTypePermissionPersistenceImpl.class);
-	private static ResourceTypePermission _nullResourceTypePermission = new ResourceTypePermissionImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ResourceTypePermissionPersistenceImpl.class);
+	private static final ResourceTypePermission _nullResourceTypePermission = new ResourceTypePermissionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2269,7 +2253,7 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 			}
 		};
 
-	private static CacheModel<ResourceTypePermission> _nullResourceTypePermissionCacheModel =
+	private static final CacheModel<ResourceTypePermission> _nullResourceTypePermissionCacheModel =
 		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<ResourceTypePermission>,

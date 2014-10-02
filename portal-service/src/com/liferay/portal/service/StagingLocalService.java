@@ -42,21 +42,6 @@ public interface StagingLocalService extends BaseLocalService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link StagingLocalServiceUtil} to access the staging local service. Add custom service methods to {@link com.liferay.portal.service.impl.StagingLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public java.lang.String getBeanIdentifier();
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
-
 	public void checkDefaultLayoutSetBranches(long userId,
 		com.liferay.portal.model.Group liveGroup, boolean branchingPublic,
 		boolean branchingPrivate, boolean remote,
@@ -86,17 +71,31 @@ public interface StagingLocalService extends BaseLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public void enableRemoteStaging(long userId,
-		com.liferay.portal.model.Group liveGroup, boolean branchingPublic,
+		com.liferay.portal.model.Group stagingGroup, boolean branchingPublic,
 		boolean branchingPrivate, java.lang.String remoteAddress,
 		int remotePort, java.lang.String remotePathContext,
 		boolean secureConnection, long remoteGroupId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier();
+
 	public void publishStagingRequest(long userId, long stagingRequestId,
 		boolean privateLayout,
 		java.util.Map<java.lang.String, java.lang.String[]> parameterMap)
 		throws com.liferay.portal.kernel.exception.PortalException;
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public void updateStagingRequest(long userId, long stagingRequestId,
 		java.lang.String fileName, byte[] bytes)

@@ -15,9 +15,10 @@
 package com.liferay.portlet.dynamicdatamapping.util;
 
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portlet.dynamicdatamapping.BaseDDMTest;
+import com.liferay.portlet.dynamicdatamapping.BaseDDMTestCase;
 
 import java.util.Map;
 
@@ -25,17 +26,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.springframework.mock.web.MockPageContext;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * @author Pablo Carvalho
  */
-public class DDMXSDImplTest extends BaseDDMTest {
+@PrepareForTest({LocalizationUtil.class})
+public class DDMXSDImplTest extends BaseDDMTestCase {
 
 	@Before
-	@Override
 	public void setUp() {
-		super.setUp();
+		setUpLocalizationUtil();
+		setUpSAXReaderUtil();
 
 		_document = createSampleDocument();
 
@@ -46,9 +51,11 @@ public class DDMXSDImplTest extends BaseDDMTest {
 	@Test
 	public void testGetFieldsContext() throws Exception {
 		_ddmXSD.getFieldsContext(
-			_mockPageContext, _PORTLET_NAMESPACE, _NAMESPACE);
+			_mockHttpServletRequest, _mockHttpServletResponse,
+			_PORTLET_NAMESPACE, _NAMESPACE);
 
-		Assert.assertNotNull(_mockPageContext.getAttribute(_fieldsContextKey));
+		Assert.assertNotNull(
+			_mockHttpServletRequest.getAttribute(_fieldsContextKey));
 	}
 
 	@Test
@@ -59,8 +66,8 @@ public class DDMXSDImplTest extends BaseDDMTest {
 			rootElement, "Localizable", "Localizable", true);
 
 		Map<String, Object> fieldContext = _ddmXSD.getFieldContext(
-			_mockPageContext, _PORTLET_NAMESPACE, _NAMESPACE, fieldElement,
-			LocaleUtil.US);
+			_mockHttpServletRequest, _mockHttpServletResponse,
+			_PORTLET_NAMESPACE, _NAMESPACE, fieldElement, LocaleUtil.US);
 
 		Assert.assertFalse(fieldContext.containsKey("disabled"));
 	}
@@ -73,8 +80,8 @@ public class DDMXSDImplTest extends BaseDDMTest {
 			rootElement, "Localizable", "Localizable", true);
 
 		Map<String, Object> fieldContext = _ddmXSD.getFieldContext(
-			_mockPageContext, _PORTLET_NAMESPACE, _NAMESPACE, fieldElement,
-			LocaleUtil.BRAZIL);
+			_mockHttpServletRequest, _mockHttpServletResponse,
+			_PORTLET_NAMESPACE, _NAMESPACE, fieldElement, LocaleUtil.BRAZIL);
 
 		Assert.assertFalse(fieldContext.containsKey("disabled"));
 	}
@@ -87,8 +94,8 @@ public class DDMXSDImplTest extends BaseDDMTest {
 			rootElement, "Unlocalizable", "Unlocalizable", false);
 
 		Map<String, Object> fieldContext = _ddmXSD.getFieldContext(
-			_mockPageContext, _PORTLET_NAMESPACE, _NAMESPACE, fieldElement,
-			LocaleUtil.BRAZIL);
+			_mockHttpServletRequest, _mockHttpServletResponse,
+			_PORTLET_NAMESPACE, _NAMESPACE, fieldElement, LocaleUtil.BRAZIL);
 
 		Assert.assertEquals(
 			Boolean.TRUE.toString(), fieldContext.get("disabled"));
@@ -102,8 +109,8 @@ public class DDMXSDImplTest extends BaseDDMTest {
 			rootElement, "Unlocalizable", "Unlocalizable", false);
 
 		Map<String, Object> fieldContext = _ddmXSD.getFieldContext(
-			_mockPageContext, _PORTLET_NAMESPACE, _NAMESPACE, fieldElement,
-			LocaleUtil.US);
+			_mockHttpServletRequest, _mockHttpServletResponse,
+			_PORTLET_NAMESPACE, _NAMESPACE, fieldElement, LocaleUtil.US);
 
 		Assert.assertFalse(fieldContext.containsKey("disabled"));
 	}
@@ -115,6 +122,9 @@ public class DDMXSDImplTest extends BaseDDMTest {
 	private DDMXSDImpl _ddmXSD = new DDMXSDImpl();
 	private Document _document;
 	private String _fieldsContextKey;
-	private MockPageContext _mockPageContext = new MockPageContext();
+	private MockHttpServletRequest _mockHttpServletRequest =
+		new MockHttpServletRequest();
+	private MockHttpServletResponse _mockHttpServletResponse =
+		new MockHttpServletResponse();
 
 }

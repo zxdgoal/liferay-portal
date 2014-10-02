@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -68,6 +70,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.asset.service.AssetTagLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements AssetTagLocalService, IdentifiableBean {
 	/*
@@ -141,8 +144,7 @@ public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return assetTagPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -159,8 +161,8 @@ public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return assetTagPersistence.findWithDynamicQuery(dynamicQuery, start, end);
 	}
 
@@ -178,9 +180,8 @@ public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return assetTagPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -255,7 +256,7 @@ public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteAssetTag((AssetTag)persistedModel);
+		return assetTagLocalService.deleteAssetTag((AssetTag)persistedModel);
 	}
 
 	@Override
@@ -395,7 +396,7 @@ public abstract class AssetTagLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<AssetTag> getAssetEntryAssetTags(long entryId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AssetTag> orderByComparator) {
 		return assetEntryPersistence.getAssetTags(entryId, start, end,
 			orderByComparator);
 	}

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatalists.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -73,6 +75,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.dynamicdatalists.service.DDLRecordSetLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class DDLRecordSetLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DDLRecordSetLocalService,
 		IdentifiableBean {
@@ -148,8 +151,7 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return ddlRecordSetPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -166,8 +168,8 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return ddlRecordSetPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -186,9 +188,8 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return ddlRecordSetPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -221,19 +222,6 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	@Override
 	public DDLRecordSet fetchDDLRecordSet(long recordSetId) {
 		return ddlRecordSetPersistence.fetchByPrimaryKey(recordSetId);
-	}
-
-	/**
-	 * Returns the d d l record set with the matching UUID and company.
-	 *
-	 * @param uuid the d d l record set's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d l record set, or <code>null</code> if a matching d d l record set could not be found
-	 */
-	@Override
-	public DDLRecordSet fetchDDLRecordSetByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return ddlRecordSetPersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -345,7 +333,7 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteDDLRecordSet((DDLRecordSet)persistedModel);
+		return ddlRecordSetLocalService.deleteDDLRecordSet((DDLRecordSet)persistedModel);
 	}
 
 	@Override
@@ -354,18 +342,18 @@ public abstract class DDLRecordSetLocalServiceBaseImpl
 		return ddlRecordSetPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the d d l record set with the matching UUID and company.
-	 *
-	 * @param uuid the d d l record set's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching d d l record set
-	 * @throws PortalException if a matching d d l record set could not be found
-	 */
 	@Override
-	public DDLRecordSet getDDLRecordSetByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return ddlRecordSetPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return ddlRecordSetPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DDLRecordSet> getDDLRecordSetsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end,
+		OrderByComparator<DDLRecordSet> orderByComparator) {
+		return ddlRecordSetPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

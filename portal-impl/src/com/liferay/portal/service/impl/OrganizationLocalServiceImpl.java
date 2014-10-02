@@ -41,7 +41,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TreeModelFinder;
+import com.liferay.portal.kernel.util.TreeModelTasksAdapter;
 import com.liferay.portal.kernel.util.TreePathUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -585,7 +585,8 @@ public class OrganizationLocalServiceImpl
 
 	@Override
 	public List<Organization> getOrganizations(
-			long userId, int start, int end, OrderByComparator obc)
+			long userId, int start, int end,
+			OrderByComparator<Organization> obc)
 		throws PortalException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
@@ -1020,13 +1021,13 @@ public class OrganizationLocalServiceImpl
 	public void rebuildTree(long companyId) throws PortalException {
 		TreePathUtil.rebuildTree(
 			companyId, OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID,
-			new TreeModelFinder<Organization>() {
+			StringPool.SLASH,
+			new TreeModelTasksAdapter<Organization>() {
 
 				@Override
 				public List<Organization> findTreeModels(
-						long previousId, long companyId, long parentPrimaryKey,
-						int size)
-					throws SystemException {
+					long previousId, long companyId, long parentPrimaryKey,
+					int size) {
 
 					return organizationPersistence.findByO_C_P(
 						previousId, companyId, parentPrimaryKey,
@@ -1197,7 +1198,7 @@ public class OrganizationLocalServiceImpl
 	public List<Organization> search(
 		long companyId, long parentOrganizationId, String keywords, String type,
 		Long regionId, Long countryId, LinkedHashMap<String, Object> params,
-		int start, int end, OrderByComparator obc) {
+		int start, int end, OrderByComparator<Organization> obc) {
 
 		String parentOrganizationIdComparator = StringPool.EQUAL;
 
@@ -1319,7 +1320,7 @@ public class OrganizationLocalServiceImpl
 		long companyId, long parentOrganizationId, String name, String type,
 		String street, String city, String zip, Long regionId, Long countryId,
 		LinkedHashMap<String, Object> params, boolean andOperator, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<Organization> obc) {
 
 		String parentOrganizationIdComparator = StringPool.EQUAL;
 

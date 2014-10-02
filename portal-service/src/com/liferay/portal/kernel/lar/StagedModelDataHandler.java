@@ -35,6 +35,12 @@ public interface StagedModelDataHandler<T extends StagedModel> {
 			PortletDataContext portletDataContext, T stagedModel)
 		throws PortletDataException;
 
+	public T fetchMissingReference(String uuid, long groupId);
+
+	public T fetchStagedModelByUuidAndCompanyId(String uuid, long companyId);
+
+	public T fetchStagedModelByUuidAndGroupId(String uuid, long groupId);
+
 	public String[] getClassNames();
 
 	public String getDisplayName(T StagedModel);

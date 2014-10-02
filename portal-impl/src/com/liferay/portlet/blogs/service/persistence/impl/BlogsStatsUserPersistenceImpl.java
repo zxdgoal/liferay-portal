@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.blogs.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.blogs.NoSuchStatsUserException;
@@ -45,7 +43,6 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,6 +64,7 @@ import java.util.Set;
  * @see BlogsStatsUserUtil
  * @generated
  */
+@ProviderType
 public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStatsUser>
 	implements BlogsStatsUserPersistence {
 	/*
@@ -156,7 +154,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -262,7 +260,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -291,7 +290,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		List<BlogsStatsUser> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -312,7 +311,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByGroupId_Last(groupId,
 				orderByComparator);
 
@@ -341,7 +341,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -369,7 +369,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser[] findByGroupId_PrevAndNext(long statsUserId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<BlogsStatsUser> orderByComparator)
 		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = findByPrimaryKey(statsUserId);
 
@@ -400,7 +400,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 	protected BlogsStatsUser getByGroupId_PrevAndNext(Session session,
 		BlogsStatsUser blogsStatsUser, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsStatsUser> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -635,7 +635,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -741,7 +741,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByUserId_First(userId,
 				orderByComparator);
 
@@ -770,7 +771,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		List<BlogsStatsUser> list = findByUserId(userId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -790,7 +791,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByUserId_Last(userId,
 				orderByComparator);
 
@@ -819,7 +821,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -847,7 +849,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser[] findByUserId_PrevAndNext(long statsUserId,
-		long userId, OrderByComparator orderByComparator)
+		long userId, OrderByComparator<BlogsStatsUser> orderByComparator)
 		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = findByPrimaryKey(statsUserId);
 
@@ -878,7 +880,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 	protected BlogsStatsUser getByUserId_PrevAndNext(Session session,
 		BlogsStatsUser blogsStatsUser, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsStatsUser> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1335,7 +1337,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findByG_NotE(long groupId, int entryCount,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1443,7 +1445,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByG_NotE_First(long groupId, int entryCount,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByG_NotE_First(groupId,
 				entryCount, orderByComparator);
 
@@ -1476,7 +1479,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByG_NotE_First(long groupId, int entryCount,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		List<BlogsStatsUser> list = findByG_NotE(groupId, entryCount, 0, 1,
 				orderByComparator);
 
@@ -1498,7 +1501,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByG_NotE_Last(long groupId, int entryCount,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByG_NotE_Last(groupId, entryCount,
 				orderByComparator);
 
@@ -1531,7 +1535,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByG_NotE_Last(long groupId, int entryCount,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		int count = countByG_NotE(groupId, entryCount);
 
 		if (count == 0) {
@@ -1560,7 +1564,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser[] findByG_NotE_PrevAndNext(long statsUserId,
-		long groupId, int entryCount, OrderByComparator orderByComparator)
+		long groupId, int entryCount,
+		OrderByComparator<BlogsStatsUser> orderByComparator)
 		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = findByPrimaryKey(statsUserId);
 
@@ -1591,7 +1596,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 	protected BlogsStatsUser getByG_NotE_PrevAndNext(Session session,
 		BlogsStatsUser blogsStatsUser, long groupId, int entryCount,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsStatsUser> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1834,7 +1839,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findByC_NotE(long companyId, int entryCount,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1942,7 +1947,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByC_NotE_First(long companyId, int entryCount,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByC_NotE_First(companyId,
 				entryCount, orderByComparator);
 
@@ -1975,7 +1981,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByC_NotE_First(long companyId, int entryCount,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		List<BlogsStatsUser> list = findByC_NotE(companyId, entryCount, 0, 1,
 				orderByComparator);
 
@@ -1997,7 +2003,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByC_NotE_Last(long companyId, int entryCount,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByC_NotE_Last(companyId,
 				entryCount, orderByComparator);
 
@@ -2030,7 +2037,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByC_NotE_Last(long companyId, int entryCount,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		int count = countByC_NotE(companyId, entryCount);
 
 		if (count == 0) {
@@ -2059,7 +2066,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser[] findByC_NotE_PrevAndNext(long statsUserId,
-		long companyId, int entryCount, OrderByComparator orderByComparator)
+		long companyId, int entryCount,
+		OrderByComparator<BlogsStatsUser> orderByComparator)
 		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = findByPrimaryKey(statsUserId);
 
@@ -2090,7 +2098,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 	protected BlogsStatsUser getByC_NotE_PrevAndNext(Session session,
 		BlogsStatsUser blogsStatsUser, long companyId, int entryCount,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsStatsUser> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2341,7 +2349,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findByU_L(long userId, Date lastPostDate,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2469,7 +2477,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByU_L_First(long userId, Date lastPostDate,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByU_L_First(userId, lastPostDate,
 				orderByComparator);
 
@@ -2502,7 +2511,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByU_L_First(long userId, Date lastPostDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		List<BlogsStatsUser> list = findByU_L(userId, lastPostDate, 0, 1,
 				orderByComparator);
 
@@ -2524,7 +2533,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser findByU_L_Last(long userId, Date lastPostDate,
-		OrderByComparator orderByComparator) throws NoSuchStatsUserException {
+		OrderByComparator<BlogsStatsUser> orderByComparator)
+		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = fetchByU_L_Last(userId, lastPostDate,
 				orderByComparator);
 
@@ -2557,7 +2567,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser fetchByU_L_Last(long userId, Date lastPostDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		int count = countByU_L(userId, lastPostDate);
 
 		if (count == 0) {
@@ -2586,7 +2596,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public BlogsStatsUser[] findByU_L_PrevAndNext(long statsUserId,
-		long userId, Date lastPostDate, OrderByComparator orderByComparator)
+		long userId, Date lastPostDate,
+		OrderByComparator<BlogsStatsUser> orderByComparator)
 		throws NoSuchStatsUserException {
 		BlogsStatsUser blogsStatsUser = findByPrimaryKey(statsUserId);
 
@@ -2617,7 +2628,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 	protected BlogsStatsUser getByU_L_PrevAndNext(Session session,
 		BlogsStatsUser blogsStatsUser, long userId, Date lastPostDate,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsStatsUser> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3419,7 +3430,7 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 */
 	@Override
 	public List<BlogsStatsUser> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsStatsUser> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3550,25 +3561,6 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	 * Initializes the blogs stats user persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.blogs.model.BlogsStatsUser")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<BlogsStatsUser>> listenersList = new ArrayList<ModelListener<BlogsStatsUser>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<BlogsStatsUser>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3587,8 +3579,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No BlogsStatsUser exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No BlogsStatsUser exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(BlogsStatsUserPersistenceImpl.class);
-	private static BlogsStatsUser _nullBlogsStatsUser = new BlogsStatsUserImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(BlogsStatsUserPersistenceImpl.class);
+	private static final BlogsStatsUser _nullBlogsStatsUser = new BlogsStatsUserImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3600,7 +3592,8 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 			}
 		};
 
-	private static CacheModel<BlogsStatsUser> _nullBlogsStatsUserCacheModel = new CacheModel<BlogsStatsUser>() {
+	private static final CacheModel<BlogsStatsUser> _nullBlogsStatsUserCacheModel =
+		new CacheModel<BlogsStatsUser>() {
 			@Override
 			public BlogsStatsUser toEntityModel() {
 				return _nullBlogsStatsUser;

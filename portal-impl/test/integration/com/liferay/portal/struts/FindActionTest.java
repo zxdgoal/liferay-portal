@@ -23,9 +23,9 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.impl.VirtualLayout;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
-import com.liferay.portal.test.ResetDatabaseExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.ResetDatabaseExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.test.GroupTestUtil;
@@ -94,7 +94,7 @@ public class FindActionTest {
 
 		HttpServletRequest request = getHttpServletRequest();
 
-		FindAction.setTargetGroup(
+		FindAction.setTargetLayout(
 			request, _blogsEntry.getGroupId(), _blogLayout.getPlid());
 
 		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
@@ -109,7 +109,7 @@ public class FindActionTest {
 
 		HttpServletRequest request = getHttpServletRequest();
 
-		FindAction.setTargetGroup(
+		FindAction.setTargetLayout(
 			request, _blogsEntry.getGroupId(), _blogLayout.getPlid());
 
 		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
@@ -174,7 +174,7 @@ public class FindActionTest {
 		return themeDisplay;
 	}
 
-	private final static String[] _PORTLET_IDS = {
+	private static final String[] _PORTLET_IDS = {
 		PortletKeys.BLOGS_ADMIN, PortletKeys.BLOGS, PortletKeys.BLOGS_AGGREGATOR
 	};
 

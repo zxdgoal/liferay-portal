@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatalists.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.dynamicdatalists.NoSuchRecordVersionException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.dynamicdatalists.service.persistence.DDLRecordVersion
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see DDLRecordVersionUtil
  * @generated
  */
+@ProviderType
 public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLRecordVersion>
 	implements DDLRecordVersionPersistence {
 	/*
@@ -154,7 +152,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public List<DDLRecordVersion> findByRecordId(long recordId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDLRecordVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -260,7 +258,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion findByRecordId_First(long recordId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = fetchByRecordId_First(recordId,
 				orderByComparator);
@@ -290,7 +288,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion fetchByRecordId_First(long recordId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		List<DDLRecordVersion> list = findByRecordId(recordId, 0, 1,
 				orderByComparator);
 
@@ -311,7 +309,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion findByRecordId_Last(long recordId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = fetchByRecordId_Last(recordId,
 				orderByComparator);
@@ -341,7 +339,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion fetchByRecordId_Last(long recordId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		int count = countByRecordId(recordId);
 
 		if (count == 0) {
@@ -369,7 +367,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion[] findByRecordId_PrevAndNext(long recordVersionId,
-		long recordId, OrderByComparator orderByComparator)
+		long recordId, OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = findByPrimaryKey(recordVersionId);
 
@@ -400,7 +398,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 	protected DDLRecordVersion getByRecordId_PrevAndNext(Session session,
 		DDLRecordVersion ddlRecordVersion, long recordId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDLRecordVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -895,7 +893,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public List<DDLRecordVersion> findByR_S(long recordId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1011,7 +1010,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion findByR_S_First(long recordId, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = fetchByR_S_First(recordId, status,
 				orderByComparator);
@@ -1045,7 +1044,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion fetchByR_S_First(long recordId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		List<DDLRecordVersion> list = findByR_S(recordId, status, 0, 1,
 				orderByComparator);
 
@@ -1067,7 +1066,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion findByR_S_Last(long recordId, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = fetchByR_S_Last(recordId, status,
 				orderByComparator);
@@ -1101,7 +1100,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion fetchByR_S_Last(long recordId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		int count = countByR_S(recordId, status);
 
 		if (count == 0) {
@@ -1130,7 +1129,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public DDLRecordVersion[] findByR_S_PrevAndNext(long recordVersionId,
-		long recordId, int status, OrderByComparator orderByComparator)
+		long recordId, int status,
+		OrderByComparator<DDLRecordVersion> orderByComparator)
 		throws NoSuchRecordVersionException {
 		DDLRecordVersion ddlRecordVersion = findByPrimaryKey(recordVersionId);
 
@@ -1161,7 +1161,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 	protected DDLRecordVersion getByR_S_PrevAndNext(Session session,
 		DDLRecordVersion ddlRecordVersion, long recordId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDLRecordVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1935,7 +1935,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	@Override
 	public List<DDLRecordVersion> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDLRecordVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2066,25 +2066,6 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 * Initializes the d d l record version persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DDLRecordVersion>> listenersList = new ArrayList<ModelListener<DDLRecordVersion>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DDLRecordVersion>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2103,8 +2084,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DDLRecordVersion exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DDLRecordVersion exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DDLRecordVersionPersistenceImpl.class);
-	private static DDLRecordVersion _nullDDLRecordVersion = new DDLRecordVersionImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(DDLRecordVersionPersistenceImpl.class);
+	private static final DDLRecordVersion _nullDDLRecordVersion = new DDLRecordVersionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2116,7 +2097,8 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 			}
 		};
 
-	private static CacheModel<DDLRecordVersion> _nullDDLRecordVersionCacheModel = new CacheModel<DDLRecordVersion>() {
+	private static final CacheModel<DDLRecordVersion> _nullDDLRecordVersionCacheModel =
+		new CacheModel<DDLRecordVersion>() {
 			@Override
 			public DDLRecordVersion toEntityModel() {
 				return _nullDDLRecordVersion;

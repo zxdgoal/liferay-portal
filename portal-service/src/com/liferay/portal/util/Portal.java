@@ -17,7 +17,6 @@ package com.liferay.portal.util;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
@@ -69,7 +68,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
@@ -79,6 +77,8 @@ import javax.servlet.jsp.PageContext;
 public interface Portal {
 
 	public static final String FRIENDLY_URL_SEPARATOR = "/-/";
+
+	public static final String JSESSIONID = ";jsessionid=";
 
 	public static final String PATH_IMAGE = "/image";
 
@@ -307,8 +307,7 @@ public interface Portal {
 			Layout layout)
 		throws PortalException;
 
-	public long[] getAncestorSiteGroupIds(long groupId)
-		throws PortalException;
+	public long[] getAncestorSiteGroupIds(long groupId) throws PortalException;
 
 	/**
 	 * Returns the set of struts actions that should not be checked for an
@@ -442,8 +441,7 @@ public interface Portal {
 	 */
 	public String getCDNHost(boolean secure);
 
-	public String getCDNHost(HttpServletRequest request)
-		throws PortalException;
+	public String getCDNHost(HttpServletRequest request) throws PortalException;
 
 	/**
 	 * Returns the insecure (HTTP) content distribution network (CDN) host
@@ -525,8 +523,7 @@ public interface Portal {
 			long scopeGroupId, String ppid, Map<String, String[]> params)
 		throws PortalException;
 
-	public long getControlPanelPlid(long companyId)
-		throws PortalException;
+	public long getControlPanelPlid(long companyId) throws PortalException;
 
 	public long getControlPanelPlid(PortletRequest portletRequest)
 		throws PortalException;
@@ -699,7 +696,7 @@ public interface Portal {
 
 	public Portlet getFirstMyAccountPortlet(ThemeDisplay themeDisplay);
 
-	public String getFirstPageLayoutTypes(PageContext pageContext);
+	public String getFirstPageLayoutTypes(HttpServletRequest request);
 
 	public Portlet getFirstSiteAdministrationPortlet(ThemeDisplay themeDisplay);
 
@@ -742,8 +739,7 @@ public interface Portal {
 	public String[] getGuestPermissions(
 		PortletRequest portletRequest, String className);
 
-	public String getHomeURL(HttpServletRequest request)
-		throws PortalException;
+	public String getHomeURL(HttpServletRequest request) throws PortalException;
 
 	public String getHost(HttpServletRequest request);
 
@@ -784,10 +780,6 @@ public interface Portal {
 			String friendlyURL, Map<String, String[]> params,
 			Map<String, Object> requestContext)
 		throws PortalException;
-
-	public String getLayoutEditPage(Layout layout);
-
-	public String getLayoutEditPage(String type);
 
 	public String getLayoutFriendlyURL(Layout layout, ThemeDisplay themeDisplay)
 		throws PortalException;
@@ -845,10 +837,6 @@ public interface Portal {
 	public String getLayoutURL(ThemeDisplay themeDisplay)
 		throws PortalException;
 
-	public String getLayoutViewPage(Layout layout);
-
-	public String getLayoutViewPage(String type);
-
 	public LiferayPortletRequest getLiferayPortletRequest(
 		PortletRequest portletRequest);
 
@@ -883,8 +871,7 @@ public interface Portal {
 	 * @deprecated As of 6.2.0 renamed to {@link #getSiteGroupId(long)}
 	 */
 	@Deprecated
-	public long getParentGroupId(long scopeGroupId)
-		throws PortalException;
+	public long getParentGroupId(long scopeGroupId) throws PortalException;
 
 	public String getPathContext();
 
@@ -998,7 +985,7 @@ public interface Portal {
 
 	public PortletConfig getPortletConfig(
 			long companyId, String portletId, ServletContext servletContext)
-		throws PortletException, SystemException;
+		throws PortletException;
 
 	public String getPortletDescription(
 		Portlet portlet, ServletContext servletContext, Locale locale);
@@ -1135,11 +1122,9 @@ public interface Portal {
 	public long[] getSiteAndCompanyGroupIds(ThemeDisplay themeDisplay)
 		throws PortalException;
 
-	public Locale getSiteDefaultLocale(long groupId)
-		throws PortalException;
+	public Locale getSiteDefaultLocale(long groupId) throws PortalException;
 
-	public long getSiteGroupId(long groupId)
-		throws PortalException;
+	public long getSiteGroupId(long groupId) throws PortalException;
 
 	/**
 	 * Returns the URL of the login page for the current site if one is
@@ -1191,11 +1176,9 @@ public interface Portal {
 
 	public String getURLWithSessionId(String url, String sessionId);
 
-	public User getUser(HttpServletRequest request)
-		throws PortalException;
+	public User getUser(HttpServletRequest request) throws PortalException;
 
-	public User getUser(PortletRequest portletRequest)
-		throws PortalException;
+	public User getUser(PortletRequest portletRequest) throws PortalException;
 
 	public String getUserEmailAddress(long userId);
 
@@ -1228,6 +1211,8 @@ public interface Portal {
 	 */
 	@Deprecated
 	public String getUserValue(long userId, String param, String defaultValue);
+
+	public String getValidPortalDomain(long companyId, String domain);
 
 	public long getValidUserId(long companyId, long userId)
 		throws PortalException;
@@ -1311,18 +1296,6 @@ public interface Portal {
 	public boolean isLayoutDescendant(Layout layout, long layoutId)
 		throws PortalException;
 
-	public boolean isLayoutFirstPageable(Layout layout);
-
-	public boolean isLayoutFirstPageable(String type);
-
-	public boolean isLayoutFriendliable(Layout layout);
-
-	public boolean isLayoutFriendliable(String type);
-
-	public boolean isLayoutParentable(Layout layout);
-
-	public boolean isLayoutParentable(String type);
-
 	public boolean isLayoutSitemapable(Layout layout);
 
 	public boolean isLoginRedirectRequired(HttpServletRequest request);
@@ -1334,6 +1307,8 @@ public interface Portal {
 	public boolean isMultipartRequest(HttpServletRequest request);
 
 	public boolean isOmniadmin(long userId);
+
+	public boolean isOmniadmin(User user);
 
 	public boolean isReservedParameter(String name);
 

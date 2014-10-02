@@ -16,8 +16,10 @@ package com.liferay.portal.search.elasticsearch.index;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.search.elasticsearch.io.StringOutputStream;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.search.elasticsearch.util.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +33,24 @@ import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsReques
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
-import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
+import org.elasticsearch.common.settings.ImmutableSettings;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Michael C. Han
  */
+@Component(
+	immediate = true,
+	property = {
+		"indexConfigFileName=/META-INF/index-settings.json",
+		"typeMappings._default_=/META-INF/mappings/default-type-mappings.json",
+		"typeMappings.KeywordQueryDocumentType=/META-INF/mappings/keyword-query-type-mappings.json",
+		"typeMappings.LiferayDocumentType=/META-INF/mappings/liferay-type-mappings.json",
+		"typeMappings.SpellCheckDocumentType=/META-INF/mappings/spellcheck-type-mappings.json"
+	}
+)
 public class CompanyIndexFactory implements IndexFactory {
 
 	@Override
@@ -51,6 +66,19 @@ public class CompanyIndexFactory implements IndexFactory {
 		CreateIndexRequestBuilder createIndexRequestBuilder =
 			indicesAdminClient.prepareCreate(String.valueOf(companyId));
 
+		if (Validator.isNotNull(_indexConfigFileName)) {
+			ImmutableSettings.Builder builder =
+				ImmutableSettings.settingsBuilder();
+
+			Class<?> clazz = getClass();
+
+			builder.classLoader(clazz.getClassLoader());
+
+			builder.loadFromClasspath(_indexConfigFileName);
+
+			createIndexRequestBuilder.setSettings(builder);
+		}
+
 		for (Map.Entry<String, String> entry : _typeMappings.entrySet()) {
 			Class<?> clazz = getClass();
 
@@ -65,14 +93,7 @@ public class CompanyIndexFactory implements IndexFactory {
 
 		CreateIndexResponse createIndexResponse = future.get();
 
-		if (_log.isInfoEnabled()) {
-			StringOutputStream stringOutputStream = new StringOutputStream();
-
-			createIndexResponse.writeTo(
-				new OutputStreamStreamOutput(stringOutputStream));
-
-			_log.info(stringOutputStream);
-		}
+		LogUtil.logActionResponse(_log, createIndexResponse);
 	}
 
 	@Override
@@ -91,20 +112,35 @@ public class CompanyIndexFactory implements IndexFactory {
 		Future<DeleteIndexResponse> future =
 			deleteIndexRequestBuilder.execute();
 
-		if (_log.isInfoEnabled()) {
-			DeleteIndexResponse deleteIndexResponse = future.get();
+		DeleteIndexResponse deleteIndexResponse = future.get();
 
-			StringOutputStream stringOutputStream = new StringOutputStream();
+		LogUtil.logActionResponse(_log, deleteIndexResponse);
+	}
 
-			deleteIndexResponse.writeTo(
-				new OutputStreamStreamOutput(stringOutputStream));
-
-			_log.info(stringOutputStream);
-		}
+	public void setIndexConfigFileName(String indexConfigFileName) {
+		_indexConfigFileName = indexConfigFileName;
 	}
 
 	public void setTypeMappings(Map<String, String> typeMappings) {
 		_typeMappings = typeMappings;
+	}
+
+	@Activate
+	protected void activate(Map<String, Object> properties) {
+		setIndexConfigFileName(
+			MapUtil.getString(properties, "indexConfigFileName"));
+
+		Map<String, String> typeMappings = new HashMap<String, String>();
+
+		for (String key : properties.keySet()) {
+			if (key.startsWith(_PREFIX)) {
+				String value = MapUtil.getString(properties, key);
+
+				typeMappings.put(key.substring(_PREFIX.length()), value);
+			}
+		}
+
+		setTypeMappings(typeMappings);
 	}
 
 	protected boolean hasIndex(
@@ -122,8 +158,11 @@ public class CompanyIndexFactory implements IndexFactory {
 		return indicesExistsResponse.isExists();
 	}
 
+	private static final String _PREFIX = "typeMappings.";
+
 	private static Log _log = LogFactoryUtil.getLog(CompanyIndexFactory.class);
 
+	private String _indexConfigFileName;
 	private Map<String, String> _typeMappings = new HashMap<String, String>();
 
 }

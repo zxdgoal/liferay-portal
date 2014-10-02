@@ -44,6 +44,8 @@ public interface ActionableDynamicQuery {
 
 	public void setClassLoader(ClassLoader classLoader);
 
+	public void setCommitImmediately(boolean commitImmediately);
+
 	public void setCompanyId(long companyId);
 
 	public void setGroupId(long groupId);
@@ -71,8 +73,7 @@ public interface ActionableDynamicQuery {
 
 	public interface PerformActionMethod {
 
-		public void performAction(Object object)
-			throws PortalException;
+		public void performAction(Object object) throws PortalException;
 
 	}
 

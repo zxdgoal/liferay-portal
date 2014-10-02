@@ -685,8 +685,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 */
 	@Override
 	public List<JournalArticle> getArticles(long groupId, long folderId) {
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(WorkflowConstants.STATUS_ANY);
 
 		List<Long> folderIds = new ArrayList<Long>();
 
@@ -722,10 +722,11 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public List<JournalArticle> getArticles(
 		long groupId, long folderId, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY, start, end, obc);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(
+				WorkflowConstants.STATUS_ANY, start, end, obc);
 
 		List<Long> folderIds = new ArrayList<Long>();
 
@@ -762,7 +763,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public List<JournalArticle> getArticlesByArticleId(
 		long groupId, String articleId, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
 		return journalArticlePersistence.filterFindByG_A(
 			groupId, articleId, start, end, obc);
@@ -818,10 +819,10 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public List<JournalArticle> getArticlesByStructureId(
 		long groupId, long classNameId, String ddmStructureKey, int status,
-		int start, int end, OrderByComparator obc) {
+		int start, int end, OrderByComparator<JournalArticle> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, start, end, obc);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status, start, end, obc);
 
 		return journalArticleFinder.filterFindByG_C_S(
 			groupId, classNameId, ddmStructureKey, queryDefinition);
@@ -855,10 +856,11 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public List<JournalArticle> getArticlesByStructureId(
 		long groupId, String ddmStructureKey, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY, start, end, obc);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(
+				WorkflowConstants.STATUS_ANY, start, end, obc);
 
 		return journalArticleFinder.filterFindByG_C_S(
 			groupId, JournalArticleConstants.CLASSNAME_ID_DEFAULT,
@@ -878,9 +880,21 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			groupId, folderId, WorkflowConstants.STATUS_ANY);
 	}
 
+	/**
+	 * Returns the number of web content articles matching the group, folder,
+	 * and status.
+	 *
+	 * @param  groupId the primary key of the web content article's group
+	 * @param  folderId the primary key of the web content article's folder
+	 * @param  status the web content article's workflow status. For more
+	 *         information see {@link WorkflowConstants} for constants starting
+	 *         with the "STATUS_" prefix.
+	 * @return the number of matching web content articles
+	 */
 	@Override
 	public int getArticlesCount(long groupId, long folderId, int status) {
-		QueryDefinition queryDefinition = new QueryDefinition(status);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status);
 
 		List<Long> folderIds = new ArrayList<Long>();
 
@@ -924,7 +938,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		long groupId, long classNameId, String ddmStructureKey, int status) {
 
 		return journalArticleFinder.filterCountByG_C_S(
-			groupId, classNameId, ddmStructureKey, new QueryDefinition(status));
+			groupId, classNameId, ddmStructureKey,
+			new QueryDefinition<JournalArticle>(status));
 	}
 
 	/**
@@ -989,10 +1004,41 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			ArrayUtil.toArray(folderIds.toArray(new Long[folderIds.size()])));
 	}
 
+	/**
+	 * Returns an ordered range of all the web content articles matching the
+	 * group, user, the root folder or any of its subfolders.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end -
+	 * start</code> instances. <code>start</code> and <code>end</code> are not
+	 * primary keys, they are indexes in the result set. Thus, <code>0</code>
+	 * refers to the first result in the set. Setting both <code>start</code>
+	 * and <code>end</code> to {@link
+	 * com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	 * result set.
+	 * </p>
+	 *
+	 * @param  groupId the primary key of the web content article's group
+	 * @param  userId the primary key of the user (optionally <code>0</code>)
+	 * @param  rootFolderId the primary key of the root folder to begin the
+	 *         search
+	 * @param  status the web content article's workflow status. For more
+	 *         information see {@link WorkflowConstants} for constants starting
+	 *         with the "STATUS_" prefix.
+	 * @param  start the lower bound of the range of web content articles to
+	 *         return
+	 * @param  end the upper bound of the range of web content articles to
+	 *         return (not inclusive)
+	 * @param  orderByComparator the comparator to order the web content
+	 *         articles
+	 * @return the range of matching web content articles ordered by the
+	 *         comparator
+	 * @throws PortalException if a portal exception occurred
+	 */
 	@Override
 	public List<JournalArticle> getGroupArticles(
 			long groupId, long userId, long rootFolderId, int status, int start,
-			int end, OrderByComparator orderByComparator)
+			int end, OrderByComparator<JournalArticle> orderByComparator)
 		throws PortalException {
 
 		List<Long> folderIds = new ArrayList<Long>();
@@ -1002,8 +1048,9 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 				groupId, rootFolderId);
 		}
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, start, end, orderByComparator);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(
+				status, start, end, orderByComparator);
 
 		return journalArticleFinder.filterFindByG_U_F_C(
 			groupId, userId, folderIds,
@@ -1013,6 +1060,16 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	/**
 	 * Returns an ordered range of all the web content articles matching the
 	 * group, user, the root folder or any of its subfolders.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end -
+	 * start</code> instances. <code>start</code> and <code>end</code> are not
+	 * primary keys, they are indexes in the result set. Thus, <code>0</code>
+	 * refers to the first result in the set. Setting both <code>start</code>
+	 * and <code>end</code> to {@link
+	 * com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full
+	 * result set.
+	 * </p>
 	 *
 	 * @param  groupId the primary key of the web content article's group
 	 * @param  userId the primary key of the user (optionally <code>0</code>)
@@ -1033,7 +1090,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public List<JournalArticle> getGroupArticles(
 			long groupId, long userId, long rootFolderId, int start, int end,
-			OrderByComparator orderByComparator)
+			OrderByComparator<JournalArticle> orderByComparator)
 		throws PortalException {
 
 		return getGroupArticles(
@@ -1063,6 +1120,20 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			groupId, userId, rootFolderId, WorkflowConstants.STATUS_ANY);
 	}
 
+	/**
+	 * Returns the number of web content articles matching the group, user, and
+	 * the root folder or any of its subfolders.
+	 *
+	 * @param  groupId the primary key of the web content article's group
+	 * @param  userId the primary key of the user (optionally <code>0</code>)
+	 * @param  rootFolderId the primary key of the root folder to begin the
+	 *         search
+	 * @param  status the web content article's workflow status. For more
+	 *         information see {@link WorkflowConstants} for constants starting
+	 *         with the "STATUS_" prefix.
+	 * @return the number of matching web content articles
+	 * @throws PortalException if a portal exception occurred
+	 */
 	@Override
 	public int getGroupArticlesCount(
 			long groupId, long userId, long rootFolderId, int status)
@@ -1075,7 +1146,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 				groupId, rootFolderId);
 		}
 
-		QueryDefinition queryDefinition = new QueryDefinition(status);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status);
 
 		return journalArticleFinder.filterCountByG_U_F_C(
 			groupId, userId, folderIds,
@@ -1179,6 +1251,10 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	@Override
 	public void moveArticle(long groupId, String articleId, long newFolderId)
 		throws PortalException {
+
+		JournalFolderPermission.check(
+			getPermissionChecker(), groupId, newFolderId,
+			ActionKeys.ADD_ARTICLE);
 
 		List<JournalArticle> articles = journalArticlePersistence.findByG_A(
 			groupId, articleId);
@@ -1379,6 +1455,34 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		restoreArticleFromTrash(article.getResourcePrimKey());
 	}
 
+	/**
+	 * Returns a range of all the web content articles matching the group, creator,
+	 * creator, and workflow status using the indexer. It is preferable to use this
+	 * method instead of the non-indexed version whenever possible for performance
+	 * reasons.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end -
+	 * start</code> instances. <code>start</code> and <code>end</code> are not
+	 * primary keys, they are indexes in the result set. Thus, <code>0</code>
+	 * refers to the first result in the set. Setting both <code>start</code>
+	 * and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full
+	 * result set.
+	 * </p>
+	 *
+	 * @param  groupId the primary key of the web content article's group
+	 * @param  creatorUserId the primary key of the web content article's
+	 *         creator
+	 * @param  status the web content article's workflow status. For more
+	 *         information see {@link WorkflowConstants} for constants starting
+	 *         with the "STATUS_" prefix.
+	 * @param  start the lower bound of the range of web content articles to
+	 *         return
+	 * @param  end the upper bound of the range of web content articles to
+	 *         return (not inclusive)
+	 * @return the matching web content articles
+	 * @throws PortalException if a portal exception occurred
+	 */
 	@Override
 	public Hits search(
 			long groupId, long creatorUserId, int status, int start, int end)
@@ -1451,7 +1555,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		String keywords, Double version, String type, String ddmStructureKey,
 		String ddmTemplateKey, Date displayDateGT, Date displayDateLT,
 		int status, Date reviewDate, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
 		return journalArticleFinder.filterFindByKeywords(
 			companyId, groupId, folderIds, classNameId, keywords, version, type,
@@ -1529,10 +1633,10 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		String content, String type, String ddmStructureKey,
 		String ddmTemplateKey, Date displayDateGT, Date displayDateLT,
 		int status, Date reviewDate, boolean andOperator, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, start, end, obc);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status, start, end, obc);
 
 		return journalArticleFinder.filterFindByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
 			companyId, groupId, folderIds, classNameId, articleId, version,
@@ -1613,10 +1717,10 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		String content, String type, String[] ddmStructureKeys,
 		String[] ddmTemplateKeys, Date displayDateGT, Date displayDateLT,
 		int status, Date reviewDate, boolean andOperator, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<JournalArticle> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, start, end, obc);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status, start, end, obc);
 
 		return journalArticleFinder.filterFindByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
 			companyId, groupId, folderIds, classNameId, articleId, version,
@@ -1738,7 +1842,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			companyId, groupId, folderIds, classNameId, articleId, version,
 			title, description, content, type, ddmStructureKey, ddmTemplateKey,
 			displayDateGT, displayDateLT, reviewDate, andOperator,
-			new QueryDefinition(status));
+			new QueryDefinition<JournalArticle>(status));
 	}
 
 	/**
@@ -1802,9 +1906,18 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			companyId, groupId, folderIds, classNameId, articleId, version,
 			title, description, content, type, ddmStructureKeys,
 			ddmTemplateKeys, displayDateGT, displayDateLT, reviewDate,
-			andOperator, new QueryDefinition(status));
+			andOperator, new QueryDefinition<JournalArticle>(status));
 	}
 
+	/**
+	 * Subscribes the user to changes in elements that belong to the web content
+	 * article's DDM structure.
+	 *
+	 * @param  groupId the primary key of the folder's group
+	 * @param  userId the primary key of the user to be subscribed
+	 * @param  ddmStructureId the primary key of the structure to subscribe to
+	 * @throws PortalException if a matching user or group could not be found
+	 */
 	@Override
 	public void subscribeStructure(
 			long groupId, long userId, long ddmStructureId)
@@ -1817,6 +1930,16 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			groupId, userId, ddmStructureId);
 	}
 
+	/**
+	 * Unsubscribes the user from changes in elements that belong to the web
+	 * content article's DDM structure.
+	 *
+	 * @param  groupId the primary key of the folder's group
+	 * @param  userId the primary key of the user to be subscribed
+	 * @param  ddmStructureId the primary key of the structure to subscribe to
+	 * @throws PortalException if a matching user or subscription could not be
+	 *         found
+	 */
 	@Override
 	public void unsubscribeStructure(
 			long groupId, long userId, long ddmStructureId)

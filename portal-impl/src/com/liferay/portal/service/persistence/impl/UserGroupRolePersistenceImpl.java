@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchUserGroupRoleException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,15 +27,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.impl.UserGroupRoleImpl;
 import com.liferay.portal.model.impl.UserGroupRoleModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.UserGroupRolePersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +58,7 @@ import java.util.Set;
  * @see UserGroupRoleUtil
  * @generated
  */
+@ProviderType
 public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupRole>
 	implements UserGroupRolePersistence {
 	/*
@@ -148,7 +146,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -254,7 +252,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByUserId_First(userId,
 				orderByComparator);
@@ -284,7 +282,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		List<UserGroupRole> list = findByUserId(userId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -304,7 +302,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByUserId_Last(userId,
 				orderByComparator);
@@ -334,7 +332,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -363,7 +361,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	@Override
 	public UserGroupRole[] findByUserId_PrevAndNext(
 		UserGroupRolePK userGroupRolePK, long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = findByPrimaryKey(userGroupRolePK);
 
@@ -394,7 +392,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 
 	protected UserGroupRole getByUserId_PrevAndNext(Session session,
 		UserGroupRole userGroupRole, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserGroupRole> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -627,7 +625,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -733,7 +731,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -763,7 +761,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		List<UserGroupRole> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -784,7 +782,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -814,7 +812,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -843,7 +841,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	@Override
 	public UserGroupRole[] findByGroupId_PrevAndNext(
 		UserGroupRolePK userGroupRolePK, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = findByPrimaryKey(userGroupRolePK);
 
@@ -874,7 +872,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 
 	protected UserGroupRole getByGroupId_PrevAndNext(Session session,
 		UserGroupRole userGroupRole, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserGroupRole> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1107,7 +1105,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findByRoleId(long roleId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1213,7 +1211,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByRoleId_First(long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByRoleId_First(roleId,
 				orderByComparator);
@@ -1243,7 +1241,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByRoleId_First(long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		List<UserGroupRole> list = findByRoleId(roleId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1263,7 +1261,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByRoleId_Last(roleId,
 				orderByComparator);
@@ -1293,7 +1291,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByRoleId_Last(long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		int count = countByRoleId(roleId);
 
 		if (count == 0) {
@@ -1322,7 +1320,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	@Override
 	public UserGroupRole[] findByRoleId_PrevAndNext(
 		UserGroupRolePK userGroupRolePK, long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = findByPrimaryKey(userGroupRolePK);
 
@@ -1353,7 +1351,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 
 	protected UserGroupRole getByRoleId_PrevAndNext(Session session,
 		UserGroupRole userGroupRole, long roleId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserGroupRole> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1592,7 +1590,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findByU_G(long userId, long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1708,7 +1706,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByU_G_First(long userId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByU_G_First(userId, groupId,
 				orderByComparator);
@@ -1742,7 +1740,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByU_G_First(long userId, long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		List<UserGroupRole> list = findByU_G(userId, groupId, 0, 1,
 				orderByComparator);
 
@@ -1764,7 +1762,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByU_G_Last(long userId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByU_G_Last(userId, groupId,
 				orderByComparator);
@@ -1798,7 +1796,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByU_G_Last(long userId, long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		int count = countByU_G(userId, groupId);
 
 		if (count == 0) {
@@ -1828,7 +1826,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	@Override
 	public UserGroupRole[] findByU_G_PrevAndNext(
 		UserGroupRolePK userGroupRolePK, long userId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = findByPrimaryKey(userGroupRolePK);
 
@@ -1859,7 +1857,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 
 	protected UserGroupRole getByU_G_PrevAndNext(Session session,
 		UserGroupRole userGroupRole, long userId, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserGroupRole> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2109,7 +2107,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findByG_R(long groupId, long roleId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2225,7 +2223,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByG_R_First(long groupId, long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByG_R_First(groupId, roleId,
 				orderByComparator);
@@ -2259,7 +2257,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByG_R_First(long groupId, long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		List<UserGroupRole> list = findByG_R(groupId, roleId, 0, 1,
 				orderByComparator);
 
@@ -2281,7 +2279,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole findByG_R_Last(long groupId, long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = fetchByG_R_Last(groupId, roleId,
 				orderByComparator);
@@ -2315,7 +2313,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public UserGroupRole fetchByG_R_Last(long groupId, long roleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		int count = countByG_R(groupId, roleId);
 
 		if (count == 0) {
@@ -2345,7 +2343,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	@Override
 	public UserGroupRole[] findByG_R_PrevAndNext(
 		UserGroupRolePK userGroupRolePK, long groupId, long roleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<UserGroupRole> orderByComparator)
 		throws NoSuchUserGroupRoleException {
 		UserGroupRole userGroupRole = findByPrimaryKey(userGroupRolePK);
 
@@ -2376,7 +2374,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 
 	protected UserGroupRole getByG_R_PrevAndNext(Session session,
 		UserGroupRole userGroupRole, long groupId, long roleId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserGroupRole> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3054,7 +3052,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 */
 	@Override
 	public List<UserGroupRole> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserGroupRole> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3185,25 +3183,6 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	 * Initializes the user group role persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.UserGroupRole")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<UserGroupRole>> listenersList = new ArrayList<ModelListener<UserGroupRole>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<UserGroupRole>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3221,8 +3200,8 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No UserGroupRole exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No UserGroupRole exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(UserGroupRolePersistenceImpl.class);
-	private static UserGroupRole _nullUserGroupRole = new UserGroupRoleImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(UserGroupRolePersistenceImpl.class);
+	private static final UserGroupRole _nullUserGroupRole = new UserGroupRoleImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3234,7 +3213,7 @@ public class UserGroupRolePersistenceImpl extends BasePersistenceImpl<UserGroupR
 			}
 		};
 
-	private static CacheModel<UserGroupRole> _nullUserGroupRoleCacheModel = new NullCacheModel();
+	private static final CacheModel<UserGroupRole> _nullUserGroupRoleCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<UserGroupRole>,
 		MVCCModel {

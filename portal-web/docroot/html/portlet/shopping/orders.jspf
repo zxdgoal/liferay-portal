@@ -58,11 +58,13 @@ portletURL.setParameter("tabs1", tabs1);
 	searchContainer.setResults(results);
 	%>
 
-	<div class="separator"><!-- --></div>
+	<c:if test="<%= !results.isEmpty() %>">
+		<div class="separator"><!-- --></div>
 
-	<aui:button-row>
-		<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteOrders();" %>' value="delete" />
-	</aui:button-row>
+		<aui:button-row>
+			<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteOrders();" %>' value="delete" />
+		</aui:button-row>
+	</c:if>
 
 	<%
 	List resultRows = searchContainer.getResultRows();
@@ -90,7 +92,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 		// Status
 
-		row.addText(ShoppingUtil.getPpPaymentStatus(order, pageContext), rowURL);
+		row.addText(ShoppingUtil.getPpPaymentStatus(order, request), rowURL);
 
 		// Customer
 
@@ -116,7 +118,7 @@ portletURL.setParameter("tabs1", tabs1);
 		window,
 		'<portlet:namespace />deleteOrders',
 		function() {
-			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-orders") %>')) {
+			if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-the-selected-orders") %>')) {
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 				document.<portlet:namespace />fm.<portlet:namespace />deleteOrderIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 

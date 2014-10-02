@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.journal.NoSuchArticleImageException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.journal.service.persistence.JournalArticleImagePersis
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see JournalArticleImageUtil
  * @generated
  */
+@ProviderType
 public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<JournalArticleImage>
 	implements JournalArticleImagePersistence {
 	/*
@@ -153,7 +151,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public List<JournalArticleImage> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<JournalArticleImage> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -259,7 +257,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -288,7 +287,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		List<JournalArticleImage> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -309,7 +308,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByGroupId_Last(groupId,
 				orderByComparator);
 
@@ -338,7 +338,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -366,7 +366,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage[] findByGroupId_PrevAndNext(
-		long articleImageId, long groupId, OrderByComparator orderByComparator)
+		long articleImageId, long groupId,
+		OrderByComparator<JournalArticleImage> orderByComparator)
 		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = findByPrimaryKey(articleImageId);
 
@@ -397,7 +398,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 
 	protected JournalArticleImage getByGroupId_PrevAndNext(Session session,
 		JournalArticleImage journalArticleImage, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalArticleImage> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -634,7 +636,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public List<JournalArticleImage> findByTempImage(boolean tempImage,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -740,7 +743,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByTempImage_First(boolean tempImage,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByTempImage_First(tempImage,
 				orderByComparator);
 
@@ -769,7 +773,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByTempImage_First(boolean tempImage,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		List<JournalArticleImage> list = findByTempImage(tempImage, 0, 1,
 				orderByComparator);
 
@@ -790,7 +794,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByTempImage_Last(boolean tempImage,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByTempImage_Last(tempImage,
 				orderByComparator);
 
@@ -819,7 +824,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByTempImage_Last(boolean tempImage,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		int count = countByTempImage(tempImage);
 
 		if (count == 0) {
@@ -848,7 +853,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	@Override
 	public JournalArticleImage[] findByTempImage_PrevAndNext(
 		long articleImageId, boolean tempImage,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = findByPrimaryKey(articleImageId);
 
 		Session session = null;
@@ -878,7 +884,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 
 	protected JournalArticleImage getByTempImage_PrevAndNext(Session session,
 		JournalArticleImage journalArticleImage, boolean tempImage,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalArticleImage> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1130,7 +1137,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	@Override
 	public List<JournalArticleImage> findByG_A_V(long groupId,
 		String articleId, double version, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1267,7 +1274,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByG_A_V_First(long groupId,
-		String articleId, double version, OrderByComparator orderByComparator)
+		String articleId, double version,
+		OrderByComparator<JournalArticleImage> orderByComparator)
 		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByG_A_V_First(groupId,
 				articleId, version, orderByComparator);
@@ -1305,7 +1313,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByG_A_V_First(long groupId,
-		String articleId, double version, OrderByComparator orderByComparator) {
+		String articleId, double version,
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		List<JournalArticleImage> list = findByG_A_V(groupId, articleId,
 				version, 0, 1, orderByComparator);
 
@@ -1328,7 +1337,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage findByG_A_V_Last(long groupId, String articleId,
-		double version, OrderByComparator orderByComparator)
+		double version, OrderByComparator<JournalArticleImage> orderByComparator)
 		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = fetchByG_A_V_Last(groupId,
 				articleId, version, orderByComparator);
@@ -1366,7 +1375,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public JournalArticleImage fetchByG_A_V_Last(long groupId,
-		String articleId, double version, OrderByComparator orderByComparator) {
+		String articleId, double version,
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		int count = countByG_A_V(groupId, articleId, version);
 
 		if (count == 0) {
@@ -1397,7 +1407,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	@Override
 	public JournalArticleImage[] findByG_A_V_PrevAndNext(long articleImageId,
 		long groupId, String articleId, double version,
-		OrderByComparator orderByComparator) throws NoSuchArticleImageException {
+		OrderByComparator<JournalArticleImage> orderByComparator)
+		throws NoSuchArticleImageException {
 		JournalArticleImage journalArticleImage = findByPrimaryKey(articleImageId);
 
 		Session session = null;
@@ -1427,7 +1438,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 
 	protected JournalArticleImage getByG_A_V_PrevAndNext(Session session,
 		JournalArticleImage journalArticleImage, long groupId,
-		String articleId, double version, OrderByComparator orderByComparator,
+		String articleId, double version,
+		OrderByComparator<JournalArticleImage> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -2740,7 +2752,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 */
 	@Override
 	public List<JournalArticleImage> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleImage> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2871,25 +2883,6 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 * Initializes the journal article image persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.journal.model.JournalArticleImage")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<JournalArticleImage>> listenersList = new ArrayList<ModelListener<JournalArticleImage>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<JournalArticleImage>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2908,8 +2901,8 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No JournalArticleImage exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No JournalArticleImage exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(JournalArticleImagePersistenceImpl.class);
-	private static JournalArticleImage _nullJournalArticleImage = new JournalArticleImageImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(JournalArticleImagePersistenceImpl.class);
+	private static final JournalArticleImage _nullJournalArticleImage = new JournalArticleImageImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2921,7 +2914,7 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 			}
 		};
 
-	private static CacheModel<JournalArticleImage> _nullJournalArticleImageCacheModel =
+	private static final CacheModel<JournalArticleImage> _nullJournalArticleImageCacheModel =
 		new CacheModel<JournalArticleImage>() {
 			@Override
 			public JournalArticleImage toEntityModel() {

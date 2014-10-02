@@ -15,16 +15,11 @@
 package com.liferay.portlet.documentlibrary.subscriptions;
 
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.settings.ModifiableSettings;
-import com.liferay.portal.kernel.settings.Settings;
-import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
-import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousMailExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.subscriptions.BaseSubscriptionLocalizedContentTestCase;
 import com.liferay.portal.util.test.TestPropsValues;
@@ -70,37 +65,13 @@ public class DLSubscriptionLocalizedContentTest
 	}
 
 	@Override
-	protected String getSubscriptionBodyPreferenceName() throws Exception {
-		return "emailFileEntryAddedBody";
+	protected String getServiceName() {
+		return DLConstants.SERVICE_NAME;
 	}
 
 	@Override
-	protected void setAddBaseModelSubscriptionBodyPreferences()
-		throws Exception {
-
-		Settings settings = SettingsFactoryUtil.getGroupServiceSettings(
-			group.getGroupId(), DLConstants.SERVICE_NAME);
-
-		ModifiableSettings modifiableSettings =
-			settings.getModifiableSettings();
-
-		String germanSubscriptionBodyPreferencesKey =
-			LocalizationUtil.getPreferencesKey(
-				getSubscriptionBodyPreferenceName(),
-				LocaleUtil.toLanguageId(LocaleUtil.GERMANY));
-
-		modifiableSettings.setValue(
-			germanSubscriptionBodyPreferencesKey, GERMAN_BODY);
-
-		String spanishSubscriptionBodyPreferencesKey =
-			LocalizationUtil.getPreferencesKey(
-				getSubscriptionBodyPreferenceName(),
-				LocaleUtil.toLanguageId(LocaleUtil.SPAIN));
-
-		modifiableSettings.setValue(
-			spanishSubscriptionBodyPreferencesKey, SPANISH_BODY);
-
-		modifiableSettings.store();
+	protected String getSubscriptionBodyPreferenceName() throws Exception {
+		return "emailFileEntryAddedBody";
 	}
 
 }

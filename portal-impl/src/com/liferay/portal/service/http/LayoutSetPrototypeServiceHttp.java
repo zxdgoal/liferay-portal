@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -49,6 +51,7 @@ import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
  * @see com.liferay.portal.service.LayoutSetPrototypeServiceUtil
  * @generated
  */
+@ProviderType
 public class LayoutSetPrototypeServiceHttp {
 	public static com.liferay.portal.model.LayoutSetPrototype addLayoutSetPrototype(
 		HttpPrincipal httpPrincipal,
@@ -188,7 +191,7 @@ public class LayoutSetPrototypeServiceHttp {
 
 	public static java.util.List<com.liferay.portal.model.LayoutSetPrototype> search(
 		HttpPrincipal httpPrincipal, long companyId, java.lang.Boolean active,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portal.model.LayoutSetPrototype> obc)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			MethodKey methodKey = new MethodKey(LayoutSetPrototypeServiceUtil.class,

@@ -36,7 +36,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem");
 		</c:if>
 	</aui:nav>
 
-	<aui:nav-bar-search cssClass="navbar-search-advanced" file="/html/portlet/dynamic_data_lists/record_set_search.jsp" searchContainer="<%= searchContainer %>" />
+	<aui:nav-bar-search file="/html/portlet/dynamic_data_lists/record_set_search.jsp" searchContainer="<%= searchContainer %>" />
 </aui:nav-bar>
 
 <c:if test="<%= DDLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_RECORD_SET) %>">
@@ -55,7 +55,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem");
 
 						refererPortletName: '<%= portlet.getPortletName() %>',
 						refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
-						title: '<%= UnicodeLanguageUtil.get(pageContext, "data-definitions") %>'
+						title: '<%= UnicodeLanguageUtil.get(request, "data-definitions") %>'
 					}
 				);
 			});

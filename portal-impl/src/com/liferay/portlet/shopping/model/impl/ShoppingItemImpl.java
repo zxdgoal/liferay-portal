@@ -18,6 +18,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.webserver.WebServerServletTokenUtil;
 import com.liferay.portlet.shopping.model.ShoppingCategory;
 import com.liferay.portlet.shopping.model.ShoppingItem;
 import com.liferay.portlet.shopping.model.ShoppingItemPrice;
@@ -31,6 +34,8 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  */
 public class ShoppingItemImpl extends ShoppingItemBaseImpl {
+
+	public static final int STOCK_QUANTITY_INFINITE_STOCK = -1;
 
 	public ShoppingItemImpl() {
 	}
@@ -74,6 +79,30 @@ public class ShoppingItemImpl extends ShoppingItemBaseImpl {
 	@Override
 	public List<ShoppingItemPrice> getItemPrices() throws PortalException {
 		return ShoppingItemPriceLocalServiceUtil.getItemPrices(getItemId());
+	}
+
+	@Override
+	public String getShoppingItemImageURL(ThemeDisplay themeDisplay) {
+		if (!isSmallImage()) {
+			return null;
+		}
+
+		if (Validator.isNotNull(getSmallImageURL())) {
+			return getSmallImageURL();
+		}
+
+		return themeDisplay.getPathImage() + "/shopping/item?img_id=" +
+			getSmallImageId() + "&t=" +
+				WebServerServletTokenUtil.getToken(getSmallImageId());
+	}
+
+	@Override
+	public boolean isInfiniteStock() {
+		if (getStockQuantity() == STOCK_QUANTITY_INFINITE_STOCK) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

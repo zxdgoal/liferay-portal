@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -58,6 +60,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.journal.service.JournalArticleImageLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class JournalArticleImageLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements JournalArticleImageLocalService,
 		IdentifiableBean {
@@ -135,8 +138,7 @@ public abstract class JournalArticleImageLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return journalArticleImagePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -153,8 +155,8 @@ public abstract class JournalArticleImageLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return journalArticleImagePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -173,9 +175,8 @@ public abstract class JournalArticleImageLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return journalArticleImagePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -251,7 +252,7 @@ public abstract class JournalArticleImageLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteJournalArticleImage((JournalArticleImage)persistedModel);
+		return journalArticleImageLocalService.deleteJournalArticleImage((JournalArticleImage)persistedModel);
 	}
 
 	@Override

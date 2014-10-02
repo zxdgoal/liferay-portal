@@ -51,7 +51,14 @@ else {
 
 for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 	String property = (String)entry.getKey();
-	String value = (String)entry.getValue();
+	String value = StringPool.BLANK;
+
+	if (ArrayUtil.contains(PropsValues.ADMIN_OBFUSCATED_PROPERTIES, property)) {
+		value = StringPool.EIGHT_STARS;
+	}
+	else {
+		value = (String)entry.getValue();
+	}
 
 	if (Validator.isNull(keywords) || property.contains(keywords) || value.contains(keywords)) {
 		filteredProperties.put(property, value);
@@ -132,7 +139,7 @@ Map<String, String[]> companyPortletPreferencesMap = companyPortletPreferences.g
 			>
 				<liferay-ui:icon
 					iconCssClass='<%= overriddenPropertyValue ? "icon-hdd" : "icon-file-alt" %>'
-					message='<%= LanguageUtil.get(pageContext, overriddenPropertyValue ? "the-value-of-this-property-was-overridden-using-the-control-panel-and-is-stored-in-the-database" : "the-value-of-this-property-is-read-from-a-portal.properties-file-or-one-of-its-extension-files") %>'
+					message='<%= LanguageUtil.get(request, overriddenPropertyValue ? "the-value-of-this-property-was-overridden-using-the-control-panel-and-is-stored-in-the-database" : "the-value-of-this-property-is-read-from-a-portal.properties-file-or-one-of-its-extension-files") %>'
 				/>
 			</liferay-ui:search-container-column-text>
 		</c:if>

@@ -55,7 +55,6 @@ import com.liferay.portlet.shopping.util.comparator.ItemMinQuantityComparator;
 import com.liferay.portlet.shopping.util.comparator.ItemNameComparator;
 import com.liferay.portlet.shopping.util.comparator.ItemPriceComparator;
 import com.liferay.portlet.shopping.util.comparator.ItemSKUComparator;
-import com.liferay.portlet.shopping.util.comparator.OrderDateComparator;
 
 import java.text.NumberFormat;
 
@@ -74,7 +73,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
-import javax.servlet.jsp.PageContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Brian Wing Shun Chan
@@ -184,13 +183,24 @@ public class ShoppingUtil {
 			return discount;
 		}
 
-		String[] categoryIds = StringUtil.split(coupon.getLimitCategories());
+		String[] categoryNames = StringUtil.split(coupon.getLimitCategories());
+
+		List<Long> categoryIds = new ArrayList<Long>();
+
+		for (String categoryName : categoryNames) {
+			ShoppingCategory category =
+				ShoppingCategoryLocalServiceUtil.getCategory(
+					coupon.getGroupId(), categoryName);
+
+			categoryIds.add(category.getCategoryId());
+		}
+
 		String[] skus = StringUtil.split(coupon.getLimitSkus());
 
-		if ((categoryIds.length > 0) || (skus.length > 0)) {
-			Set<String> categoryIdsSet = new HashSet<String>();
+		if ((categoryIds.size() > 0) || (skus.length > 0)) {
+			Set<Long> categoryIdsSet = new HashSet<Long>();
 
-			for (String categoryId : categoryIds) {
+			for (Long categoryId : categoryIds) {
 				categoryIdsSet.add(categoryId);
 			}
 
@@ -212,8 +222,7 @@ public class ShoppingUtil {
 				ShoppingItem item = cartItem.getItem();
 
 				if ((!categoryIdsSet.isEmpty() &&
-					 categoryIdsSet.contains(
-						 String.valueOf(item.getCategoryId()))) ||
+					 categoryIdsSet.contains(item.getCategoryId())) ||
 					(!skusSet.isEmpty() && skusSet.contains(item.getSku()))) {
 
 					newItems.put(cartItem, count);
@@ -545,8 +554,8 @@ public class ShoppingUtil {
 	}
 
 	public static String getBreadcrumbs(
-			long categoryId, PageContext pageContext,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			long categoryId, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		ShoppingCategory category = null;
@@ -557,13 +566,12 @@ public class ShoppingUtil {
 		catch (Exception e) {
 		}
 
-		return getBreadcrumbs(
-			category, pageContext, renderRequest, renderResponse);
+		return getBreadcrumbs(category, renderRequest, renderResponse);
 	}
 
 	public static String getBreadcrumbs(
-			ShoppingCategory category, PageContext pageContext,
-			RenderRequest renderRequest, RenderResponse renderResponse)
+			ShoppingCategory category, RenderRequest renderRequest,
+			RenderResponse renderResponse)
 		throws Exception {
 
 		PortletURL categoriesURL = renderResponse.createRenderURL();
@@ -581,9 +589,12 @@ public class ShoppingUtil {
 			//categoriesURL.setWindowState(WindowState.MAXIMIZED);
 		}
 
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			renderRequest);
+
 		String categoriesLink =
 			"<a href=\"" + categoriesURL.toString() + "\">" +
-				LanguageUtil.get(pageContext, "categories") + "</a>";
+				LanguageUtil.get(request, "categories") + "</a>";
 
 		if (category == null) {
 			return "<span class=\"first last\">" + categoriesLink + "</span>";
@@ -850,7 +861,7 @@ public class ShoppingUtil {
 		return GetterUtil.getLong(itemId);
 	}
 
-	public static OrderByComparator getItemOrderByComparator(
+	public static OrderByComparator<ShoppingItem> getItemOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -859,7 +870,7 @@ public class ShoppingUtil {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<ShoppingItem> orderByComparator = null;
 
 		if (orderByCol.equals("min-qty")) {
 			orderByComparator = new ItemMinQuantityComparator(orderByAsc);
@@ -872,9 +883,6 @@ public class ShoppingUtil {
 		}
 		else if (orderByCol.equals("sku")) {
 			orderByComparator = new ItemSKUComparator(orderByAsc);
-		}
-		else if (orderByCol.equals("order-date")) {
-			orderByComparator = new OrderDateComparator(orderByAsc);
 		}
 
 		return orderByComparator;
@@ -960,7 +968,7 @@ public class ShoppingUtil {
 	}
 
 	public static String getPpPaymentStatus(
-		ShoppingOrder order, PageContext pageContext) {
+		ShoppingOrder order, HttpServletRequest request) {
 
 		String ppPaymentStatus = order.getPpPaymentStatus();
 
@@ -971,7 +979,7 @@ public class ShoppingUtil {
 			ppPaymentStatus = StringUtil.toLowerCase(ppPaymentStatus);
 		}
 
-		return LanguageUtil.get(pageContext, HtmlUtil.escape(ppPaymentStatus));
+		return LanguageUtil.get(request, HtmlUtil.escape(ppPaymentStatus));
 	}
 
 	public static String getPpPaymentStatus(String ppPaymentStatus) {
@@ -987,6 +995,10 @@ public class ShoppingUtil {
 	}
 
 	public static boolean isInStock(ShoppingItem item) {
+		if (item.isInfiniteStock()) {
+			return true;
+		}
+
 		if (!item.isFields()) {
 			if (item.getStockQuantity() > 0) {
 				return true;
@@ -1011,6 +1023,10 @@ public class ShoppingUtil {
 	public static boolean isInStock(
 		ShoppingItem item, ShoppingItemField[] itemFields, String[] fieldsArray,
 		Integer orderedQuantity) {
+
+		if (item.isInfiniteStock()) {
+			return true;
+		}
 
 		if (!item.isFields()) {
 			int stockQuantity = item.getStockQuantity();

@@ -14,16 +14,20 @@
 
 package com.liferay.portal.lar;
 
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.ExportImportHelperUtil;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
+import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataContextFactoryUtil;
 import com.liferay.portal.kernel.lar.PortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
+import com.liferay.portal.kernel.lar.PortletDataHandlerStatusMessageSenderUtil;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.lar.xstream.XStreamAliasRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.settings.Settings;
@@ -240,8 +244,6 @@ public class LayoutExporter {
 
 		stopWatch.start();
 
-		LayoutCache layoutCache = new LayoutCache();
-
 		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
 
 		PortletDataContext portletDataContext =
@@ -372,27 +374,60 @@ public class LayoutExporter {
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
 			groupId, privateLayout);
 
-		List<Portlet> portlets = getDataSiteLevelPortlets(companyId);
-
 		if (group.isStagingGroup()) {
 			group = group.getLiveGroup();
 		}
 
-		for (Portlet portlet : portlets) {
+		// Collect data portlets
+
+		for (Portlet portlet : getDataSiteLevelPortlets(companyId)) {
 			String portletId = portlet.getRootPortletId();
 
 			if (!group.isStagedPortlet(portletId)) {
 				continue;
 			}
 
-			String key = PortletPermissionUtil.getPrimaryKey(0, portletId);
+			// Calculate the amount of exported data
 
-			if (portletIds.get(key) == null) {
+			if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
+				PortletDataHandler portletDataHandler =
+					portlet.getPortletDataHandlerInstance();
+
+				portletDataHandler.prepareManifestSummary(portletDataContext);
+			}
+
+			// Add portlet ID to exportable portlets list
+
+			portletIds.put(
+				PortletPermissionUtil.getPrimaryKey(0, portletId),
+				new Object[] {
+					portletId, LayoutConstants.DEFAULT_PLID, groupId,
+					StringPool.BLANK, StringPool.BLANK
+				});
+
+			if (!portlet.isScopeable()) {
+				continue;
+			}
+
+			// Scoped data
+
+			for (Layout layout : layouts) {
+				if ((!ArrayUtil.contains(layoutIds, layout.getLayoutId()) &&
+					 ArrayUtil.isNotEmpty(layoutIds)) ||
+					!layout.isTypePortlet() || !layout.hasScopeGroup()) {
+
+					continue;
+				}
+
+				Group scopeGroup = layout.getScopeGroup();
+
 				portletIds.put(
-					key,
+					PortletPermissionUtil.getPrimaryKey(
+						layout.getPlid(), portlet.getPortletId()),
 					new Object[] {
-						portletId, LayoutConstants.DEFAULT_PLID, groupId,
-						StringPool.BLANK, StringPool.BLANK
+						portlet.getPortletId(), layout.getPlid(),
+						scopeGroup.getGroupId(), StringPool.BLANK,
+						layout.getUuid()
 					});
 			}
 		}
@@ -405,7 +440,7 @@ public class LayoutExporter {
 
 		String layoutSetPrototypeUuid = layoutSet.getLayoutSetPrototypeUuid();
 
-		if (!group.isStaged() && Validator.isNotNull(layoutSetPrototypeUuid)) {
+		if (Validator.isNotNull(layoutSetPrototypeUuid)) {
 			LayoutSetPrototype layoutSetPrototype =
 				LayoutSetPrototypeLocalServiceUtil.
 					getLayoutSetPrototypeByUuidAndCompanyId(
@@ -420,8 +455,18 @@ public class LayoutExporter {
 		}
 
 		for (Layout layout : layouts) {
-			exportLayout(
-				portletDataContext, portlets, layoutIds, portletIds, layout);
+			exportLayout(portletDataContext, layoutIds, portletIds, layout);
+		}
+
+		if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
+			ManifestSummary manifestSummary =
+				portletDataContext.getManifestSummary();
+
+			PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+				"layout", ArrayUtil.toStringArray(portletIds.keySet()),
+				manifestSummary);
+
+			manifestSummary.resetCounters();
 		}
 
 		Element portletsElement = rootElement.addElement("portlets");
@@ -475,8 +520,8 @@ public class LayoutExporter {
 					companyId, portletId, parameterMap, type);
 
 			_portletExporter.exportPortlet(
-				portletDataContext, layoutCache, portletId, layout,
-				portletsElement, exportPermissions,
+				portletDataContext, portletId, layout, portletsElement,
+				exportPermissions,
 				exportPortletControlsMap.get(
 					PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS),
 				exportPortletControlsMap.get(
@@ -520,12 +565,12 @@ public class LayoutExporter {
 	}
 
 	protected void exportLayout(
-			PortletDataContext portletDataContext, List<Portlet> portlets,
-			long[] layoutIds, Map<String, Object[]> portletIds, Layout layout)
+			PortletDataContext portletDataContext, long[] layoutIds,
+			Map<String, Object[]> portletIds, Layout layout)
 		throws Exception {
 
 		if (!ArrayUtil.contains(layoutIds, layout.getLayoutId()) &&
-			(layoutIds != null) && (layoutIds.length > 0)) {
+			ArrayUtil.isNotEmpty(layoutIds)) {
 
 			Element layoutElement = portletDataContext.getExportDataElement(
 				layout);
@@ -568,25 +613,6 @@ public class LayoutExporter {
 			// Only portlet type layouts support page scoping
 
 			return;
-		}
-
-		if (layout.isTypePortlet()) {
-			for (Portlet portlet : portlets) {
-				if (portlet.isScopeable() && layout.hasScopeGroup()) {
-					String key = PortletPermissionUtil.getPrimaryKey(
-						layout.getPlid(), portlet.getPortletId());
-
-					Group scopeGroup = layout.getScopeGroup();
-
-					portletIds.put(
-						key,
-						new Object[] {
-							portlet.getPortletId(), layout.getPlid(),
-							scopeGroup.getGroupId(), StringPool.BLANK,
-							layout.getUuid()
-						});
-				}
-			}
 		}
 
 		LayoutTypePortlet layoutTypePortlet =
@@ -655,6 +681,7 @@ public class LayoutExporter {
 	}
 
 	private LayoutExporter() {
+		XStreamAliasRegistryUtil.register(LayoutImpl.class, "Layout");
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(LayoutExporter.class);

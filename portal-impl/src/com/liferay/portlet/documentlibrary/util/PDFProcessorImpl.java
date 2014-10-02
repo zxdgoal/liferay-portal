@@ -21,8 +21,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.process.ClassPathUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
+import com.liferay.portal.kernel.process.ProcessChannel;
 import com.liferay.portal.kernel.process.ProcessException;
-import com.liferay.portal.kernel.process.ProcessExecutor;
+import com.liferay.portal.kernel.process.ProcessExecutorUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -551,17 +552,8 @@ public class PDFProcessorImpl
 
 		int previewFilesCount = 0;
 
-		PDDocument pdDocument = null;
-
-		try {
-			pdDocument = PDDocument.load(file);
-
+		try (PDDocument pdDocument = PDDocument.load(file)) {
 			previewFilesCount = pdDocument.getNumberOfPages();
-		}
-		finally {
-			if (pdDocument != null) {
-				pdDocument.close();
-			}
 		}
 
 		File[] previewFiles = new File[previewFilesCount];
@@ -586,8 +578,10 @@ public class PDFProcessorImpl
 					PropsValues.DL_FILE_ENTRY_PREVIEW_DOCUMENT_MAX_WIDTH,
 					generatePreview, generateThumbnail);
 
-			Future<String> future = ProcessExecutor.execute(
-				ClassPathUtil.getPortalClassPath(), processCallable);
+			ProcessChannel<String> processChannel = ProcessExecutorUtil.execute(
+				ClassPathUtil.getPortalProcessConfig(), processCallable);
+
+			Future<String> future = processChannel.getProcessNoticeableFuture();
 
 			String processIdentity = String.valueOf(
 				fileVersion.getFileVersionId());
@@ -631,7 +625,8 @@ public class PDFProcessorImpl
 				try {
 					addFileToStore(
 						fileVersion.getCompanyId(), PREVIEW_PATH,
-						getPreviewFilePath(fileVersion, index +1), previewFile);
+						getPreviewFilePath(fileVersion, index + 1),
+						previewFile);
 				}
 				finally {
 					FileUtil.delete(previewFile);
@@ -753,7 +748,7 @@ public class PDFProcessorImpl
 			Map<String, String> customLogSettings, File inputFile,
 			File thumbnailFile, File[] previewFiles, String extension,
 			String thumbnailExtension, int dpi, int height, int width,
-			boolean generateThumbnail, boolean generatePreview) {
+			boolean generatePreview, boolean generateThumbnail) {
 
 			_serverId = serverId;
 			_liferayHome = liferayHome;
@@ -766,8 +761,8 @@ public class PDFProcessorImpl
 			_dpi = dpi;
 			_height = height;
 			_width = width;
-			_generateThumbnail = generateThumbnail;
 			_generatePreview = generatePreview;
+			_generateThumbnail = generateThumbnail;
 		}
 
 		@Override

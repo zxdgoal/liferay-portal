@@ -19,8 +19,6 @@ AUI.add(
 
 		var STR_UPDATE = 'update';
 
-		var TPL_DELETE_TRANSLATION_URL = '{baseURL}&{namespace}languageId={languageId}';
-
 		var Journal = A.Component.create(
 			{
 				ATTRS: {
@@ -29,15 +27,10 @@ AUI.add(
 						value: {}
 					},
 
-					focusFieldId: {
-						validator: Lang.isString
-					},
-
 					strings: {
 						validator: Lang.isObject,
 						value: {
 							addTemplate: Liferay.Language.get('please-add-a-template-to-render-this-structure'),
-							deleteTranslationConfirmation: Liferay.Language.get('are-you-sure-you-want-to-deactivate-this-language'),
 							permissions: Liferay.Language.get('permissions'),
 							saveAsDraftBeforePreview: Liferay.Language.get('in-order-to-preview-your-changes,-the-web-content-will-be-saved-as-a-draft')
 						}
@@ -57,8 +50,6 @@ AUI.add(
 						instance._createTooltip();
 
 						instance._bindUI();
-
-						instance._focusField();
 					},
 
 					destructor: function() {
@@ -118,16 +109,6 @@ AUI.add(
 						var strings = instance.get(STR_STRINGS);
 
 						alert(strings.addTemplate);
-					},
-
-					_focusField: function() {
-						var instance = this;
-
-						var focusFieldId = instance.get('focusFieldId');
-
-						if (focusFieldId) {
-							Liferay.Util.focusFormField(instance.one(focusFieldId));
-						}
 					},
 
 					_getByName: function(currentForm, name, withoutNamespace) {
@@ -199,31 +180,7 @@ AUI.add(
 						if (cmd) {
 							var form = instance._getPrincipalForm();
 
-							if (cmd === 'delete_translation') {
-								var strings = instance.get(STR_STRINGS);
-
-								if (confirm(strings.deleteTranslationConfirmation)) {
-									var article = instance.get(STR_ARTICLE);
-
-									instance.one(SELECTOR_CMD, form).val(cmd);
-
-									instance.one('#redirect', form).val(
-										Lang.sub(
-											TPL_DELETE_TRANSLATION_URL,
-											{
-												baseURL: article.editUrl,
-												languageId: article.defaultLanguageId,
-												namespace: instance.NS
-											}
-										)
-									);
-
-									submitForm(form);
-								}
-							}
-							else {
-								instance.one(SELECTOR_CMD, form).val(cmd);
-							}
+							instance.one(SELECTOR_CMD, form).val(cmd);
 						}
 					},
 
@@ -242,12 +199,7 @@ AUI.add(
 
 						var cmd = instance.one(SELECTOR_CMD, form).val();
 
-						if (cmd === 'translate') {
-							instance._translateArticle();
-						}
-						else {
-							instance._saveArticle(cmd);
-						}
+						instance._saveArticle(cmd);
 					},
 
 					_previewArticle: function(event) {
@@ -326,18 +278,6 @@ AUI.add(
 
 							submitForm(form);
 						}
-					},
-
-					_translateArticle: function() {
-						var instance = this;
-
-						var form = instance._getPrincipalForm();
-
-						var cmdInput = instance._getByName(form, STR_CMD);
-
-						cmdInput.val('translate');
-
-						submitForm(form);
 					},
 
 					_updateStructureDefaultValues: function() {

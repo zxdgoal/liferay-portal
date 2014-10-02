@@ -28,13 +28,13 @@ import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.NullSafeStringComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.ModelListener;
+import com.liferay.portal.model.ModelListenerRegistrationUtil;
 import com.liferay.portal.model.ModelWrapper;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
@@ -63,6 +63,7 @@ import javax.sql.DataSource;
  *
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class BasePersistenceImpl<T extends BaseModel<T>>
 	implements BasePersistence<T>, SessionFactory {
@@ -119,8 +120,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	@Override
 	public Map<Serializable, T> fetchByPrimaryKeys(
-			Set<Serializable> primaryKeys)
-		throws SystemException {
+		Set<Serializable> primaryKeys) {
 
 		throw new UnsupportedOperationException();
 	}
@@ -128,14 +128,13 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	@Override
 	@SuppressWarnings("unused")
 	public T findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
+		throws NoSuchModelException {
 
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(DynamicQuery dynamicQuery) {
+	public <V> List<V> findWithDynamicQuery(DynamicQuery dynamicQuery) {
 		Session session = null;
 
 		try {
@@ -154,8 +153,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(
+	public <V> List<V> findWithDynamicQuery(
 		DynamicQuery dynamicQuery, int start, int end) {
 
 		Session session = null;
@@ -178,10 +176,9 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(
+	public <V> List<V> findWithDynamicQuery(
 		DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<V> orderByComparator) {
 
 		OrderFactoryUtil.addOrderByComparator(dynamicQuery, orderByComparator);
 
@@ -223,7 +220,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	@Override
 	public ModelListener<T>[] getListeners() {
-		return listeners;
+		return ModelListenerRegistrationUtil.getModelListeners(getModelClass());
 	}
 
 	@Override
@@ -256,19 +253,12 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	@Override
 	public void registerListener(ModelListener<T> listener) {
-		List<ModelListener<T>> listenersList = ListUtil.fromArray(listeners);
-
-		listenersList.add(listener);
-
-		listeners = listenersList.toArray(
-			new ModelListener[listenersList.size()]);
+		ModelListenerRegistrationUtil.register(listener);
 	}
 
 	@Override
 	@SuppressWarnings("unused")
-	public T remove(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-
+	public T remove(Serializable primaryKey) throws NoSuchModelException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -279,6 +269,8 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 			model = modelWrapper.getWrappedModel();
 		}
+
+		ModelListener<T>[] listeners = getListeners();
 
 		for (ModelListener<T> listener : listeners) {
 			listener.onBeforeRemove(model);
@@ -306,12 +298,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	@Override
 	public void unregisterListener(ModelListener<T> listener) {
-		List<ModelListener<T>> listenersList = ListUtil.fromArray(listeners);
-
-		listenersList.remove(listener);
-
-		listeners = listenersList.toArray(
-			new ModelListener[listenersList.size()]);
+		ModelListenerRegistrationUtil.unregister(listener);
 	}
 
 	@Override
@@ -323,6 +310,8 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 
 		boolean isNew = model.isNew();
+
+		ModelListener<T>[] listeners = getListeners();
 
 		for (ModelListener<T> listener : listeners) {
 			if (isNew) {
@@ -360,6 +349,8 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 
 		boolean isNew = model.isNew();
+
+		ModelListener<T>[] listeners = getListeners();
 
 		for (ModelListener<T> listener : listeners) {
 			if (isNew) {
@@ -420,14 +411,14 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	protected void appendOrderByComparator(
 		StringBundler query, String entityAlias,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<T> orderByComparator) {
 
 		appendOrderByComparator(query, entityAlias, orderByComparator, false);
 	}
 
 	protected void appendOrderByComparator(
 		StringBundler query, String entityAlias,
-		OrderByComparator orderByComparator, boolean sqlQuery) {
+		OrderByComparator<T> orderByComparator, boolean sqlQuery) {
 
 		query.append(ORDER_BY_CLAUSE);
 
@@ -537,6 +528,10 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	protected static final String WHERE_OR = " OR ";
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	protected ModelListener<T>[] listeners = new ModelListener[0];
 
 	private static Log _log = LogFactoryUtil.getLog(BasePersistenceImpl.class);

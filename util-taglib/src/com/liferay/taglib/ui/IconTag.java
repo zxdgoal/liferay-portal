@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -153,7 +154,7 @@ public class IconTag extends IncludeTag {
 		_id = null;
 		_image = null;
 		_imageHover = null;
-		_label = false;
+		_label = null;
 		_lang = null;
 		_linkCssClass = null;
 		_localizeMessage = true;
@@ -182,7 +183,7 @@ public class IconTag extends IncludeTag {
 			String message = getProcessedMessage();
 
 			if (_localizeMessage) {
-				message = LanguageUtil.get(pageContext, message);
+				message = LanguageUtil.get(request, message);
 			}
 
 			data.put("title", HtmlUtil.stripHtml(message));
@@ -198,28 +199,27 @@ public class IconTag extends IncludeTag {
 		String details = null;
 
 		if (_alt != null) {
-			details = " alt=\"" + LanguageUtil.get(pageContext, _alt) + "\"";
+			details = " alt=\"" + LanguageUtil.get(request, _alt) + "\"";
 		}
-		else if (_label) {
+		else if (isLabel()) {
 			details = " alt=\"\"";
 		}
 		else {
 			StringBundler sb = new StringBundler(6);
 
 			sb.append(" alt=\"");
-			sb.append(LanguageUtil.get(pageContext, getProcessedMessage()));
+			sb.append(LanguageUtil.get(request, getProcessedMessage()));
 			sb.append("\"");
 
 			if (_toolTip) {
 				sb.append(" onmouseover=\"Liferay.Portal.ToolTip.show(this, '");
 				sb.append(
-					UnicodeLanguageUtil.get(
-						pageContext, getProcessedMessage()));
+					UnicodeLanguageUtil.get(request, getProcessedMessage()));
 				sb.append("')\"");
 			}
 			else {
 				sb.append(" title=\"");
-				sb.append(LanguageUtil.get(pageContext, getProcessedMessage()));
+				sb.append(LanguageUtil.get(request, getProcessedMessage()));
 				sb.append("\"");
 			}
 
@@ -399,7 +399,11 @@ public class IconTag extends IncludeTag {
 		String onClick = StringPool.BLANK;
 
 		if (Validator.isNotNull(_onClick)) {
-			onClick = _onClick + StringPool.SEMICOLON;
+			onClick = _onClick;
+
+			if (!onClick.endsWith(StringPool.SEMICOLON)) {
+				onClick = onClick + StringPool.SEMICOLON;
+			}
 		}
 
 		if (isForcePost()) {
@@ -435,6 +439,14 @@ public class IconTag extends IncludeTag {
 			new String[] {
 				StringPool.DASH, StringPool.BLANK
 			});
+	}
+
+	protected String getProcessedUrl() {
+		if (isForcePost()) {
+			return "javascript:;";
+		}
+
+		return _url;
 	}
 
 	protected String getSrc() {
@@ -514,6 +526,40 @@ public class IconTag extends IncludeTag {
 		return false;
 	}
 
+	protected boolean isLabel() {
+		if (_label != null) {
+			return _label;
+		}
+
+		IntegerWrapper iconListIconCount = (IntegerWrapper)request.getAttribute(
+			"liferay-ui:icon-list:icon-count");
+
+		Boolean iconListSingleIcon = (Boolean)request.getAttribute(
+			"liferay-ui:icon-list:single-icon");
+
+		if ((iconListIconCount != null) || (iconListSingleIcon != null)) {
+			_label = true;
+
+			return _label;
+		}
+
+		IntegerWrapper iconMenuIconCount = (IntegerWrapper)request.getAttribute(
+			"liferay-ui:icon-menu:icon-count");
+
+		Boolean iconMenuSingleIcon = (Boolean)request.getAttribute(
+			"liferay-ui:icon-menu:single-icon");
+
+		if ((iconMenuIconCount != null) || (iconMenuSingleIcon != null)) {
+			_label = true;
+
+			return _label;
+		}
+
+		_label = false;
+
+		return _label;
+	}
+
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
 		request.setAttribute("liferay-ui:icon:alt", _alt);
@@ -529,7 +575,8 @@ public class IconTag extends IncludeTag {
 		request.setAttribute("liferay-ui:icon:imageHover", _imageHover);
 		request.setAttribute(
 			"liferay-ui:icon:forcePost", String.valueOf(isForcePost()));
-		request.setAttribute("liferay-ui:icon:label", String.valueOf(_label));
+		request.setAttribute(
+			"liferay-ui:icon:label", String.valueOf(isLabel()));
 		request.setAttribute("liferay-ui:icon:lang", _lang);
 		request.setAttribute("liferay-ui:icon:linkCssClass", _linkCssClass);
 		request.setAttribute(
@@ -543,7 +590,7 @@ public class IconTag extends IncludeTag {
 		request.setAttribute("liferay-ui:icon:target", _target);
 		request.setAttribute(
 			"liferay-ui:icon:toolTip", String.valueOf(_toolTip));
-		request.setAttribute("liferay-ui:icon:url", getUrl());
+		request.setAttribute("liferay-ui:icon:url", getProcessedUrl());
 		request.setAttribute(
 			"liferay-ui:icon:useDialog", String.valueOf(_useDialog));
 	}
@@ -562,7 +609,7 @@ public class IconTag extends IncludeTag {
 	private String _id;
 	private String _image;
 	private String _imageHover;
-	private boolean _label;
+	private Boolean _label;
 	private String _lang;
 	private String _linkCssClass;
 	private boolean _localizeMessage = true;

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.messageboards.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.messageboards.NoSuchDiscussionException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.messageboards.service.persistence.MBDiscussionPersist
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see MBDiscussionUtil
  * @generated
  */
+@ProviderType
 public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussion>
 	implements MBDiscussionPersistence {
 	/*
@@ -149,7 +147,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public List<MBDiscussion> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -269,7 +267,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByUuid_First(uuid, orderByComparator);
 
 		if (mbDiscussion != null) {
@@ -297,7 +296,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		List<MBDiscussion> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -317,7 +316,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (mbDiscussion != null) {
@@ -345,7 +345,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -373,7 +373,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion[] findByUuid_PrevAndNext(long discussionId,
-		String uuid, OrderByComparator orderByComparator)
+		String uuid, OrderByComparator<MBDiscussion> orderByComparator)
 		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = findByPrimaryKey(discussionId);
 
@@ -404,7 +404,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 	protected MBDiscussion getByUuid_PrevAndNext(Session session,
 		MBDiscussion mbDiscussion, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MBDiscussion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -928,7 +928,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public List<MBDiscussion> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<MBDiscussion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1058,7 +1058,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1091,7 +1092,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		List<MBDiscussion> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1113,7 +1114,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1146,7 +1148,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1175,7 +1177,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion[] findByUuid_C_PrevAndNext(long discussionId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<MBDiscussion> orderByComparator)
 		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = findByPrimaryKey(discussionId);
 
@@ -1206,7 +1209,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 	protected MBDiscussion getByUuid_C_PrevAndNext(Session session,
 		MBDiscussion mbDiscussion, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MBDiscussion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1482,7 +1485,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public List<MBDiscussion> findByClassNameId(long classNameId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<MBDiscussion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1588,7 +1591,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByClassNameId_First(classNameId,
 				orderByComparator);
 
@@ -1617,7 +1621,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		List<MBDiscussion> list = findByClassNameId(classNameId, 0, 1,
 				orderByComparator);
 
@@ -1638,7 +1642,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion findByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchDiscussionException {
+		OrderByComparator<MBDiscussion> orderByComparator)
+		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = fetchByClassNameId_Last(classNameId,
 				orderByComparator);
 
@@ -1667,7 +1672,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion fetchByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		int count = countByClassNameId(classNameId);
 
 		if (count == 0) {
@@ -1695,7 +1700,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public MBDiscussion[] findByClassNameId_PrevAndNext(long discussionId,
-		long classNameId, OrderByComparator orderByComparator)
+		long classNameId, OrderByComparator<MBDiscussion> orderByComparator)
 		throws NoSuchDiscussionException {
 		MBDiscussion mbDiscussion = findByPrimaryKey(discussionId);
 
@@ -1726,7 +1731,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 	protected MBDiscussion getByClassNameId_PrevAndNext(Session session,
 		MBDiscussion mbDiscussion, long classNameId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MBDiscussion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3012,7 +3017,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	@Override
 	public List<MBDiscussion> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MBDiscussion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3148,25 +3153,6 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 * Initializes the message boards discussion persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.messageboards.model.MBDiscussion")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<MBDiscussion>> listenersList = new ArrayList<ModelListener<MBDiscussion>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<MBDiscussion>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3185,11 +3171,11 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MBDiscussion exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MBDiscussion exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(MBDiscussionPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(MBDiscussionPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static MBDiscussion _nullMBDiscussion = new MBDiscussionImpl() {
+	private static final MBDiscussion _nullMBDiscussion = new MBDiscussionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3201,7 +3187,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 		};
 
-	private static CacheModel<MBDiscussion> _nullMBDiscussionCacheModel = new CacheModel<MBDiscussion>() {
+	private static final CacheModel<MBDiscussion> _nullMBDiscussionCacheModel = new CacheModel<MBDiscussion>() {
 			@Override
 			public MBDiscussion toEntityModel() {
 				return _nullMBDiscussion;

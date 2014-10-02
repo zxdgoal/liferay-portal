@@ -15,21 +15,21 @@
 package com.liferay.portlet.blogs.trash;
 
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
+import com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.trash.BaseTrashHandlerTestCase;
 
-import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.HashMap;
@@ -180,7 +180,7 @@ public class BlogsEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 		throws Exception {
 
 		String title = getSearchKeywords();
-		String deckTitle = StringPool.BLANK;
+		String subtitle = StringPool.BLANK;
 		String description = "Description";
 		String content = "Content";
 		int displayDateMonth = 1;
@@ -191,21 +191,17 @@ public class BlogsEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 		boolean allowPingbacks = true;
 		boolean allowTrackbacks = true;
 		String[] trackbacks = new String[0];
-		boolean smallImage = false;
-		String smallImageURL = StringPool.BLANK;
-		String smallImageFileName = StringPool.BLANK;
-		InputStream smallImageInputStream = null;
+		ImageSelector imageSelector = null;
 
 		serviceContext = (ServiceContext)serviceContext.clone();
 
 		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_SAVE_DRAFT);
 
 		BlogsEntry entry = BlogsEntryLocalServiceUtil.addEntry(
-			TestPropsValues.getUserId(), title, deckTitle, description, content,
+			TestPropsValues.getUserId(), title, subtitle, description, content,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
-			smallImageInputStream, serviceContext);
+			imageSelector, serviceContext);
 
 		if (approved) {
 			entry = BlogsEntryLocalServiceUtil.updateStatus(
@@ -231,8 +227,8 @@ public class BlogsEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 	protected int getNotInTrashBaseModelsCount(BaseModel<?> parentBaseModel)
 		throws Exception {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY);
+		QueryDefinition<BlogsEntry> queryDefinition =
+			new QueryDefinition<BlogsEntry>(WorkflowConstants.STATUS_ANY);
 
 		return BlogsEntryLocalServiceUtil.getGroupEntriesCount(
 			(Long)parentBaseModel.getPrimaryKeyObj(), queryDefinition);

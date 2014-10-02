@@ -28,8 +28,8 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
@@ -38,6 +38,7 @@ import com.liferay.portal.xml.XMLSchemaImpl;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.documentlibrary.util.test.DLAppTestUtil;
+import com.liferay.portlet.dynamicdatamapping.io.DDMFormXSDDeserializerUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormFieldOptions;
@@ -48,7 +49,6 @@ import com.liferay.portlet.dynamicdatamapping.service.BaseDDMServiceTestCase;
 import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
-import com.liferay.portlet.dynamicdatamapping.util.DDMFormXSDDeserializerUtil;
 import com.liferay.portlet.dynamicdatamapping.util.DDMImpl;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLImpl;
 import com.liferay.portlet.journal.model.JournalArticle;
@@ -85,10 +85,10 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 
 		long classNameId = PortalUtil.getClassNameId(JournalArticle.class);
 
-		String xsd = readText("test-ddm-structure-all-fields.xml");
+		String definition = readText("test-ddm-structure-all-fields.xml");
 
 		_ddmStructure = addStructure(
-			classNameId, null, "Test Structure", xsd,
+			classNameId, null, "Test Structure", definition,
 			StorageType.XML.getValue(), DDMStructureConstants.TYPE_DEFAULT);
 	}
 
@@ -352,7 +352,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Fields actualFields = JournalConverterUtil.getDDMFields(
 			_ddmStructure, content);
 
-		assertEquals(expectedFields, actualFields);
+		Assert.assertEquals(expectedFields, actualFields);
 	}
 
 	@Test
@@ -399,7 +399,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 			Fields actualFields = JournalConverterUtil.getDDMFields(
 				_ddmStructure, document.asXML());
 
-			assertEquals(expectedFields, actualFields);
+			Assert.assertEquals(expectedFields, actualFields);
 		}
 	}
 
@@ -439,7 +439,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Fields actualFields = JournalConverterUtil.getDDMFields(
 			_ddmStructure, content);
 
-		assertEquals(expectedFields, actualFields);
+		Assert.assertEquals(expectedFields, actualFields);
 	}
 
 	@Test
@@ -460,7 +460,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Fields actualFields = JournalConverterUtil.getDDMFields(
 			_ddmStructure, content);
 
-		assertEquals(expectedFields, actualFields);
+		Assert.assertEquals(expectedFields, actualFields);
 	}
 
 	@Test
@@ -484,7 +484,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Fields actualFields = JournalConverterUtil.getDDMFields(
 			_ddmStructure, content);
 
-		assertEquals(expectedFields, actualFields);
+		Assert.assertEquals(expectedFields, actualFields);
 	}
 
 	@Test
@@ -496,7 +496,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Fields actualFields = JournalConverterUtil.getDDMFields(
 			_ddmStructure, content);
 
-		assertEquals(expectedFields, actualFields);
+		Assert.assertEquals(expectedFields, actualFields);
 	}
 
 	@Test
@@ -584,34 +584,6 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		}
 	}
 
-	protected void assertEquals(Fields expectedFields, Fields actualFields) {
-		Field expectedFieldsDisplayField = expectedFields.get(
-			DDMImpl.FIELDS_DISPLAY_NAME);
-
-		String expectedFieldsDisplayFieldValue =
-			(String)expectedFieldsDisplayField.getValue();
-
-		String regex = DDMImpl.INSTANCE_SEPARATOR.concat("\\w{8}");
-
-		expectedFieldsDisplayFieldValue =
-			expectedFieldsDisplayFieldValue.replaceAll(regex, StringPool.BLANK);
-
-		expectedFieldsDisplayField.setValue(expectedFieldsDisplayFieldValue);
-
-		Field actualFieldsDisplayField = actualFields.get(
-			DDMImpl.FIELDS_DISPLAY_NAME);
-
-		String actualFieldsDisplayFieldValue =
-			(String)actualFieldsDisplayField.getValue();
-
-		actualFieldsDisplayFieldValue =
-			actualFieldsDisplayFieldValue.replaceAll(regex, StringPool.BLANK);
-
-		actualFieldsDisplayField.setValue(actualFieldsDisplayFieldValue);
-
-		Assert.assertEquals(expectedFields, actualFields);
-	}
-
 	protected void assertEquals(
 		LocalizedValue expectedLocalizedValue,
 		LocalizedValue actualLocalizedValue) {
@@ -620,10 +592,10 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 			expectedLocalizedValue.getAvailableLocales();
 
 		for (Locale expectedLocale : expectedAvailableLocales) {
-			String expectedValue = expectedLocalizedValue.getValue(
+			String expectedValue = expectedLocalizedValue.getString(
 				expectedLocale);
 
-			String actualValue = actualLocalizedValue.getValue(expectedLocale);
+			String actualValue = actualLocalizedValue.getString(expectedLocale);
 
 			Assert.assertEquals(expectedValue, actualValue);
 		}

@@ -1,3 +1,5 @@
-Bundle-Version: ${plugin.full.version}
+Bundle-Name: Liferay Ant BND
+Bundle-SymbolicName: com.liferay.ant.bnd
+Bundle-Version: 1.0.0
 Export-Package: com.liferay.ant.bnd
 Include-Resource: classes

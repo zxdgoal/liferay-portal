@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
@@ -31,8 +33,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -41,7 +41,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.service.persistence.impl.NestedSetsTreeManager;
@@ -58,7 +57,6 @@ import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,6 +77,7 @@ import java.util.Set;
  * @see AssetCategoryUtil
  * @generated
  */
+@ProviderType
 public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCategory>
 	implements AssetCategoryPersistence {
 	/*
@@ -193,7 +192,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -313,7 +312,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByUuid_First(uuid, orderByComparator);
 
 		if (assetCategory != null) {
@@ -341,7 +341,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -361,7 +361,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (assetCategory != null) {
@@ -389,7 +390,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -417,7 +418,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByUuid_PrevAndNext(long categoryId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
 		Session session = null;
@@ -447,7 +449,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByUuid_PrevAndNext(Session session,
 		AssetCategory assetCategory, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -974,7 +976,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1104,7 +1106,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1137,7 +1140,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1159,7 +1162,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1192,7 +1196,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1221,7 +1225,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByUuid_C_PrevAndNext(long categoryId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -1252,7 +1257,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByUuid_C_PrevAndNext(Session session,
 		AssetCategory assetCategory, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1527,7 +1532,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1633,7 +1638,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -1662,7 +1668,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -1683,7 +1689,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByGroupId_Last(groupId,
 				orderByComparator);
 
@@ -1712,7 +1719,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1740,7 +1747,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByGroupId_PrevAndNext(long categoryId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -1771,7 +1778,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByGroupId_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1919,7 +1926,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -2010,7 +2017,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] filterFindByGroupId_PrevAndNext(long categoryId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(categoryId, groupId,
@@ -2046,7 +2053,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory filterGetByGroupId_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2366,7 +2373,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByParentCategoryId(long parentCategoryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2476,7 +2483,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByParentCategoryId_First(long parentCategoryId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByParentCategoryId_First(parentCategoryId,
 				orderByComparator);
 
@@ -2505,7 +2513,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByParentCategoryId_First(long parentCategoryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByParentCategoryId(parentCategoryId, 0,
 				1, orderByComparator);
 
@@ -2526,7 +2534,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByParentCategoryId_Last(long parentCategoryId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByParentCategoryId_Last(parentCategoryId,
 				orderByComparator);
 
@@ -2555,7 +2564,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByParentCategoryId_Last(long parentCategoryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByParentCategoryId(parentCategoryId);
 
 		if (count == 0) {
@@ -2583,7 +2592,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByParentCategoryId_PrevAndNext(long categoryId,
-		long parentCategoryId, OrderByComparator orderByComparator)
+		long parentCategoryId,
+		OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -2614,7 +2624,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByParentCategoryId_PrevAndNext(Session session,
 		AssetCategory assetCategory, long parentCategoryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2852,7 +2862,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByVocabularyId(long vocabularyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2962,7 +2972,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByVocabularyId_First(long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByVocabularyId_First(vocabularyId,
 				orderByComparator);
 
@@ -2991,7 +3002,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByVocabularyId_First(long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByVocabularyId(vocabularyId, 0, 1,
 				orderByComparator);
 
@@ -3012,7 +3023,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByVocabularyId_Last(long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByVocabularyId_Last(vocabularyId,
 				orderByComparator);
 
@@ -3041,7 +3053,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByVocabularyId_Last(long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByVocabularyId(vocabularyId);
 
 		if (count == 0) {
@@ -3069,7 +3081,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByVocabularyId_PrevAndNext(long categoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -3100,7 +3112,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByVocabularyId_PrevAndNext(Session session,
 		AssetCategory assetCategory, long vocabularyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3344,7 +3356,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByG_V(long groupId, long vocabularyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3460,7 +3472,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_V_First(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_V_First(groupId, vocabularyId,
 				orderByComparator);
 
@@ -3493,7 +3506,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByG_V_First(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByG_V(groupId, vocabularyId, 0, 1,
 				orderByComparator);
 
@@ -3515,7 +3528,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_V_Last(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_V_Last(groupId, vocabularyId,
 				orderByComparator);
 
@@ -3548,7 +3562,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByG_V_Last(long groupId, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByG_V(groupId, vocabularyId);
 
 		if (count == 0) {
@@ -3577,7 +3591,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByG_V_PrevAndNext(long categoryId, long groupId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -3608,7 +3622,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByG_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long vocabularyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3763,7 +3777,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> filterFindByG_V(long groupId, long vocabularyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_V(groupId, vocabularyId, start, end,
 				orderByComparator);
@@ -3860,7 +3874,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] filterFindByG_V_PrevAndNext(long categoryId,
-		long groupId, long vocabularyId, OrderByComparator orderByComparator)
+		long groupId, long vocabularyId,
+		OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_V_PrevAndNext(categoryId, groupId, vocabularyId,
@@ -3896,7 +3911,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory filterGetByG_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long vocabularyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4088,7 +4103,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> filterFindByG_V(long groupId,
 		long[] vocabularyIds, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_V(groupId, vocabularyIds, start, end,
 				orderByComparator);
@@ -4235,7 +4250,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByG_V(long groupId, long[] vocabularyIds,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		if (vocabularyIds == null) {
 			vocabularyIds = new long[0];
 		}
@@ -4700,7 +4715,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByP_N(long parentCategoryId, String name,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4830,7 +4845,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByP_N_First(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByP_N_First(parentCategoryId, name,
 				orderByComparator);
 
@@ -4863,7 +4879,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByP_N_First(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByP_N(parentCategoryId, name, 0, 1,
 				orderByComparator);
 
@@ -4885,7 +4901,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByP_N_Last(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByP_N_Last(parentCategoryId, name,
 				orderByComparator);
 
@@ -4918,7 +4935,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByP_N_Last(long parentCategoryId, String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByP_N(parentCategoryId, name);
 
 		if (count == 0) {
@@ -4947,7 +4964,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByP_N_PrevAndNext(long categoryId,
-		long parentCategoryId, String name, OrderByComparator orderByComparator)
+		long parentCategoryId, String name,
+		OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -4978,7 +4996,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByP_N_PrevAndNext(Session session,
 		AssetCategory assetCategory, long parentCategoryId, String name,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5261,7 +5279,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> findByP_V(long parentCategoryId,
 		long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5377,7 +5395,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByP_V_First(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByP_V_First(parentCategoryId,
 				vocabularyId, orderByComparator);
@@ -5411,7 +5429,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByP_V_First(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByP_V(parentCategoryId, vocabularyId, 0,
 				1, orderByComparator);
 
@@ -5433,7 +5451,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByP_V_Last(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByP_V_Last(parentCategoryId,
 				vocabularyId, orderByComparator);
@@ -5467,7 +5485,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByP_V_Last(long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByP_V(parentCategoryId, vocabularyId);
 
 		if (count == 0) {
@@ -5497,7 +5515,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] findByP_V_PrevAndNext(long categoryId,
 		long parentCategoryId, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
 		Session session = null;
@@ -5527,7 +5546,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByP_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long parentCategoryId, long vocabularyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5777,7 +5796,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findByN_V(String name, long vocabularyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5907,7 +5926,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByN_V_First(String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByN_V_First(name, vocabularyId,
 				orderByComparator);
 
@@ -5940,7 +5960,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByN_V_First(String name, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByN_V(name, vocabularyId, 0, 1,
 				orderByComparator);
 
@@ -5962,7 +5982,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByN_V_Last(String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByN_V_Last(name, vocabularyId,
 				orderByComparator);
 
@@ -5995,7 +6016,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByN_V_Last(String name, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByN_V(name, vocabularyId);
 
 		if (count == 0) {
@@ -6024,7 +6045,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory[] findByN_V_PrevAndNext(long categoryId, String name,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
@@ -6055,7 +6076,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByN_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, String name, long vocabularyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -6347,7 +6368,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> findByG_P_V(long groupId, long parentCategoryId,
 		long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6469,7 +6490,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_P_V_First(long groupId, long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_P_V_First(groupId,
 				parentCategoryId, vocabularyId, orderByComparator);
@@ -6508,7 +6529,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory fetchByG_P_V_First(long groupId,
 		long parentCategoryId, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByG_P_V(groupId, parentCategoryId,
 				vocabularyId, 0, 1, orderByComparator);
 
@@ -6531,7 +6552,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_P_V_Last(long groupId, long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_P_V_Last(groupId,
 				parentCategoryId, vocabularyId, orderByComparator);
@@ -6569,7 +6590,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByG_P_V_Last(long groupId, long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByG_P_V(groupId, parentCategoryId, vocabularyId);
 
 		if (count == 0) {
@@ -6600,7 +6621,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] findByG_P_V_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
 		Session session = null;
@@ -6630,7 +6652,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByG_P_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator, boolean previous) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -6795,7 +6818,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> filterFindByG_P_V(long groupId,
 		long parentCategoryId, long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_P_V(groupId, parentCategoryId, vocabularyId, start,
 				end, orderByComparator);
@@ -6898,7 +6921,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] filterFindByG_P_V_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_P_V_PrevAndNext(categoryId, groupId,
 				parentCategoryId, vocabularyId, orderByComparator);
@@ -6935,7 +6959,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory filterGetByG_P_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long parentCategoryId,
-		long vocabularyId, OrderByComparator orderByComparator, boolean previous) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7299,7 +7324,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> findByG_LikeN_V(long groupId, String name,
 		long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -7429,7 +7454,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_LikeN_V_First(long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_LikeN_V_First(groupId, name,
 				vocabularyId, orderByComparator);
@@ -7467,7 +7492,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByG_LikeN_V_First(long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByG_LikeN_V(groupId, name, vocabularyId,
 				0, 1, orderByComparator);
 
@@ -7490,7 +7515,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory findByG_LikeN_V_Last(long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator)
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator)
 		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_LikeN_V_Last(groupId, name,
 				vocabularyId, orderByComparator);
@@ -7528,7 +7553,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public AssetCategory fetchByG_LikeN_V_Last(long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByG_LikeN_V(groupId, name, vocabularyId);
 
 		if (count == 0) {
@@ -7559,7 +7584,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] findByG_LikeN_V_PrevAndNext(long categoryId,
 		long groupId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
 		Session session = null;
@@ -7589,7 +7615,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByG_LikeN_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator, boolean previous) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7768,7 +7795,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> filterFindByG_LikeN_V(long groupId, String name,
 		long vocabularyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LikeN_V(groupId, name, vocabularyId, start, end,
 				orderByComparator);
@@ -7885,7 +7912,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] filterFindByG_LikeN_V_PrevAndNext(long categoryId,
 		long groupId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LikeN_V_PrevAndNext(categoryId, groupId, name,
 				vocabularyId, orderByComparator);
@@ -7920,7 +7948,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory filterGetByG_LikeN_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, String name,
-		long vocabularyId, OrderByComparator orderByComparator, boolean previous) {
+		long vocabularyId, OrderByComparator<AssetCategory> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -8134,7 +8163,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> filterFindByG_LikeN_V(long groupId, String name,
 		long[] vocabularyIds, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LikeN_V(groupId, name, vocabularyIds, start, end,
 				orderByComparator);
@@ -8304,7 +8333,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> findByG_LikeN_V(long groupId, String name,
 		long[] vocabularyIds, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		if (vocabularyIds == null) {
 			vocabularyIds = new long[0];
 		}
@@ -9178,7 +9207,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> findByG_P_N_V(long groupId,
 		long parentCategoryId, String name, long vocabularyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -9323,7 +9352,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory findByG_P_N_V_First(long groupId,
 		long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_P_N_V_First(groupId,
 				parentCategoryId, name, vocabularyId, orderByComparator);
 
@@ -9365,7 +9395,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory fetchByG_P_N_V_First(long groupId,
 		long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		List<AssetCategory> list = findByG_P_N_V(groupId, parentCategoryId,
 				name, vocabularyId, 0, 1, orderByComparator);
 
@@ -9390,7 +9420,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory findByG_P_N_V_Last(long groupId,
 		long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = fetchByG_P_N_V_Last(groupId,
 				parentCategoryId, name, vocabularyId, orderByComparator);
 
@@ -9432,7 +9463,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory fetchByG_P_N_V_Last(long groupId,
 		long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		int count = countByG_P_N_V(groupId, parentCategoryId, name, vocabularyId);
 
 		if (count == 0) {
@@ -9464,7 +9495,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] findByG_P_N_V_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		AssetCategory assetCategory = findByPrimaryKey(categoryId);
 
 		Session session = null;
@@ -9496,8 +9528,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory getByG_P_N_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long parentCategoryId,
-		String name, long vocabularyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		String name, long vocabularyId,
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -9684,7 +9716,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public List<AssetCategory> filterFindByG_P_N_V(long groupId,
 		long parentCategoryId, String name, long vocabularyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AssetCategory> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_P_N_V(groupId, parentCategoryId, name, vocabularyId,
 				start, end, orderByComparator);
@@ -9806,7 +9838,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	@Override
 	public AssetCategory[] filterFindByG_P_N_V_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId, String name, long vocabularyId,
-		OrderByComparator orderByComparator) throws NoSuchCategoryException {
+		OrderByComparator<AssetCategory> orderByComparator)
+		throws NoSuchCategoryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_P_N_V_PrevAndNext(categoryId, groupId,
 				parentCategoryId, name, vocabularyId, orderByComparator);
@@ -9843,8 +9876,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected AssetCategory filterGetByG_P_N_V_PrevAndNext(Session session,
 		AssetCategory assetCategory, long groupId, long parentCategoryId,
-		String name, long vocabularyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		String name, long vocabularyId,
+		OrderByComparator<AssetCategory> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -11061,7 +11094,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<AssetCategory> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AssetCategory> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -11246,7 +11279,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	@Override
 	public List<com.liferay.portlet.asset.model.AssetEntry> getAssetEntries(
-		long pk, int start, int end, OrderByComparator orderByComparator) {
+		long pk, int start, int end,
+		OrderByComparator<com.liferay.portlet.asset.model.AssetEntry> orderByComparator) {
 		return assetCategoryToAssetEntryTableMapper.getRightBaseModels(pk,
 			start, end, orderByComparator);
 	}
@@ -11719,26 +11753,6 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 * Initializes the asset category persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.asset.model.AssetCategory")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<AssetCategory>> listenersList = new ArrayList<ModelListener<AssetCategory>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<AssetCategory>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
-
 		assetCategoryToAssetEntryTableMapper = TableMapperFactory.getTableMapper("AssetEntries_AssetCategories",
 				"categoryId", "entryId", this, assetEntryPersistence);
 
@@ -11802,11 +11816,11 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No AssetCategory exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No AssetCategory exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(AssetCategoryPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(AssetCategoryPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static AssetCategory _nullAssetCategory = new AssetCategoryImpl() {
+	private static final AssetCategory _nullAssetCategory = new AssetCategoryImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -11818,7 +11832,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			}
 		};
 
-	private static CacheModel<AssetCategory> _nullAssetCategoryCacheModel = new CacheModel<AssetCategory>() {
+	private static final CacheModel<AssetCategory> _nullAssetCategoryCacheModel = new CacheModel<AssetCategory>() {
 			@Override
 			public AssetCategory toEntityModel() {
 				return _nullAssetCategory;

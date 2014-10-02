@@ -42,6 +42,7 @@ import com.liferay.portlet.documentlibrary.service.DLFileVersionService;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFolderService;
 import com.liferay.portlet.documentlibrary.util.RepositoryModelUtil;
+import com.liferay.portlet.documentlibrary.util.comparator.DLFileEntryOrderByComparator;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
 import java.io.File;
@@ -134,7 +135,7 @@ public class LiferayLocalRepository
 
 	@Override
 	public Folder addFolder(
-			long userId, long parentFolderId, String title, String description,
+			long userId, long parentFolderId, String name, String description,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -142,7 +143,7 @@ public class LiferayLocalRepository
 
 		DLFolder dlFolder = dlFolderLocalService.addFolder(
 			userId, getGroupId(), getRepositoryId(), mountPoint,
-			toFolderId(parentFolderId), title, description, false,
+			toFolderId(parentFolderId), name, description, false,
 			serviceContext);
 
 		return new LiferayFolder(dlFolder);
@@ -217,22 +218,24 @@ public class LiferayLocalRepository
 	}
 
 	@Override
-	public Folder getFolder(long parentFolderId, String title)
+	public Folder getFolder(long parentFolderId, String name)
 		throws PortalException {
 
 		DLFolder dlFolder = dlFolderLocalService.getFolder(
-			getGroupId(), toFolderId(parentFolderId), title);
+			getGroupId(), toFolderId(parentFolderId), name);
 
 		return new LiferayFolder(dlFolder);
 	}
 
 	@Override
 	public List<FileEntry> getRepositoryFileEntries(
-		long rootFolderId, int start, int end, OrderByComparator obc) {
+		long rootFolderId, int start, int end,
+		OrderByComparator<FileEntry> obc) {
 
 		List<DLFileEntry> dlFileEntries =
 			dlFileEntryLocalService.getGroupFileEntries(
-				getGroupId(), 0, rootFolderId, start, end, obc);
+				getGroupId(), 0, rootFolderId, start, end,
+				DLFileEntryOrderByComparator.getOrderByComparator(obc));
 
 		return RepositoryModelUtil.toFileEntries(dlFileEntries);
 	}
@@ -324,8 +327,8 @@ public class LiferayLocalRepository
 
 	@Override
 	public Folder updateFolder(
-			long folderId, long parentFolderId, String title,
-			String description, ServiceContext serviceContext)
+			long folderId, long parentFolderId, String name, String description,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		long defaultFileEntryTypeId = ParamUtil.getLong(
@@ -336,9 +339,9 @@ public class LiferayLocalRepository
 			serviceContext, "overrideFileEntryTypes");
 
 		DLFolder dlFolder = dlFolderLocalService.updateFolder(
-			toFolderId(folderId), toFolderId(parentFolderId), title,
-			description, defaultFileEntryTypeId, fileEntryTypeIds,
-			overrideFileEntryTypes, serviceContext);
+			toFolderId(folderId), toFolderId(parentFolderId), name, description,
+			defaultFileEntryTypeId, fileEntryTypeIds, overrideFileEntryTypes,
+			serviceContext);
 
 		return new LiferayFolder(dlFolder);
 	}

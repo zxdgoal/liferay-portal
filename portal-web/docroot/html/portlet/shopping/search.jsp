@@ -76,7 +76,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 	headerNames.add("price");
 	headerNames.add(StringPool.BLANK);
 
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, headerNames, LanguageUtil.format(pageContext, "no-entries-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>", false));
+	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, headerNames, LanguageUtil.format(request, "no-entries-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>", false));
 
 	int total = ShoppingItemLocalServiceUtil.searchCount(scopeGroupId, categoryIdsArray, keywords);
 
@@ -103,25 +103,14 @@ String keywords = ParamUtil.getString(request, "keywords");
 
 		// SKU and small image
 
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(6);
 
 		if (item.isSmallImage()) {
 			sb.append("<br />");
 			sb.append("<img alt=\"");
-			sb.append(item.getSku());
+			sb.append(HtmlUtil.escapeAttribute(item.getSku()));
 			sb.append("\" src=\"");
-
-			if (Validator.isNotNull(item.getSmallImageURL())) {
-				sb.append(item.getSmallImageURL());
-			}
-			else {
-				sb.append(themeDisplay.getPathImage());
-				sb.append("/shopping/item?img_id=");
-				sb.append(item.getSmallImageId());
-				sb.append("&t=");
-				sb.append(WebServerServletTokenUtil.getToken(item.getSmallImageId()));
-			}
-
+			sb.append(item.getShoppingItemImageURL(themeDisplay));
 			sb.append("\">");
 		}
 		else {

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.blogs.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -31,16 +33,13 @@ import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -55,7 +54,6 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,6 +75,7 @@ import java.util.Set;
  * @see BlogsEntryUtil
  * @generated
  */
+@ProviderType
 public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	implements BlogsEntryPersistence {
 	/*
@@ -162,7 +161,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -282,7 +281,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByUuid_First(uuid, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -310,7 +310,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -330,7 +330,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -358,7 +359,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -386,7 +387,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByUuid_PrevAndNext(long entryId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
 		Session session = null;
@@ -416,7 +418,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByUuid_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -942,7 +944,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1072,7 +1074,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1105,7 +1108,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1127,7 +1130,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1160,7 +1164,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1189,7 +1193,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByUuid_C_PrevAndNext(long entryId, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -1220,7 +1224,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByUuid_C_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1495,7 +1499,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1601,7 +1605,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByGroupId_First(groupId, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -1629,7 +1634,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1649,7 +1654,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByGroupId_Last(groupId, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -1677,7 +1683,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1705,7 +1711,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByGroupId_PrevAndNext(long entryId, long groupId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
 		Session session = null;
@@ -1735,7 +1742,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByGroupId_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1882,7 +1889,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -1972,7 +1979,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] filterFindByGroupId_PrevAndNext(long entryId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(entryId, groupId, orderByComparator);
@@ -2007,7 +2014,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByGroupId_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2326,7 +2333,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2432,7 +2439,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -2461,7 +2469,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -2482,7 +2490,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -2511,7 +2520,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -2539,7 +2548,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByCompanyId_PrevAndNext(long entryId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -2570,7 +2579,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByCompanyId_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2739,2065 +2748,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "blogsEntry.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_U",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
-			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
-			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_U",
-			new String[] { Long.class.getName(), Long.class.getName() });
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U(long companyId, long userId) {
-		return findByC_U(companyId, userId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U(long companyId, long userId, int start,
-		int end) {
-		return findByC_U(companyId, userId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U(long companyId, long userId, int start,
-		int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U;
-			finderArgs = new Object[] { companyId, userId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U;
-			finderArgs = new Object[] {
-					companyId, userId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(userId != blogsEntry.getUserId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_USERID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_First(long companyId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_First(companyId, userId,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_First(long companyId, long userId,
-		OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_U(companyId, userId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_Last(long companyId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_Last(companyId, userId,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_Last(long companyId, long userId,
-		OrderByComparator orderByComparator) {
-		int count = countByC_U(companyId, userId);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_U(companyId, userId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_U_PrevAndNext(long entryId, long companyId,
-		long userId, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_U_PrevAndNext(session, blogsEntry, companyId,
-					userId, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_U_PrevAndNext(session, blogsEntry, companyId,
-					userId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_U_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_U_USERID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		qPos.add(userId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 */
-	@Override
-	public void removeByC_U(long companyId, long userId) {
-		for (BlogsEntry blogsEntry : findByC_U(companyId, userId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_U(long companyId, long userId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_U;
-
-		Object[] finderArgs = new Object[] { companyId, userId };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_USERID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_U_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_U_USERID_2 = "blogsEntry.userId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD",
-			new String[] {
-				Long.class.getName(), Date.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD",
-			new String[] { Long.class.getName(), Date.class.getName() });
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate) {
-		return findByC_LtD(companyId, displayDate, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate,
-		int start, int end) {
-		return findByC_LtD(companyId, displayDate, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate,
-		int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD;
-		finderArgs = new Object[] {
-				companyId, displayDate,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(displayDate.getTime() <= blogsEntry.getDisplayDate()
-																.getTime())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
-			}
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_First(long companyId, Date displayDate,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_First(companyId, displayDate,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_First(long companyId, Date displayDate,
-		OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_LtD(companyId, displayDate, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_Last(long companyId, Date displayDate,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_Last(companyId, displayDate,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_Last(long companyId, Date displayDate,
-		OrderByComparator orderByComparator) {
-		int count = countByC_LtD(companyId, displayDate);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_LtD(companyId, displayDate, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_LtD_PrevAndNext(long entryId, long companyId,
-		Date displayDate, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_LtD_PrevAndNext(session, blogsEntry, companyId,
-					displayDate, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_LtD_PrevAndNext(session, blogsEntry, companyId,
-					displayDate, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_LtD_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, Date displayDate,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		if (bindDisplayDate) {
-			qPos.add(new Timestamp(displayDate.getTime()));
-		}
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 */
-	@Override
-	public void removeByC_LtD(long companyId, Date displayDate) {
-		for (BlogsEntry blogsEntry : findByC_LtD(companyId, displayDate,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_LtD(long companyId, Date displayDate) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD;
-
-		Object[] finderArgs = new Object[] { companyId, displayDate };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_LTD_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_LTD_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL";
-	private static final String _FINDER_COLUMN_C_LTD_DISPLAYDATE_2 = "blogsEntry.displayDate < ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_NotS",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_NotS",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_NotS(long companyId, int status) {
-		return findByC_NotS(companyId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_NotS(long companyId, int status, int start,
-		int end) {
-		return findByC_NotS(companyId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_NotS(long companyId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS;
-		finderArgs = new Object[] {
-				companyId, status,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(status == blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_NotS_First(companyId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_NotS(companyId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_NotS_Last(companyId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) {
-		int count = countByC_NotS(companyId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_NotS(companyId, status, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_NotS_PrevAndNext(long entryId, long companyId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_NotS_PrevAndNext(session, blogsEntry, companyId,
-					status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_NotS_PrevAndNext(session, blogsEntry, companyId,
-					status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_NotS(long companyId, int status) {
-		for (BlogsEntry blogsEntry : findByC_NotS(companyId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_NotS(long companyId, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS;
-
-		Object[] finderArgs = new Object[] { companyId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_NOTS_STATUS_2 = "blogsEntry.status != ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK |
-			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
-			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_S(long companyId, int status) {
-		return findByC_S(companyId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_S(long companyId, int status, int start,
-		int end) {
-		return findByC_S(companyId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_S(long companyId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
-			finderArgs = new Object[] { companyId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S;
-			finderArgs = new Object[] {
-					companyId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(status != blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_S_First(companyId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_S(companyId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_S_Last(companyId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator) {
-		int count = countByC_S(companyId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_S(companyId, status, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status = &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_S_PrevAndNext(long entryId, long companyId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_S_PrevAndNext(session, blogsEntry, companyId,
-					status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_S_PrevAndNext(session, blogsEntry, companyId,
-					status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_S_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_S_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_S(long companyId, int status) {
-		for (BlogsEntry blogsEntry : findByC_S(companyId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_S(long companyId, int status) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_S;
-
-		Object[] finderArgs = new Object[] { companyId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "blogsEntry.status = ?";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_UT = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_UT",
@@ -5116,7 +3066,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByG_LtD(long groupId, Date displayDate,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5236,7 +3186,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_LtD_First(long groupId, Date displayDate,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_LtD_First(groupId, displayDate,
 				orderByComparator);
 
@@ -5269,7 +3220,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_LtD_First(long groupId, Date displayDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_LtD(groupId, displayDate, 0, 1,
 				orderByComparator);
 
@@ -5291,7 +3242,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_LtD_Last(long groupId, Date displayDate,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_LtD_Last(groupId, displayDate,
 				orderByComparator);
 
@@ -5324,7 +3276,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_LtD_Last(long groupId, Date displayDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_LtD(groupId, displayDate);
 
 		if (count == 0) {
@@ -5353,7 +3305,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByG_LtD_PrevAndNext(long entryId, long groupId,
-		Date displayDate, OrderByComparator orderByComparator)
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -5384,7 +3336,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_LtD_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, Date displayDate,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5550,7 +3502,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> filterFindByG_LtD(long groupId, Date displayDate,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LtD(groupId, displayDate, start, end,
 				orderByComparator);
@@ -5657,7 +3609,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] filterFindByG_LtD_PrevAndNext(long entryId,
-		long groupId, Date displayDate, OrderByComparator orderByComparator)
+		long groupId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LtD_PrevAndNext(entryId, groupId, displayDate,
@@ -5693,7 +3646,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_LtD_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, Date displayDate,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5995,874 +3948,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_G_LTD_GROUPID_2 = "blogsEntry.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_LTD_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL";
 	private static final String _FINDER_COLUMN_G_LTD_DISPLAYDATE_2 = "blogsEntry.displayDate < ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_NotS",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_NotS",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-
-	/**
-	 * Returns all the blogs entries where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_NotS(long groupId, int status) {
-		return findByG_NotS(groupId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_NotS(long groupId, int status, int start,
-		int end) {
-		return findByG_NotS(groupId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_NotS(long groupId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_NOTS;
-		finderArgs = new Object[] { groupId, status, start, end, orderByComparator };
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((groupId != blogsEntry.getGroupId()) ||
-						(status == blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(4);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByG_NotS_First(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_NotS_First(groupId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByG_NotS_First(long groupId, int status,
-		OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByG_NotS(groupId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByG_NotS_Last(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_NotS_Last(groupId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(6);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByG_NotS_Last(long groupId, int status,
-		OrderByComparator orderByComparator) {
-		int count = countByG_NotS(groupId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByG_NotS(groupId, status, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByG_NotS_PrevAndNext(long entryId, long groupId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByG_NotS_PrevAndNext(session, blogsEntry, groupId,
-					status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByG_NotS_PrevAndNext(session, blogsEntry, groupId,
-					status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByG_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status) {
-		return filterFindByG_NotS(groupId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status,
-		int start, int end) {
-		return filterFindByG_NotS(groupId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_NotS(groupId, status, start, end, orderByComparator);
-		}
-
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(4);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			if (getDB().isSupportsInlineDistinct()) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator, true);
-			}
-			else {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
-					orderByComparator, true);
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			if (getDB().isSupportsInlineDistinct()) {
-				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-			}
-			else {
-				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-			}
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(status);
-
-			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] filterFindByG_NotS_PrevAndNext(long entryId,
-		long groupId, int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_NotS_PrevAndNext(entryId, groupId, status,
-				orderByComparator);
-		}
-
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = filterGetByG_NotS_PrevAndNext(session, blogsEntry,
-					groupId, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = filterGetByG_NotS_PrevAndNext(session, blogsEntry,
-					groupId, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry filterGetByG_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		if (getDB().isSupportsInlineDistinct()) {
-			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-		}
-		else {
-			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-		}
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByG_NotS(long groupId, int status) {
-		for (BlogsEntry blogsEntry : findByG_NotS(groupId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByG_NotS(long groupId, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_NOTS;
-
-		Object[] finderArgs = new Object[] { groupId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public int filterCountByG_NotS(long groupId, int status) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_NotS(groupId, status);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	private static final String _FINDER_COLUMN_G_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_NOTS_STATUS_2 = "blogsEntry.status != ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
@@ -6933,7 +4018,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByG_S(long groupId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -7049,7 +4134,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_S_First(groupId, status,
 				orderByComparator);
 
@@ -7082,7 +4168,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_S(groupId, status, 0, 1,
 				orderByComparator);
 
@@ -7104,7 +4190,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_S_Last(groupId, status,
 				orderByComparator);
 
@@ -7137,7 +4224,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_S(groupId, status);
 
 		if (count == 0) {
@@ -7166,7 +4253,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByG_S_PrevAndNext(long entryId, long groupId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -7197,7 +4284,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7352,7 +4439,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> filterFindByG_S(long groupId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_S(groupId, status, start, end, orderByComparator);
 		}
@@ -7447,7 +4534,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] filterFindByG_S_PrevAndNext(long entryId, long groupId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_S_PrevAndNext(entryId, groupId, status,
@@ -7483,7 +4570,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7751,6 +4838,2944 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "blogsEntry.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_NotS",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_NotS",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns all the blogs entries where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_NotS(long groupId, int status) {
+		return findByG_NotS(groupId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_NotS(long groupId, int status, int start,
+		int end) {
+		return findByG_NotS(groupId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_NotS(long groupId, int status, int start,
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_NOTS;
+		finderArgs = new Object[] { groupId, status, start, end, orderByComparator };
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(status == blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_NotS_First(long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_NotS_First(groupId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_NotS_First(long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByG_NotS(groupId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_NotS_Last(long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_NotS_Last(groupId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_NotS_Last(long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByG_NotS(groupId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByG_NotS(groupId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByG_NotS_PrevAndNext(long entryId, long groupId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByG_NotS_PrevAndNext(session, blogsEntry, groupId,
+					status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByG_NotS_PrevAndNext(session, blogsEntry, groupId,
+					status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByG_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status) {
+		return filterFindByG_NotS(groupId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status,
+		int start, int end) {
+		return filterFindByG_NotS(groupId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_NotS(long groupId, int status,
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_NotS(groupId, status, start, end, orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(4 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(4);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(status);
+
+			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] filterFindByG_NotS_PrevAndNext(long entryId,
+		long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_NotS_PrevAndNext(entryId, groupId, status,
+				orderByComparator);
+		}
+
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = filterGetByG_NotS_PrevAndNext(session, blogsEntry,
+					groupId, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = filterGetByG_NotS_PrevAndNext(session, blogsEntry,
+					groupId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry filterGetByG_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where groupId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_NotS(long groupId, int status) {
+		for (BlogsEntry blogsEntry : findByG_NotS(groupId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByG_NotS(long groupId, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_NOTS;
+
+		Object[] finderArgs = new Object[] { groupId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_NotS(long groupId, int status) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_NotS(groupId, status);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_NOTS_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_NOTS_STATUS_2 = "blogsEntry.status != ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_U",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_U = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_U",
+			new String[] { Long.class.getName(), Long.class.getName() });
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U(long companyId, long userId) {
+		return findByC_U(companyId, userId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U(long companyId, long userId, int start,
+		int end) {
+		return findByC_U(companyId, userId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U(long companyId, long userId, int start,
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U;
+			finderArgs = new Object[] { companyId, userId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U;
+			finderArgs = new Object[] {
+					companyId, userId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(userId != blogsEntry.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_USERID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_First(long companyId, long userId,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_First(companyId, userId,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_First(long companyId, long userId,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_U(companyId, userId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_Last(long companyId, long userId,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_Last(companyId, userId,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_Last(long companyId, long userId,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_U(companyId, userId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_U(companyId, userId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_U_PrevAndNext(long entryId, long companyId,
+		long userId, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_U_PrevAndNext(session, blogsEntry, companyId,
+					userId, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_U_PrevAndNext(session, blogsEntry, companyId,
+					userId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_U_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, long userId,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_U_USERID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(userId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 */
+	@Override
+	public void removeByC_U(long companyId, long userId) {
+		for (BlogsEntry blogsEntry : findByC_U(companyId, userId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_U(long companyId, long userId) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_U;
+
+		Object[] finderArgs = new Object[] { companyId, userId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_USERID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_U_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_U_USERID_2 = "blogsEntry.userId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD",
+			new String[] {
+				Long.class.getName(), Date.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD",
+			new String[] { Long.class.getName(), Date.class.getName() });
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate) {
+		return findByC_LtD(companyId, displayDate, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate,
+		int start, int end) {
+		return findByC_LtD(companyId, displayDate, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD(long companyId, Date displayDate,
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD;
+		finderArgs = new Object[] {
+				companyId, displayDate,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(displayDate.getTime() <= blogsEntry.getDisplayDate()
+																.getTime())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_LtD_First(long companyId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_LtD_First(companyId, displayDate,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_LtD_First(long companyId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_LtD(companyId, displayDate, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_LtD_Last(long companyId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_LtD_Last(companyId, displayDate,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_LtD_Last(long companyId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_LtD(companyId, displayDate);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_LtD(companyId, displayDate, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_LtD_PrevAndNext(long entryId, long companyId,
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_LtD_PrevAndNext(session, blogsEntry, companyId,
+					displayDate, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_LtD_PrevAndNext(session, blogsEntry, companyId,
+					displayDate, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_LtD_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		if (bindDisplayDate) {
+			qPos.add(new Timestamp(displayDate.getTime()));
+		}
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 */
+	@Override
+	public void removeByC_LtD(long companyId, Date displayDate) {
+		for (BlogsEntry blogsEntry : findByC_LtD(companyId, displayDate,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_LtD(long companyId, Date displayDate) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD;
+
+		Object[] finderArgs = new Object[] { companyId, displayDate };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_LTD_COMPANYID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_C_LTD_DISPLAYDATE_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_LTD_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_LTD_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL";
+	private static final String _FINDER_COLUMN_C_LTD_DISPLAYDATE_2 = "blogsEntry.displayDate < ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_S(long companyId, int status) {
+		return findByC_S(companyId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_S(long companyId, int status, int start,
+		int end) {
+		return findByC_S(companyId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_S(long companyId, int status, int start,
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] { companyId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] {
+					companyId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_S_First(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_S_First(companyId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_S_First(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_S(companyId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_S_Last(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_S_Last(companyId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_S_Last(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_S(companyId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_S(companyId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status = &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_S_PrevAndNext(long entryId, long companyId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_S_PrevAndNext(session, blogsEntry, companyId,
+					status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_S_PrevAndNext(session, blogsEntry, companyId,
+					status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_S_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and status = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByC_S(long companyId, int status) {
+		for (BlogsEntry blogsEntry : findByC_S(companyId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_S(long companyId, int status) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_S;
+
+		Object[] finderArgs = new Object[] { companyId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_NotS",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_NotS",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_NotS(long companyId, int status) {
+		return findByC_NotS(companyId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_NotS(long companyId, int status, int start,
+		int end) {
+		return findByC_NotS(companyId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_NotS(long companyId, int status, int start,
+		int end, OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_NOTS;
+		finderArgs = new Object[] {
+				companyId, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(status == blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_NotS_First(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_NotS_First(companyId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_NotS_First(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_NotS(companyId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_NotS_Last(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_NotS_Last(companyId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_NotS_Last(long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_NotS(companyId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_NotS(companyId, status, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_NotS_PrevAndNext(long entryId, long companyId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_NotS_PrevAndNext(session, blogsEntry, companyId,
+					status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_NotS_PrevAndNext(session, blogsEntry, companyId,
+					status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByC_NotS(long companyId, int status) {
+		for (BlogsEntry blogsEntry : findByC_NotS(companyId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_NotS(long companyId, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_NOTS;
+
+		Object[] finderArgs = new Object[] { companyId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_NOTS_STATUS_2 = "blogsEntry.status != ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLtD_S",
@@ -7813,7 +7838,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByLtD_S(Date displayDate, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -7933,7 +7958,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByLtD_S_First(Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByLtD_S_First(displayDate, status,
 				orderByComparator);
 
@@ -7966,7 +7992,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByLtD_S_First(Date displayDate, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByLtD_S(displayDate, status, 0, 1,
 				orderByComparator);
 
@@ -7988,7 +8014,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByLtD_S_Last(Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByLtD_S_Last(displayDate, status,
 				orderByComparator);
 
@@ -8021,7 +8048,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByLtD_S_Last(Date displayDate, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByLtD_S(displayDate, status);
 
 		if (count == 0) {
@@ -8050,7 +8077,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByLtD_S_PrevAndNext(long entryId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -8081,7 +8108,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByLtD_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -8284,2237 +8311,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
 	private static final String _FINDER_COLUMN_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
 	private static final String _FINDER_COLUMN_LTD_S_STATUS_2 = "blogsEntry.status = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U_NotS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_U_NOTS =
-		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_U_NotS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
-		int status) {
-		return findByC_U_NotS(companyId, userId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
-		int status, int start, int end) {
-		return findByC_U_NotS(companyId, userId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_NOTS;
-		finderArgs = new Object[] {
-				companyId, userId, status,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(userId != blogsEntry.getUserId()) ||
-						(status == blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_NotS_First(long companyId, long userId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_NotS_First(companyId, userId,
-				status, orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_NotS_First(long companyId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_U_NotS(companyId, userId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_NotS_Last(long companyId, long userId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_NotS_Last(companyId, userId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_NotS_Last(long companyId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByC_U_NotS(companyId, userId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_U_NotS(companyId, userId, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_U_NotS_PrevAndNext(long entryId,
-		long companyId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_U_NotS_PrevAndNext(session, blogsEntry,
-					companyId, userId, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_U_NotS_PrevAndNext(session, blogsEntry,
-					companyId, userId, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_U_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
-
-		query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		qPos.add(userId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_U_NotS(long companyId, long userId, int status) {
-		for (BlogsEntry blogsEntry : findByC_U_NotS(companyId, userId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_U_NotS(long companyId, long userId, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_U_NOTS;
-
-		Object[] finderArgs = new Object[] { companyId, userId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
-
-			query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_U_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_U_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
-	private static final String _FINDER_COLUMN_C_U_NOTS_STATUS_2 = "blogsEntry.status != ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			},
-			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
-			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK |
-			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
-			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_U_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_S(long companyId, long userId, int status) {
-		return findByC_U_S(companyId, userId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_S(long companyId, long userId,
-		int status, int start, int end) {
-		return findByC_U_S(companyId, userId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_U_S(long companyId, long userId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U_S;
-			finderArgs = new Object[] { companyId, userId, status };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_S;
-			finderArgs = new Object[] {
-					companyId, userId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(userId != blogsEntry.getUserId()) ||
-						(status != blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_S_First(long companyId, long userId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_S_First(companyId, userId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_S_First(long companyId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_U_S(companyId, userId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_U_S_Last(long companyId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_U_S_Last(companyId, userId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_U_S_Last(long companyId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByC_U_S(companyId, userId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_U_S(companyId, userId, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_U_S_PrevAndNext(long entryId, long companyId,
-		long userId, int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_U_S_PrevAndNext(session, blogsEntry, companyId,
-					userId, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_U_S_PrevAndNext(session, blogsEntry, companyId,
-					userId, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_U_S_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
-
-		query.append(_FINDER_COLUMN_C_U_S_USERID_2);
-
-		query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		qPos.add(userId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_U_S(long companyId, long userId, int status) {
-		for (BlogsEntry blogsEntry : findByC_U_S(companyId, userId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_U_S(long companyId, long userId, int status) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_U_S;
-
-		Object[] finderArgs = new Object[] { companyId, userId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_U_S_USERID_2);
-
-			query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_U_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_U_S_USERID_2 = "blogsEntry.userId = ? AND ";
-	private static final String _FINDER_COLUMN_C_U_S_STATUS_2 = "blogsEntry.status = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_NOTS =
-		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD_NotS",
-			new String[] {
-				Long.class.getName(), Date.class.getName(),
-				Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_NOTS =
-		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD_NotS",
-			new String[] {
-				Long.class.getName(), Date.class.getName(),
-				Integer.class.getName()
-			});
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
-		int status) {
-		return findByC_LtD_NotS(companyId, displayDate, status,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
-		int status, int start, int end) {
-		return findByC_LtD_NotS(companyId, displayDate, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_NOTS;
-		finderArgs = new Object[] {
-				companyId, displayDate, status,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(displayDate.getTime() <= blogsEntry.getDisplayDate()
-																.getTime()) ||
-						(status == blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_NotS_First(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_NotS_First(companyId, displayDate,
-				status, orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_NotS_First(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_LtD_NotS(companyId, displayDate,
-				status, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_NotS_Last(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_NotS_Last(companyId, displayDate,
-				status, orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_NotS_Last(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByC_LtD_NotS(companyId, displayDate, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_LtD_NotS(companyId, displayDate,
-				status, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_LtD_NotS_PrevAndNext(long entryId,
-		long companyId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_LtD_NotS_PrevAndNext(session, blogsEntry,
-					companyId, displayDate, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_LtD_NotS_PrevAndNext(session, blogsEntry,
-					companyId, displayDate, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_LtD_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		if (bindDisplayDate) {
-			qPos.add(new Timestamp(displayDate.getTime()));
-		}
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_LtD_NotS(long companyId, Date displayDate, int status) {
-		for (BlogsEntry blogsEntry : findByC_LtD_NotS(companyId, displayDate,
-				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_LtD_NotS(long companyId, Date displayDate, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_NOTS;
-
-		Object[] finderArgs = new Object[] { companyId, displayDate, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
-	private static final String _FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
-	private static final String _FINDER_COLUMN_C_LTD_NOTS_STATUS_2 = "blogsEntry.status != ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD_S",
-			new String[] {
-				Long.class.getName(), Date.class.getName(),
-				Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD_S",
-			new String[] {
-				Long.class.getName(), Date.class.getName(),
-				Integer.class.getName()
-			});
-
-	/**
-	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
-		int status) {
-		return findByC_LtD_S(companyId, displayDate, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
-		int status, int start, int end) {
-		return findByC_LtD_S(companyId, displayDate, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_S;
-		finderArgs = new Object[] {
-				companyId, displayDate, status,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((companyId != blogsEntry.getCompanyId()) ||
-						(displayDate.getTime() <= blogsEntry.getDisplayDate()
-																.getTime()) ||
-						(status != blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_S_First(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_S_First(companyId, displayDate,
-				status, orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_S_First(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByC_LtD_S(companyId, displayDate, status,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByC_LtD_S_Last(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByC_LtD_S_Last(companyId, displayDate,
-				status, orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(", displayDate=");
-		msg.append(displayDate);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByC_LtD_S_Last(long companyId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByC_LtD_S(companyId, displayDate, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByC_LtD_S(companyId, displayDate, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByC_LtD_S_PrevAndNext(long entryId, long companyId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByC_LtD_S_PrevAndNext(session, blogsEntry, companyId,
-					displayDate, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByC_LtD_S_PrevAndNext(session, blogsEntry, companyId,
-					displayDate, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByC_LtD_S_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long companyId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		if (bindDisplayDate) {
-			qPos.add(new Timestamp(displayDate.getTime()));
-		}
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 */
-	@Override
-	public void removeByC_LtD_S(long companyId, Date displayDate, int status) {
-		for (BlogsEntry blogsEntry : findByC_LtD_S(companyId, displayDate,
-				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByC_LtD_S(long companyId, Date displayDate, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_S;
-
-		Object[] finderArgs = new Object[] { companyId, displayDate, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
-
-			boolean bindDisplayDate = false;
-
-			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
-			}
-			else {
-				bindDisplayDate = true;
-
-				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				if (bindDisplayDate) {
-					qPos.add(new Timestamp(displayDate.getTime()));
-				}
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_C_LTD_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
-	private static final String _FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
-	private static final String _FINDER_COLUMN_C_LTD_S_STATUS_2 = "blogsEntry.status = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_LtD",
@@ -10584,7 +8380,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public List<BlogsEntry> findByG_U_LtD(long groupId, long userId,
 		Date displayDate, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -10710,7 +8506,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_LtD_First(long groupId, long userId,
-		Date displayDate, OrderByComparator orderByComparator)
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_LtD_First(groupId, userId,
 				displayDate, orderByComparator);
@@ -10748,7 +8544,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_LtD_First(long groupId, long userId,
-		Date displayDate, OrderByComparator orderByComparator) {
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_U_LtD(groupId, userId, displayDate, 0,
 				1, orderByComparator);
 
@@ -10771,7 +8567,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_LtD_Last(long groupId, long userId,
-		Date displayDate, OrderByComparator orderByComparator)
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_LtD_Last(groupId, userId,
 				displayDate, orderByComparator);
@@ -10809,7 +8605,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_LtD_Last(long groupId, long userId,
-		Date displayDate, OrderByComparator orderByComparator) {
+		Date displayDate, OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_U_LtD(groupId, userId, displayDate);
 
 		if (count == 0) {
@@ -10839,7 +8635,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByG_U_LtD_PrevAndNext(long entryId, long groupId,
-		long userId, Date displayDate, OrderByComparator orderByComparator)
+		long userId, Date displayDate,
+		OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -10870,7 +8667,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_U_LtD_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -11046,7 +8843,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public List<BlogsEntry> filterFindByG_U_LtD(long groupId, long userId,
 		Date displayDate, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_LtD(groupId, userId, displayDate, start, end,
 				orderByComparator);
@@ -11159,7 +8956,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] filterFindByG_U_LtD_PrevAndNext(long entryId,
 		long groupId, long userId, Date displayDate,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_LtD_PrevAndNext(entryId, groupId, userId,
 				displayDate, orderByComparator);
@@ -11194,7 +8992,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_U_LtD_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -11512,934 +9310,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_G_U_LTD_USERID_2 = "blogsEntry.userId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_LTD_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL";
 	private static final String _FINDER_COLUMN_G_U_LTD_DISPLAYDATE_2 = "blogsEntry.displayDate < ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_NotS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_NOTS =
-		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_U_NotS",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-
-	/**
-	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId, int status) {
-		return findByG_U_NotS(groupId, userId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId,
-		int status, int start, int end) {
-		return findByG_U_NotS(groupId, userId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries
-	 */
-	@Override
-	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_NOTS;
-		finderArgs = new Object[] {
-				groupId, userId, status,
-				
-				start, end, orderByComparator
-			};
-
-		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (BlogsEntry blogsEntry : list) {
-				if ((groupId != blogsEntry.getGroupId()) ||
-						(userId != blogsEntry.getUserId()) ||
-						(status == blogsEntry.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(5 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(5);
-			}
-
-			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				if (!pagination) {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByG_U_NotS_First(long groupId, long userId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_U_NotS_First(groupId, userId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByG_U_NotS_First(long groupId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByG_U_NotS(groupId, userId, status, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry findByG_U_NotS_Last(long groupId, long userId,
-		int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_U_NotS_Last(groupId, userId, status,
-				orderByComparator);
-
-		if (blogsEntry != null) {
-			return blogsEntry;
-		}
-
-		StringBundler msg = new StringBundler(8);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
-
-		msg.append(", status=");
-		msg.append(status);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
-	 */
-	@Override
-	public BlogsEntry fetchByG_U_NotS_Last(long groupId, long userId,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByG_U_NotS(groupId, userId, status);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<BlogsEntry> list = findByG_U_NotS(groupId, userId, status,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] findByG_U_NotS_PrevAndNext(long entryId, long groupId,
-		long userId, int status, OrderByComparator orderByComparator)
-		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = getByG_U_NotS_PrevAndNext(session, blogsEntry, groupId,
-					userId, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = getByG_U_NotS_PrevAndNext(session, blogsEntry, groupId,
-					userId, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry getByG_U_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		qPos.add(userId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
-		int status) {
-		return filterFindByG_U_NotS(groupId, userId, status, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
-		int status, int start, int end) {
-		return filterFindByG_U_NotS(groupId, userId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_U_NotS(groupId, userId, status, start, end,
-				orderByComparator);
-		}
-
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(5);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			if (getDB().isSupportsInlineDistinct()) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator, true);
-			}
-			else {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
-					orderByComparator, true);
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			if (getDB().isSupportsInlineDistinct()) {
-				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-			}
-			else {
-				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-			}
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(userId);
-
-			qPos.add(status);
-
-			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] filterFindByG_U_NotS_PrevAndNext(long entryId,
-		long groupId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_U_NotS_PrevAndNext(entryId, groupId, userId, status,
-				orderByComparator);
-		}
-
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = filterGetByG_U_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = filterGetByG_U_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry filterGetByG_U_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		if (getDB().isSupportsInlineDistinct()) {
-			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-		}
-		else {
-			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-		}
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		qPos.add(userId);
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 */
-	@Override
-	public void removeByG_U_NotS(long groupId, long userId, int status) {
-		for (BlogsEntry blogsEntry : findByG_U_NotS(groupId, userId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(blogsEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the number of matching blogs entries
-	 */
-	@Override
-	public int countByG_U_NotS(long groupId, long userId, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_NOTS;
-
-		Object[] finderArgs = new Object[] { groupId, userId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
-				this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-			query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(userId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-
-				FinderCacheUtil.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				FinderCacheUtil.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param status the status
-	 * @return the number of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public int filterCountByG_U_NotS(long groupId, long userId, int status) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_U_NotS(groupId, userId, status);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
-
-		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(userId);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	private static final String _FINDER_COLUMN_G_U_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_NOTS_STATUS_2 = "blogsEntry.status != ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_S",
@@ -12521,7 +9391,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByG_U_S(long groupId, long userId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -12643,7 +9513,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_S_First(long groupId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_S_First(groupId, userId, status,
 				orderByComparator);
 
@@ -12680,7 +9551,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_S_First(long groupId, long userId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_U_S(groupId, userId, status, 0, 1,
 				orderByComparator);
 
@@ -12703,7 +9574,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_S_Last(long groupId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_S_Last(groupId, userId, status,
 				orderByComparator);
 
@@ -12740,7 +9612,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_S_Last(long groupId, long userId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_U_S(groupId, userId, status);
 
 		if (count == 0) {
@@ -12770,7 +9642,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry[] findByG_U_S_PrevAndNext(long entryId, long groupId,
-		long userId, int status, OrderByComparator orderByComparator)
+		long userId, int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -12801,7 +9673,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_U_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -12964,7 +9836,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> filterFindByG_U_S(long groupId, long userId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_S(groupId, userId, status, start, end,
 				orderByComparator);
@@ -13066,7 +9939,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] filterFindByG_U_S_PrevAndNext(long entryId,
 		long groupId, long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_S_PrevAndNext(entryId, groupId, userId, status,
 				orderByComparator);
@@ -13101,7 +9975,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_U_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -13385,6 +10259,1938 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_G_U_S_GROUPID_2 = "blogsEntry.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_S_USERID_2 = "blogsEntry.userId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_NOTS =
+		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_U_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId, int status) {
+		return findByG_U_NotS(groupId, userId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId,
+		int status, int start, int end) {
+		return findByG_U_NotS(groupId, userId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_NotS(long groupId, long userId,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_NOTS;
+		finderArgs = new Object[] {
+				groupId, userId, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(status == blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_U_NotS_First(long groupId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_U_NotS_First(groupId, userId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_U_NotS_First(long groupId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByG_U_NotS(groupId, userId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_U_NotS_Last(long groupId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_U_NotS_Last(groupId, userId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_U_NotS_Last(long groupId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByG_U_NotS(groupId, userId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByG_U_NotS(groupId, userId, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByG_U_NotS_PrevAndNext(long entryId, long groupId,
+		long userId, int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByG_U_NotS_PrevAndNext(session, blogsEntry, groupId,
+					userId, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByG_U_NotS_PrevAndNext(session, blogsEntry, groupId,
+					userId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByG_U_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(userId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
+		int status) {
+		return filterFindByG_U_NotS(groupId, userId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
+		int status, int start, int end) {
+		return filterFindByG_U_NotS(groupId, userId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_NotS(long groupId, long userId,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_NotS(groupId, userId, status, start, end,
+				orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(5 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(5);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(userId);
+
+			qPos.add(status);
+
+			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] filterFindByG_U_NotS_PrevAndNext(long entryId,
+		long groupId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_NotS_PrevAndNext(entryId, groupId, userId, status,
+				orderByComparator);
+		}
+
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = filterGetByG_U_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = filterGetByG_U_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry filterGetByG_U_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(userId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_U_NotS(long groupId, long userId, int status) {
+		for (BlogsEntry blogsEntry : findByG_U_NotS(groupId, userId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByG_U_NotS(long groupId, long userId, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_NOTS;
+
+		Object[] finderArgs = new Object[] { groupId, userId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+			query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the number of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_U_NotS(long groupId, long userId, int status) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_U_NotS(groupId, userId, status);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_USERID_2);
+
+		query.append(_FINDER_COLUMN_G_U_NOTS_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(userId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_U_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_NOTS_STATUS_2 = "blogsEntry.status != ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_LtD_S",
+			new String[] {
+				Long.class.getName(), Date.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_LtD_S",
+			new String[] {
+				Long.class.getName(), Date.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
+		int status) {
+		return findByG_LtD_S(groupId, displayDate, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
+		int status, int start, int end) {
+		return findByG_LtD_S(groupId, displayDate, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTD_S;
+		finderArgs = new Object[] {
+				groupId, displayDate, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(displayDate.getTime() <= blogsEntry.getDisplayDate()
+																.getTime()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_LtD_S_First(long groupId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_LtD_S_First(groupId, displayDate,
+				status, orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_LtD_S_First(long groupId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByG_LtD_S(groupId, displayDate, status, 0,
+				1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_LtD_S_Last(long groupId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_LtD_S_Last(groupId, displayDate,
+				status, orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_LtD_S_Last(long groupId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByG_LtD_S(groupId, displayDate, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByG_LtD_S(groupId, displayDate, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByG_LtD_S_PrevAndNext(long entryId, long groupId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByG_LtD_S_PrevAndNext(session, blogsEntry, groupId,
+					displayDate, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByG_LtD_S_PrevAndNext(session, blogsEntry, groupId,
+					displayDate, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByG_LtD_S_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		if (bindDisplayDate) {
+			qPos.add(new Timestamp(displayDate.getTime()));
+		}
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
+		int status) {
+		return filterFindByG_LtD_S(groupId, displayDate, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
+		int status, int start, int end) {
+		return filterFindByG_LtD_S(groupId, displayDate, status, start, end,
+			null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_LtD_S(groupId, displayDate, status, start, end,
+				orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(5 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(5);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (bindDisplayDate) {
+				qPos.add(new Timestamp(displayDate.getTime()));
+			}
+
+			qPos.add(status);
+
+			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] filterFindByG_LtD_S_PrevAndNext(long entryId,
+		long groupId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_LtD_S_PrevAndNext(entryId, groupId, displayDate,
+				status, orderByComparator);
+		}
+
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = filterGetByG_LtD_S_PrevAndNext(session, blogsEntry,
+					groupId, displayDate, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = filterGetByG_LtD_S_PrevAndNext(session, blogsEntry,
+					groupId, displayDate, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry filterGetByG_LtD_S_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		if (bindDisplayDate) {
+			qPos.add(new Timestamp(displayDate.getTime()));
+		}
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_LtD_S(long groupId, Date displayDate, int status) {
+		for (BlogsEntry blogsEntry : findByG_LtD_S(groupId, displayDate,
+				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByG_LtD_S(long groupId, Date displayDate, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_LTD_S;
+
+		Object[] finderArgs = new Object[] { groupId, displayDate, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the number of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_LtD_S(long groupId, Date displayDate, int status) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_LtD_S(groupId, displayDate, status);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (bindDisplayDate) {
+				qPos.add(new Timestamp(displayDate.getTime()));
+			}
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_LTD_S_GROUPID_2 = "blogsEntry.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
+	private static final String _FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
+	private static final String _FINDER_COLUMN_G_LTD_S_STATUS_2 = "blogsEntry.status = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTD_NOTS =
 		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
@@ -13457,7 +12263,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findByG_LtD_NotS(long groupId, Date displayDate,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -13583,7 +12390,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_LtD_NotS_First(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_LtD_NotS_First(groupId, displayDate,
 				status, orderByComparator);
@@ -13621,7 +12428,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_LtD_NotS_First(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_LtD_NotS(groupId, displayDate, status,
 				0, 1, orderByComparator);
 
@@ -13644,7 +12451,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_LtD_NotS_Last(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_LtD_NotS_Last(groupId, displayDate,
 				status, orderByComparator);
@@ -13682,7 +12489,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_LtD_NotS_Last(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_LtD_NotS(groupId, displayDate, status);
 
 		if (count == 0) {
@@ -13713,7 +12520,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] findByG_LtD_NotS_PrevAndNext(long entryId,
 		long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
 		Session session = null;
@@ -13743,7 +12551,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_LtD_NotS_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -13919,7 +12727,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public List<BlogsEntry> filterFindByG_LtD_NotS(long groupId,
 		Date displayDate, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LtD_NotS(groupId, displayDate, status, start, end,
 				orderByComparator);
@@ -14032,7 +12840,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] filterFindByG_LtD_NotS_PrevAndNext(long entryId,
 		long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_LtD_NotS_PrevAndNext(entryId, groupId, displayDate,
 				status, orderByComparator);
@@ -14067,7 +12876,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_LtD_NotS_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -14386,68 +13195,79 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_G_LTD_NOTS_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
 	private static final String _FINDER_COLUMN_G_LTD_NOTS_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
 	private static final String _FINDER_COLUMN_G_LTD_NOTS_STATUS_2 = "blogsEntry.status != ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_LtD_S",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U_S",
 			new String[] {
-				Long.class.getName(), Date.class.getName(),
+				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_LtD_S",
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_U_S",
 			new String[] {
-				Long.class.getName(), Date.class.getName(),
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			BlogsEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.USERID_COLUMN_BITMASK |
+			BlogsEntryModelImpl.STATUS_COLUMN_BITMASK |
+			BlogsEntryModelImpl.DISPLAYDATE_COLUMN_BITMASK |
+			BlogsEntryModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_U_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_U_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			});
 
 	/**
-	 * Returns all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
+	 * @param companyId the company ID
+	 * @param userId the user ID
 	 * @param status the status
 	 * @return the matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
-		int status) {
-		return findByG_LtD_S(groupId, displayDate, status, QueryUtil.ALL_POS,
+	public List<BlogsEntry> findByC_U_S(long companyId, long userId, int status) {
+		return findByC_U_S(companyId, userId, status, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
+	 * @param companyId the company ID
+	 * @param userId the user ID
 	 * @param status the status
 	 * @param start the lower bound of the range of blogs entries
 	 * @param end the upper bound of the range of blogs entries (not inclusive)
 	 * @return the range of matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
+	public List<BlogsEntry> findByC_U_S(long companyId, long userId,
 		int status, int start, int end) {
-		return findByG_LtD_S(groupId, displayDate, status, start, end, null);
+		return findByC_U_S(companyId, userId, status, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
+	 * @param companyId the company ID
+	 * @param userId the user ID
 	 * @param status the status
 	 * @param start the lower bound of the range of blogs entries
 	 * @param end the upper bound of the range of blogs entries (not inclusive)
@@ -14455,15 +13275,561 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @return the ordered range of matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_LtD_S(long groupId, Date displayDate,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+	public List<BlogsEntry> findByC_U_S(long companyId, long userId,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_LTD_S;
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U_S;
+			finderArgs = new Object[] { companyId, userId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_S;
+			finderArgs = new Object[] {
+					companyId, userId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_S_First(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_S_First(companyId, userId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_S_First(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_U_S(companyId, userId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_S_Last(long companyId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_S_Last(companyId, userId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_S_Last(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_U_S(companyId, userId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_U_S(companyId, userId, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_U_S_PrevAndNext(long entryId, long companyId,
+		long userId, int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_U_S_PrevAndNext(session, blogsEntry, companyId,
+					userId, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_U_S_PrevAndNext(session, blogsEntry, companyId,
+					userId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_U_S_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_U_S_USERID_2);
+
+		query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(userId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; and status = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByC_U_S(long companyId, long userId, int status) {
+		for (BlogsEntry blogsEntry : findByC_U_S(companyId, userId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_U_S(long companyId, long userId, int status) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_U_S;
+
+		Object[] finderArgs = new Object[] { companyId, userId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_S_USERID_2);
+
+			query.append(_FINDER_COLUMN_C_U_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_U_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_U_S_USERID_2 = "blogsEntry.userId = ? AND ";
+	private static final String _FINDER_COLUMN_C_U_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_NOTS = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_U_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_U_NOTS =
+		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_U_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
+		int status) {
+		return findByC_U_NotS(companyId, userId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
+		int status, int start, int end) {
+		return findByC_U_NotS(companyId, userId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_U_NotS(long companyId, long userId,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_U_NOTS;
 		finderArgs = new Object[] {
-				groupId, displayDate, status,
+				companyId, userId, status,
 				
 				start, end, orderByComparator
 			};
@@ -14473,7 +13839,544 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		if ((list != null) && !list.isEmpty()) {
 			for (BlogsEntry blogsEntry : list) {
-				if ((groupId != blogsEntry.getGroupId()) ||
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(status == blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_NotS_First(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_NotS_First(companyId, userId,
+				status, orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_NotS_First(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_U_NotS(companyId, userId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByC_U_NotS_Last(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByC_U_NotS_Last(companyId, userId, status,
+				orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByC_U_NotS_Last(long companyId, long userId,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_U_NotS(companyId, userId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByC_U_NotS(companyId, userId, status,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByC_U_NotS_PrevAndNext(long entryId,
+		long companyId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByC_U_NotS_PrevAndNext(session, blogsEntry,
+					companyId, userId, status, orderByComparator, true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByC_U_NotS_PrevAndNext(session, blogsEntry,
+					companyId, userId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByC_U_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, long userId, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
+
+		query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
+
+		query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		qPos.add(userId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByC_U_NotS(long companyId, long userId, int status) {
+		for (BlogsEntry blogsEntry : findByC_U_NotS(companyId, userId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where companyId = &#63; and userId = &#63; and status &ne; &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByC_U_NotS(long companyId, long userId, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_U_NOTS;
+
+		Object[] finderArgs = new Object[] { companyId, userId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_USERID_2);
+
+			query.append(_FINDER_COLUMN_C_U_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(userId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_U_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_U_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
+	private static final String _FINDER_COLUMN_C_U_NOTS_STATUS_2 = "blogsEntry.status != ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD_S",
+			new String[] {
+				Long.class.getName(), Date.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_S = new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD_S",
+			new String[] {
+				Long.class.getName(), Date.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
+		int status) {
+		return findByC_LtD_S(companyId, displayDate, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
+		int status, int start, int end) {
+		return findByC_LtD_S(companyId, displayDate, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByC_LtD_S(long companyId, Date displayDate,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_S;
+		finderArgs = new Object[] {
+				companyId, displayDate, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
 						(displayDate.getTime() <= blogsEntry.getDisplayDate()
 																.getTime()) ||
 						(status != blogsEntry.getStatus())) {
@@ -14497,20 +14400,20 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+			query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
 
 			boolean bindDisplayDate = false;
 
 			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
 			}
 			else {
 				bindDisplayDate = true;
 
-				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
 			}
 
-			query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+			query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -14532,7 +14435,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
+				qPos.add(companyId);
 
 				if (bindDisplayDate) {
 					qPos.add(new Timestamp(displayDate.getTime()));
@@ -14571,9 +14474,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -14581,10 +14484,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry findByG_LtD_S_First(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
+	public BlogsEntry findByC_LtD_S_First(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_LtD_S_First(groupId, displayDate,
+		BlogsEntry blogsEntry = fetchByC_LtD_S_First(companyId, displayDate,
 				status, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -14595,8 +14498,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append(", displayDate=");
 		msg.append(displayDate);
@@ -14610,19 +14513,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry fetchByG_LtD_S_First(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByG_LtD_S(groupId, displayDate, status, 0,
-				1, orderByComparator);
+	public BlogsEntry fetchByC_LtD_S_First(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_LtD_S(companyId, displayDate, status,
+				0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -14632,9 +14535,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -14642,10 +14545,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry findByG_LtD_S_Last(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator)
+	public BlogsEntry findByC_LtD_S_Last(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_LtD_S_Last(groupId, displayDate,
+		BlogsEntry blogsEntry = fetchByC_LtD_S_Last(companyId, displayDate,
 				status, orderByComparator);
 
 		if (blogsEntry != null) {
@@ -14656,8 +14559,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append(", displayDate=");
 		msg.append(displayDate);
@@ -14671,24 +14574,24 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry fetchByG_LtD_S_Last(long groupId, Date displayDate,
-		int status, OrderByComparator orderByComparator) {
-		int count = countByG_LtD_S(groupId, displayDate, status);
+	public BlogsEntry fetchByC_LtD_S_Last(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_LtD_S(companyId, displayDate, status);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<BlogsEntry> list = findByG_LtD_S(groupId, displayDate, status,
+		List<BlogsEntry> list = findByC_LtD_S(companyId, displayDate, status,
 				count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -14699,10 +14602,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
 	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -14710,8 +14613,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	 */
 	@Override
-	public BlogsEntry[] findByG_LtD_S_PrevAndNext(long entryId, long groupId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
+	public BlogsEntry[] findByC_LtD_S_PrevAndNext(long entryId, long companyId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
@@ -14722,12 +14626,12 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 			BlogsEntry[] array = new BlogsEntryImpl[3];
 
-			array[0] = getByG_LtD_S_PrevAndNext(session, blogsEntry, groupId,
+			array[0] = getByC_LtD_S_PrevAndNext(session, blogsEntry, companyId,
 					displayDate, status, orderByComparator, true);
 
 			array[1] = blogsEntry;
 
-			array[2] = getByG_LtD_S_PrevAndNext(session, blogsEntry, groupId,
+			array[2] = getByC_LtD_S_PrevAndNext(session, blogsEntry, companyId,
 					displayDate, status, orderByComparator, false);
 
 			return array;
@@ -14740,9 +14644,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		}
 	}
 
-	protected BlogsEntry getByG_LtD_S_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+	protected BlogsEntry getByC_LtD_S_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -14755,20 +14659,20 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
 
-		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+		query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
 
 		boolean bindDisplayDate = false;
 
 		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+			query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
 		}
 		else {
 			bindDisplayDate = true;
 
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+			query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
 		}
 
-		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+		query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -14838,7 +14742,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		qPos.add(groupId);
+		qPos.add(companyId);
 
 		if (bindDisplayDate) {
 			qPos.add(new Timestamp(displayDate.getTime()));
@@ -14865,391 +14769,33 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
 	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
-		int status) {
-		return filterFindByG_LtD_S(groupId, displayDate, status,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
-		int status, int start, int end) {
-		return filterFindByG_LtD_S(groupId, displayDate, status, start, end,
-			null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_LtD_S(long groupId, Date displayDate,
-		int status, int start, int end, OrderByComparator orderByComparator) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_LtD_S(groupId, displayDate, status, start, end,
-				orderByComparator);
-		}
-
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(5);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			if (getDB().isSupportsInlineDistinct()) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator, true);
-			}
-			else {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
-					orderByComparator, true);
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			if (getDB().isSupportsInlineDistinct()) {
-				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-			}
-			else {
-				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-			}
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (bindDisplayDate) {
-				qPos.add(new Timestamp(displayDate.getTime()));
-			}
-
-			qPos.add(status);
-
-			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] filterFindByG_LtD_S_PrevAndNext(long entryId,
-		long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_LtD_S_PrevAndNext(entryId, groupId, displayDate,
-				status, orderByComparator);
-		}
-
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = filterGetByG_LtD_S_PrevAndNext(session, blogsEntry,
-					groupId, displayDate, status, orderByComparator, true);
-
-			array[1] = blogsEntry;
-
-			array[2] = filterGetByG_LtD_S_PrevAndNext(session, blogsEntry,
-					groupId, displayDate, status, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry filterGetByG_LtD_S_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, Date displayDate, int status,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		if (getDB().isSupportsInlineDistinct()) {
-			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-		}
-		else {
-			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-		}
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		if (bindDisplayDate) {
-			qPos.add(new Timestamp(displayDate.getTime()));
-		}
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63; from the database.
-	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 */
 	@Override
-	public void removeByG_LtD_S(long groupId, Date displayDate, int status) {
-		for (BlogsEntry blogsEntry : findByG_LtD_S(groupId, displayDate,
+	public void removeByC_LtD_S(long companyId, Date displayDate, int status) {
+		for (BlogsEntry blogsEntry : findByC_LtD_S(companyId, displayDate,
 				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(blogsEntry);
 		}
 	}
 
 	/**
-	 * Returns the number of blogs entries where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
+	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @return the number of matching blogs entries
 	 */
 	@Override
-	public int countByG_LtD_S(long groupId, Date displayDate, int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_LTD_S;
+	public int countByC_LtD_S(long companyId, Date displayDate, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_S;
 
-		Object[] finderArgs = new Object[] { groupId, displayDate, status };
+		Object[] finderArgs = new Object[] { companyId, displayDate, status };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
@@ -15259,20 +14805,20 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
+			query.append(_FINDER_COLUMN_C_LTD_S_COMPANYID_2);
 
 			boolean bindDisplayDate = false;
 
 			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
+				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1);
 			}
 			else {
 				bindDisplayDate = true;
 
-				query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
+				query.append(_FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2);
 			}
 
-			query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
+			query.append(_FINDER_COLUMN_C_LTD_S_STATUS_2);
 
 			String sql = query.toString();
 
@@ -15285,7 +14831,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
+				qPos.add(companyId);
 
 				if (bindDisplayDate) {
 					qPos.add(new Timestamp(displayDate.getTime()));
@@ -15310,124 +14856,53 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		return count.intValue();
 	}
 
-	/**
-	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and displayDate &lt; &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the number of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public int filterCountByG_LtD_S(long groupId, Date displayDate, int status) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_LtD_S(groupId, displayDate, status);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_LTD_S_GROUPID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_LTD_S_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (bindDisplayDate) {
-				qPos.add(new Timestamp(displayDate.getTime()));
-			}
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	private static final String _FINDER_COLUMN_G_LTD_S_GROUPID_2 = "blogsEntry.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
-	private static final String _FINDER_COLUMN_G_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
-	private static final String _FINDER_COLUMN_G_LTD_S_STATUS_2 = "blogsEntry.status = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD_NOTS =
+	private static final String _FINDER_COLUMN_C_LTD_S_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
+	private static final String _FINDER_COLUMN_C_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
+	private static final String _FINDER_COLUMN_C_LTD_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_NOTS =
 		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_LtD_NotS",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtD_NotS",
 			new String[] {
-				Long.class.getName(), Long.class.getName(), Date.class.getName(),
+				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_LTD_NOTS =
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_NOTS =
 		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_U_LtD_NotS",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtD_NotS",
 			new String[] {
-				Long.class.getName(), Long.class.getName(), Date.class.getName(),
+				Long.class.getName(), Date.class.getName(),
 				Integer.class.getName()
 			});
 
 	/**
-	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @return the matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status) {
-		return findByG_U_LtD_NotS(groupId, userId, displayDate, status,
+	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
+		int status) {
+		return findByC_LtD_NotS(companyId, displayDate, status,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns a range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param start the lower bound of the range of blogs entries
@@ -15435,21 +14910,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @return the range of matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status, int start, int end) {
-		return findByG_U_LtD_NotS(groupId, userId, displayDate, status, start,
-			end, null);
+	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
+		int status, int start, int end) {
+		return findByC_LtD_NotS(companyId, displayDate, status, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns an ordered range of all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param start the lower bound of the range of blogs entries
@@ -15458,16 +14931,16 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @return the ordered range of matching blogs entries
 	 */
 	@Override
-	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+	public List<BlogsEntry> findByC_LtD_NotS(long companyId, Date displayDate,
+		int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD_NOTS;
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTD_NOTS;
 		finderArgs = new Object[] {
-				groupId, userId, displayDate, status,
+				companyId, displayDate, status,
 				
 				start, end, orderByComparator
 			};
@@ -15477,8 +14950,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		if ((list != null) && !list.isEmpty()) {
 			for (BlogsEntry blogsEntry : list) {
-				if ((groupId != blogsEntry.getGroupId()) ||
-						(userId != blogsEntry.getUserId()) ||
+				if ((companyId != blogsEntry.getCompanyId()) ||
 						(displayDate.getTime() <= blogsEntry.getDisplayDate()
 																.getTime()) ||
 						(status == blogsEntry.getStatus())) {
@@ -15493,31 +14965,29 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(6 +
+				query = new StringBundler(5 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(6);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
 
 			boolean bindDisplayDate = false;
 
 			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
 			}
 			else {
 				bindDisplayDate = true;
 
-				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
 			}
 
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -15539,9 +15009,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
-
-				qPos.add(userId);
+				qPos.add(companyId);
 
 				if (bindDisplayDate) {
 					qPos.add(new Timestamp(displayDate.getTime()));
@@ -15580,10 +15048,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -15591,25 +15058,22 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry findByG_U_LtD_NotS_First(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
+	public BlogsEntry findByC_LtD_NotS_First(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_U_LtD_NotS_First(groupId, userId,
-				displayDate, status, orderByComparator);
+		BlogsEntry blogsEntry = fetchByC_LtD_NotS_First(companyId, displayDate,
+				status, orderByComparator);
 
 		if (blogsEntry != null) {
 			return blogsEntry;
 		}
 
-		StringBundler msg = new StringBundler(10);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append(", displayDate=");
 		msg.append(displayDate);
@@ -15623,20 +15087,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the first blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry fetchByG_U_LtD_NotS_First(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator) {
-		List<BlogsEntry> list = findByG_U_LtD_NotS(groupId, userId,
-				displayDate, status, 0, 1, orderByComparator);
+	public BlogsEntry fetchByC_LtD_NotS_First(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByC_LtD_NotS(companyId, displayDate,
+				status, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -15646,10 +15109,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -15657,25 +15119,22 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry findByG_U_LtD_NotS_Last(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
+	public BlogsEntry findByC_LtD_NotS_Last(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
-		BlogsEntry blogsEntry = fetchByG_U_LtD_NotS_Last(groupId, userId,
-				displayDate, status, orderByComparator);
+		BlogsEntry blogsEntry = fetchByC_LtD_NotS_Last(companyId, displayDate,
+				status, orderByComparator);
 
 		if (blogsEntry != null) {
 			return blogsEntry;
 		}
 
-		StringBundler msg = new StringBundler(10);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append(", userId=");
-		msg.append(userId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append(", displayDate=");
 		msg.append(displayDate);
@@ -15689,26 +15148,25 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the last blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
 	 */
 	@Override
-	public BlogsEntry fetchByG_U_LtD_NotS_Last(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator) {
-		int count = countByG_U_LtD_NotS(groupId, userId, displayDate, status);
+	public BlogsEntry fetchByC_LtD_NotS_Last(long companyId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByC_LtD_NotS(companyId, displayDate, status);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<BlogsEntry> list = findByG_U_LtD_NotS(groupId, userId,
-				displayDate, status, count - 1, count, orderByComparator);
+		List<BlogsEntry> list = findByC_LtD_NotS(companyId, displayDate,
+				status, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -15718,11 +15176,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
 	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -15730,9 +15187,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
 	 */
 	@Override
-	public BlogsEntry[] findByG_U_LtD_NotS_PrevAndNext(long entryId,
-		long groupId, long userId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+	public BlogsEntry[] findByC_LtD_NotS_PrevAndNext(long entryId,
+		long companyId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
 		Session session = null;
@@ -15742,15 +15200,13 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 			BlogsEntry[] array = new BlogsEntryImpl[3];
 
-			array[0] = getByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, displayDate, status, orderByComparator,
-					true);
+			array[0] = getByC_LtD_NotS_PrevAndNext(session, blogsEntry,
+					companyId, displayDate, status, orderByComparator, true);
 
 			array[1] = blogsEntry;
 
-			array[2] = getByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, displayDate, status, orderByComparator,
-					false);
+			array[2] = getByC_LtD_NotS_PrevAndNext(session, blogsEntry,
+					companyId, displayDate, status, orderByComparator, false);
 
 			return array;
 		}
@@ -15762,9 +15218,9 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		}
 	}
 
-	protected BlogsEntry getByG_U_LtD_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		int status, OrderByComparator orderByComparator, boolean previous) {
+	protected BlogsEntry getByC_LtD_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long companyId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -15777,22 +15233,20 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
 
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+		query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
 
 		boolean bindDisplayDate = false;
 
 		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
 		}
 		else {
 			bindDisplayDate = true;
 
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
 		}
 
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+		query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -15862,9 +15316,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		qPos.add(groupId);
-
-		qPos.add(userId);
+		qPos.add(companyId);
 
 		if (bindDisplayDate) {
 			qPos.add(new Timestamp(displayDate.getTime()));
@@ -15891,435 +15343,56 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	}
 
 	/**
-	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Removes all the blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status) {
-		return filterFindByG_U_LtD_NotS(groupId, userId, displayDate, status,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @return the range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status, int start, int end) {
-		return filterFindByG_U_LtD_NotS(groupId, userId, displayDate, status,
-			start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param start the lower bound of the range of blogs entries
-	 * @param end the upper bound of the range of blogs entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status, int start, int end,
-		OrderByComparator orderByComparator) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_U_LtD_NotS(groupId, userId, displayDate, status,
-				start, end, orderByComparator);
-		}
-
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(6);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			if (getDB().isSupportsInlineDistinct()) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator, true);
-			}
-			else {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
-					orderByComparator, true);
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			if (getDB().isSupportsInlineDistinct()) {
-				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-			}
-			else {
-				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-			}
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(userId);
-
-			if (bindDisplayDate) {
-				qPos.add(new Timestamp(displayDate.getTime()));
-			}
-
-			qPos.add(status);
-
-			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param entryId the primary key of the current blogs entry
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next blogs entry
-	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
-	 */
-	@Override
-	public BlogsEntry[] filterFindByG_U_LtD_NotS_PrevAndNext(long entryId,
-		long groupId, long userId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return findByG_U_LtD_NotS_PrevAndNext(entryId, groupId, userId,
-				displayDate, status, orderByComparator);
-		}
-
-		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BlogsEntry[] array = new BlogsEntryImpl[3];
-
-			array[0] = filterGetByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, displayDate, status, orderByComparator,
-					true);
-
-			array[1] = blogsEntry;
-
-			array[2] = filterGetByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
-					groupId, userId, displayDate, status, orderByComparator,
-					false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected BlogsEntry filterGetByG_U_LtD_NotS_PrevAndNext(Session session,
-		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		int status, OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		if (getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
-		}
-		else {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
-
-		if (!getDB().isSupportsInlineDistinct()) {
-			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
-		}
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				if (getDB().isSupportsInlineDistinct()) {
-					query.append(_ORDER_BY_ENTITY_ALIAS);
-				}
-				else {
-					query.append(_ORDER_BY_ENTITY_TABLE);
-				}
-
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			if (getDB().isSupportsInlineDistinct()) {
-				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
-			}
-			else {
-				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
-			}
-		}
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		if (getDB().isSupportsInlineDistinct()) {
-			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
-		}
-		else {
-			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
-		}
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		qPos.add(userId);
-
-		if (bindDisplayDate) {
-			qPos.add(new Timestamp(displayDate.getTime()));
-		}
-
-		qPos.add(status);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<BlogsEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 */
 	@Override
-	public void removeByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status) {
-		for (BlogsEntry blogsEntry : findByG_U_LtD_NotS(groupId, userId,
-				displayDate, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+	public void removeByC_LtD_NotS(long companyId, Date displayDate, int status) {
+		for (BlogsEntry blogsEntry : findByC_LtD_NotS(companyId, displayDate,
+				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(blogsEntry);
 		}
 	}
 
 	/**
-	 * Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 * Returns the number of blogs entries where companyId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
 	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
+	 * @param companyId the company ID
 	 * @param displayDate the display date
 	 * @param status the status
 	 * @return the number of matching blogs entries
 	 */
 	@Override
-	public int countByG_U_LtD_NotS(long groupId, long userId, Date displayDate,
-		int status) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_LTD_NOTS;
+	public int countByC_LtD_NotS(long companyId, Date displayDate, int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTD_NOTS;
 
-		Object[] finderArgs = new Object[] { groupId, userId, displayDate, status };
+		Object[] finderArgs = new Object[] { companyId, displayDate, status };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(5);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2);
 
 			boolean bindDisplayDate = false;
 
 			if (displayDate == null) {
-				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1);
 			}
 			else {
 				bindDisplayDate = true;
 
-				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+				query.append(_FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2);
 			}
 
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+			query.append(_FINDER_COLUMN_C_LTD_NOTS_STATUS_2);
 
 			String sql = query.toString();
 
@@ -16332,9 +15405,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
-
-				qPos.add(userId);
+				qPos.add(companyId);
 
 				if (bindDisplayDate) {
 					qPos.add(new Timestamp(displayDate.getTime()));
@@ -16359,86 +15430,10 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		return count.intValue();
 	}
 
-	/**
-	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param userId the user ID
-	 * @param displayDate the display date
-	 * @param status the status
-	 * @return the number of matching blogs entries that the user has permission to view
-	 */
-	@Override
-	public int filterCountByG_U_LtD_NotS(long groupId, long userId,
-		Date displayDate, int status) {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_U_LtD_NotS(groupId, userId, displayDate, status);
-		}
-
-		StringBundler query = new StringBundler(5);
-
-		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
-
-		boolean bindDisplayDate = false;
-
-		if (displayDate == null) {
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
-		}
-		else {
-			bindDisplayDate = true;
-
-			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
-		}
-
-		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				BlogsEntry.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(userId);
-
-			if (bindDisplayDate) {
-				qPos.add(new Timestamp(displayDate.getTime()));
-			}
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
-	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
-	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2 = "blogsEntry.status != ?";
+	private static final String _FINDER_COLUMN_C_LTD_NOTS_COMPANYID_2 = "blogsEntry.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
+	private static final String _FINDER_COLUMN_C_LTD_NOTS_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
+	private static final String _FINDER_COLUMN_C_LTD_NOTS_STATUS_2 = "blogsEntry.status != ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD_S =
 		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
@@ -16516,7 +15511,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public List<BlogsEntry> findByG_U_LtD_S(long groupId, long userId,
 		Date displayDate, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -16648,7 +15643,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_LtD_S_First(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_LtD_S_First(groupId, userId,
 				displayDate, status, orderByComparator);
@@ -16690,7 +15686,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_LtD_S_First(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator) {
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		List<BlogsEntry> list = findByG_U_LtD_S(groupId, userId, displayDate,
 				status, 0, 1, orderByComparator);
 
@@ -16714,7 +15711,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry findByG_U_LtD_S_Last(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator)
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
 		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = fetchByG_U_LtD_S_Last(groupId, userId,
 				displayDate, status, orderByComparator);
@@ -16756,7 +15754,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public BlogsEntry fetchByG_U_LtD_S_Last(long groupId, long userId,
-		Date displayDate, int status, OrderByComparator orderByComparator) {
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		int count = countByG_U_LtD_S(groupId, userId, displayDate, status);
 
 		if (count == 0) {
@@ -16788,7 +15787,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] findByG_U_LtD_S_PrevAndNext(long entryId, long groupId,
 		long userId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
 
 		Session session = null;
@@ -16818,7 +15818,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry getByG_U_LtD_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		int status, OrderByComparator orderByComparator, boolean previous) {
+		int status, OrderByComparator<BlogsEntry> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -17001,7 +16002,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public List<BlogsEntry> filterFindByG_U_LtD_S(long groupId, long userId,
 		Date displayDate, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_LtD_S(groupId, userId, displayDate, status, start,
 				end, orderByComparator);
@@ -17119,7 +16120,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	@Override
 	public BlogsEntry[] filterFindByG_U_LtD_S_PrevAndNext(long entryId,
 		long groupId, long userId, Date displayDate, int status,
-		OrderByComparator orderByComparator) throws NoSuchEntryException {
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_LtD_S_PrevAndNext(entryId, groupId, userId,
 				displayDate, status, orderByComparator);
@@ -17156,7 +16158,8 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 	protected BlogsEntry filterGetByG_U_LtD_S_PrevAndNext(Session session,
 		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
-		int status, OrderByComparator orderByComparator, boolean previous) {
+		int status, OrderByComparator<BlogsEntry> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -17493,6 +16496,1070 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _FINDER_COLUMN_G_U_LTD_S_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
 	private static final String _FINDER_COLUMN_G_U_LTD_S_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
 	private static final String _FINDER_COLUMN_G_U_LTD_S_STATUS_2 = "blogsEntry.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD_NOTS =
+		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, BlogsEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_LtD_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Date.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_LTD_NOTS =
+		new FinderPath(BlogsEntryModelImpl.ENTITY_CACHE_ENABLED,
+			BlogsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_U_LtD_NotS",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Date.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
+	 * Returns all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status) {
+		return findByG_U_LtD_NotS(groupId, userId, displayDate, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status, int start, int end) {
+		return findByG_U_LtD_NotS(groupId, userId, displayDate, status, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries
+	 */
+	@Override
+	public List<BlogsEntry> findByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_U_LTD_NOTS;
+		finderArgs = new Object[] {
+				groupId, userId, displayDate, status,
+				
+				start, end, orderByComparator
+			};
+
+		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(displayDate.getTime() <= blogsEntry.getDisplayDate()
+																.getTime()) ||
+						(status == blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(6 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(6);
+			}
+
+			query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<BlogsEntry>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_U_LtD_NotS_First(long groupId, long userId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_U_LtD_NotS_First(groupId, userId,
+				displayDate, status, orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_U_LtD_NotS_First(long groupId, long userId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		List<BlogsEntry> list = findByG_U_LtD_NotS(groupId, userId,
+				displayDate, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry findByG_U_LtD_NotS_Last(long groupId, long userId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = fetchByG_U_LtD_NotS_Last(groupId, userId,
+				displayDate, status, orderByComparator);
+
+		if (blogsEntry != null) {
+			return blogsEntry;
+		}
+
+		StringBundler msg = new StringBundler(10);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(", displayDate=");
+		msg.append(displayDate);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchEntryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching blogs entry, or <code>null</code> if a matching blogs entry could not be found
+	 */
+	@Override
+	public BlogsEntry fetchByG_U_LtD_NotS_Last(long groupId, long userId,
+		Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		int count = countByG_U_LtD_NotS(groupId, userId, displayDate, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<BlogsEntry> list = findByG_U_LtD_NotS(groupId, userId,
+				displayDate, status, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] findByG_U_LtD_NotS_PrevAndNext(long entryId,
+		long groupId, long userId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = getByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, displayDate, status, orderByComparator,
+					true);
+
+			array[1] = blogsEntry;
+
+			array[2] = getByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, displayDate, status, orderByComparator,
+					false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry getByG_U_LtD_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(userId);
+
+		if (bindDisplayDate) {
+			qPos.add(new Timestamp(displayDate.getTime()));
+		}
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status) {
+		return filterFindByG_U_LtD_NotS(groupId, userId, displayDate, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @return the range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status, int start, int end) {
+		return filterFindByG_U_LtD_NotS(groupId, userId, displayDate, status,
+			start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the blogs entries that the user has permissions to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.blogs.model.impl.BlogsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param start the lower bound of the range of blogs entries
+	 * @param end the upper bound of the range of blogs entries (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public List<BlogsEntry> filterFindByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status, int start, int end,
+		OrderByComparator<BlogsEntry> orderByComparator) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_LtD_NotS(groupId, userId, displayDate, status,
+				start, end, orderByComparator);
+		}
+
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			query = new StringBundler(6);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_TABLE,
+					orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+			}
+			else {
+				q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+			}
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(userId);
+
+			if (bindDisplayDate) {
+				qPos.add(new Timestamp(displayDate.getTime()));
+			}
+
+			qPos.add(status);
+
+			return (List<BlogsEntry>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the blogs entries before and after the current blogs entry in the ordered set of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param entryId the primary key of the current blogs entry
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next blogs entry
+	 * @throws com.liferay.portlet.blogs.NoSuchEntryException if a blogs entry with the primary key could not be found
+	 */
+	@Override
+	public BlogsEntry[] filterFindByG_U_LtD_NotS_PrevAndNext(long entryId,
+		long groupId, long userId, Date displayDate, int status,
+		OrderByComparator<BlogsEntry> orderByComparator)
+		throws NoSuchEntryException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_LtD_NotS_PrevAndNext(entryId, groupId, userId,
+				displayDate, status, orderByComparator);
+		}
+
+		BlogsEntry blogsEntry = findByPrimaryKey(entryId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			BlogsEntry[] array = new BlogsEntryImpl[3];
+
+			array[0] = filterGetByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, displayDate, status, orderByComparator,
+					true);
+
+			array[1] = blogsEntry;
+
+			array[2] = filterGetByG_U_LtD_NotS_PrevAndNext(session, blogsEntry,
+					groupId, userId, displayDate, status, orderByComparator,
+					false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected BlogsEntry filterGetByG_U_LtD_NotS_PrevAndNext(Session session,
+		BlogsEntry blogsEntry, long groupId, long userId, Date displayDate,
+		int status, OrderByComparator<BlogsEntry> orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_BLOGSENTRY_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					query.append(_ORDER_BY_ENTITY_ALIAS);
+				}
+				else {
+					query.append(_ORDER_BY_ENTITY_TABLE);
+				}
+
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				query.append(BlogsEntryModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				query.append(BlogsEntryModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			q.addEntity(_FILTER_ENTITY_ALIAS, BlogsEntryImpl.class);
+		}
+		else {
+			q.addEntity(_FILTER_ENTITY_TABLE, BlogsEntryImpl.class);
+		}
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(userId);
+
+		if (bindDisplayDate) {
+			qPos.add(new Timestamp(displayDate.getTime()));
+		}
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(blogsEntry);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<BlogsEntry> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status) {
+		for (BlogsEntry blogsEntry : findByG_U_LtD_NotS(groupId, userId,
+				displayDate, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(blogsEntry);
+		}
+	}
+
+	/**
+	 * Returns the number of blogs entries where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the number of matching blogs entries
+	 */
+	@Override
+	public int countByG_U_LtD_NotS(long groupId, long userId, Date displayDate,
+		int status) {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_U_LTD_NOTS;
+
+		Object[] finderArgs = new Object[] { groupId, userId, displayDate, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_BLOGSENTRY_WHERE);
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+			boolean bindDisplayDate = false;
+
+			if (displayDate == null) {
+				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+			}
+			else {
+				bindDisplayDate = true;
+
+				query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(userId);
+
+				if (bindDisplayDate) {
+					qPos.add(new Timestamp(displayDate.getTime()));
+				}
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of blogs entries that the user has permission to view where groupId = &#63; and userId = &#63; and displayDate &lt; &#63; and status &ne; &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param displayDate the display date
+	 * @param status the status
+	 * @return the number of matching blogs entries that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_U_LtD_NotS(long groupId, long userId,
+		Date displayDate, int status) {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_U_LtD_NotS(groupId, userId, displayDate, status);
+		}
+
+		StringBundler query = new StringBundler(5);
+
+		query.append(_FILTER_SQL_COUNT_BLOGSENTRY_WHERE);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_USERID_2);
+
+		boolean bindDisplayDate = false;
+
+		if (displayDate == null) {
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1);
+		}
+		else {
+			bindDisplayDate = true;
+
+			query.append(_FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				BlogsEntry.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(userId);
+
+			if (bindDisplayDate) {
+				qPos.add(new Timestamp(displayDate.getTime()));
+			}
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_GROUPID_2 = "blogsEntry.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_USERID_2 = "blogsEntry.userId = ? AND ";
+	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_1 = "blogsEntry.displayDate < NULL AND ";
+	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_DISPLAYDATE_2 = "blogsEntry.displayDate < ? AND ";
+	private static final String _FINDER_COLUMN_G_U_LTD_NOTS_STATUS_2 = "blogsEntry.status != ?";
 
 	public BlogsEntryPersistenceImpl() {
 		setModelClass(BlogsEntry.class);
@@ -17929,6 +17996,27 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			}
 
 			if ((blogsEntryModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						blogsEntryModelImpl.getOriginalGroupId(),
+						blogsEntryModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+
+				args = new Object[] {
+						blogsEntryModelImpl.getGroupId(),
+						blogsEntryModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+			}
+
+			if ((blogsEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						blogsEntryModelImpl.getOriginalCompanyId(),
@@ -17971,23 +18059,25 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			}
 
 			if ((blogsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						blogsEntryModelImpl.getOriginalGroupId(),
+						blogsEntryModelImpl.getOriginalUserId(),
 						blogsEntryModelImpl.getOriginalStatus()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
 					args);
 
 				args = new Object[] {
 						blogsEntryModelImpl.getGroupId(),
+						blogsEntryModelImpl.getUserId(),
 						blogsEntryModelImpl.getStatus()
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
 					args);
 			}
 
@@ -18011,29 +18101,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_U_S, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_U_S,
-					args);
-			}
-
-			if ((blogsEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						blogsEntryModelImpl.getOriginalGroupId(),
-						blogsEntryModelImpl.getOriginalUserId(),
-						blogsEntryModelImpl.getOriginalStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
-					args);
-
-				args = new Object[] {
-						blogsEntryModelImpl.getGroupId(),
-						blogsEntryModelImpl.getUserId(),
-						blogsEntryModelImpl.getStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U_S,
 					args);
 			}
 		}
@@ -18068,7 +18135,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		blogsEntryImpl.setCreateDate(blogsEntry.getCreateDate());
 		blogsEntryImpl.setModifiedDate(blogsEntry.getModifiedDate());
 		blogsEntryImpl.setTitle(blogsEntry.getTitle());
-		blogsEntryImpl.setDeckTitle(blogsEntry.getDeckTitle());
+		blogsEntryImpl.setSubtitle(blogsEntry.getSubtitle());
 		blogsEntryImpl.setUrlTitle(blogsEntry.getUrlTitle());
 		blogsEntryImpl.setDescription(blogsEntry.getDescription());
 		blogsEntryImpl.setContent(blogsEntry.getContent());
@@ -18077,6 +18144,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		blogsEntryImpl.setAllowTrackbacks(blogsEntry.isAllowTrackbacks());
 		blogsEntryImpl.setTrackbacks(blogsEntry.getTrackbacks());
 		blogsEntryImpl.setSmallImage(blogsEntry.isSmallImage());
+		blogsEntryImpl.setSmallImageFileEntryId(blogsEntry.getSmallImageFileEntryId());
 		blogsEntryImpl.setSmallImageId(blogsEntry.getSmallImageId());
 		blogsEntryImpl.setSmallImageURL(blogsEntry.getSmallImageURL());
 		blogsEntryImpl.setStatus(blogsEntry.getStatus());
@@ -18313,7 +18381,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 */
 	@Override
 	public List<BlogsEntry> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BlogsEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -18449,25 +18517,6 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	 * Initializes the blogs entry persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.blogs.model.BlogsEntry")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<BlogsEntry>> listenersList = new ArrayList<ModelListener<BlogsEntry>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<BlogsEntry>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -18496,11 +18545,11 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No BlogsEntry exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No BlogsEntry exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(BlogsEntryPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(BlogsEntryPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static BlogsEntry _nullBlogsEntry = new BlogsEntryImpl() {
+	private static final BlogsEntry _nullBlogsEntry = new BlogsEntryImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -18512,7 +18561,7 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 			}
 		};
 
-	private static CacheModel<BlogsEntry> _nullBlogsEntryCacheModel = new CacheModel<BlogsEntry>() {
+	private static final CacheModel<BlogsEntry> _nullBlogsEntryCacheModel = new CacheModel<BlogsEntry>() {
 			@Override
 			public BlogsEntry toEntityModel() {
 				return _nullBlogsEntry;

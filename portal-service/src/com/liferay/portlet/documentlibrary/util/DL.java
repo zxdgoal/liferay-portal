@@ -170,8 +170,10 @@ public interface DL {
 		FileEntry fileEntry, FileVersion fileVersion, ThemeDisplay themeDisplay,
 		String queryString, boolean appendVersion, boolean absoluteURL);
 
-	public OrderByComparator getRepositoryModelOrderByComparator(
+	public <T> OrderByComparator<T> getRepositoryModelOrderByComparator(
 		String orderByCol, String orderByType);
+
+	public String getSanitizedFileName(String title, String extension);
 
 	public String getTempFileId(long id, String version);
 
@@ -189,8 +191,7 @@ public interface DL {
 
 	public String getThumbnailStyle() throws Exception;
 
-	public String getThumbnailStyle(boolean max, int margin)
-		throws Exception;
+	public String getThumbnailStyle(boolean max, int margin) throws Exception;
 
 	public String getTitleWithExtension(FileEntry fileEntry);
 

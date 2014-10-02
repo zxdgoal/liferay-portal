@@ -26,10 +26,12 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
 import com.liferay.portal.test.AdviseWith;
-import com.liferay.portal.test.AspectJMockingNewClassLoaderJUnitTestRunner;
+import com.liferay.portal.test.runners.AspectJMockingNewClassLoaderJUnitTestRunner;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+
+import java.rmi.RemoteException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +62,7 @@ public class SPIRegistryImplTest {
 		new CodeCoverageAssertor();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		_spiRegistryImpl = new SPIRegistryImpl();
 
 		_spiRegistryImpl.setErrorSPI(new ErrorSPI());
@@ -69,11 +71,11 @@ public class SPIRegistryImplTest {
 
 		spiRegistryUtil.setSPIRegistry(_spiRegistryImpl);
 
-		_excludedPortletIds = (Set<String>)ReflectionTestUtil.getFieldValue(
+		_excludedPortletIds = ReflectionTestUtil.getFieldValue(
 			_spiRegistryImpl, "_excludedPortletIds");
-		_portletIds = (Map<SPI, String[]>)ReflectionTestUtil.getFieldValue(
+		_portletIds = ReflectionTestUtil.getFieldValue(
 			_spiRegistryImpl, "_portletIds");
-		_portletSPIs = (Map<String, SPI>)ReflectionTestUtil.getFieldValue(
+		_portletSPIs = ReflectionTestUtil.getFieldValue(
 			_spiRegistryImpl, "_portletSPIs");
 	}
 
@@ -115,7 +117,7 @@ public class SPIRegistryImplTest {
 
 	@AdviseWith(adviceClasses = {PortletLocalServiceUtilAdvice.class})
 	@Test
-	public void testRegistration() throws Exception {
+	public void testRegistration() throws RemoteException {
 		PortletLocalServiceUtilAdvice._portletIds = Arrays.asList(
 			"portlet3", "portlet4");
 
@@ -272,24 +274,24 @@ public class SPIRegistryImplTest {
 	public static class PortletLocalServiceUtilAdvice {
 
 		@Around(
-			"execution(public static com.liferay.portal.model.Portlet com." +
-				"liferay.portal.service.PortletLocalServiceUtil." +
-					"getPortletById(String)) && args(portletId)")
-		public Portlet getPortletById(String portletId) {
-			if (portletId.equals("portlet1")) {
-				return _createPortletProxy(portletId);
-			}
-
-			return null;
-		}
-
-		@Around(
 			"execution(public static com.liferay.portal.model.PortletApp " +
 				"com.liferay.portal.service.PortletLocalServiceUtil." +
 					"getPortletApp(String)) && args(servletContextName)")
 		public PortletApp getPortletApp(String servletContextName) {
 			if (servletContextName.equals("portletApp1")) {
 				return _createPortletAppProxy(_portletIds);
+			}
+
+			return null;
+		}
+
+		@Around(
+			"execution(public static com.liferay.portal.model.Portlet com." +
+				"liferay.portal.service.PortletLocalServiceUtil." +
+					"getPortletById(String)) && args(portletId)")
+		public Portlet getPortletById(String portletId) {
+			if (portletId.equals("portlet1")) {
+				return _createPortletProxy(portletId);
 			}
 
 			return null;

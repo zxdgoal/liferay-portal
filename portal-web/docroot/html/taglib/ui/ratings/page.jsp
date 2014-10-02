@@ -114,7 +114,7 @@ if (ratingsEntry != null) {
 							for (int i = 1; i <= numberOfStars; i++) {
 							%>
 
-								<span class="rating-element <%= (i <= averageIndex) ? "icon-star" : "icon-star-empty" %>" title="<%= TrashUtil.isInTrash(className, classPK) ? LanguageUtil.get(pageContext, "ratings-are-disabled-because-this-entry-is-in-the-recycle-bin") : ((i == 1) ? LanguageUtil.format(pageContext, "the-average-rating-is-x-stars-out-of-x", new Object[] {averageScore, numberOfStars}, false) : StringPool.BLANK) %>"></span>
+								<span class="rating-element <%= (i <= averageIndex) ? "icon-star" : "icon-star-empty" %>" title="<%= TrashUtil.isInTrash(className, classPK) ? LanguageUtil.get(request, "ratings-are-disabled-because-this-entry-is-in-the-recycle-bin") : ((i == 1) ? LanguageUtil.format(request, "the-average-rating-is-x-stars-out-of-x", new Object[] {averageScore, numberOfStars}, false) : StringPool.BLANK) %>"></span>
 
 							<%
 							}
@@ -125,24 +125,24 @@ if (ratingsEntry != null) {
 				</div>
 			</c:when>
 			<c:when test='<%= type.equals("thumbs") %>'>
-				<c:choose>
-					<c:when test="<%= themeDisplay.isSignedIn() %>">
-						<div class="liferay-rating-vote thumbrating" id="<%= randomNamespace %>ratingThumb">
-							<div class="helper-clearfix rating-content thumbrating-content" id="<%= randomNamespace %>ratingThumbContent">
-								<liferay-util:whitespace-remover>
-									<div class="rating-label">
-										<c:choose>
-											<c:when test="<%= (ratingsStats.getTotalScore() == 0) %>">
-												0
-											</c:when>
-											<c:otherwise>
-												<%= (averageScore > 0) ? "+" : StringPool.BLANK %><%= (int)ratingsStats.getTotalScore() %>
-											</c:otherwise>
-										</c:choose>
+				<div class="liferay-rating-vote thumbrating" id="<%= randomNamespace %>ratingThumb">
+					<div class="helper-clearfix rating-content thumbrating-content" id="<%= randomNamespace %>ratingThumbContent">
+						<liferay-util:whitespace-remover>
+							<div class="rating-label">
+								<c:choose>
+									<c:when test="<%= (ratingsStats.getTotalScore() == 0) %>">
+										0
+									</c:when>
+									<c:otherwise>
+										<%= (averageScore > 0) ? "+" : StringPool.BLANK %><%= (int)ratingsStats.getTotalScore() %>
+									</c:otherwise>
+								</c:choose>
 
-										<%= StringPool.SPACE %>(<%= ratingsStats.getTotalEntries() %> <liferay-ui:message key='<%= (ratingsStats.getTotalEntries() == 1) ? "vote" : "votes" %>' />)
-									</div>
+								<%= StringPool.SPACE %>(<%= ratingsStats.getTotalEntries() %> <liferay-ui:message key='<%= (ratingsStats.getTotalEntries() == 1) ? "vote" : "votes" %>' />)
+							</div>
 
+							<c:choose>
+								<c:when test="<%= themeDisplay.isSignedIn() %>">
 									<c:choose>
 										<c:when test="<%= TrashUtil.isInTrash(className, classPK) %>">
 											<span class="rating-element rating-<%= (yourScore > 0) ? "on" : "off" %> rating-thumb-up" title="<liferay-ui:message key="ratings-are-disabled-because-this-entry-is-in-the-recycle-bin" />"></span>
@@ -174,14 +174,11 @@ if (ratingsEntry != null) {
 											</div>
 										</c:otherwise>
 									</c:choose>
-								</liferay-util:whitespace-remover>
-							</div>
-						</div>
-					</c:when>
-					<c:otherwise>
-						<a href="<%= themeDisplay.getURLSignIn() %>"><liferay-ui:message key="sign-in-to-vote" /></a>
-					</c:otherwise>
-				</c:choose>
+								</c:when>
+							</c:choose>
+						</liferay-util:whitespace-remover>
+					</div>
+				</div>
 			</c:when>
 		</c:choose>
 	</div>

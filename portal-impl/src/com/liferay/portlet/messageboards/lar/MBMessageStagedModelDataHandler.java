@@ -14,16 +14,19 @@
 
 package com.liferay.portlet.messageboards.lar;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
+import com.liferay.portal.kernel.lar.StagedModelModifiedDateComparator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -64,13 +67,35 @@ public class MBMessageStagedModelDataHandler
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
 
-		MBMessage message =
-			MBMessageLocalServiceUtil.fetchMBMessageByUuidAndGroupId(
-				uuid, groupId);
+		MBMessage message = fetchStagedModelByUuidAndGroupId(uuid, groupId);
 
 		if (message != null) {
 			MBMessageLocalServiceUtil.deleteMessage(message);
 		}
+	}
+
+	@Override
+	public MBMessage fetchStagedModelByUuidAndCompanyId(
+		String uuid, long companyId) {
+
+		List<MBMessage> messages =
+			MBMessageLocalServiceUtil.getMBMessagesByUuidAndCompanyId(
+				uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				new StagedModelModifiedDateComparator<MBMessage>());
+
+		if (ListUtil.isEmpty(messages)) {
+			return null;
+		}
+
+		return messages.get(0);
+	}
+
+	@Override
+	public MBMessage fetchStagedModelByUuidAndGroupId(
+		String uuid, long groupId) {
+
+		return MBMessageLocalServiceUtil.fetchMBMessageByUuidAndGroupId(
+			uuid, groupId);
 	}
 
 	@Override
@@ -198,18 +223,6 @@ public class MBMessageStagedModelDataHandler
 
 		long userId = portletDataContext.getUserId(message.getUserUuid());
 
-		if (message.isDiscussion()) {
-			StagedModelDataHandlerUtil.importReferenceStagedModels(
-				portletDataContext, message, MBDiscussion.class);
-		}
-		else if (message.getCategoryId() !=
-					MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
-
-			StagedModelDataHandlerUtil.importReferenceStagedModel(
-				portletDataContext, message, MBCategory.class,
-				message.getCategoryId());
-		}
-
 		Map<Long, Long> categoryIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				MBCategory.class);
@@ -222,12 +235,6 @@ public class MBMessageStagedModelDataHandler
 				MBThread.class);
 
 		long threadId = MapUtil.getLong(threadIds, message.getThreadId(), 0);
-
-		if (!message.isRoot()) {
-			StagedModelDataHandlerUtil.importReferenceStagedModel(
-				portletDataContext, message, MBMessage.class,
-				message.getParentMessageId());
-		}
 
 		Map<Long, Long> messageIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
@@ -250,10 +257,8 @@ public class MBMessageStagedModelDataHandler
 			MBMessage importedMessage = null;
 
 			if (portletDataContext.isDataStrategyMirror()) {
-				MBMessage existingMessage =
-					MBMessageLocalServiceUtil.fetchMBMessageByUuidAndGroupId(
-						message.getUuid(),
-						portletDataContext.getScopeGroupId());
+				MBMessage existingMessage = fetchStagedModelByUuidAndGroupId(
+					message.getUuid(), portletDataContext.getScopeGroupId());
 
 				if (existingMessage == null) {
 					serviceContext.setUuid(message.getUuid());
@@ -355,9 +360,8 @@ public class MBMessageStagedModelDataHandler
 
 		long userId = portletDataContext.getUserId(message.getUserUuid());
 
-		MBMessage existingMessage =
-			MBMessageLocalServiceUtil.fetchMBMessageByUuidAndGroupId(
-				message.getUuid(), portletDataContext.getScopeGroupId());
+		MBMessage existingMessage = fetchStagedModelByUuidAndGroupId(
+			message.getUuid(), portletDataContext.getScopeGroupId());
 
 		if (existingMessage == null) {
 			return;

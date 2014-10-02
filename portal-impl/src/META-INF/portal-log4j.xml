@@ -184,10 +184,6 @@
 		<priority value="ERROR" />
 	</category>
 
-	<category name="com.liferay.portal.editor.fckeditor.ConnectorAction">
-		<priority value="ERROR" />
-	</category>
-
 	<category name="com.liferay.portal.events.ChannelHubAppShutdownAction">
 		<priority value="INFO" />
 	</category>
@@ -284,6 +280,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.jsonwebservice.JSONWebServiceActionsManagerImpl">
+		<priority value="WARN" />
+	</category>
+
 	<category name="com.liferay.portal.kernel.bean.PortalBeanLocatorUtil">
 		<priority value="ERROR" />
 	</category>
@@ -357,6 +357,10 @@
 	</category>
 
 	<category name="com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilter">
+		<priority value="FATAL" />
+	</category>
+
+	<category name="com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilterHelper">
 		<priority value="FATAL" />
 	</category>
 
@@ -864,6 +868,10 @@
 		<priority value="INFO" />
 	</category>
 
+	<category name="com.liferay.portal.upgrade.v7_0_0.UpgradePortletSettings">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.portal.util">
 		<priority value="ERROR" />
 	</category>
@@ -1298,6 +1306,10 @@
 
 	<category name="org.springframework.aop.support.AopUtils">
 		<priority value="INFO" />
+	</category>
+
+	<category name="osgi.logging">
+		<priority value="WARN" />
 	</category>
 
 	<category name="portal-web.docroot.errors.404.jsp">

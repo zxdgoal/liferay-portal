@@ -58,10 +58,9 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TreeModelFinder;
+import com.liferay.portal.kernel.util.TreeModelTasksAdapter;
 import com.liferay.portal.kernel.util.TreePathUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowHandler;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
@@ -850,6 +849,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 					Group.class.getName(), group.getGroupId());
 			}
 
+			assetEntryLocalService.deleteGroupEntries(group.getGroupId());
+
 			assetTagLocalService.deleteGroupTags(group.getGroupId());
 
 			assetVocabularyLocalService.deleteVocabularies(group.getGroupId());
@@ -1538,7 +1539,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	@Override
 	public List<Group> getLayoutsGroups(
 		long companyId, long parentGroupId, boolean site, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<Group> obc) {
 
 		return groupFinder.findByLayouts(
 			companyId, parentGroupId, site, start, end, obc);
@@ -1893,7 +1894,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 			long userId, int start, int end)
 		throws PortalException {
 
-		List<Group> userOrgsGroups = new UniqueList<Group>();
+		List<Group> userOrgsGroups = new ArrayList<Group>();
 
 		List<Organization> userOrgs =
 			organizationLocalService.getUserOrganizations(userId, start, end);
@@ -1910,7 +1911,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 			}
 		}
 
-		return userOrgsGroups;
+		return ListUtil.unique(userOrgsGroups);
 	}
 
 	/**
@@ -2081,14 +2082,13 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	@Override
 	public void rebuildTree(long companyId) throws PortalException {
 		TreePathUtil.rebuildTree(
-			companyId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
-			new TreeModelFinder<Group>() {
+			companyId, GroupConstants.DEFAULT_PARENT_GROUP_ID, StringPool.SLASH,
+			new TreeModelTasksAdapter<Group>() {
 
 				@Override
 				public List<Group> findTreeModels(
-						long previousId, long companyId, long parentPrimaryKey,
-						int size)
-					throws SystemException {
+					long previousId, long companyId, long parentPrimaryKey,
+					int size) {
 
 					return groupPersistence.findByG_C_P(
 						previousId, companyId, parentPrimaryKey,
@@ -2214,7 +2214,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long parentGroupId, String keywords,
 		LinkedHashMap<String, Object> params, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, getClassNameIds(), parentGroupId, keywords, params,
@@ -2306,7 +2306,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long parentGroupId, String name, String description,
 		LinkedHashMap<String, Object> params, boolean andOperator, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, getClassNameIds(), parentGroupId, name, description,
@@ -2398,7 +2398,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long[] classNameIds, long parentGroupId,
 		String keywords, LinkedHashMap<String, Object> params, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<Group> obc) {
 
 		String[] keywordsArray = getSearchNames(companyId, keywords);
 
@@ -2512,7 +2512,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long[] classNameIds, long parentGroupId, String name,
 		String description, LinkedHashMap<String, Object> params,
-		boolean andOperator, int start, int end, OrderByComparator obc) {
+		boolean andOperator, int start, int end, OrderByComparator<Group> obc) {
 
 		String[] names = getSearchNames(companyId, name);
 		String[] descriptions = CustomSQLUtil.keywords(description);
@@ -2610,7 +2610,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long[] classNameIds, String keywords,
 		LinkedHashMap<String, Object> params, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, classNameIds, GroupConstants.ANY_PARENT_GROUP_ID,
@@ -2706,7 +2706,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, long[] classNameIds, String name, String description,
 		LinkedHashMap<String, Object> params, boolean andOperator, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, classNameIds, GroupConstants.ANY_PARENT_GROUP_ID, name,
@@ -2787,7 +2787,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	@Override
 	public List<Group> search(
 		long companyId, String keywords, LinkedHashMap<String, Object> params,
-		int start, int end, OrderByComparator obc) {
+		int start, int end, OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, getClassNameIds(), GroupConstants.ANY_PARENT_GROUP_ID,
@@ -2877,7 +2877,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	public List<Group> search(
 		long companyId, String name, String description,
 		LinkedHashMap<String, Object> params, boolean andOperator, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<Group> obc) {
 
 		return search(
 			companyId, getClassNameIds(), GroupConstants.ANY_PARENT_GROUP_ID,
@@ -4172,7 +4172,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		setRolePermissions(group, role, "com.liferay.portlet.imagegallery");
 		setRolePermissions(group, role, "com.liferay.portlet.journal");
 		setRolePermissions(group, role, "com.liferay.portlet.messageboards");
-		setRolePermissions(group, role, "com.liferay.portlet.polls");
 		setRolePermissions(group, role, "com.liferay.portlet.wiki");
 	}
 
@@ -4302,7 +4301,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	}
 
 	protected List<Group> sort(
-		Collection<Group> groups, int start, int end, OrderByComparator obc) {
+		Collection<Group> groups, int start, int end,
+		OrderByComparator<Group> obc) {
 
 		if (obc == null) {
 			obc = new GroupNameComparator(true);

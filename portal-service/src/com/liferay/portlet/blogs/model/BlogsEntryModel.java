@@ -229,19 +229,19 @@ public interface BlogsEntryModel extends BaseModel<BlogsEntry>,
 	public void setTitle(String title);
 
 	/**
-	 * Returns the deck title of this blogs entry.
+	 * Returns the subtitle of this blogs entry.
 	 *
-	 * @return the deck title of this blogs entry
+	 * @return the subtitle of this blogs entry
 	 */
 	@AutoEscape
-	public String getDeckTitle();
+	public String getSubtitle();
 
 	/**
-	 * Sets the deck title of this blogs entry.
+	 * Sets the subtitle of this blogs entry.
 	 *
-	 * @param deckTitle the deck title of this blogs entry
+	 * @param subtitle the subtitle of this blogs entry
 	 */
-	public void setDeckTitle(String deckTitle);
+	public void setSubtitle(String subtitle);
 
 	/**
 	 * Returns the url title of this blogs entry.
@@ -379,6 +379,20 @@ public interface BlogsEntryModel extends BaseModel<BlogsEntry>,
 	 * @param smallImage the small image of this blogs entry
 	 */
 	public void setSmallImage(boolean smallImage);
+
+	/**
+	 * Returns the small image file entry ID of this blogs entry.
+	 *
+	 * @return the small image file entry ID of this blogs entry
+	 */
+	public long getSmallImageFileEntryId();
+
+	/**
+	 * Sets the small image file entry ID of this blogs entry.
+	 *
+	 * @param smallImageFileEntryId the small image file entry ID of this blogs entry
+	 */
+	public void setSmallImageFileEntryId(long smallImageFileEntryId);
 
 	/**
 	 * Returns the small image ID of this blogs entry.

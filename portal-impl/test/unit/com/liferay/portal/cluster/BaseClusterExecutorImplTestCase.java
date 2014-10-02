@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
+import com.liferay.portal.kernel.concurrent.NoticeableFuture;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
@@ -111,6 +112,10 @@ public abstract class BaseClusterExecutorImplTestCase
 
 		public static final String BAD_ADDRESS = "bad address";
 
+		public static void setPort(int port) {
+			_port = port;
+		}
+
 		@Around(
 			"set(* com.liferay.portal.util.PropsValues." +
 				"PORTAL_INSTANCE_HTTP_INET_SOCKET_ADDRESS)")
@@ -143,10 +148,6 @@ public abstract class BaseClusterExecutorImplTestCase
 			}
 
 			return proceedingJoinPoint.proceed(new Object[] {address});
-		}
-
-		public static void setPort(int port) {
-			_port = port;
 		}
 
 		private static Integer _port;
@@ -226,7 +227,7 @@ public abstract class BaseClusterExecutorImplTestCase
 	protected void assertFutureClusterResponsesWithException(
 			FutureClusterResponses futureClusterResponses, String expectedUUID,
 			Address expectedAddress, String expectedExceptionMessage)
-		throws Exception {
+		throws InterruptedException {
 
 		ClusterNodeResponses clusterNodeResponses =
 			futureClusterResponses.get();
@@ -302,8 +303,7 @@ public abstract class BaseClusterExecutorImplTestCase
 	}
 
 	protected ClusterExecutorImpl getClusterExecutorImpl(
-			boolean useMockReceiver, boolean loadSpringXML)
-		throws Exception {
+		boolean useMockReceiver, boolean loadSpringXML) {
 
 		_initialize(loadSpringXML);
 
@@ -373,8 +373,6 @@ public abstract class BaseClusterExecutorImplTestCase
 		TestBean.class, "testMethod2");
 	protected static MethodKey testMethod3MethodKey = new MethodKey(
 		TestBean.class, "testMethod3", String.class);
-	protected static MethodKey testMethod4MethodKey = new MethodKey(
-		TestBean.class, "testMethod4");
 
 	protected class MockClusterEventListener implements ClusterEventListener {
 
@@ -432,16 +430,6 @@ public abstract class BaseClusterExecutorImplTestCase
 			_clusterExecutorImpl = clusterExecutorImpl;
 		}
 
-		public ClusterRequest waitLocalRequestMessage() throws Exception {
-			try {
-				return _localRequestExchanger.exchange(
-					null, 1000, TimeUnit.MILLISECONDS);
-			}
-			catch (TimeoutException te) {
-				return null;
-			}
-		}
-
 		@Override
 		public void receive(Message message) {
 			super.receive(message);
@@ -464,6 +452,16 @@ public abstract class BaseClusterExecutorImplTestCase
 			}
 		}
 
+		public ClusterRequest waitLocalRequestMessage() throws Exception {
+			try {
+				return _localRequestExchanger.exchange(
+					null, 1000, TimeUnit.MILLISECONDS);
+			}
+			catch (TimeoutException te) {
+				return null;
+			}
+		}
+
 		private ClusterExecutorImpl _clusterExecutorImpl;
 		private Exchanger<ClusterRequest> _localRequestExchanger =
 			new Exchanger<ClusterRequest>();
@@ -479,38 +477,6 @@ public abstract class BaseClusterExecutorImplTestCase
 				_messageExchanger.exchange(clusterNodeResponses);
 			}
 			catch (Exception e) {
-			}
-		}
-
-		public ClusterNodeResponses waitMessage() throws Exception {
-			try {
-				return _messageExchanger.exchange(
-					null, 1000, TimeUnit.MILLISECONDS);
-			}
-			catch (TimeoutException te) {
-				return null;
-			}
-		}
-
-		public TimeoutException waitTimeoutException() throws Exception {
-			try {
-				return _timeoutExceptionExchanger.exchange(
-					null, 2000, TimeUnit.MILLISECONDS);
-			}
-			catch (TimeoutException te) {
-				return null;
-			}
-		}
-
-		public InterruptedException waitInterruptedException()
-			throws Exception {
-
-			try {
-				return _interruptedExceptionExchanger.exchange(
-					null, 1000, TimeUnit.MILLISECONDS);
-			}
-			catch (TimeoutException te) {
-				return null;
 			}
 		}
 
@@ -534,10 +500,42 @@ public abstract class BaseClusterExecutorImplTestCase
 			}
 		}
 
-		private Exchanger<ClusterNodeResponses> _messageExchanger =
-			new Exchanger<ClusterNodeResponses>();
+		public InterruptedException waitInterruptedException()
+			throws Exception {
+
+			try {
+				return _interruptedExceptionExchanger.exchange(
+					null, 1000, TimeUnit.MILLISECONDS);
+			}
+			catch (TimeoutException te) {
+				return null;
+			}
+		}
+
+		public ClusterNodeResponses waitMessage() throws Exception {
+			try {
+				return _messageExchanger.exchange(
+					null, 1000, TimeUnit.MILLISECONDS);
+			}
+			catch (TimeoutException te) {
+				return null;
+			}
+		}
+
+		public TimeoutException waitTimeoutException() throws Exception {
+			try {
+				return _timeoutExceptionExchanger.exchange(
+					null, 2000, TimeUnit.MILLISECONDS);
+			}
+			catch (TimeoutException te) {
+				return null;
+			}
+		}
+
 		private Exchanger<InterruptedException> _interruptedExceptionExchanger =
 			new Exchanger<InterruptedException>();
+		private Exchanger<ClusterNodeResponses> _messageExchanger =
+			new Exchanger<ClusterNodeResponses>();
 		private Exchanger<TimeoutException> _timeoutExceptionExchanger =
 			new Exchanger<TimeoutException>();
 
@@ -546,7 +544,9 @@ public abstract class BaseClusterExecutorImplTestCase
 	protected class MockPortalExecutorManager implements PortalExecutorManager {
 
 		@Override
-		public <T> Future<T> execute(String name, Callable<T> callable) {
+		public <T> NoticeableFuture<T> execute(
+			String name, Callable<T> callable) {
+
 			return _threadPoolExecutor.submit(callable);
 		}
 

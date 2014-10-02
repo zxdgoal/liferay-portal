@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.shopping.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,8 +27,6 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -46,7 +45,6 @@ import com.liferay.portlet.shopping.service.persistence.ShoppingOrderPersistence
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +65,7 @@ import java.util.Set;
  * @see ShoppingOrderUtil
  * @generated
  */
+@ProviderType
 public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOrder>
 	implements ShoppingOrderPersistence {
 	/*
@@ -155,7 +154,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public List<ShoppingOrder> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -261,7 +260,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchOrderException {
+		OrderByComparator<ShoppingOrder> orderByComparator)
+		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -290,7 +290,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		List<ShoppingOrder> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -311,7 +311,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchOrderException {
+		OrderByComparator<ShoppingOrder> orderByComparator)
+		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = fetchByGroupId_Last(groupId,
 				orderByComparator);
 
@@ -340,7 +341,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -368,7 +369,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder[] findByGroupId_PrevAndNext(long orderId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<ShoppingOrder> orderByComparator)
 		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = findByPrimaryKey(orderId);
 
@@ -399,7 +400,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	protected ShoppingOrder getByGroupId_PrevAndNext(Session session,
 		ShoppingOrder shoppingOrder, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ShoppingOrder> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -547,7 +548,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public List<ShoppingOrder> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<ShoppingOrder> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -638,7 +639,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder[] filterFindByGroupId_PrevAndNext(long orderId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<ShoppingOrder> orderByComparator)
 		throws NoSuchOrderException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(orderId, groupId, orderByComparator);
@@ -673,7 +674,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	protected ShoppingOrder filterGetByGroupId_PrevAndNext(Session session,
 		ShoppingOrder shoppingOrder, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ShoppingOrder> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1488,7 +1489,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	@Override
 	public List<ShoppingOrder> findByG_U_PPPS(long groupId, long userId,
 		String ppPaymentStatus, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1625,7 +1626,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder findByG_U_PPPS_First(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator)
 		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_First(groupId, userId,
 				ppPaymentStatus, orderByComparator);
@@ -1663,7 +1665,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder fetchByG_U_PPPS_First(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator) {
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		List<ShoppingOrder> list = findByG_U_PPPS(groupId, userId,
 				ppPaymentStatus, 0, 1, orderByComparator);
 
@@ -1686,7 +1689,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder findByG_U_PPPS_Last(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator)
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator)
 		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = fetchByG_U_PPPS_Last(groupId, userId,
 				ppPaymentStatus, orderByComparator);
@@ -1724,7 +1728,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public ShoppingOrder fetchByG_U_PPPS_Last(long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator) {
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		int count = countByG_U_PPPS(groupId, userId, ppPaymentStatus);
 
 		if (count == 0) {
@@ -1755,7 +1760,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	@Override
 	public ShoppingOrder[] findByG_U_PPPS_PrevAndNext(long orderId,
 		long groupId, long userId, String ppPaymentStatus,
-		OrderByComparator orderByComparator) throws NoSuchOrderException {
+		OrderByComparator<ShoppingOrder> orderByComparator)
+		throws NoSuchOrderException {
 		ShoppingOrder shoppingOrder = findByPrimaryKey(orderId);
 
 		Session session = null;
@@ -1785,8 +1791,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	protected ShoppingOrder getByG_U_PPPS_PrevAndNext(Session session,
 		ShoppingOrder shoppingOrder, long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator,
-		boolean previous) {
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1965,7 +1971,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	@Override
 	public List<ShoppingOrder> filterFindByG_U_PPPS(long groupId, long userId,
 		String ppPaymentStatus, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_PPPS(groupId, userId, ppPaymentStatus, start, end,
 				orderByComparator);
@@ -2082,7 +2088,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	@Override
 	public ShoppingOrder[] filterFindByG_U_PPPS_PrevAndNext(long orderId,
 		long groupId, long userId, String ppPaymentStatus,
-		OrderByComparator orderByComparator) throws NoSuchOrderException {
+		OrderByComparator<ShoppingOrder> orderByComparator)
+		throws NoSuchOrderException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_PPPS_PrevAndNext(orderId, groupId, userId,
 				ppPaymentStatus, orderByComparator);
@@ -2117,8 +2124,8 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 	protected ShoppingOrder filterGetByG_U_PPPS_PrevAndNext(Session session,
 		ShoppingOrder shoppingOrder, long groupId, long userId,
-		String ppPaymentStatus, OrderByComparator orderByComparator,
-		boolean previous) {
+		String ppPaymentStatus,
+		OrderByComparator<ShoppingOrder> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3095,7 +3102,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 */
 	@Override
 	public List<ShoppingOrder> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ShoppingOrder> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3231,25 +3238,6 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	 * Initializes the shopping order persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.shopping.model.ShoppingOrder")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ShoppingOrder>> listenersList = new ArrayList<ModelListener<ShoppingOrder>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ShoppingOrder>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3278,11 +3266,11 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ShoppingOrder exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ShoppingOrder exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ShoppingOrderPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(ShoppingOrderPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"number"
 			});
-	private static ShoppingOrder _nullShoppingOrder = new ShoppingOrderImpl() {
+	private static final ShoppingOrder _nullShoppingOrder = new ShoppingOrderImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3294,7 +3282,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			}
 		};
 
-	private static CacheModel<ShoppingOrder> _nullShoppingOrderCacheModel = new CacheModel<ShoppingOrder>() {
+	private static final CacheModel<ShoppingOrder> _nullShoppingOrderCacheModel = new CacheModel<ShoppingOrder>() {
 			@Override
 			public ShoppingOrder toEntityModel() {
 				return _nullShoppingOrder;

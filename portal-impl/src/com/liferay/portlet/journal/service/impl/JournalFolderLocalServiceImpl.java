@@ -17,7 +17,6 @@ package com.liferay.portlet.journal.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.search.Indexable;
@@ -32,12 +31,13 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.TreeModelFinder;
+import com.liferay.portal.kernel.util.TreeModelTasksAdapter;
 import com.liferay.portal.kernel.util.TreePathUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.SystemEventConstants;
+import com.liferay.portal.model.TreeModel;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.WorkflowDefinitionLink;
 import com.liferay.portal.service.ServiceContext;
@@ -318,7 +318,7 @@ public class JournalFolderLocalServiceImpl
 
 	@Override
 	public List<Object> getFoldersAndArticles(long groupId, long folderId) {
-		QueryDefinition queryDefinition = new QueryDefinition(
+		QueryDefinition<?> queryDefinition = new QueryDefinition<Object>(
 			WorkflowConstants.STATUS_ANY);
 
 		return journalFolderFinder.findF_A_ByG_F(
@@ -329,7 +329,8 @@ public class JournalFolderLocalServiceImpl
 	public List<Object> getFoldersAndArticles(
 		long groupId, long folderId, int status) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(status);
+		QueryDefinition<?> queryDefinition = new QueryDefinition<Object>(
+			status);
 
 		return journalFolderFinder.findF_A_ByG_F(
 			groupId, folderId, queryDefinition);
@@ -338,10 +339,11 @@ public class JournalFolderLocalServiceImpl
 	@Override
 	public List<Object> getFoldersAndArticles(
 		long groupId, long folderId, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<?> obc) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY, start, end, obc);
+		QueryDefinition<?> queryDefinition = new QueryDefinition<Object>(
+			WorkflowConstants.STATUS_ANY, start, end,
+			(OrderByComparator<Object>)obc);
 
 		return journalFolderFinder.findF_A_ByG_F(
 			groupId, folderId, queryDefinition);
@@ -351,7 +353,8 @@ public class JournalFolderLocalServiceImpl
 	public int getFoldersAndArticlesCount(
 		long groupId, List<Long> folderIds, int status) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(status);
+		QueryDefinition<JournalArticle> queryDefinition =
+			new QueryDefinition<JournalArticle>(status);
 
 		if (folderIds.size() <= PropsValues.SQL_DATA_MAX_PARAMETERS) {
 			return journalArticleFinder.countByG_F(
@@ -377,7 +380,7 @@ public class JournalFolderLocalServiceImpl
 	public int getFoldersAndArticlesCount(long groupId, long folderId) {
 		return journalFolderFinder.countF_A_ByG_F(
 			groupId, folderId,
-			new QueryDefinition(WorkflowConstants.STATUS_ANY));
+			new QueryDefinition<Object>(WorkflowConstants.STATUS_ANY));
 	}
 
 	@Override
@@ -385,7 +388,7 @@ public class JournalFolderLocalServiceImpl
 		long groupId, long folderId, int status) {
 
 		return journalFolderFinder.countF_A_ByG_F(
-			groupId, folderId, new QueryDefinition(status));
+			groupId, folderId, new QueryDefinition<Object>(status));
 	}
 
 	@Override
@@ -402,7 +405,7 @@ public class JournalFolderLocalServiceImpl
 
 	@Override
 	public long getInheritedWorkflowFolderId(long folderId)
-		throws NoSuchFolderException, SystemException {
+		throws NoSuchFolderException {
 
 		while (folderId != JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			JournalFolder folder = journalFolderPersistence.findByPrimaryKey(
@@ -427,7 +430,7 @@ public class JournalFolderLocalServiceImpl
 
 	@Override
 	public long getOverridedDDMStructuresFolderId(long folderId)
-		throws NoSuchFolderException, SystemException {
+		throws NoSuchFolderException {
 
 		while (folderId != JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			JournalFolder folder = journalFolderPersistence.findByPrimaryKey(
@@ -485,6 +488,9 @@ public class JournalFolderLocalServiceImpl
 
 		journalFolderPersistence.update(folder);
 
+		rebuildTree(
+			folder.getCompanyId(), folderId, folder.getTreePath(), true);
+
 		return folder;
 	}
 
@@ -504,12 +510,8 @@ public class JournalFolderLocalServiceImpl
 
 			// Folder
 
-			TrashEntry trashEntry = folder.getTrashEntry();
-
-			TrashVersion trashVersion =
-				trashVersionLocalService.fetchVersion(
-					trashEntry.getEntryId(), JournalFolder.class.getName(),
-					folderId);
+			TrashVersion trashVersion = trashVersionLocalService.fetchVersion(
+				JournalFolder.class.getName(), folderId);
 
 			int status = WorkflowConstants.STATUS_APPROVED;
 
@@ -532,8 +534,7 @@ public class JournalFolderLocalServiceImpl
 					folder.getGroupId(), folder.getFolderId(),
 					WorkflowConstants.STATUS_IN_TRASH);
 
-			restoreDependentsFromTrash(
-				foldersAndArticles, trashEntry.getEntryId());
+			restoreDependentsFromTrash(foldersAndArticles);
 		}
 
 		return journalFolderLocalService.moveFolder(
@@ -592,21 +593,56 @@ public class JournalFolderLocalServiceImpl
 	}
 
 	@Override
-	public void rebuildTree(long companyId) {
-		TreePathUtil.rebuildTree(
+	public void rebuildTree(long companyId) throws PortalException {
+		rebuildTree(
 			companyId, JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-			new TreeModelFinder<JournalFolder>() {
+			StringPool.SLASH, false);
+	}
+
+	@Override
+	public void rebuildTree(
+			long companyId, long parentFolderId, String parentTreePath,
+			final boolean reindex)
+		throws PortalException {
+
+		TreePathUtil.rebuildTree(
+			companyId, parentFolderId, parentTreePath,
+			new TreeModelTasksAdapter<JournalFolder>() {
 
 				@Override
 				public List<JournalFolder> findTreeModels(
-						long previousId, long companyId, long parentPrimaryKey,
-						int size)
-					throws SystemException {
+					long previousId, long companyId, long parentPrimaryKey,
+					int size) {
 
 					return journalFolderPersistence.findByF_C_P_NotS(
 						previousId, companyId, parentPrimaryKey,
 						WorkflowConstants.STATUS_IN_TRASH, QueryUtil.ALL_POS,
 						size, new FolderIdComparator(true));
+				}
+
+				@Override
+				public void rebuildDependentModelsTreePaths(
+						long parentPrimaryKey, String treePath)
+					throws PortalException {
+
+					journalArticleLocalService.setTreePaths(
+						parentPrimaryKey, treePath, false);
+				}
+
+				@Override
+				public void reindexTreeModels(List<TreeModel> treeModels)
+					throws PortalException {
+
+					if (!reindex) {
+						return;
+					}
+
+					Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+						JournalFolder.class);
+
+					for (TreeModel treeModel : treeModels) {
+						indexer.reindex(treeModel);
+					}
 				}
 
 			}
@@ -638,7 +674,7 @@ public class JournalFolderLocalServiceImpl
 				folder.getGroupId(), folder.getFolderId(),
 				WorkflowConstants.STATUS_IN_TRASH);
 
-		restoreDependentsFromTrash(foldersAndArticles, trashEntry.getEntryId());
+		restoreDependentsFromTrash(foldersAndArticles);
 
 		// Trash
 
@@ -897,9 +933,7 @@ public class JournalFolderLocalServiceImpl
 		validateArticleDDMStructures(folderId, ddmStructureIds);
 	}
 
-	protected void deleteWorkflowDefinitionLink(JournalFolder folder)
-		throws PortalException {
-
+	protected void deleteWorkflowDefinitionLink(JournalFolder folder) {
 		List<Long> ddmStructureIds = new ArrayList<Long>();
 
 		for (DDMStructure ddmStructure :
@@ -1194,8 +1228,7 @@ public class JournalFolderLocalServiceImpl
 		}
 	}
 
-	protected void restoreDependentsFromTrash(
-			List<Object> foldersAndArticles, long trashEntryId)
+	protected void restoreDependentsFromTrash(List<Object> foldersAndArticles)
 		throws PortalException {
 
 		for (Object object : foldersAndArticles) {
@@ -1205,18 +1238,13 @@ public class JournalFolderLocalServiceImpl
 
 				JournalArticle article = (JournalArticle)object;
 
-				TrashEntry trashEntry = trashEntryLocalService.fetchEntry(
-					JournalArticle.class.getName(),
-					article.getResourcePrimKey());
-
-				if (trashEntry != null) {
+				if (!article.isInTrashImplicitly()) {
 					continue;
 				}
 
 				TrashVersion trashVersion =
 					trashVersionLocalService.fetchVersion(
-						trashEntryId, JournalArticle.class.getName(),
-						article.getId());
+						JournalArticle.class.getName(), article.getId());
 
 				int oldStatus = WorkflowConstants.STATUS_APPROVED;
 
@@ -1234,10 +1262,8 @@ public class JournalFolderLocalServiceImpl
 
 					// Article
 
-					trashVersion =
-						trashVersionLocalService.fetchVersion(
-							trashEntryId, JournalArticle.class.getName(),
-							curArticle.getId());
+					trashVersion = trashVersionLocalService.fetchVersion(
+						JournalArticle.class.getName(), curArticle.getId());
 
 					int curArticleOldStatus = WorkflowConstants.STATUS_APPROVED;
 
@@ -1278,17 +1304,13 @@ public class JournalFolderLocalServiceImpl
 
 				JournalFolder folder = (JournalFolder)object;
 
-				TrashEntry trashEntry = trashEntryLocalService.fetchEntry(
-					JournalFolder.class.getName(), folder.getFolderId());
-
-				if (trashEntry != null) {
+				if (!folder.isInTrashImplicitly()) {
 					continue;
 				}
 
 				TrashVersion trashVersion =
 					trashVersionLocalService.fetchVersion(
-						trashEntryId, JournalFolder.class.getName(),
-						folder.getFolderId());
+						JournalFolder.class.getName(), folder.getFolderId());
 
 				int oldStatus = WorkflowConstants.STATUS_APPROVED;
 
@@ -1306,7 +1328,7 @@ public class JournalFolderLocalServiceImpl
 					folder.getGroupId(), folder.getFolderId(),
 					WorkflowConstants.STATUS_IN_TRASH);
 
-				restoreDependentsFromTrash(curFoldersAndArticles, trashEntryId);
+				restoreDependentsFromTrash(curFoldersAndArticles);
 
 				// Trash
 

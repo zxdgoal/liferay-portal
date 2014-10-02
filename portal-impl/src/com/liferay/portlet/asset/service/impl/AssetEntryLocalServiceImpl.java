@@ -121,6 +121,15 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 	}
 
 	@Override
+	public void deleteGroupEntries(long groupId) throws PortalException {
+		List<AssetEntry> assetEntries = getGroupEntries(groupId);
+
+		for (AssetEntry assetEntry : assetEntries) {
+			deleteEntry(assetEntry);
+		}
+	}
+
+	@Override
 	public AssetEntry fetchEntry(long entryId) {
 		return assetEntryPersistence.fetchByPrimaryKey(entryId);
 	}
@@ -213,6 +222,11 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 		long classNameId = classNameLocalService.getClassNameId(className);
 
 		return assetEntryPersistence.findByC_C(classNameId, classPK);
+	}
+
+	@Override
+	public List<AssetEntry> getGroupEntries(long groupId) {
+		return assetEntryPersistence.findByGroupId(groupId);
 	}
 
 	@Override
@@ -524,7 +538,6 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 
 		// Entry
 
-		User user = userPersistence.findByPrimaryKey(userId);
 		long classNameId = classNameLocalService.getClassNameId(className);
 
 		validate(groupId, className, classTypeId, categoryIds, tagNames);
@@ -547,9 +560,20 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 
 			entry = assetEntryPersistence.create(entryId);
 
-			entry.setCompanyId(user.getCompanyId());
-			entry.setUserId(user.getUserId());
-			entry.setUserName(user.getFullName());
+			Group group = groupLocalService.getGroup(groupId);
+
+			entry.setCompanyId(group.getCompanyId());
+
+			entry.setUserId(userId);
+
+			User user = userPersistence.fetchByPrimaryKey(userId);
+
+			if (user != null) {
+				entry.setUserName(user.getFullName());
+			}
+			else {
+				entry.setUserName(StringPool.BLANK);
+			}
 
 			if (createDate == null) {
 				createDate = new Date();

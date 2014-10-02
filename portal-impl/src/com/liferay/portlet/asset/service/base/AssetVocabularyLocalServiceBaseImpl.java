@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -71,6 +73,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class AssetVocabularyLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AssetVocabularyLocalService,
 		IdentifiableBean {
@@ -147,8 +150,7 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return assetVocabularyPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -165,8 +167,8 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return assetVocabularyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -185,9 +187,8 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return assetVocabularyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -220,20 +221,6 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	@Override
 	public AssetVocabulary fetchAssetVocabulary(long vocabularyId) {
 		return assetVocabularyPersistence.fetchByPrimaryKey(vocabularyId);
-	}
-
-	/**
-	 * Returns the asset vocabulary with the matching UUID and company.
-	 *
-	 * @param uuid the asset vocabulary's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset vocabulary, or <code>null</code> if a matching asset vocabulary could not be found
-	 */
-	@Override
-	public AssetVocabulary fetchAssetVocabularyByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return assetVocabularyPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -345,7 +332,7 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteAssetVocabulary((AssetVocabulary)persistedModel);
+		return assetVocabularyLocalService.deleteAssetVocabulary((AssetVocabulary)persistedModel);
 	}
 
 	@Override
@@ -354,19 +341,18 @@ public abstract class AssetVocabularyLocalServiceBaseImpl
 		return assetVocabularyPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the asset vocabulary with the matching UUID and company.
-	 *
-	 * @param uuid the asset vocabulary's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset vocabulary
-	 * @throws PortalException if a matching asset vocabulary could not be found
-	 */
 	@Override
-	public AssetVocabulary getAssetVocabularyByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return assetVocabularyPersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return assetVocabularyPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<AssetVocabulary> getAssetVocabulariesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<AssetVocabulary> orderByComparator) {
+		return assetVocabularyPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

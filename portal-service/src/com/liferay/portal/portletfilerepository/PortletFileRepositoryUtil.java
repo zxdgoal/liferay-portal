@@ -80,6 +80,16 @@ public class PortletFileRepositoryUtil {
 			userId, repositoryId, parentFolderId, folderName, serviceContext);
 	}
 
+	public static Folder addPortletFolder(
+			long groupId, long userId, String portletId, long parentFolderId,
+			String folderName, ServiceContext serviceContext)
+		throws PortalException {
+
+		return getPortletFileRepository().addPortletFolder(
+			groupId, userId, portletId, parentFolderId, folderName,
+			serviceContext);
+	}
+
 	public static Repository addPortletRepository(
 			long groupId, String portletId, ServiceContext serviceContext)
 		throws PortalException {
@@ -174,14 +184,14 @@ public class PortletFileRepositoryUtil {
 
 	public static List<FileEntry> getPortletFileEntries(
 		long groupId, long folderId, int status, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<FileEntry> obc) {
 
 		return getPortletFileRepository().getPortletFileEntries(
 			groupId, folderId, status, start, end, obc);
 	}
 
 	public static List<FileEntry> getPortletFileEntries(
-		long groupId, long folderId, OrderByComparator obc) {
+		long groupId, long folderId, OrderByComparator<FileEntry> obc) {
 
 		return getPortletFileRepository().getPortletFileEntries(
 			groupId, folderId, obc);

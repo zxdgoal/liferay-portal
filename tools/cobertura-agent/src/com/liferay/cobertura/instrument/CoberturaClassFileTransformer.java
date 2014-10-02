@@ -14,8 +14,6 @@
 
 package com.liferay.cobertura.instrument;
 
-import com.liferay.portal.kernel.util.CharPool;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -92,6 +90,10 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 	}
 
 	public boolean matches(String className) {
+		if (className == null) {
+			return false;
+		}
+
 		if (_excludePatterns.length != 0) {
 			for (Pattern excludePattern : _excludePatterns) {
 				Matcher matcher = excludePattern.matcher(className);
@@ -138,11 +140,10 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 					}
 				}
 
-				ClassWriter classWriter = new ClassWriter(
+				ClassWriter classWriter = new ContextAwareClassWriter(
 					ClassWriter.COMPUTE_FRAMES);
 
-				String name = className.replace(
-					CharPool.SLASH, CharPool.PERIOD);
+				String name = className.replace('/', '.');
 
 				ClassVisitor classVisitor = new CoberturaClassVisitor(
 					projectData.getOrCreateClassData(name), classWriter);
@@ -164,10 +165,11 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 			// redirecting ProjectData#initialize to
 			// InstrumentationAgent#initialize
 
-			if (className.equals(
+			if ((className != null) &&
+				className.equals(
 					"net/sourceforge/cobertura/coveragedata/TouchCollector")) {
 
-				ClassWriter classWriter = new ClassWriter(
+				ClassWriter classWriter = new ContextAwareClassWriter(
 					ClassWriter.COMPUTE_FRAMES);
 
 				ClassVisitor classVisitor = new TouchCollectorClassVisitor(
@@ -205,7 +207,7 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 
 		File dumpDir = _dumpDir;
 
-		int index = className.lastIndexOf(CharPool.SLASH);
+		int index = className.lastIndexOf('/');
 
 		if (index != -1) {
 			dumpDir = new File(
@@ -219,32 +221,14 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 
 		File classFile = new File(dumpDir, className + ".class");
 
-		OutputStream outputStream = null;
-
-		try {
-			outputStream = new FileOutputStream(classFile);
-
+		try (OutputStream outputStream = new FileOutputStream(classFile)) {
 			outputStream.write(data);
 		}
-		finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
 
-		FileWriter fileWriter = null;
-
-		try {
-			fileWriter = new FileWriter(logFile, true);
-
+		try (FileWriter fileWriter = new FileWriter(logFile, true)) {
 			fileWriter.write(
 				"Instrumented " + className + " from " + classLoader +
 					" and dumped to " + classFile.getAbsolutePath() + "\n");
-		}
-		finally {
-			if (fileWriter != null) {
-				fileWriter.close();
-			}
 		}
 	}
 
@@ -255,7 +239,7 @@ public class CoberturaClassFileTransformer implements ClassFileTransformer {
 
 		String name = runtimeMXBean.getName();
 
-		int index = name.indexOf(CharPool.AT);
+		int index = name.indexOf('@');
 
 		String processId = null;
 

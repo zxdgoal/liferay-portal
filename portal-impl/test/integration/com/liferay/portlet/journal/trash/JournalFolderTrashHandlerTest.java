@@ -20,10 +20,10 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.ClassedModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.journal.model.JournalFolder;
@@ -120,14 +120,10 @@ public class JournalFolderTrashHandlerTest extends BaseTrashHandlerTestCase {
 			boolean approved, ServiceContext serviceContext)
 		throws Exception {
 
-		String name = getSearchKeywords();
-
-		name += RandomTestUtil.randomString(
-			_FOLDER_NAME_MAX_LENGTH - name.length());
-
 		return JournalTestUtil.addFolder(
 			serviceContext.getScopeGroupId(),
-			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID, name);
+			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			getSearchKeywords());
 	}
 
 	@Override
@@ -189,7 +185,7 @@ public class JournalFolderTrashHandlerTest extends BaseTrashHandlerTestCase {
 
 	@Override
 	protected String getSearchKeywords() {
-		return "Title";
+		return _FOLDER_NAME;
 	}
 
 	@Override
@@ -247,6 +243,8 @@ public class JournalFolderTrashHandlerTest extends BaseTrashHandlerTestCase {
 
 		return folder;
 	}
+
+	private static final String _FOLDER_NAME = RandomTestUtil.randomString(100);
 
 	private static final int _FOLDER_NAME_MAX_LENGTH = 100;
 

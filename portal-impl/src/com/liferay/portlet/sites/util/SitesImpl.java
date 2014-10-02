@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.portal.kernel.lar.UserIdStrategy;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.staging.MergeLayoutPrototypesThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -43,6 +44,7 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.LayoutType;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.Organization;
@@ -85,7 +87,6 @@ import com.liferay.portal.service.persistence.LayoutSetUtil;
 import com.liferay.portal.service.persistence.LayoutUtil;
 import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.LayoutSettings;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
@@ -503,12 +504,11 @@ public class SitesImpl implements Sites {
 		if (LayoutPermissionUtil.contains(
 				permissionChecker, layout, ActionKeys.DELETE)) {
 
-			LayoutSettings layoutSettings = LayoutSettings.getInstance(layout);
+			LayoutType layoutType = layout.getLayoutType();
 
 			EventsProcessorUtil.process(
 				PropsKeys.LAYOUT_CONFIGURATION_ACTION_DELETE,
-				layoutSettings.getConfigurationActionDelete(), request,
-				response);
+				layoutType.getConfigurationActionDelete(), request, response);
 		}
 
 		if (group.isGuest() && !layout.isPrivateLayout() &&
@@ -1217,6 +1217,8 @@ public class SitesImpl implements Sites {
 		}
 
 		try {
+			MergeLayoutPrototypesThreadLocal.setInProgress(true);
+
 			boolean importData = true;
 
 			long lastResetTime = GetterUtil.getLong(
@@ -1249,6 +1251,8 @@ public class SitesImpl implements Sites {
 			LayoutSetUtil.updateImpl(layoutSetPrototypeLayoutSet);
 		}
 		finally {
+			MergeLayoutPrototypesThreadLocal.setInProgress(false);
+
 			LockLocalServiceUtil.unlock(
 				LayoutLocalServiceVirtualLayoutsAdvice.class.getName(),
 				String.valueOf(layoutSet.getLayoutSetId()), owner);
@@ -1568,6 +1572,8 @@ public class SitesImpl implements Sites {
 		}
 
 		try {
+			MergeLayoutPrototypesThreadLocal.setInProgress(true);
+
 			applyLayoutPrototype(layoutPrototype, layout, true);
 		}
 		catch (Exception e) {
@@ -1581,6 +1587,8 @@ public class SitesImpl implements Sites {
 			LayoutUtil.updateImpl(layoutPrototypeLayout);
 		}
 		finally {
+			MergeLayoutPrototypesThreadLocal.setInProgress(false);
+
 			LockLocalServiceUtil.unlock(
 				LayoutLocalServiceVirtualLayoutsAdvice.class.getName(),
 				String.valueOf(layout.getPlid()), owner);
@@ -1702,9 +1710,17 @@ public class SitesImpl implements Sites {
 				new String[] {Boolean.TRUE.toString()});
 		}
 		else {
-			parameterMap.put(
-				PortletDataHandlerKeys.LOGO,
-				new String[] {Boolean.FALSE.toString()});
+			if (PropsValues.LAYOUT_SET_PROTOTYPE_PROPAGATE_LOGO) {
+				parameterMap.put(
+					PortletDataHandlerKeys.LOGO,
+					new String[] {Boolean.TRUE.toString()});
+			}
+			else {
+				parameterMap.put(
+					PortletDataHandlerKeys.LOGO,
+					new String[] {Boolean.FALSE.toString()});
+			}
+
 			parameterMap.put(
 				PortletDataHandlerKeys.PORTLET_DATA,
 				new String[] {Boolean.FALSE.toString()});
@@ -1867,6 +1883,15 @@ public class SitesImpl implements Sites {
 			layoutSetPrototypeUuid);
 
 		LayoutLocalServiceUtil.updatePriorities(groupId, privateLayout);
+
+		// Force propagation from site template to site. See LPS-48206.
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
+			groupId, privateLayout);
+
+		mergeLayoutSetPrototypeLayouts(group, layoutSet);
 	}
 
 	private static final String _TEMP_DIR =

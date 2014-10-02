@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -61,6 +63,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.softwarecatalog.service.SCProductVersionLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class SCProductVersionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SCProductVersionLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class SCProductVersionLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return scProductVersionPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class SCProductVersionLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return scProductVersionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +178,8 @@ public abstract class SCProductVersionLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return scProductVersionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -254,7 +255,7 @@ public abstract class SCProductVersionLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteSCProductVersion((SCProductVersion)persistedModel);
+		return scProductVersionLocalService.deleteSCProductVersion((SCProductVersion)persistedModel);
 	}
 
 	@Override
@@ -415,7 +416,7 @@ public abstract class SCProductVersionLocalServiceBaseImpl
 	@Override
 	public List<SCProductVersion> getSCFrameworkVersionSCProductVersions(
 		long frameworkVersionId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductVersion> orderByComparator) {
 		return scFrameworkVersionPersistence.getSCProductVersions(frameworkVersionId,
 			start, end, orderByComparator);
 	}

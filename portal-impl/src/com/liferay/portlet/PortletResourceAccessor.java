@@ -111,18 +111,19 @@ public interface PortletResourceAccessor
 		implements PortletResourceAccessor {
 
 		@Override
-		public boolean isPortalResource() {
-			return false;
-		}
-
-		@Override
+		@SuppressWarnings("rawtypes")
 		public Class<List<String>> getAttributeClass() {
-			throw new UnsupportedOperationException();
+			return (Class)List.class;
 		}
 
 		@Override
 		public Class<Portlet> getTypeClass() {
 			return Portlet.class;
+		}
+
+		@Override
+		public boolean isPortalResource() {
+			return false;
 		}
 
 	}
@@ -131,18 +132,19 @@ public interface PortletResourceAccessor
 		implements PortletResourceAccessor {
 
 		@Override
-		public boolean isPortalResource() {
-			return true;
-		}
-
-		@Override
+		@SuppressWarnings("rawtypes")
 		public Class<List<String>> getAttributeClass() {
-			throw new UnsupportedOperationException();
+			return (Class)List.class;
 		}
 
 		@Override
 		public Class<Portlet> getTypeClass() {
 			return Portlet.class;
+		}
+
+		@Override
+		public boolean isPortalResource() {
+			return true;
 		}
 
 	}

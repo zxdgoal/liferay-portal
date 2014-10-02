@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.social.NoSuchRequestException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.social.service.persistence.SocialRequestPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see SocialRequestUtil
  * @generated
  */
+@ProviderType
 public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequest>
 	implements SocialRequestPersistence {
 	/*
@@ -152,7 +150,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +270,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUuid_First(uuid, orderByComparator);
 
 		if (socialRequest != null) {
@@ -300,7 +299,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -320,7 +319,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (socialRequest != null) {
@@ -348,7 +348,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -376,7 +376,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByUuid_PrevAndNext(long requestId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
 		Session session = null;
@@ -406,7 +407,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByUuid_PrevAndNext(Session session,
 		SocialRequest socialRequest, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -932,7 +933,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1062,7 +1063,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1095,7 +1097,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1117,7 +1119,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1150,7 +1153,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1179,7 +1182,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByUuid_C_PrevAndNext(long requestId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -1210,7 +1214,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByUuid_C_PrevAndNext(Session session,
 		SocialRequest socialRequest, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1487,7 +1491,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1593,7 +1597,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -1622,7 +1627,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -1643,7 +1648,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -1672,7 +1678,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -1700,7 +1706,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByCompanyId_PrevAndNext(long requestId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -1731,7 +1737,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByCompanyId_PrevAndNext(Session session,
 		SocialRequest socialRequest, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1964,7 +1970,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2070,7 +2076,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUserId_First(userId,
 				orderByComparator);
 
@@ -2099,7 +2106,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByUserId(userId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2119,7 +2126,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByUserId_Last(userId,
 				orderByComparator);
 
@@ -2148,7 +2156,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -2176,7 +2184,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByUserId_PrevAndNext(long requestId,
-		long userId, OrderByComparator orderByComparator)
+		long userId, OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -2207,7 +2215,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByUserId_PrevAndNext(Session session,
 		SocialRequest socialRequest, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2443,7 +2451,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByReceiverUserId(long receiverUserId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2553,7 +2561,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByReceiverUserId_First(receiverUserId,
 				orderByComparator);
 
@@ -2582,7 +2591,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByReceiverUserId_First(long receiverUserId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByReceiverUserId(receiverUserId, 0, 1,
 				orderByComparator);
 
@@ -2603,7 +2612,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByReceiverUserId_Last(receiverUserId,
 				orderByComparator);
 
@@ -2632,7 +2642,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByReceiverUserId_Last(long receiverUserId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByReceiverUserId(receiverUserId);
 
 		if (count == 0) {
@@ -2660,7 +2670,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByReceiverUserId_PrevAndNext(long requestId,
-		long receiverUserId, OrderByComparator orderByComparator)
+		long receiverUserId, OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -2691,7 +2701,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByReceiverUserId_PrevAndNext(Session session,
 		SocialRequest socialRequest, long receiverUserId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2930,7 +2940,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByU_S(long userId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3046,7 +3056,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByU_S_First(long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByU_S_First(userId, status,
 				orderByComparator);
 
@@ -3079,7 +3090,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByU_S_First(long userId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByU_S(userId, status, 0, 1,
 				orderByComparator);
 
@@ -3101,7 +3112,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByU_S_Last(long userId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByU_S_Last(userId, status,
 				orderByComparator);
 
@@ -3134,7 +3146,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByU_S_Last(long userId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByU_S(userId, status);
 
 		if (count == 0) {
@@ -3163,7 +3175,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByU_S_PrevAndNext(long requestId, long userId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -3194,7 +3206,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByU_S_PrevAndNext(Session session,
 		SocialRequest socialRequest, long userId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3444,7 +3456,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3560,7 +3572,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByC_C_First(classNameId, classPK,
 				orderByComparator);
 
@@ -3593,7 +3606,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByC_C(classNameId, classPK, 0, 1,
 				orderByComparator);
 
@@ -3615,7 +3628,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByC_C_Last(classNameId, classPK,
 				orderByComparator);
 
@@ -3648,7 +3662,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByC_C(classNameId, classPK);
 
 		if (count == 0) {
@@ -3677,7 +3691,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByC_C_PrevAndNext(long requestId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+		long classNameId, long classPK,
+		OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -3708,7 +3723,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByC_C_PrevAndNext(Session session,
 		SocialRequest socialRequest, long classNameId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3958,7 +3973,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findByR_S(long receiverUserId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4074,7 +4089,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByR_S_First(long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByR_S_First(receiverUserId, status,
 				orderByComparator);
 
@@ -4107,7 +4123,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByR_S_First(long receiverUserId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByR_S(receiverUserId, status, 0, 1,
 				orderByComparator);
 
@@ -4129,7 +4145,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByR_S_Last(long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByR_S_Last(receiverUserId, status,
 				orderByComparator);
 
@@ -4162,7 +4179,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByR_S_Last(long receiverUserId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByR_S(receiverUserId, status);
 
 		if (count == 0) {
@@ -4191,7 +4208,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest[] findByR_S_PrevAndNext(long requestId,
-		long receiverUserId, int status, OrderByComparator orderByComparator)
+		long receiverUserId, int status,
+		OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -4222,7 +4240,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByR_S_PrevAndNext(Session session,
 		SocialRequest socialRequest, long receiverUserId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4799,7 +4817,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public List<SocialRequest> findByU_C_C_T_S(long userId, long classNameId,
 		long classPK, int type, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4933,7 +4951,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByU_C_C_T_S_First(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
+		long classPK, int type, int status,
+		OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByU_C_C_T_S_First(userId,
 				classNameId, classPK, type, status, orderByComparator);
@@ -4979,7 +4998,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByU_C_C_T_S_First(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator) {
+		long classPK, int type, int status,
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByU_C_C_T_S(userId, classNameId,
 				classPK, type, status, 0, 1, orderByComparator);
 
@@ -5004,7 +5024,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest findByU_C_C_T_S_Last(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator)
+		long classPK, int type, int status,
+		OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByU_C_C_T_S_Last(userId,
 				classNameId, classPK, type, status, orderByComparator);
@@ -5050,7 +5071,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public SocialRequest fetchByU_C_C_T_S_Last(long userId, long classNameId,
-		long classPK, int type, int status, OrderByComparator orderByComparator) {
+		long classPK, int type, int status,
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByU_C_C_T_S(userId, classNameId, classPK, type, status);
 
 		if (count == 0) {
@@ -5083,7 +5105,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest[] findByU_C_C_T_S_PrevAndNext(long requestId,
 		long userId, long classNameId, long classPK, int type, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
 		Session session = null;
@@ -5116,7 +5139,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	protected SocialRequest getByU_C_C_T_S_PrevAndNext(Session session,
 		SocialRequest socialRequest, long userId, long classNameId,
 		long classPK, int type, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5431,7 +5454,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public List<SocialRequest> findByC_C_T_R_S(long classNameId, long classPK,
 		int type, long receiverUserId, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5568,7 +5591,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest findByC_C_T_R_S_First(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByC_C_T_R_S_First(classNameId,
 				classPK, type, receiverUserId, status, orderByComparator);
 
@@ -5614,7 +5638,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest fetchByC_C_T_R_S_First(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		List<SocialRequest> list = findByC_C_T_R_S(classNameId, classPK, type,
 				receiverUserId, status, 0, 1, orderByComparator);
 
@@ -5640,7 +5664,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest findByC_C_T_R_S_Last(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) throws NoSuchRequestException {
+		OrderByComparator<SocialRequest> orderByComparator)
+		throws NoSuchRequestException {
 		SocialRequest socialRequest = fetchByC_C_T_R_S_Last(classNameId,
 				classPK, type, receiverUserId, status, orderByComparator);
 
@@ -5686,7 +5711,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest fetchByC_C_T_R_S_Last(long classNameId, long classPK,
 		int type, long receiverUserId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		int count = countByC_C_T_R_S(classNameId, classPK, type,
 				receiverUserId, status);
 
@@ -5720,7 +5745,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	@Override
 	public SocialRequest[] findByC_C_T_R_S_PrevAndNext(long requestId,
 		long classNameId, long classPK, int type, long receiverUserId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<SocialRequest> orderByComparator)
 		throws NoSuchRequestException {
 		SocialRequest socialRequest = findByPrimaryKey(requestId);
 
@@ -5753,8 +5778,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 	protected SocialRequest getByC_C_T_R_S_PrevAndNext(Session session,
 		SocialRequest socialRequest, long classNameId, long classPK, int type,
-		long receiverUserId, int status, OrderByComparator orderByComparator,
-		boolean previous) {
+		long receiverUserId, int status,
+		OrderByComparator<SocialRequest> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -6798,7 +6823,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 */
 	@Override
 	public List<SocialRequest> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialRequest> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6934,25 +6959,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * Initializes the social request persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.social.model.SocialRequest")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SocialRequest>> listenersList = new ArrayList<ModelListener<SocialRequest>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SocialRequest>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -6971,11 +6977,11 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SocialRequest exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SocialRequest exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SocialRequestPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(SocialRequestPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "type"
 			});
-	private static SocialRequest _nullSocialRequest = new SocialRequestImpl() {
+	private static final SocialRequest _nullSocialRequest = new SocialRequestImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -6987,7 +6993,7 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 			}
 		};
 
-	private static CacheModel<SocialRequest> _nullSocialRequestCacheModel = new CacheModel<SocialRequest>() {
+	private static final CacheModel<SocialRequest> _nullSocialRequestCacheModel = new CacheModel<SocialRequest>() {
 			@Override
 			public SocialRequest toEntityModel() {
 				return _nullSocialRequest;

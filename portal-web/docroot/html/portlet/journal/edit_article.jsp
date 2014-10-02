@@ -62,18 +62,10 @@ DDMStructure ddmStructure = null;
 long ddmStructureId = ParamUtil.getLong(request, "ddmStructureId");
 
 if (ddmStructureId > 0) {
-	try {
-		ddmStructure = DDMStructureLocalServiceUtil.getStructure(ddmStructureId);
-	}
-	catch (NoSuchStructureException nsse) {
-	}
+	ddmStructure = DDMStructureLocalServiceUtil.fetchStructure(ddmStructureId);
 }
 else if (Validator.isNotNull(structureId)) {
-	try {
-		ddmStructure = DDMStructureLocalServiceUtil.getStructure(themeDisplay.getSiteGroupId(), PortalUtil.getClassNameId(JournalArticle.class), structureId, true);
-	}
-	catch (NoSuchStructureException nsse) {
-	}
+	ddmStructure = DDMStructureLocalServiceUtil.fetchStructure(themeDisplay.getSiteGroupId(), PortalUtil.getClassNameId(JournalArticle.class), structureId, true);
 }
 
 String templateId = BeanParamUtil.getString(article, request, "templateId");
@@ -83,18 +75,10 @@ DDMTemplate ddmTemplate = null;
 long ddmTemplateId = ParamUtil.getLong(request, "ddmTemplateId");
 
 if (ddmTemplateId > 0) {
-	try {
-		ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(ddmTemplateId);
-	}
-	catch (NoSuchTemplateException nste) {
-	}
+	ddmTemplate = DDMTemplateLocalServiceUtil.fetchDDMTemplate(ddmTemplateId);
 }
 else if (Validator.isNotNull(templateId)) {
-	try {
-		ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(groupId, PortalUtil.getClassNameId(DDMStructure.class), templateId, true);
-	}
-	catch (NoSuchStructureException nste) {
-	}
+	ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(groupId, PortalUtil.getClassNameId(DDMStructure.class), templateId, true);
 }
 
 if (ddmTemplate == null) {
@@ -164,7 +148,7 @@ request.setAttribute("edit_article.jsp-toLanguageId", toLanguageId);
 		<portlet:param name="struts_action" value="/journal/edit_article" />
 	</portlet:renderURL>
 
-	<aui:form action="<%= editArticleActionURL %>" cssClass="lfr-dynamic-form" enctype="multipart/form-data" method="post" name="fm1">
+	<aui:form action="<%= editArticleActionURL %>" cssClass="lfr-dynamic-form" enctype="multipart/form-data" method="post" name="fm1" onSubmit="event.preventDefault();">
 		<aui:input name="<%= Constants.CMD %>" type="hidden" />
 		<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
@@ -186,6 +170,19 @@ request.setAttribute("edit_article.jsp-toLanguageId", toLanguageId);
 		<aui:input name="workflowAction" type="hidden" value="<%= String.valueOf(WorkflowConstants.ACTION_SAVE_DRAFT) %>" />
 
 		<liferay-ui:error exception="<%= ArticleContentSizeException.class %>" message="you-have-exceeded-the-maximum-web-content-size-allowed" />
+
+		<liferay-ui:error exception="<%= FileSizeException.class %>">
+
+			<%
+			long fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE);
+
+			if (fileMaxSize == 0) {
+				fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
+			}
+			%>
+
+			<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(fileMaxSize, locale) %>" key="please-enter-a-file-with-a-valid-file-size-no-larger-than-x" translateArguments="<%= false %>" />
+		</liferay-ui:error>
 
 		<liferay-ui:error exception="<%= LiferayFileItemException.class %>">
 			<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(LiferayFileItem.THRESHOLD_SIZE, locale) %>" key="please-enter-valid-content-with-valid-content-size-no-larger-than-x" translateArguments="<%= false %>" />
@@ -368,7 +365,7 @@ request.setAttribute("edit_article.jsp-toLanguageId", toLanguageId);
 				<c:if test="<%= (article != null) && !article.isNew() %>">
 					<liferay-security:permissionsURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 						modelResource="<%= JournalArticle.class.getName() %>"
-						modelResourceDescription="<%= article.getTitle(locale) %>"
+						modelResourceDescription="<%= HtmlUtil.escape(article.getTitle(locale)) %>"
 						resourcePrimKey="<%= String.valueOf(article.getResourcePrimKey()) %>"
 						var="permissionsURL"
 					/>
@@ -379,11 +376,6 @@ request.setAttribute("edit_article.jsp-toLanguageId", toLanguageId);
 
 				title: '<%= (article != null) ? HtmlUtil.escapeJS(article.getTitle(locale)) : StringPool.BLANK %>'
 			},
-
-			<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-				focusFieldId: '<%= (article != null || PropsValues.JOURNAL_ARTICLE_FORCE_AUTOGENERATE_ID) ? "#title" : "#newArticleId" %>',
-			</c:if>
-
 			namespace: '<portlet:namespace />'
 		}
 	);

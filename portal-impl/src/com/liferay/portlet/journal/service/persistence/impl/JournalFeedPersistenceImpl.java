@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -47,7 +45,6 @@ import com.liferay.portlet.journal.service.persistence.JournalFeedPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +65,7 @@ import java.util.Set;
  * @see JournalFeedUtil
  * @generated
  */
+@ProviderType
 public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	implements JournalFeedPersistence {
 	/*
@@ -152,7 +150,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public List<JournalFeed> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +270,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByUuid_First(uuid, orderByComparator);
 
 		if (journalFeed != null) {
@@ -300,7 +299,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		List<JournalFeed> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -320,7 +319,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (journalFeed != null) {
@@ -348,7 +348,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -376,7 +376,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed[] findByUuid_PrevAndNext(long id, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = findByPrimaryKey(id);
 
 		Session session = null;
@@ -406,7 +407,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 
 	protected JournalFeed getByUuid_PrevAndNext(Session session,
 		JournalFeed journalFeed, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalFeed> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -931,7 +932,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public List<JournalFeed> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<JournalFeed> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1061,7 +1062,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1094,7 +1096,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		List<JournalFeed> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1116,7 +1118,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1149,7 +1152,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1178,7 +1181,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed[] findByUuid_C_PrevAndNext(long id, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<JournalFeed> orderByComparator)
 		throws NoSuchFeedException {
 		JournalFeed journalFeed = findByPrimaryKey(id);
 
@@ -1209,7 +1212,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 
 	protected JournalFeed getByUuid_C_PrevAndNext(Session session,
 		JournalFeed journalFeed, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalFeed> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1483,7 +1486,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public List<JournalFeed> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1589,7 +1592,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -1618,7 +1622,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		List<JournalFeed> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1638,7 +1642,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = fetchByGroupId_Last(groupId, orderByComparator);
 
 		if (journalFeed != null) {
@@ -1666,7 +1671,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1694,7 +1699,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed[] findByGroupId_PrevAndNext(long id, long groupId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		JournalFeed journalFeed = findByPrimaryKey(id);
 
 		Session session = null;
@@ -1724,7 +1730,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 
 	protected JournalFeed getByGroupId_PrevAndNext(Session session,
 		JournalFeed journalFeed, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalFeed> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1872,7 +1878,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public List<JournalFeed> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<JournalFeed> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -1962,7 +1968,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public JournalFeed[] filterFindByGroupId_PrevAndNext(long id, long groupId,
-		OrderByComparator orderByComparator) throws NoSuchFeedException {
+		OrderByComparator<JournalFeed> orderByComparator)
+		throws NoSuchFeedException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(id, groupId, orderByComparator);
 		}
@@ -1996,7 +2003,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 
 	protected JournalFeed filterGetByGroupId_PrevAndNext(Session session,
 		JournalFeed journalFeed, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalFeed> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3164,7 +3171,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 */
 	@Override
 	public List<JournalFeed> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFeed> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3300,25 +3307,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 * Initializes the journal feed persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.journal.model.JournalFeed")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<JournalFeed>> listenersList = new ArrayList<ModelListener<JournalFeed>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<JournalFeed>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3347,11 +3335,11 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No JournalFeed exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No JournalFeed exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(JournalFeedPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(JournalFeedPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "id", "type"
 			});
-	private static JournalFeed _nullJournalFeed = new JournalFeedImpl() {
+	private static final JournalFeed _nullJournalFeed = new JournalFeedImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3363,7 +3351,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 			}
 		};
 
-	private static CacheModel<JournalFeed> _nullJournalFeedCacheModel = new CacheModel<JournalFeed>() {
+	private static final CacheModel<JournalFeed> _nullJournalFeedCacheModel = new CacheModel<JournalFeed>() {
 			@Override
 			public JournalFeed toEntityModel() {
 				return _nullJournalFeed;

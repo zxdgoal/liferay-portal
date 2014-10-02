@@ -2,12 +2,6 @@
 @import "mixins";
 
 .taglib-form-navigator {
-	ul.form-navigator.list-group {
-		@include respond-to(desktop) {
-			float: right;
-		}
-	}
-
 	.error-notice, .modified-notice {
 		display: none;
 	}
@@ -15,7 +9,7 @@
 	> .form-steps {
 		position: relative;
 
-		> ul.form-navigator.well {
+		> ul.form-navigator.list-group {
 			border-width: 0;
 			clear: both;
 			float: none;
@@ -29,6 +23,7 @@
 			}
 
 			.tab {
+				border-width: 0;
 				display: inline-block;
 				overflow: visible;
 				position: relative;
@@ -55,6 +50,7 @@
 				}
 
 				.tab-label {
+					border-width: 0;
 					display: block;
 					margin: 0 5px 0 -5px;
 					outline: 0;
@@ -121,11 +117,13 @@
 /* Skin */
 
 .taglib-form-navigator {
-	> .form-steps > ul.form-navigator.well {
+	> .form-steps > ul.form-navigator.list-group {
 		background: transparent;
 
 		.tab {
 			&.active {
+				background: transparent;
+
 				@include opacity(1);
 
 				.tab-label {

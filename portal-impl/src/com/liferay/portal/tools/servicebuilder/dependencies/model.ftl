@@ -1,10 +1,10 @@
 package ${packagePath}.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 <#if entity.hasCompoundPK()>
 	import ${packagePath}.service.persistence.${entity.name}PK;
 </#if>
+
+import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
@@ -52,10 +52,7 @@ import java.util.Map;
  * @generated
  */
 
-<#if pluginName == "">
-	@ProviderType
-</#if>
-
+@ProviderType
 public interface ${entity.name}Model extends
 	<#assign overrideColumnNames = []>
 
@@ -204,7 +201,7 @@ public interface ${entity.name}Model extends
 			@Override
 		</#if>
 
-		public ${column.type} get${column.methodName}();
+		public ${column.genericizedType} get${column.methodName}();
 
 		<#if column.localized>
 			/**
@@ -280,7 +277,7 @@ public interface ${entity.name}Model extends
 		<#if overrideColumnNames?seq_index_of(column.name) != -1>
 			@Override
 		</#if>
-		public void set${column.methodName}(${column.type} ${column.name});
+		public void set${column.methodName}(${column.genericizedType} ${column.name});
 
 		<#if column.localized>
 			/**

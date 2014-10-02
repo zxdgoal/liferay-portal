@@ -25,13 +25,14 @@ import java.util.Collection;
  */
 public interface ElasticsearchUpdateDocumentCommand {
 
-	public void updateDocument(
-			String documentType, SearchContext searchContext, Document document)
+	public String updateDocument(
+			String documentType, SearchContext searchContext, Document document,
+			boolean deleteFirst)
 		throws SearchException;
 
 	public void updateDocuments(
 			String documentType, SearchContext searchContext,
-			Collection<Document> documents)
+			Collection<Document> documents, boolean deleteFirst)
 		throws SearchException;
 
 }

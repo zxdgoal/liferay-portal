@@ -50,7 +50,7 @@ request.setAttribute("websites.classPK", company.getAccountId());
 	<liferay-util:buffer var="htmlTop">
 		<div class="company-info">
 			<p class="float-container">
-				<img alt="<liferay-ui:message key="logo" />" class="company-logo" src="<%= themeDisplay.getPathImage() %>/company_logo?img_id=<%= company.getLogoId() %>&t=<%= WebServerServletTokenUtil.getToken(company.getLogoId()) %>" /><br />
+				<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="logo" />" class="company-logo" src="<%= themeDisplay.getPathImage() %>/company_logo?img_id=<%= company.getLogoId() %>&t=<%= WebServerServletTokenUtil.getToken(company.getLogoId()) %>" /><br />
 
 				<span class="company-name"><%= HtmlUtil.escape(company.getName()) %></span>
 			</p>
@@ -76,6 +76,42 @@ request.setAttribute("websites.classPK", company.getAccountId());
 
 		submitForm(document.<portlet:namespace />fm, '<portlet:actionURL><portlet:param name="struts_action" value="/portal_settings/edit_company" /></portlet:actionURL>');
 	}
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />saveLdap',
+		function() {
+			var A = AUI();
+
+			var ldapServerIds = [];
+
+			A.all('.ldap-servers .table-data tr').each(
+				function(item, index, collection) {
+					ldapServerIds.push(item.getAttribute('data-ldapServerId'));
+				}
+			);
+
+			var ldapServerId = document.<portlet:namespace />fm['<portlet:namespace />settings--ldap.server.ids--'];
+
+			if (ldapServerId) {
+				ldapServerId.value = ldapServerIds.join(',');
+			}
+		},
+		['aui-base']
+	);
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />saveLocales',
+		function() {
+			var locales = document.<portlet:namespace />fm.<portlet:namespace /><%= PropsKeys.LOCALES %>;
+
+			if (locales) {
+				locales.value = Liferay.Util.listSelect(document.<portlet:namespace />fm.<portlet:namespace />currentLanguageIds);
+			}
+		},
+		['liferay-util-list-fields']
+	);
 </aui:script>
 
 <%!

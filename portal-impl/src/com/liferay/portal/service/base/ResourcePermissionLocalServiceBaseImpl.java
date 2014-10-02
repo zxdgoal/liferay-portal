@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -60,6 +62,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.ResourcePermissionLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class ResourcePermissionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements ResourcePermissionLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class ResourcePermissionLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return resourcePermissionPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class ResourcePermissionLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return resourcePermissionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +178,8 @@ public abstract class ResourcePermissionLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return resourcePermissionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -254,7 +255,7 @@ public abstract class ResourcePermissionLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteResourcePermission((ResourcePermission)persistedModel);
+		return resourcePermissionLocalService.deleteResourcePermission((ResourcePermission)persistedModel);
 	}
 
 	@Override

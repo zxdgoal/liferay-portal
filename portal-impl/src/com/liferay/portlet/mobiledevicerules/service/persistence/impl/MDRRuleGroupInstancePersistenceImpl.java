@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.mobiledevicerules.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -47,7 +45,6 @@ import com.liferay.portlet.mobiledevicerules.service.persistence.MDRRuleGroupIns
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +65,7 @@ import java.util.Set;
  * @see MDRRuleGroupInstanceUtil
  * @generated
  */
+@ProviderType
 public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDRRuleGroupInstance>
 	implements MDRRuleGroupInstancePersistence {
 	/*
@@ -155,7 +153,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findByUuid(String uuid, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -275,7 +273,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_First(uuid,
 				orderByComparator);
@@ -305,7 +303,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByUuid(uuid, 0, 1,
 				orderByComparator);
 
@@ -326,7 +324,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_Last(uuid,
 				orderByComparator);
@@ -356,7 +354,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -385,7 +383,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByUuid_PrevAndNext(
 		long ruleGroupInstanceId, String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -416,7 +414,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByUuid_PrevAndNext(Session session,
 		MDRRuleGroupInstance mdrRuleGroupInstance, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -943,7 +942,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1073,7 +1073,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_First(uuid,
 				companyId, orderByComparator);
@@ -1107,7 +1107,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByUuid_C_First(String uuid,
-		long companyId, OrderByComparator orderByComparator) {
+		long companyId,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1129,7 +1130,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByUuid_C_Last(uuid,
 				companyId, orderByComparator);
@@ -1163,7 +1164,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1193,7 +1194,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByUuid_C_PrevAndNext(
 		long ruleGroupInstanceId, String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -1224,7 +1225,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByUuid_C_PrevAndNext(Session session,
 		MDRRuleGroupInstance mdrRuleGroupInstance, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1500,7 +1502,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1606,7 +1608,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -1636,7 +1638,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -1657,7 +1659,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -1687,7 +1689,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1716,7 +1718,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByGroupId_PrevAndNext(
 		long ruleGroupInstanceId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -1747,7 +1749,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByGroupId_PrevAndNext(Session session,
 		MDRRuleGroupInstance mdrRuleGroupInstance, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1895,7 +1898,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> filterFindByGroupId(long groupId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -1987,7 +1991,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] filterFindByGroupId_PrevAndNext(
 		long ruleGroupInstanceId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(ruleGroupInstanceId, groupId,
@@ -2023,7 +2027,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance filterGetByGroupId_PrevAndNext(
 		Session session, MDRRuleGroupInstance mdrRuleGroupInstance,
-		long groupId, OrderByComparator orderByComparator, boolean previous) {
+		long groupId,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2343,7 +2349,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findByRuleGroupId(long ruleGroupId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2449,7 +2456,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_First(ruleGroupId,
 				orderByComparator);
@@ -2479,7 +2486,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByRuleGroupId_First(long ruleGroupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByRuleGroupId(ruleGroupId, 0, 1,
 				orderByComparator);
 
@@ -2500,7 +2507,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByRuleGroupId_Last(ruleGroupId,
 				orderByComparator);
@@ -2530,7 +2537,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByRuleGroupId_Last(long ruleGroupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByRuleGroupId(ruleGroupId);
 
 		if (count == 0) {
@@ -2559,7 +2566,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByRuleGroupId_PrevAndNext(
 		long ruleGroupInstanceId, long ruleGroupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -2590,7 +2597,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByRuleGroupId_PrevAndNext(
 		Session session, MDRRuleGroupInstance mdrRuleGroupInstance,
-		long ruleGroupId, OrderByComparator orderByComparator, boolean previous) {
+		long ruleGroupId,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2829,7 +2838,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2945,7 +2955,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_First(classNameId,
 				classPK, orderByComparator);
@@ -2979,7 +2989,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByC_C_First(long classNameId,
-		long classPK, OrderByComparator orderByComparator) {
+		long classPK, OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByC_C(classNameId, classPK, 0, 1,
 				orderByComparator);
 
@@ -3001,7 +3011,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByC_C_Last(classNameId,
 				classPK, orderByComparator);
@@ -3035,7 +3045,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByC_C(classNameId, classPK);
 
 		if (count == 0) {
@@ -3065,7 +3075,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByC_C_PrevAndNext(
 		long ruleGroupInstanceId, long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -3096,7 +3106,9 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByC_C_PrevAndNext(Session session,
 		MDRRuleGroupInstance mdrRuleGroupInstance, long classNameId,
-		long classPK, OrderByComparator orderByComparator, boolean previous) {
+		long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3356,7 +3368,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public List<MDRRuleGroupInstance> findByG_C_C(long groupId,
 		long classNameId, long classPK, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3478,7 +3490,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByG_C_C_First(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+		long classNameId, long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_First(groupId,
 				classNameId, classPK, orderByComparator);
@@ -3516,7 +3529,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByG_C_C_First(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator) {
+		long classNameId, long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		List<MDRRuleGroupInstance> list = findByG_C_C(groupId, classNameId,
 				classPK, 0, 1, orderByComparator);
 
@@ -3539,7 +3553,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance findByG_C_C_Last(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+		long classNameId, long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = fetchByG_C_C_Last(groupId,
 				classNameId, classPK, orderByComparator);
@@ -3577,7 +3592,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public MDRRuleGroupInstance fetchByG_C_C_Last(long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator) {
+		long classNameId, long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		int count = countByG_C_C(groupId, classNameId, classPK);
 
 		if (count == 0) {
@@ -3608,7 +3624,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] findByG_C_C_PrevAndNext(
 		long ruleGroupInstanceId, long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		MDRRuleGroupInstance mdrRuleGroupInstance = findByPrimaryKey(ruleGroupInstanceId);
 
@@ -3639,7 +3655,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 
 	protected MDRRuleGroupInstance getByG_C_C_PrevAndNext(Session session,
 		MDRRuleGroupInstance mdrRuleGroupInstance, long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator,
+		long classNameId, long classPK,
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -3804,7 +3821,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public List<MDRRuleGroupInstance> filterFindByG_C_C(long groupId,
 		long classNameId, long classPK, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C(groupId, classNameId, classPK, start, end,
 				orderByComparator);
@@ -3907,7 +3924,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	@Override
 	public MDRRuleGroupInstance[] filterFindByG_C_C_PrevAndNext(
 		long ruleGroupInstanceId, long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator)
 		throws NoSuchRuleGroupInstanceException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_PrevAndNext(ruleGroupInstanceId, groupId,
@@ -3946,7 +3963,8 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	protected MDRRuleGroupInstance filterGetByG_C_C_PrevAndNext(
 		Session session, MDRRuleGroupInstance mdrRuleGroupInstance,
 		long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5226,7 +5244,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 */
 	@Override
 	public List<MDRRuleGroupInstance> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<MDRRuleGroupInstance> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5362,25 +5380,6 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	 * Initializes the m d r rule group instance persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<MDRRuleGroupInstance>> listenersList = new ArrayList<ModelListener<MDRRuleGroupInstance>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<MDRRuleGroupInstance>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -5409,11 +5408,11 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MDRRuleGroupInstance exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MDRRuleGroupInstance exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(MDRRuleGroupInstancePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(MDRRuleGroupInstancePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static MDRRuleGroupInstance _nullMDRRuleGroupInstance = new MDRRuleGroupInstanceImpl() {
+	private static final MDRRuleGroupInstance _nullMDRRuleGroupInstance = new MDRRuleGroupInstanceImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -5425,7 +5424,7 @@ public class MDRRuleGroupInstancePersistenceImpl extends BasePersistenceImpl<MDR
 			}
 		};
 
-	private static CacheModel<MDRRuleGroupInstance> _nullMDRRuleGroupInstanceCacheModel =
+	private static final CacheModel<MDRRuleGroupInstance> _nullMDRRuleGroupInstanceCacheModel =
 		new CacheModel<MDRRuleGroupInstance>() {
 			@Override
 			public MDRRuleGroupInstance toEntityModel() {

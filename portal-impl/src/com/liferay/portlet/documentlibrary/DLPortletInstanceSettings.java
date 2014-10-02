@@ -35,6 +35,15 @@ import java.util.Map;
  */
 public class DLPortletInstanceSettings {
 
+	public static final String[] ALL_KEYS = {
+		"rootFolderId", "displayViews", "enableFileEntryDrafts",
+		"entriesPerPage", "entryColumns", "fileEntriesPerPage",
+		"fileEntryColumns", "folderColumns", "foldersPerPage", "mimeTypes",
+		"enableCommentRatings", "enableRatings", "enableRelatedAssets",
+		"showActions", "showFolderMenu", "showFoldersSearch", "showSubfolders",
+		"showTabs",
+	};
+
 	public static DLPortletInstanceSettings getInstance(
 			Layout layout, String portletId)
 		throws PortalException {
@@ -108,6 +117,10 @@ public class DLPortletInstanceSettings {
 		return _typedSettings.getBooleanValue("enableCommentRatings");
 	}
 
+	public boolean isEnableFileEntryDrafts() {
+		return _typedSettings.getBooleanValue("enableFileEntryDrafts");
+	}
+
 	public boolean isEnableRatings() {
 		return _typedSettings.getBooleanValue("enableRatings");
 	}
@@ -142,6 +155,8 @@ public class DLPortletInstanceSettings {
 		fallbackKeys.add("displayViews", PropsKeys.DL_DISPLAY_VIEWS);
 		fallbackKeys.add(
 			"enableCommentRatings", PropsKeys.DL_COMMENT_RATINGS_ENABLED);
+		fallbackKeys.add(
+			"enableFileEntryDrafts", PropsKeys.DL_FILE_ENTRY_DRAFTS_ENABLED);
 		fallbackKeys.add("enableRatings", PropsKeys.DL_RATINGS_ENABLED);
 		fallbackKeys.add(
 			"enableRelatedAssets", PropsKeys.DL_RELATED_ASSETS_ENABLED);

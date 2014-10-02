@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.bookmarks.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -84,6 +86,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class BookmarksFolderLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements BookmarksFolderLocalService,
 		IdentifiableBean {
@@ -160,8 +163,7 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return bookmarksFolderPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -178,8 +180,8 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return bookmarksFolderPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -198,9 +200,8 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return bookmarksFolderPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -233,20 +234,6 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 	@Override
 	public BookmarksFolder fetchBookmarksFolder(long folderId) {
 		return bookmarksFolderPersistence.fetchByPrimaryKey(folderId);
-	}
-
-	/**
-	 * Returns the bookmarks folder with the matching UUID and company.
-	 *
-	 * @param uuid the bookmarks folder's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching bookmarks folder, or <code>null</code> if a matching bookmarks folder could not be found
-	 */
-	@Override
-	public BookmarksFolder fetchBookmarksFolderByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return bookmarksFolderPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -366,7 +353,7 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteBookmarksFolder((BookmarksFolder)persistedModel);
+		return bookmarksFolderLocalService.deleteBookmarksFolder((BookmarksFolder)persistedModel);
 	}
 
 	@Override
@@ -375,19 +362,18 @@ public abstract class BookmarksFolderLocalServiceBaseImpl
 		return bookmarksFolderPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the bookmarks folder with the matching UUID and company.
-	 *
-	 * @param uuid the bookmarks folder's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching bookmarks folder
-	 * @throws PortalException if a matching bookmarks folder could not be found
-	 */
 	@Override
-	public BookmarksFolder getBookmarksFolderByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return bookmarksFolderPersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return bookmarksFolderPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<BookmarksFolder> getBookmarksFoldersByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<BookmarksFolder> orderByComparator) {
+		return bookmarksFolderPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

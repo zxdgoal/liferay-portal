@@ -32,9 +32,9 @@ boolean showSyntaxHelp = ((toggleValue != null) && toggleValue.equals("block"));
 <div align="right">
 	<liferay-ui:toggle
 		defaultShowContent="<%= false %>"
-		hideMessage='<%= LanguageUtil.get(pageContext, "hide-syntax-help") + " &raquo;" %>'
+		hideMessage='<%= LanguageUtil.get(request, "hide-syntax-help") + " &raquo;" %>'
 		id="<%= toggleId %>"
-		showMessage='<%= "&laquo; " + LanguageUtil.get(pageContext, "show-syntax-help") %>'
+		showMessage='<%= "&laquo; " + LanguageUtil.get(request, "show-syntax-help") %>'
 	/>
 </div>
 
@@ -48,6 +48,7 @@ boolean showSyntaxHelp = ((toggleValue != null) && toggleValue.equals("block"));
 			<c:when test='<%= format.equals("creole") %>'>
 				<liferay-ui:input-editor
 					configParams="<%= configParams %>"
+					contents="<%= content %>"
 					editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>"
 					fileBrowserParams="<%= fileBrowserParams %>"
 					toolbarSet="creole"
@@ -57,6 +58,7 @@ boolean showSyntaxHelp = ((toggleValue != null) && toggleValue.equals("block"));
 			<c:otherwise>
 				<liferay-ui:input-editor
 					configParams="<%= configParams %>"
+					contents="<%= content %>"
 					editorImpl="<%= EDITOR_SIMPLE_IMPL_KEY %>"
 					fileBrowserParams="<%= fileBrowserParams %>"
 					name="content"
@@ -79,12 +81,6 @@ boolean showSyntaxHelp = ((toggleValue != null) && toggleValue.equals("block"));
 		</aui:col>
 	</aui:row>
 </div>
-
-<aui:script>
-	function <portlet:namespace />initEditor() {
-		return '<%= UnicodeFormatter.toString(content) %>';
-	}
-</aui:script>
 
 <aui:script use="aui-base">
 	var CSS_EDITOR_WIDTH = 'col-md-8';

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchUserTrackerException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserTracker;
 import com.liferay.portal.model.impl.UserTrackerImpl;
 import com.liferay.portal.model.impl.UserTrackerModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.UserTrackerPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see UserTrackerUtil
  * @generated
  */
+@ProviderType
 public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	implements UserTrackerPersistence {
 	/*
@@ -149,7 +147,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public List<UserTracker> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<UserTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -255,7 +253,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -284,7 +283,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		List<UserTracker> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -305,7 +304,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -334,7 +334,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -362,7 +362,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker[] findByCompanyId_PrevAndNext(long userTrackerId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<UserTracker> orderByComparator)
 		throws NoSuchUserTrackerException {
 		UserTracker userTracker = findByPrimaryKey(userTrackerId);
 
@@ -393,7 +393,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 
 	protected UserTracker getByCompanyId_PrevAndNext(Session session,
 		UserTracker userTracker, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserTracker> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -625,7 +625,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public List<UserTracker> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -731,7 +731,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchByUserId_First(userId, orderByComparator);
 
 		if (userTracker != null) {
@@ -759,7 +760,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		List<UserTracker> list = findByUserId(userId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -779,7 +780,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchByUserId_Last(userId, orderByComparator);
 
 		if (userTracker != null) {
@@ -807,7 +809,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -835,7 +837,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker[] findByUserId_PrevAndNext(long userTrackerId,
-		long userId, OrderByComparator orderByComparator)
+		long userId, OrderByComparator<UserTracker> orderByComparator)
 		throws NoSuchUserTrackerException {
 		UserTracker userTracker = findByPrimaryKey(userTrackerId);
 
@@ -866,7 +868,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 
 	protected UserTracker getByUserId_PrevAndNext(Session session,
 		UserTracker userTracker, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserTracker> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1101,7 +1103,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public List<UserTracker> findBySessionId(String sessionId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<UserTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1221,7 +1223,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findBySessionId_First(String sessionId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchBySessionId_First(sessionId,
 				orderByComparator);
 
@@ -1250,7 +1253,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchBySessionId_First(String sessionId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		List<UserTracker> list = findBySessionId(sessionId, 0, 1,
 				orderByComparator);
 
@@ -1271,7 +1274,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker findBySessionId_Last(String sessionId,
-		OrderByComparator orderByComparator) throws NoSuchUserTrackerException {
+		OrderByComparator<UserTracker> orderByComparator)
+		throws NoSuchUserTrackerException {
 		UserTracker userTracker = fetchBySessionId_Last(sessionId,
 				orderByComparator);
 
@@ -1300,7 +1304,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker fetchBySessionId_Last(String sessionId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		int count = countBySessionId(sessionId);
 
 		if (count == 0) {
@@ -1328,7 +1332,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public UserTracker[] findBySessionId_PrevAndNext(long userTrackerId,
-		String sessionId, OrderByComparator orderByComparator)
+		String sessionId, OrderByComparator<UserTracker> orderByComparator)
 		throws NoSuchUserTrackerException {
 		UserTracker userTracker = findByPrimaryKey(userTrackerId);
 
@@ -1359,7 +1363,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 
 	protected UserTracker getBySessionId_PrevAndNext(Session session,
 		UserTracker userTracker, String sessionId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<UserTracker> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2094,7 +2098,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 */
 	@Override
 	public List<UserTracker> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<UserTracker> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2225,25 +2229,6 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	 * Initializes the user tracker persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.UserTracker")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<UserTracker>> listenersList = new ArrayList<ModelListener<UserTracker>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<UserTracker>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2262,8 +2247,8 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No UserTracker exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No UserTracker exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(UserTrackerPersistenceImpl.class);
-	private static UserTracker _nullUserTracker = new UserTrackerImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(UserTrackerPersistenceImpl.class);
+	private static final UserTracker _nullUserTracker = new UserTrackerImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2275,7 +2260,7 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 			}
 		};
 
-	private static CacheModel<UserTracker> _nullUserTrackerCacheModel = new NullCacheModel();
+	private static final CacheModel<UserTracker> _nullUserTrackerCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<UserTracker>,
 		MVCCModel {

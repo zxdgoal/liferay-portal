@@ -1,4 +1,3 @@
-
 <%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -18,14 +17,6 @@
 <%@ include file="/html/portlet/trash/init.jsp" %>
 
 <%
-SearchContainer searchContainer = (SearchContainer)request.getAttribute("liferay-ui:search:searchContainer");
-
-String redirect = ParamUtil.getString(request, "redirect");
-
-if (searchContainer != null) {
-	redirect = searchContainer.getIteratorURL().toString();
-}
-
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 TrashRenderer trashRenderer = null;
@@ -47,7 +38,9 @@ TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashRender
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="className" value="<%= trashRenderer.getClassName() %>" />
 			<portlet:param name="classPK" value="<%= String.valueOf(trashRenderer.getClassPK()) %>" />
-			<portlet:param name="containerModelClassName" value="<%= trashHandler.getContainerModelClassName() %>" />
+			<portlet:param name="containerModelClassName" value="<%= trashHandler.getRootContainerModelClassName() %>" />
+			<portlet:param name="containerModelId" value="<%= String.valueOf(trashHandler.getRootContainerModelId(trashRenderer.getClassPK())) %>" />
+			<portlet:param name="rootContainerModelMovable" value="<%= String.valueOf(trashHandler.isRootContainerModelMovable()) %>" />
 		</portlet:renderURL>
 
 		<%

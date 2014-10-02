@@ -25,16 +25,17 @@ import com.liferay.portal.model.ClassedModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.search.BaseSearchTestCase;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.ServiceContextTestUtil;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBCategoryServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadServiceUtil;
 import com.liferay.portlet.messageboards.util.test.MBTestUtil;
 
@@ -152,6 +153,18 @@ public class MBMessageSearchTest extends BaseSearchTestCase {
 	}
 
 	@Override
+	protected void deleteBaseModel(long primaryKey) throws Exception {
+		MBMessage message = MBMessageLocalServiceUtil.getMessage(primaryKey);
+
+		if (!message.isRoot()) {
+			MBMessageLocalServiceUtil.deleteMessage(primaryKey);
+		}
+		else {
+			MBThreadLocalServiceUtil.deleteThread(message.getThreadId());
+		}
+	}
+
+	@Override
 	protected Class<?> getBaseModelClass() {
 		return MBMessage.class;
 	}
@@ -197,6 +210,20 @@ public class MBMessageSearchTest extends BaseSearchTestCase {
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 		return hits.getLength();
+	}
+
+	@Override
+	protected BaseModel<?> updateBaseModel(
+			BaseModel<?> baseModel, String keywords,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		MBMessage message = (MBMessage)baseModel;
+
+		message.setSubject(keywords);
+		message.setBody(keywords);
+
+		return MBTestUtil.updateMessage(message, keywords, keywords, true);
 	}
 
 }

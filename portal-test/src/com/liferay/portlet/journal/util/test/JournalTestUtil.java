@@ -125,11 +125,11 @@ public class JournalTestUtil {
 		String content = DDMStructureTestUtil.getSampleStructuredContent(
 			contentMap, LocaleUtil.toLanguageId(defaultLocale));
 
-		String xsd = DDMStructureTestUtil.getSampleStructureXSD(
+		String definition = DDMStructureTestUtil.getSampleStructureDefinition(
 			_locales, defaultLocale);
 
 		DDMStructure ddmStructure = DDMStructureTestUtil.addStructure(
-			groupId, JournalArticle.class.getName(), xsd, defaultLocale);
+			groupId, JournalArticle.class.getName(), definition, defaultLocale);
 
 		DDMTemplate ddmTemplate = DDMTemplateTestUtil.addTemplate(
 			groupId, ddmStructure.getStructureId());
@@ -153,13 +153,18 @@ public class JournalTestUtil {
 			expirationDateMonth = expirationCal.get(Calendar.MONTH);
 			expirationDateDay = expirationCal.get(Calendar.DATE);
 			expirationDateYear = expirationCal.get(Calendar.YEAR);
-			expirationDateHour = expirationCal.get(Calendar.HOUR);
+			expirationDateHour = expirationCal.get(Calendar.HOUR_OF_DAY);
 			expirationDateMinute = expirationCal.get(Calendar.MINUTE);
-
-			if (expirationCal.get(Calendar.AM_PM) == Calendar.PM) {
-				expirationDateHour += 12;
-			}
 		}
+
+		Calendar displayCal = CalendarFactoryUtil.getCalendar(
+			TestPropsValues.getUser().getTimeZone());
+
+		int displayDateDay = displayCal.get(Calendar.DATE);
+		int displayDateMonth = displayCal.get(Calendar.MONTH);
+		int displayDateYear = displayCal.get(Calendar.YEAR);
+		int displayDateHour = displayCal.get(Calendar.HOUR_OF_DAY);
+		int displayDateMinute = displayCal.get(Calendar.MINUTE);
 
 		if (workflowEnabled) {
 			serviceContext = (ServiceContext)serviceContext.clone();
@@ -179,7 +184,8 @@ public class JournalTestUtil {
 			StringPool.BLANK, true, JournalArticleConstants.VERSION_DEFAULT,
 			titleMap, descriptionMap, content, "general",
 			ddmStructure.getStructureKey(), ddmTemplate.getTemplateKey(),
-			layoutUuid, 1, 1, 1965, 0, 0, expirationDateMonth,
+			layoutUuid, displayDateMonth, displayDateDay, displayDateYear,
+			displayDateHour, displayDateMinute, expirationDateMonth,
 			expirationDateDay, expirationDateYear, expirationDateHour,
 			expirationDateMinute, neverExpire, 0, 0, 0, 0, 0, true, true, false,
 			null, null, null, null, serviceContext);
@@ -752,12 +758,8 @@ public class JournalTestUtil {
 			displayDateMonth = displayCal.get(Calendar.MONTH);
 			displayDateDay = displayCal.get(Calendar.DATE);
 			displayDateYear = displayCal.get(Calendar.YEAR);
-			displayDateHour = displayCal.get(Calendar.HOUR);
+			displayDateHour = displayCal.get(Calendar.HOUR_OF_DAY);
 			displayDateMinute = displayCal.get(Calendar.MINUTE);
-
-			if (displayCal.get(Calendar.AM_PM) == Calendar.PM) {
-				displayDateHour += 12;
-			}
 		}
 
 		serviceContext.setCommand(Constants.UPDATE);

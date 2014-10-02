@@ -17,10 +17,14 @@ package com.liferay.portlet.blogs.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
@@ -81,22 +85,39 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 			InputStream smallImageInputStream, ServiceContext serviceContext)
 		throws PortalException {
 
+		BlogsPermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ActionKeys.ADD_ENTRY);
+
+		ImageSelector imageSelector = null;
+
+		if (smallImage && Validator.isNotNull(smallImageFileName) &&
+			(smallImageInputStream != null)) {
+
+			FileEntry fileEntry = TempFileEntryUtil.addTempFileEntry(
+				serviceContext.getScopeGroupId(), getUserId(),
+				BlogsEntry.class.getName(), smallImageFileName,
+				smallImageInputStream,
+				MimeTypesUtil.getContentType(smallImageFileName));
+
+			imageSelector = new ImageSelector(
+				fileEntry.getFileEntryId(), smallImageURL);
+		}
+
 		return addEntry(
 			title, StringPool.BLANK, description, content, displayDateMonth,
 			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
-			allowPingbacks, allowTrackbacks, trackbacks, smallImage,
-			smallImageURL, smallImageFileName, smallImageInputStream,
+			allowPingbacks, allowTrackbacks, trackbacks, imageSelector,
 			serviceContext);
 	}
 
 	@Override
 	public BlogsEntry addEntry(
-			String title, String deckTitle, String description, String content,
+			String title, String subtitle, String description, String content,
 			int displayDateMonth, int displayDateDay, int displayDateYear,
 			int displayDateHour, int displayDateMinute, boolean allowPingbacks,
-			boolean allowTrackbacks, String[] trackbacks, boolean smallImage,
-			String smallImageURL, String smallImageFileName,
-			InputStream smallImageInputStream, ServiceContext serviceContext)
+			boolean allowTrackbacks, String[] trackbacks,
+			ImageSelector imageSelector, ServiceContext serviceContext)
 		throws PortalException {
 
 		BlogsPermission.check(
@@ -104,11 +125,10 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 			ActionKeys.ADD_ENTRY);
 
 		return blogsEntryLocalService.addEntry(
-			getUserId(), title, deckTitle, description, content,
+			getUserId(), title, subtitle, description, content,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
-			smallImageInputStream, serviceContext);
+			imageSelector, serviceContext);
 	}
 
 	@Override
@@ -128,8 +148,9 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 
 		boolean listNotExhausted = true;
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, false, 0, 0, new EntryDisplayDateComparator());
+		QueryDefinition<BlogsEntry> queryDefinition =
+			new QueryDefinition<BlogsEntry>(
+				status, false, 0, 0, new EntryDisplayDateComparator());
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			queryDefinition.setStatus(WorkflowConstants.STATUS_IN_TRASH, true);
@@ -293,8 +314,9 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 
 		boolean listNotExhausted = true;
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, false, 0, 0, new EntryDisplayDateComparator());
+		QueryDefinition<BlogsEntry> queryDefinition =
+			new QueryDefinition<BlogsEntry>(
+				status, false, 0, 0, new EntryDisplayDateComparator());
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			queryDefinition.setStatus(WorkflowConstants.STATUS_IN_TRASH, true);
@@ -336,8 +358,9 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 
 		boolean listNotExhausted = true;
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			status, false, 0, 0, new EntryDisplayDateComparator());
+		QueryDefinition<BlogsEntry> queryDefinition =
+			new QueryDefinition<BlogsEntry>(
+				status, false, 0, 0, new EntryDisplayDateComparator());
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			queryDefinition.setStatus(WorkflowConstants.STATUS_IN_TRASH, true);
@@ -420,6 +443,12 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 		blogsEntryLocalService.unsubscribe(getUserId(), groupId);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #updateEntry(long, String,
+	 *             String, String, String, int, int, int, int, int, boolean,
+	 *             boolean, String[], boolean, String, long, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public BlogsEntry updateEntry(
 			long entryId, String title, String description, String content,
@@ -430,22 +459,44 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 			InputStream smallImageInputStream, ServiceContext serviceContext)
 		throws PortalException {
 
+		BlogsPermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ActionKeys.UPDATE);
+
+		ImageSelector imageSelector = null;
+
+		if (smallImage) {
+			if (Validator.isNotNull(smallImageFileName) &&
+				(smallImageInputStream != null)) {
+
+				FileEntry fileEntry = TempFileEntryUtil.addTempFileEntry(
+					serviceContext.getScopeGroupId(), getUserId(),
+					BlogsEntry.class.getName(), smallImageFileName,
+					smallImageInputStream,
+					MimeTypesUtil.getContentType(smallImageFileName));
+
+				imageSelector = new ImageSelector(
+					fileEntry.getFileEntryId(), smallImageURL);
+			}
+		}
+		else {
+			imageSelector = new ImageSelector(0);
+		}
+
 		return updateEntry(
 			entryId, title, StringPool.BLANK, description, content,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
-			smallImageInputStream, serviceContext);
+			imageSelector, serviceContext);
 	}
 
 	@Override
 	public BlogsEntry updateEntry(
-			long entryId, String title, String deckTitle, String description,
+			long entryId, String title, String subtitle, String description,
 			String content, int displayDateMonth, int displayDateDay,
 			int displayDateYear, int displayDateHour, int displayDateMinute,
 			boolean allowPingbacks, boolean allowTrackbacks,
-			String[] trackbacks, boolean smallImage, String smallImageURL,
-			String smallImageFileName, InputStream smallImageInputStream,
+			String[] trackbacks, ImageSelector imageSelector,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -453,11 +504,10 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 			getPermissionChecker(), entryId, ActionKeys.UPDATE);
 
 		return blogsEntryLocalService.updateEntry(
-			getUserId(), entryId, title, deckTitle, description, content,
+			getUserId(), entryId, title, subtitle, description, content,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
-			smallImageInputStream, serviceContext);
+			imageSelector, serviceContext);
 	}
 
 	protected String exportToRSS(

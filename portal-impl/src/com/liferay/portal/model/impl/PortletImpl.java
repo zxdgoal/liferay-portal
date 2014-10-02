@@ -25,20 +25,19 @@ import com.liferay.portal.kernel.poller.PollerProcessor;
 import com.liferay.portal.kernel.pop.MessageListener;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
+import com.liferay.portal.kernel.portlet.FriendlyURLMapperTracker;
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.OpenSearch;
-import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.URLEncoder;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -98,6 +97,7 @@ public class PortletImpl extends PortletBaseImpl {
 	 * Constructs a portlet with no parameters.
 	 */
 	public PortletImpl() {
+		this(0, null);
 	}
 
 	/**
@@ -106,37 +106,37 @@ public class PortletImpl extends PortletBaseImpl {
 	public PortletImpl(long companyId, String portletId) {
 		setCompanyId(companyId);
 		setPortletId(portletId);
-		setStrutsPath(portletId);
+
 		setActive(true);
-		_indexerClasses = new ArrayList<String>();
-		_schedulerEntries = new ArrayList<SchedulerEntry>();
-		_stagedModelDataHandlerClasses = new ArrayList<String>();
-		_socialActivityInterpreterClasses = new ArrayList<String>();
-		_userNotificationHandlerClasses = new ArrayList<String>();
+		setStrutsPath(portletId);
+
 		_assetRendererFactoryClasses = new ArrayList<String>();
 		_atomCollectionAdapterClasses = new ArrayList<String>();
-		_customAttributesDisplayClasses = new ArrayList<String>();
-		_trashHandlerClasses = new ArrayList<String>();
-		_workflowHandlerClasses = new ArrayList<String>();
 		_autopropagatedParameters = new LinkedHashSet<String>();
-		_headerPortalCss = new ArrayList<String>();
-		_headerPortletCss = new ArrayList<String>();
-		_headerPortalJavaScript = new ArrayList<String>();
-		_headerPortletJavaScript = new ArrayList<String>();
+		_customAttributesDisplayClasses = new ArrayList<String>();
 		_footerPortalCss = new ArrayList<String>();
-		_footerPortletCss = new ArrayList<String>();
 		_footerPortalJavaScript = new ArrayList<String>();
+		_footerPortletCss = new ArrayList<String>();
 		_footerPortletJavaScript = new ArrayList<String>();
-		_unlinkedRoles = new HashSet<String>();
-		_roleMappers = new LinkedHashMap<String, String>();
+		_headerPortalCss = new ArrayList<String>();
+		_headerPortalJavaScript = new ArrayList<String>();
+		_headerPortletCss = new ArrayList<String>();
+		_headerPortletJavaScript = new ArrayList<String>();
+		_indexerClasses = new ArrayList<String>();
 		_initParams = new HashMap<String, String>();
-		_portletModes = new HashMap<String, Set<String>>();
-		_windowStates = new HashMap<String, Set<String>>();
-		_supportedLocales = new HashSet<String>();
 		_portletFilters = new LinkedHashMap<String, PortletFilter>();
-		_processingEvents = new HashSet<QName>();
-		_publishingEvents = new HashSet<QName>();
-		_publicRenderParameters = new HashSet<PublicRenderParameter>();
+		_portletModes = new HashMap<String, Set<String>>();
+		_roleMappers = new LinkedHashMap<String, String>();
+		_rootPortlet = this;
+		_schedulerEntries = new ArrayList<SchedulerEntry>();
+		_socialActivityInterpreterClasses = new ArrayList<String>();
+		_stagedModelDataHandlerClasses = new ArrayList<String>();
+		_supportedLocales = new HashSet<String>();
+		_trashHandlerClasses = new ArrayList<String>();
+		_unlinkedRoles = new HashSet<String>();
+		_userNotificationHandlerClasses = new ArrayList<String>();
+		_windowStates = new HashMap<String, Set<String>>();
+		_workflowHandlerClasses = new ArrayList<String>();
 	}
 
 	/**
@@ -196,10 +196,16 @@ public class PortletImpl extends PortletBaseImpl {
 		PortletApp portletApp) {
 
 		setPortletId(portletId);
+		setCompanyId(companyId);
+		setRoles(roles);
+		setActive(active);
+		setProcessingEvents(processingEvents);
+		setPublishingEvents(publishingEvents);
+		setPublicRenderParameters(publicRenderParameters);
+
 		_rootPortlet = rootPortlet;
 		_pluginPackage = pluginPackage;
 		_defaultPluginSetting = pluginSetting;
-		setCompanyId(companyId);
 		_icon = icon;
 		_virtualPath = virtualPath;
 		_strutsPath = strutsPath;
@@ -278,11 +284,9 @@ public class PortletImpl extends PortletBaseImpl {
 		_cssClassWrapper = cssClassWrapper;
 		_facebookIntegration = facebookIntegration;
 		_addDefaultResource = addDefaultResource;
-		setRoles(roles);
 		_unlinkedRoles = unlinkedRoles;
 		_roleMappers = roleMappers;
 		_system = system;
-		setActive(active);
 		_include = include;
 		_initParams = initParams;
 		_expCache = expCache;
@@ -292,9 +296,6 @@ public class PortletImpl extends PortletBaseImpl {
 		_resourceBundle = resourceBundle;
 		_portletInfo = portletInfo;
 		_portletFilters = portletFilters;
-		setProcessingEvents(processingEvents);
-		setPublishingEvents(publishingEvents);
-		setPublicRenderParameters(publicRenderParameters);
 		_portletApp = portletApp;
 	}
 
@@ -669,20 +670,7 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	@Override
 	public String getContextPath() {
-		if (!_portletApp.isWARFile()) {
-			return PortalUtil.getPathContext();
-		}
-
-		String servletContextName = _portletApp.getServletContextName();
-
-		if (ServletContextPool.containsKey(servletContextName)) {
-			ServletContext servletContext = ServletContextPool.get(
-				servletContextName);
-
-			return ContextPathUtil.getContextPath(servletContext);
-		}
-
-		return StringPool.SLASH.concat(servletContextName);
+		return _portletApp.getContextPath();
 	}
 
 	/**
@@ -915,14 +903,10 @@ public class PortletImpl extends PortletBaseImpl {
 	public FriendlyURLMapper getFriendlyURLMapperInstance() {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
-		List<FriendlyURLMapper> friendlyURLMapperInstances =
-			portletBag.getFriendlyURLMapperInstances();
+		FriendlyURLMapperTracker friendlyURLMapperTracker =
+			portletBag.getFriendlyURLMapperTracker();
 
-		if (friendlyURLMapperInstances.isEmpty()) {
-			return null;
-		}
-
-		return friendlyURLMapperInstances.get(0);
+		return friendlyURLMapperTracker.getFriendlyURLMapper();
 	}
 
 	/**
@@ -1934,8 +1918,9 @@ public class PortletImpl extends PortletBaseImpl {
 	@Override
 	public long getTimestamp() {
 		if (_timestamp == null) {
-			ServletContext servletContext = ServletContextPool.get(
-				getContextName());
+			PortletApp portletApp = getPortletApp();
+
+			ServletContext servletContext = portletApp.getServletContext();
 
 			_timestamp = ServletContextUtil.getLastModified(
 				servletContext, StringPool.SLASH, true);
@@ -3967,7 +3952,7 @@ public class PortletImpl extends PortletBaseImpl {
 	/**
 	 * Map of the ready states of all portlets keyed by their root portlet ID.
 	 */
-	private static Map<String, Boolean> _readyMap =
+	private static final Map<String, Boolean> _readyMap =
 		new ConcurrentHashMap<String, Boolean>();
 
 	/**
@@ -4302,25 +4287,25 @@ public class PortletImpl extends PortletBaseImpl {
 	/**
 	 * The supported processing events of the portlet.
 	 */
-	private Set<QName> _processingEvents = new HashSet<QName>();
+	private final Set<QName> _processingEvents = new HashSet<QName>();
 
 	/**
 	 * Map of the supported processing events of the portlet keyed by the QName.
 	 */
-	private Map<String, QName> _processingEventsByQName =
+	private final Map<String, QName> _processingEventsByQName =
 		new HashMap<String, QName>();
 
 	/**
 	 * The supported public render parameters of the portlet.
 	 */
-	private Set<PublicRenderParameter> _publicRenderParameters =
+	private final Set<PublicRenderParameter> _publicRenderParameters =
 		new HashSet<PublicRenderParameter>();
 
 	/**
 	 * Map of the supported public render parameters of the portlet keyed by the
 	 * identifier.
 	 */
-	private Map<String, PublicRenderParameter>
+	private final Map<String, PublicRenderParameter>
 		_publicRenderParametersByIdentifier =
 			new HashMap<String, PublicRenderParameter>();
 
@@ -4328,14 +4313,14 @@ public class PortletImpl extends PortletBaseImpl {
 	 * Map of the supported public render parameters of the portlet keyed by the
 	 * QName.
 	 */
-	private Map<String, PublicRenderParameter>
+	private final Map<String, PublicRenderParameter>
 		_publicRenderParametersByQName =
 			new HashMap<String, PublicRenderParameter>();
 
 	/**
 	 * The supported publishing events of the portlet.
 	 */
-	private Set<QName> _publishingEvents = new HashSet<QName>();
+	private final Set<QName> _publishingEvents = new HashSet<QName>();
 
 	/**
 	 * <code>True</code> if the portlet supports remoting.
@@ -4381,12 +4366,12 @@ public class PortletImpl extends PortletBaseImpl {
 	/**
 	 * The root portlet of this portlet instance.
 	 */
-	private Portlet _rootPortlet = this;
+	private final Portlet _rootPortlet;
 
 	/**
 	 * The scheduler entries of the portlet.
 	 */
-	private List<SchedulerEntry> _schedulerEntries;
+	private final List<SchedulerEntry> _schedulerEntries;
 
 	/**
 	 * <code>True</code> if the portlet supports scoping of data.

@@ -202,6 +202,7 @@
 				clean.delete.lib=true
 				ivy.home=${project.dir}/.ivy
 				liferay.home=${liferay.home}
+				module.framework.base.dir=${liferay.home}/osgi
 			</echo>
 
 			<copy file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties" tofile="${project.dir}/tools/sdk/build.${env.HOST}.properties" />
@@ -251,6 +252,7 @@
 		<ant dir="portal-impl" target="clean" inheritAll="false" />
 		<ant dir="portal-pacl" target="clean" inheritAll="false" />
 		<ant dir="portal-test" target="clean" inheritAll="false" />
+		<ant dir="portal-test-internal" target="clean" inheritAll="false" />
 
 		<ant dir="portal-web" target="clean" inheritAll="false" />
 
@@ -268,6 +270,8 @@
 				includes="*.log*"
 			/>
 		</delete>
+
+		<delete dir="${liferay.home}/data/elasticsearch" />
 
 		<delete failonerror="false">
 			<fileset
@@ -405,6 +409,7 @@
 		<ant dir="portal-impl" target="compile" inheritAll="false" />
 		<ant dir="portal-pacl" target="compile" inheritAll="false" />
 		<ant dir="portal-test" target="compile" inheritAll="false" />
+		<ant dir="portal-test-internal" target="compile" inheritAll="false" />
 
 		<ant dir="util-taglib" target="jar" inheritAll="false" />
 
@@ -414,8 +419,6 @@
 		<ant dir="portal-impl" target="build-themes" inheritAll="false" />
 
 		<antcall target="jar" />
-
-		<setup-jrebel />
 
 		<antcall target="print-current-time" />
 	</target>
@@ -468,6 +471,7 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 		<ant dir="portal-impl" target="deploy" inheritAll="false" />
 		<ant dir="portal-pacl" target="deploy" inheritAll="false" />
 		<ant dir="portal-test" target="deploy" inheritAll="false" />
+		<ant dir="portal-test-internal" target="deploy" inheritAll="false" />
 
 		<ant dir="portal-web" target="deploy" inheritAll="false" />
 
@@ -481,7 +485,7 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 		<antcall target="deploy-properties" />
 
 		<copy todir="${app.server.lib.global.dir}">
-			<fileset dir="lib/development" includes="hsql.jar,jtds.jar,junit.jar,mysql.jar,postgresql.jar" />
+			<fileset dir="lib/development" includes="hsql.jar,jtds.jar,mysql.jar,postgresql.jar" />
 			<fileset dir="lib/global" />
 		</copy>
 
@@ -831,6 +835,11 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 		</if>
 
 		<ant-execute
+			ant.dir="${project.dir}/modules/core/registry-api"
+			ant.target="deploy"
+		/>
+
+		<ant-execute
 			ant.dir="${project.dir}/modules"
 			ant.target="deploy"
 		/>
@@ -900,6 +909,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 		<ant dir="portal-impl" target="jar" inheritAll="false" />
 		<ant dir="portal-pacl" target="jar" inheritAll="false" />
 		<ant dir="portal-test" target="jar" inheritAll="false" />
+		<ant dir="portal-test-internal" target="jar" inheritAll="false" />
 
 		<ant dir="portal-web" target="war" inheritAll="false" />
 
@@ -941,6 +951,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 
 			<packageset dir="portal-service/src" />
 			<packageset dir="portal-test/src" />
+			<packageset dir="portal-test-internal/src" />
 			<packageset dir="util-bridges/src" />
 			<packageset dir="util-java/src" />
 			<packageset dir="util-slf4j/src" />
@@ -982,6 +993,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 			<packageset dir="portal-impl/src" />
 			<packageset dir="portal-service/src" />
 			<packageset dir="portal-test/src" />
+			<packageset dir="portal-test-internal/src" />
 			<packageset dir="util-bridges/src" />
 			<packageset dir="util-java/src" />
 			<packageset dir="util-slf4j/src" />
@@ -998,8 +1010,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 	<target name="propertiesdoc">
 		<property name="properties.dest.dir" value="${doc.dir}/propertiesdoc" />
 
-		<delete dir="${properties.dest.dir}" />
-		<mkdir dir="${properties.dest.dir}" />
+		<remake-dir dir="${properties.dest.dir}" />
 
 		<antcall target="propertiesdoc-cmd">
 			<param name="properties.dest.dir" value="${properties.dest.dir}" />
@@ -1148,6 +1159,26 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 
 	<target name="test-unit">
 		<ant antfile="build-test.xml" target="test-unit" inheritAll="false" />
+	</target>
+
+	<target name="update-ivy-cache">
+		<execute>
+			git reset --hard HEAD
+			git clean -d -f
+
+			rm -fr .ivy
+
+			ant setup-sdk
+
+			ant -f modules/build.xml clean
+
+			ant -f modules/core/registry-api/build.xml deploy
+			ant -f modules/core/registry-test/build.xml compile-test
+
+			ant -f modules/build.xml compile
+
+			ant -f modules/sdk/ant-arquillian/build.xml clean compile
+		</execute>
 	</target>
 
 	<target name="update-plugins-to-svn-revision">

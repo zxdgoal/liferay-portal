@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchResourceActionException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceAction;
 import com.liferay.portal.model.impl.ResourceActionImpl;
 import com.liferay.portal.model.impl.ResourceActionModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.ResourceActionPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see ResourceActionUtil
  * @generated
  */
+@ProviderType
 public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceAction>
 	implements ResourceActionPersistence {
 	/*
@@ -151,7 +149,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public List<ResourceAction> findByName(String name, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceAction> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -271,7 +269,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public ResourceAction findByName_First(String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceAction> orderByComparator)
 		throws NoSuchResourceActionException {
 		ResourceAction resourceAction = fetchByName_First(name,
 				orderByComparator);
@@ -301,7 +299,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public ResourceAction fetchByName_First(String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceAction> orderByComparator) {
 		List<ResourceAction> list = findByName(name, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -321,7 +319,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public ResourceAction findByName_Last(String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceAction> orderByComparator)
 		throws NoSuchResourceActionException {
 		ResourceAction resourceAction = fetchByName_Last(name, orderByComparator);
 
@@ -350,7 +348,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public ResourceAction fetchByName_Last(String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceAction> orderByComparator) {
 		int count = countByName(name);
 
 		if (count == 0) {
@@ -378,7 +376,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public ResourceAction[] findByName_PrevAndNext(long resourceActionId,
-		String name, OrderByComparator orderByComparator)
+		String name, OrderByComparator<ResourceAction> orderByComparator)
 		throws NoSuchResourceActionException {
 		ResourceAction resourceAction = findByPrimaryKey(resourceActionId);
 
@@ -409,7 +407,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 
 	protected ResourceAction getByName_PrevAndNext(Session session,
 		ResourceAction resourceAction, String name,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ResourceAction> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1452,7 +1450,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 */
 	@Override
 	public List<ResourceAction> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceAction> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1583,25 +1581,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	 * Initializes the resource action persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.ResourceAction")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ResourceAction>> listenersList = new ArrayList<ModelListener<ResourceAction>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ResourceAction>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1620,8 +1599,8 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ResourceAction exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ResourceAction exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ResourceActionPersistenceImpl.class);
-	private static ResourceAction _nullResourceAction = new ResourceActionImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ResourceActionPersistenceImpl.class);
+	private static final ResourceAction _nullResourceAction = new ResourceActionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1633,7 +1612,8 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			}
 		};
 
-	private static CacheModel<ResourceAction> _nullResourceActionCacheModel = new NullCacheModel();
+	private static final CacheModel<ResourceAction> _nullResourceActionCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<ResourceAction>,
 		MVCCModel {

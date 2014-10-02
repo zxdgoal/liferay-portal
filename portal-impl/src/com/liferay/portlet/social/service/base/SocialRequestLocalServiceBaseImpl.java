@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -60,6 +62,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.social.service.SocialRequestLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class SocialRequestLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SocialRequestLocalService,
 		IdentifiableBean {
@@ -135,8 +138,7 @@ public abstract class SocialRequestLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return socialRequestPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -153,8 +155,8 @@ public abstract class SocialRequestLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return socialRequestPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -173,9 +175,8 @@ public abstract class SocialRequestLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return socialRequestPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -208,20 +209,6 @@ public abstract class SocialRequestLocalServiceBaseImpl
 	@Override
 	public SocialRequest fetchSocialRequest(long requestId) {
 		return socialRequestPersistence.fetchByPrimaryKey(requestId);
-	}
-
-	/**
-	 * Returns the social request with the matching UUID and company.
-	 *
-	 * @param uuid the social request's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching social request, or <code>null</code> if a matching social request could not be found
-	 */
-	@Override
-	public SocialRequest fetchSocialRequestByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return socialRequestPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -278,7 +265,7 @@ public abstract class SocialRequestLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteSocialRequest((SocialRequest)persistedModel);
+		return socialRequestLocalService.deleteSocialRequest((SocialRequest)persistedModel);
 	}
 
 	@Override
@@ -287,18 +274,18 @@ public abstract class SocialRequestLocalServiceBaseImpl
 		return socialRequestPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the social request with the matching UUID and company.
-	 *
-	 * @param uuid the social request's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching social request
-	 * @throws PortalException if a matching social request could not be found
-	 */
 	@Override
-	public SocialRequest getSocialRequestByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return socialRequestPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<SocialRequest> getSocialRequestsByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return socialRequestPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<SocialRequest> getSocialRequestsByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<SocialRequest> orderByComparator) {
+		return socialRequestPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

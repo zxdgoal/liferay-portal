@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.InvalidRepositoryIdException;
 import com.liferay.portal.kernel.repository.Repository;
 import com.liferay.portal.kernel.repository.RepositoryException;
+import com.liferay.portal.kernel.repository.capabilities.TrashCapability;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -41,11 +42,10 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.TempFileUtil;
+import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Lock;
-import com.liferay.portal.repository.liferayrepository.LiferayRepository;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
@@ -53,7 +53,6 @@ import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
-import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.service.base.DLAppServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.service.permission.DLFileEntryPermission;
 import com.liferay.portlet.documentlibrary.service.permission.DLFileShortcutPermission;
@@ -372,25 +371,25 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  groupId the primary key of the group
 	 * @param  folderId the primary key of the folder where the file entry will
 	 *         eventually reside
+	 * @param  folderName the temporary folder's name
 	 * @param  fileName the file's original name
-	 * @param  tempFolderName the temporary folder's name
 	 * @param  file the file's data (optionally <code>null</code>)
 	 * @param  mimeType the file's MIME type
 	 * @return the temporary file entry
 	 * @throws PortalException if the file name was invalid
-	 * @see    com.liferay.portal.kernel.util.TempFileUtil
+	 * @see    com.liferay.portal.kernel.util.TempFileEntryUtil
 	 */
 	@Override
 	public FileEntry addTempFileEntry(
-			long groupId, long folderId, String fileName, String tempFolderName,
+			long groupId, long folderId, String folderName, String fileName,
 			File file, String mimeType)
 		throws PortalException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
-		return TempFileUtil.addTempFile(
-			groupId, getUserId(), fileName, tempFolderName, file, mimeType);
+		return TempFileEntryUtil.addTempFileEntry(
+			groupId, getUserId(), folderName, fileName, file, mimeType);
 	}
 
 	/**
@@ -406,27 +405,26 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  groupId the primary key of the group
 	 * @param  folderId the primary key of the folder where the file entry will
 	 *         eventually reside
+	 * @param  folderName the temporary folder's name
 	 * @param  fileName the file's original name
-	 * @param  tempFolderName the temporary folder's name
 	 * @param  inputStream the file's data
 	 * @param  mimeType the file's MIME type
 	 * @return the temporary file entry
 	 * @throws PortalException if the file name was invalid or if a portal
 	 *         exception occurred
-	 * @see    com.liferay.portal.kernel.util.TempFileUtil
+	 * @see    com.liferay.portal.kernel.util.TempFileEntryUtil
 	 */
 	@Override
 	public FileEntry addTempFileEntry(
-			long groupId, long folderId, String fileName, String tempFolderName,
+			long groupId, long folderId, String folderName, String fileName,
 			InputStream inputStream, String mimeType)
 		throws PortalException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
-		return TempFileUtil.addTempFile(
-			groupId, getUserId(), fileName, tempFolderName, inputStream,
-			mimeType);
+		return TempFileEntryUtil.addTempFileEntry(
+			groupId, getUserId(), folderName, fileName, inputStream, mimeType);
 	}
 
 	/**
@@ -763,11 +761,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		Repository repository = getFileEntryRepository(fileEntryId);
 
 		repository.deleteFileVersion(fileEntryId, version);
-
-		FileEntry fileEntry = repository.getFileEntry(fileEntryId);
-
-		dlAppHelperLocalService.registerDLSyncEventCallback(
-			DLSyncConstants.EVENT_UPDATE, fileEntry);
 	}
 
 	/**
@@ -781,14 +774,25 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public void deleteFolder(long folderId) throws PortalException {
 		Repository repository = getFolderRepository(folderId);
 
+		Folder folder = repository.getFolder(folderId);
+
+		if (repository.isCapabilityProvided(TrashCapability.class)) {
+			TrashCapability trashCapability = repository.getCapability(
+				TrashCapability.class);
+
+			if (trashCapability.isInTrash(folder)) {
+				trashCapability.deleteFolder(folder);
+
+				return;
+			}
+		}
+
 		List<FileEntry> fileEntries = repository.getRepositoryFileEntries(
 			0, folderId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		for (FileEntry fileEntry : fileEntries) {
 			dlAppHelperLocalService.deleteFileEntry(fileEntry);
 		}
-
-		Folder folder = repository.getFolder(folderId);
 
 		repository.deleteFolder(folderId);
 
@@ -811,6 +815,19 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(repositoryId);
 
+		Folder folder = repository.getFolder(parentFolderId, name);
+
+		if (repository.isCapabilityProvided(TrashCapability.class)) {
+			TrashCapability trashCapability = repository.getCapability(
+				TrashCapability.class);
+
+			if (trashCapability.isInTrash(folder)) {
+				trashCapability.deleteFolder(folder);
+
+				return;
+			}
+		}
+
 		repository.deleteFolder(parentFolderId, name);
 	}
 
@@ -820,21 +837,21 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  groupId the primary key of the group
 	 * @param  folderId the primary key of the folder where the file entry was
 	 *         eventually to reside
+	 * @param  folderName the temporary folder's name
 	 * @param  fileName the file's original name
-	 * @param  tempFolderName the temporary folder's name
 	 * @throws PortalException if the file name was invalid
-	 * @see    com.liferay.portal.kernel.util.TempFileUtil
+	 * @see    com.liferay.portal.kernel.util.TempFileEntryUtil
 	 */
 	@Override
 	public void deleteTempFileEntry(
-			long groupId, long folderId, String fileName, String tempFolderName)
+			long groupId, long folderId, String folderName, String fileName)
 		throws PortalException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
-		TempFileUtil.deleteTempFile(
-			groupId, getUserId(), fileName, tempFolderName);
+		TempFileEntryUtil.deleteTempFileEntry(
+			groupId, getUserId(), folderName, fileName);
 	}
 
 	/**
@@ -907,7 +924,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<FileEntry> getFileEntries(
 			long repositoryId, long folderId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -974,7 +991,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<FileEntry> getFileEntries(
 			long repositoryId, long folderId, long fileEntryTypeId, int start,
-			int end, OrderByComparator obc)
+			int end, OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -988,10 +1005,20 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			long repositoryId, long folderId, String[] mimeTypes)
 		throws PortalException {
 
+		return getFileEntries(
+			repositoryId, folderId, mimeTypes, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	@Override
+	public List<FileEntry> getFileEntries(
+			long repositoryId, long folderId, String[] mimeTypes, int start,
+			int end, OrderByComparator<FileEntry> obc)
+		throws PortalException {
+
 		Repository repository = getRepository(repositoryId);
 
-		return repository.getFileEntries(
-			folderId, mimeTypes, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		return repository.getFileEntries(folderId, mimeTypes, start, end, obc);
 	}
 
 	/**
@@ -1103,6 +1130,16 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		return repository.getFileEntriesCount(folderId, fileEntryTypeId);
 	}
 
+	@Override
+	public int getFileEntriesCount(
+			long repositoryId, long folderId, String[] mimeTypes)
+		throws PortalException {
+
+		Repository repository = getRepository(repositoryId);
+
+		return repository.getFileEntriesCount(folderId, mimeTypes);
+	}
+
 	/**
 	 * Returns the file entry with the primary key.
 	 *
@@ -1210,6 +1247,22 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		return dlFileShortcutService.getFileShortcut(fileShortcutId);
+	}
+
+	/**
+	 * Returns the file version with the primary key.
+	 *
+	 * @param  fileVersionId the primary key of the file version
+	 * @return the file version with the primary key
+	 * @throws PortalException if the file version could not be found
+	 */
+	@Override
+	public FileVersion getFileVersion(long fileVersionId)
+		throws PortalException {
+
+		Repository repository = getFileVersionRepository(fileVersionId);
+
+		return repository.getFileVersion(fileVersionId);
 	}
 
 	/**
@@ -1344,7 +1397,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<Folder> getFolders(
 			long repositoryId, long parentFolderId, boolean includeMountFolders,
-			int start, int end, OrderByComparator obc)
+			int start, int end, OrderByComparator<Folder> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -1384,7 +1437,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public List<Folder> getFolders(
 			long repositoryId, long parentFolderId, int status,
 			boolean includeMountFolders, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<Folder> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -1448,7 +1501,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<Folder> getFolders(
 			long repositoryId, long parentFolderId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<Folder> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -1525,7 +1578,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
 			long repositoryId, long folderId, int status,
 			boolean includeMountFolders, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<?> obc)
 		throws PortalException {
 
 		return getFoldersAndFileEntriesAndFileShortcuts(
@@ -1537,7 +1590,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
 			long repositoryId, long folderId, int status, String[] mimeTypes,
 			boolean includeMountFolders, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<?> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -1695,7 +1748,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		return getGroupFileEntries(
 			groupId, userId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, start,
-			end, new RepositoryModelModifiedDateComparator());
+			end, new RepositoryModelModifiedDateComparator<FileEntry>());
 	}
 
 	/**
@@ -1728,7 +1781,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<FileEntry> getGroupFileEntries(
 			long groupId, long userId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		return getGroupFileEntries(
@@ -1769,7 +1822,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		return getGroupFileEntries(
 			groupId, userId, rootFolderId, start, end,
-			new RepositoryModelModifiedDateComparator());
+			new RepositoryModelModifiedDateComparator<FileEntry>());
 	}
 
 	/**
@@ -1804,7 +1857,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<FileEntry> getGroupFileEntries(
 			long groupId, long userId, long rootFolderId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(groupId);
@@ -1816,7 +1869,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<FileEntry> getGroupFileEntries(
 			long groupId, long userId, long rootFolderId, String[] mimeTypes,
-			int status, int start, int end, OrderByComparator obc)
+			int status, int start, int end, OrderByComparator<FileEntry> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(groupId);
@@ -1963,7 +2016,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	@Override
 	public List<Folder> getMountFolders(
 			long repositoryId, long parentFolderId, int start, int end,
-			OrderByComparator obc)
+			OrderByComparator<Folder> obc)
 		throws PortalException {
 
 		Repository repository = getRepository(repositoryId);
@@ -2045,22 +2098,22 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  groupId the primary key of the group
 	 * @param  folderId the primary key of the folder where the file entry will
 	 *         eventually reside
-	 * @param  tempFolderName the temporary folder's name
+	 * @param  folderName the temporary folder's name
 	 * @return the temporary file entry names
 	 * @throws PortalException if the folder was invalid
 	 * @see    #addTempFileEntry(long, long, String, String, File, String)
-	 * @see    com.liferay.portal.kernel.util.TempFileUtil
+	 * @see    com.liferay.portal.kernel.util.TempFileEntryUtil
 	 */
 	@Override
-	public String[] getTempFileEntryNames(
-			long groupId, long folderId, String tempFolderName)
+	public String[] getTempFileNames(
+			long groupId, long folderId, String folderName)
 		throws PortalException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
-		return TempFileUtil.getTempFileEntryNames(
-			groupId, getUserId(), tempFolderName);
+		return TempFileEntryUtil.getTempFileNames(
+			groupId, getUserId(), folderName);
 	}
 
 	/**
@@ -2171,8 +2224,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			FileEntry fileEntry = fromRepository.moveFileEntry(
 				fileEntryId, newFolderId, serviceContext);
 
-			dlAppHelperLocalService.moveFileEntry(fileEntry);
-
 			return fileEntry;
 		}
 
@@ -2200,7 +2251,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getFileEntryRepository(fileEntryId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2211,8 +2262,13 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFileEntryPermission.check(
 			getPermissionChecker(), fileEntry, ActionKeys.UPDATE);
 
-		return dlAppHelperLocalService.moveFileEntryFromTrash(
-			getUserId(), fileEntry, newFolderId, serviceContext);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		Folder destinationFolder = repository.getFolder(newFolderId);
+
+		return trashCapability.moveFileEntryFromTrash(
+			getUserId(), fileEntry, destinationFolder, serviceContext);
 	}
 
 	/**
@@ -2228,7 +2284,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getFileEntryRepository(fileEntryId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2239,8 +2295,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFileEntryPermission.check(
 			getPermissionChecker(), fileEntry, ActionKeys.DELETE);
 
-		return dlAppHelperLocalService.moveFileEntryToTrash(
-			getUserId(), fileEntry);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		return trashCapability.moveFileEntryToTrash(getUserId(), fileEntry);
 	}
 
 	/**
@@ -2333,8 +2391,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 				serviceContext);
 		}
 
-		dlAppHelperLocalService.moveFolder(folder);
-
 		return folder;
 	}
 
@@ -2355,7 +2411,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getFolderRepository(folderId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2366,8 +2422,13 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFolderPermission.check(
 			getPermissionChecker(), folder, ActionKeys.UPDATE);
 
-		return dlAppHelperLocalService.moveFolderFromTrash(
-			getUserId(), folder, parentFolderId, serviceContext);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		Folder destinationFolder = repository.getFolder(parentFolderId);
+
+		return trashCapability.moveFolderFromTrash(
+			getUserId(), folder, destinationFolder, serviceContext);
 	}
 
 	/**
@@ -2381,7 +2442,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public Folder moveFolderToTrash(long folderId) throws PortalException {
 		Repository repository = getFolderRepository(folderId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2392,7 +2453,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFolderPermission.check(
 			getPermissionChecker(), folder, ActionKeys.DELETE);
 
-		return dlAppHelperLocalService.moveFolderToTrash(getUserId(), folder);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		return trashCapability.moveFolderToTrash(getUserId(), folder);
 	}
 
 	/**
@@ -2463,7 +2527,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getFileEntryRepository(fileEntryId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2474,8 +2538,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFileEntryPermission.check(
 			getPermissionChecker(), fileEntry, ActionKeys.DELETE);
 
-		dlAppHelperLocalService.restoreFileEntryFromTrash(
-			getUserId(), fileEntry);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		trashCapability.restoreFileEntryFromTrash(getUserId(), fileEntry);
 	}
 
 	/**
@@ -2507,7 +2573,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public void restoreFolderFromTrash(long folderId) throws PortalException {
 		Repository repository = getFolderRepository(folderId);
 
-		if (!(repository instanceof LiferayRepository)) {
+		if (!repository.isCapabilityProvided(TrashCapability.class)) {
 			throw new InvalidRepositoryException(
 				"Repository " + repository.getRepositoryId() +
 					" does not support trash operations");
@@ -2518,7 +2584,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFolderPermission.check(
 			getPermissionChecker(), folder, ActionKeys.DELETE);
 
-		dlAppHelperLocalService.restoreFolderFromTrash(getUserId(), folder);
+		TrashCapability trashCapability = repository.getCapability(
+			TrashCapability.class);
+
+		trashCapability.restoreFolderFromTrash(getUserId(), folder);
 	}
 
 	/**

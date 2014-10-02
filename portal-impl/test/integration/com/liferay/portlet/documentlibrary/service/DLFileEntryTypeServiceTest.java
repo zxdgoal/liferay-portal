@@ -30,8 +30,8 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
@@ -108,7 +108,7 @@ public class DLFileEntryTypeServiceTest {
 		byte[] testFileBytes = FileUtil.getBytes(
 			getClass(), _TEST_DDM_STRUCTURE);
 
-		serviceContext.setAttribute("xsd", new String(testFileBytes));
+		serviceContext.setAttribute("definition", new String(testFileBytes));
 
 		User user = TestPropsValues.getUser();
 

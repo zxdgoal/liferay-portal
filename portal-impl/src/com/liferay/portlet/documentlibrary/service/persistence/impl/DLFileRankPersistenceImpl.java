@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.documentlibrary.NoSuchFileRankException;
@@ -43,7 +42,6 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLFileRankPersist
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +62,7 @@ import java.util.Set;
  * @see DLFileRankUtil
  * @generated
  */
+@ProviderType
 public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	implements DLFileRankPersistence {
 	/*
@@ -149,7 +148,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public List<DLFileRank> findByUserId(long userId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -255,7 +254,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByUserId_First(long userId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByUserId_First(userId, orderByComparator);
 
 		if (dlFileRank != null) {
@@ -283,7 +283,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		List<DLFileRank> list = findByUserId(userId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -303,7 +303,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByUserId_Last(long userId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByUserId_Last(userId, orderByComparator);
 
 		if (dlFileRank != null) {
@@ -331,7 +332,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -359,7 +360,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank[] findByUserId_PrevAndNext(long fileRankId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = findByPrimaryKey(fileRankId);
 
 		Session session = null;
@@ -389,7 +391,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 	protected DLFileRank getByUserId_PrevAndNext(Session session,
 		DLFileRank dlFileRank, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileRank> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -625,7 +627,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public List<DLFileRank> findByFileEntryId(long fileEntryId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileRank> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -731,7 +733,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByFileEntryId_First(fileEntryId,
 				orderByComparator);
 
@@ -760,7 +763,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		List<DLFileRank> list = findByFileEntryId(fileEntryId, 0, 1,
 				orderByComparator);
 
@@ -781,7 +784,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByFileEntryId_Last(fileEntryId,
 				orderByComparator);
 
@@ -810,7 +814,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		int count = countByFileEntryId(fileEntryId);
 
 		if (count == 0) {
@@ -838,7 +842,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank[] findByFileEntryId_PrevAndNext(long fileRankId,
-		long fileEntryId, OrderByComparator orderByComparator)
+		long fileEntryId, OrderByComparator<DLFileRank> orderByComparator)
 		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = findByPrimaryKey(fileRankId);
 
@@ -869,7 +873,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 	protected DLFileRank getByFileEntryId_PrevAndNext(Session session,
 		DLFileRank dlFileRank, long fileEntryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileRank> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1107,7 +1111,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public List<DLFileRank> findByG_U(long groupId, long userId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileRank> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1223,7 +1227,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByG_U_First(groupId, userId,
 				orderByComparator);
 
@@ -1256,7 +1261,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		List<DLFileRank> list = findByG_U(groupId, userId, 0, 1,
 				orderByComparator);
 
@@ -1278,7 +1283,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchFileRankException {
+		OrderByComparator<DLFileRank> orderByComparator)
+		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByG_U_Last(groupId, userId,
 				orderByComparator);
 
@@ -1311,7 +1317,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		int count = countByG_U(groupId, userId);
 
 		if (count == 0) {
@@ -1340,7 +1346,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank[] findByG_U_PrevAndNext(long fileRankId, long groupId,
-		long userId, OrderByComparator orderByComparator)
+		long userId, OrderByComparator<DLFileRank> orderByComparator)
 		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = findByPrimaryKey(fileRankId);
 
@@ -1371,7 +1377,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 	protected DLFileRank getByG_U_PrevAndNext(Session session,
 		DLFileRank dlFileRank, long groupId, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileRank> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1632,7 +1638,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public List<DLFileRank> findByG_U_A(long groupId, long userId,
-		boolean active, int start, int end, OrderByComparator orderByComparator) {
+		boolean active, int start, int end,
+		OrderByComparator<DLFileRank> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1754,7 +1761,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByG_U_A_First(long groupId, long userId,
-		boolean active, OrderByComparator orderByComparator)
+		boolean active, OrderByComparator<DLFileRank> orderByComparator)
 		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByG_U_A_First(groupId, userId, active,
 				orderByComparator);
@@ -1792,7 +1799,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByG_U_A_First(long groupId, long userId,
-		boolean active, OrderByComparator orderByComparator) {
+		boolean active, OrderByComparator<DLFileRank> orderByComparator) {
 		List<DLFileRank> list = findByG_U_A(groupId, userId, active, 0, 1,
 				orderByComparator);
 
@@ -1815,7 +1822,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank findByG_U_A_Last(long groupId, long userId,
-		boolean active, OrderByComparator orderByComparator)
+		boolean active, OrderByComparator<DLFileRank> orderByComparator)
 		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = fetchByG_U_A_Last(groupId, userId, active,
 				orderByComparator);
@@ -1853,7 +1860,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank fetchByG_U_A_Last(long groupId, long userId,
-		boolean active, OrderByComparator orderByComparator) {
+		boolean active, OrderByComparator<DLFileRank> orderByComparator) {
 		int count = countByG_U_A(groupId, userId, active);
 
 		if (count == 0) {
@@ -1883,7 +1890,8 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public DLFileRank[] findByG_U_A_PrevAndNext(long fileRankId, long groupId,
-		long userId, boolean active, OrderByComparator orderByComparator)
+		long userId, boolean active,
+		OrderByComparator<DLFileRank> orderByComparator)
 		throws NoSuchFileRankException {
 		DLFileRank dlFileRank = findByPrimaryKey(fileRankId);
 
@@ -1914,7 +1922,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 	protected DLFileRank getByG_U_A_PrevAndNext(Session session,
 		DLFileRank dlFileRank, long groupId, long userId, boolean active,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileRank> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2240,6 +2248,13 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 						finderArgs, list);
 				}
 				else {
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"DLFileRankPersistenceImpl.fetchByC_U_F(long, long, long, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
 					DLFileRank dlFileRank = list.get(0);
 
 					result = dlFileRank;
@@ -2978,7 +2993,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 */
 	@Override
 	public List<DLFileRank> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileRank> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3114,25 +3129,6 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	 * Initializes the document library file rank persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.documentlibrary.model.DLFileRank")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DLFileRank>> listenersList = new ArrayList<ModelListener<DLFileRank>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DLFileRank>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3151,11 +3147,11 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLFileRank exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLFileRank exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DLFileRankPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DLFileRankPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"active"
 			});
-	private static DLFileRank _nullDLFileRank = new DLFileRankImpl() {
+	private static final DLFileRank _nullDLFileRank = new DLFileRankImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3167,7 +3163,7 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 			}
 		};
 
-	private static CacheModel<DLFileRank> _nullDLFileRankCacheModel = new CacheModel<DLFileRank>() {
+	private static final CacheModel<DLFileRank> _nullDLFileRankCacheModel = new CacheModel<DLFileRank>() {
 			@Override
 			public DLFileRank toEntityModel() {
 				return _nullDLFileRank;

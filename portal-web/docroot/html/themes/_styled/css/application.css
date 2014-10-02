@@ -81,6 +81,39 @@
 	z-index: 1110 !important;
 }
 
+/* ---------- List group ---------- */
+
+.nav.list-group {
+	li > a {
+		&:focus, &:hover {
+			background-color: #E5F5FC;
+			color: #009AE5;
+		}
+	}
+
+	> .active {
+		border-width: 1px 0 0 0;
+
+		> a {
+			&, &:focus, &:hover {
+				background-color: #60BFEF;
+				border: 1px solid #60BFEF;
+				color: #FFF;
+			}
+		}
+	}
+
+	.list-group-item {
+		padding: 0;
+
+		&.nav-header {
+			background-color: #F3F3F3;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+	}
+}
+
 /* ---------- Portal tool tips ---------- */
 
 .tooltip {
@@ -289,6 +322,7 @@
 	font-weight: bold;
 
 	.category-portlets & {
+		background-color: #00A2EA;
 		color: #FFF;
 	}
 }
@@ -311,7 +345,7 @@
 	vertical-align: middle;
 }
 
-.aui .lfr-url-error {
+.lfr-url-error {
 	display: inline-block;
 	white-space: normal;
 
@@ -409,21 +443,40 @@
 
 /* ---------- Modals ---------- */
 
-.aui {
-	.modal {
-		display: block;
-		margin: 0;
-		overflow: hidden;
-		position: fixed;
-	}
-
-	.modal-body {
+.dialog-iframe-popup {
+	> #main-content, > #wrapper {
+		bottom: 0;
+		left: 0;
 		overflow: auto;
+		padding: 20px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		-webkit-overflow-scrolling: touch;
 	}
+}
 
-	.modal-hidden {
-		display: none;
+.modal {
+	display: block;
+	margin: 0;
+	overflow: hidden;
+	position: fixed;
+}
+
+.modal-body {
+	overflow: auto;
+
+	&.dialog-iframe-bd {
+		overflow: hidden;
 	}
+}
+
+.modal-hidden {
+	display: none;
+}
+
+.modal-open .modal {
+	overflow: hidden;
 }
 
 /* ---------- Loading mask ---------- */
@@ -600,31 +653,33 @@
 
 /* ---------- CKEditor menu ---------- */
 
-.aui {
-	.cke_dialog .cke_dialog_ui_input_text {
-		height: auto;
+.cke_dialog .cke_dialog_ui_input_text {
+	height: auto;
+}
+
+.cke_editable_inline a {
+	cursor: pointer;
+}
+
+.cke_panel.cke_combopanel {
+	width: 220px;
+}
+
+.cke_panel_block {
+	.cke_panel_grouptitle {
+		font-size: 20px;
+		line-height: 20px;
+		margin-top: 0;
 	}
 
-	.cke_panel.cke_combopanel {
-		width: 220px;
-	}
+	.cke_panel_list {
+		margin-left: 0;
 
-	.cke_panel_block {
-		.cke_panel_grouptitle {
-			font-size: 20px;
-			line-height: 20px;
-			margin-top: 0;
-		}
+		.cke_panel_listItem {
+			line-height: initial;
 
-		.cke_panel_list {
-			margin-left: 0;
-
-			.cke_panel_listItem {
-				line-height: initial;
-
-				a:hover {
-					text-decoration: none;
-				}
+			a:hover {
+				text-decoration: none;
 			}
 		}
 	}
@@ -632,7 +687,7 @@
 
 /* ---------- HTML editor ---------- */
 
-body.html-editor {
+.html-editor.portlet {
 	background: #FFF;
 	color: #000;
 	line-height: 1;
@@ -640,7 +695,7 @@ body.html-editor {
 }
 
 .html-editor.portlet-message-boards {
-	@include hyphenation;
+	@include hyphens;
 
 	word-wrap: break-word;
 
@@ -726,24 +781,27 @@ body.html-editor {
 	.lfr-portlet-title-editable-content {
 		padding: 0;
 
-		.combobox-content {
-			.field-content .field-input-text {
-				display: block;
-				margin-bottom: 0;
-			}
+		.field-input {
+			margin-bottom: 0;
+		}
 
-			.field-label.textfield-label {
-				display: none;
-			}
+		.textfield-label {
+			display: none;
+		}
 
-			.toolbar-content {
-				margin-top: 0;
-				vertical-align: top;
+		.btn-toolbar-content {
+			display: inline-block;
+		}
 
-				.btn-group {
-					margin-top: 0;
-				}
-			}
+		.btn-group {
+			margin-top: 0;
+		}
+
+		.btn {
+			display: inline-block;
+			float: none;
+			margin-top: 0;
+			width: auto;
 		}
 	}
 }
@@ -797,32 +855,8 @@ body.html-editor {
 	}
 }
 
-/* LPS-45287 */
+/* LPS-44925 */
 
-.ios.mobile {
-	.dialog-iframe-modal {
-		height: auto !important;
-		position: absolute !important;
-		top: 10px !important;
-
-		&, .dialog-iframe-bd, .dialog-iframe-node, .modal-content {
-			height: auto !important;
-			overflow: visible;
-		}
-
-		.dialog-iframe-bd {
-			max-height: none !important;
-		}
-
-		.dialog-iframe-node {
-			min-width: 100%;
-			width: 100px;
-		}
-	}
-
-	&.dialog-iframe-root-node {
-		&, .dialog-iframe-popup {
-			overflow: auto;
-		}
-	}
+.modal-content .dialog-iframe-node {
+	border: 1px solid transparent;
 }

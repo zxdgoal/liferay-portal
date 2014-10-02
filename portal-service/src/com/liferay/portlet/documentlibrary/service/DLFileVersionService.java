@@ -36,9 +36,9 @@ import com.liferay.portal.service.BaseService;
  * @see com.liferay.portlet.documentlibrary.service.impl.DLFileVersionServiceImpl
  * @generated
  */
-@ProviderType
 @AccessControlled
 @JSONWebService
+@ProviderType
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
 public interface DLFileVersionService extends BaseService {
@@ -54,13 +54,6 @@ public interface DLFileVersionService extends BaseService {
 	* @return the Spring bean ID for this bean
 	*/
 	public java.lang.String getBeanIdentifier();
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion getFileVersion(
@@ -80,4 +73,11 @@ public interface DLFileVersionService extends BaseService {
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion getLatestFileVersion(
 		long fileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException;
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier);
 }

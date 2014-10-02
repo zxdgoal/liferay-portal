@@ -15,7 +15,6 @@
 package com.liferay.portal.service;
 
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
@@ -30,8 +29,8 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.impl.BackgroundTaskImpl;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portal.util.test.UserTestUtil;
@@ -184,9 +183,7 @@ public class BackgroundTaskLocalServiceTest {
 
 		Map<String, Serializable> taskContextMap = getTaskContextMap();
 
-		String taskContext = JSONFactoryUtil.serialize(taskContextMap);
-
-		backgroundTaskImpl.setTaskContext(taskContext);
+		backgroundTaskImpl.setTaskContextMap(taskContextMap);
 
 		BackgroundTask backgroundTask =
 			BackgroundTaskLocalServiceUtil.addBackgroundTask(

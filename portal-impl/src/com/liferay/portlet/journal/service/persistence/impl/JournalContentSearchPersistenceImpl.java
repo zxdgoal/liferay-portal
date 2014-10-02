@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.journal.NoSuchContentSearchException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.journal.service.persistence.JournalContentSearchPersi
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see JournalContentSearchUtil
  * @generated
  */
+@ProviderType
 public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<JournalContentSearch>
 	implements JournalContentSearchPersistence {
 	/*
@@ -155,7 +153,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public List<JournalContentSearch> findByPortletId(String portletId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -276,7 +275,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByPortletId_First(String portletId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByPortletId_First(portletId,
 				orderByComparator);
@@ -306,7 +305,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByPortletId_First(String portletId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByPortletId(portletId, 0, 1,
 				orderByComparator);
 
@@ -327,7 +326,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByPortletId_Last(String portletId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByPortletId_Last(portletId,
 				orderByComparator);
@@ -357,7 +356,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByPortletId_Last(String portletId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByPortletId(portletId);
 
 		if (count == 0) {
@@ -386,7 +385,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch[] findByPortletId_PrevAndNext(
 		long contentSearchId, String portletId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -417,7 +416,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 	protected JournalContentSearch getByPortletId_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, String portletId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -684,7 +684,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public List<JournalContentSearch> findByArticleId(String articleId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -805,7 +806,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByArticleId_First(String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByArticleId_First(articleId,
 				orderByComparator);
@@ -835,7 +836,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByArticleId_First(String articleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByArticleId(articleId, 0, 1,
 				orderByComparator);
 
@@ -856,7 +857,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByArticleId_Last(String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByArticleId_Last(articleId,
 				orderByComparator);
@@ -886,7 +887,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByArticleId_Last(String articleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByArticleId(articleId);
 
 		if (count == 0) {
@@ -915,7 +916,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch[] findByArticleId_PrevAndNext(
 		long contentSearchId, String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -946,7 +947,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 	protected JournalContentSearch getByArticleId_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, String articleId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1217,7 +1219,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public List<JournalContentSearch> findByG_P(long groupId,
 		boolean privateLayout, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1333,7 +1335,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByG_P_First(long groupId,
-		boolean privateLayout, OrderByComparator orderByComparator)
+		boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_First(groupId,
 				privateLayout, orderByComparator);
@@ -1367,7 +1370,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByG_P_First(long groupId,
-		boolean privateLayout, OrderByComparator orderByComparator) {
+		boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByG_P(groupId, privateLayout, 0,
 				1, orderByComparator);
 
@@ -1389,7 +1393,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByG_P_Last(long groupId,
-		boolean privateLayout, OrderByComparator orderByComparator)
+		boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_Last(groupId,
 				privateLayout, orderByComparator);
@@ -1423,7 +1428,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByG_P_Last(long groupId,
-		boolean privateLayout, OrderByComparator orderByComparator) {
+		boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByG_P(groupId, privateLayout);
 
 		if (count == 0) {
@@ -1452,7 +1458,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch[] findByG_P_PrevAndNext(long contentSearchId,
-		long groupId, boolean privateLayout, OrderByComparator orderByComparator)
+		long groupId, boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -1483,7 +1490,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 	protected JournalContentSearch getByG_P_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, long groupId,
-		boolean privateLayout, OrderByComparator orderByComparator,
+		boolean privateLayout,
+		OrderByComparator<JournalContentSearch> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -1734,7 +1742,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public List<JournalContentSearch> findByG_A(long groupId, String articleId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1865,7 +1874,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByG_A_First(long groupId, String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_A_First(groupId,
 				articleId, orderByComparator);
@@ -1899,7 +1908,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByG_A_First(long groupId,
-		String articleId, OrderByComparator orderByComparator) {
+		String articleId,
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByG_A(groupId, articleId, 0, 1,
 				orderByComparator);
 
@@ -1921,7 +1931,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch findByG_A_Last(long groupId, String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_A_Last(groupId,
 				articleId, orderByComparator);
@@ -1955,7 +1965,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch fetchByG_A_Last(long groupId, String articleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByG_A(groupId, articleId);
 
 		if (count == 0) {
@@ -1984,7 +1994,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public JournalContentSearch[] findByG_A_PrevAndNext(long contentSearchId,
-		long groupId, String articleId, OrderByComparator orderByComparator)
+		long groupId, String articleId,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -2015,7 +2026,9 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 	protected JournalContentSearch getByG_A_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, long groupId,
-		String articleId, OrderByComparator orderByComparator, boolean previous) {
+		String articleId,
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2308,7 +2321,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public List<JournalContentSearch> findByG_P_L(long groupId,
 		boolean privateLayout, long layoutId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2431,7 +2444,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_L_First(long groupId,
 		boolean privateLayout, long layoutId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_L_First(groupId,
 				privateLayout, layoutId, orderByComparator);
@@ -2470,7 +2483,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_L_First(long groupId,
 		boolean privateLayout, long layoutId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByG_P_L(groupId, privateLayout,
 				layoutId, 0, 1, orderByComparator);
 
@@ -2494,7 +2507,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_L_Last(long groupId,
 		boolean privateLayout, long layoutId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_L_Last(groupId,
 				privateLayout, layoutId, orderByComparator);
@@ -2533,7 +2546,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_L_Last(long groupId,
 		boolean privateLayout, long layoutId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByG_P_L(groupId, privateLayout, layoutId);
 
 		if (count == 0) {
@@ -2564,7 +2577,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch[] findByG_P_L_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
-		long layoutId, OrderByComparator orderByComparator)
+		long layoutId, OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -2596,7 +2609,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	protected JournalContentSearch getByG_P_L_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, long groupId,
 		boolean privateLayout, long layoutId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2871,7 +2885,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public List<JournalContentSearch> findByG_P_A(long groupId,
 		boolean privateLayout, String articleId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3009,7 +3023,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_A_First(long groupId,
 		boolean privateLayout, String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_A_First(groupId,
 				privateLayout, articleId, orderByComparator);
@@ -3048,7 +3062,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_A_First(long groupId,
 		boolean privateLayout, String articleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByG_P_A(groupId, privateLayout,
 				articleId, 0, 1, orderByComparator);
 
@@ -3072,7 +3086,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_A_Last(long groupId,
 		boolean privateLayout, String articleId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_A_Last(groupId,
 				privateLayout, articleId, orderByComparator);
@@ -3111,7 +3125,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_A_Last(long groupId,
 		boolean privateLayout, String articleId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByG_P_A(groupId, privateLayout, articleId);
 
 		if (count == 0) {
@@ -3142,7 +3156,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch[] findByG_P_A_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
-		String articleId, OrderByComparator orderByComparator)
+		String articleId,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -3174,7 +3189,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	protected JournalContentSearch getByG_P_A_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, long groupId,
 		boolean privateLayout, String articleId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3488,7 +3504,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public List<JournalContentSearch> findByG_P_L_P(long groupId,
 		boolean privateLayout, long layoutId, String portletId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3634,7 +3650,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_L_P_First(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_L_P_First(groupId,
 				privateLayout, layoutId, portletId, orderByComparator);
@@ -3677,7 +3693,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_L_P_First(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		List<JournalContentSearch> list = findByG_P_L_P(groupId, privateLayout,
 				layoutId, portletId, 0, 1, orderByComparator);
 
@@ -3702,7 +3718,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch findByG_P_L_P_Last(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = fetchByG_P_L_P_Last(groupId,
 				privateLayout, layoutId, portletId, orderByComparator);
@@ -3745,7 +3761,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch fetchByG_P_L_P_Last(long groupId,
 		boolean privateLayout, long layoutId, String portletId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		int count = countByG_P_L_P(groupId, privateLayout, layoutId, portletId);
 
 		if (count == 0) {
@@ -3777,7 +3793,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	@Override
 	public JournalContentSearch[] findByG_P_L_P_PrevAndNext(
 		long contentSearchId, long groupId, boolean privateLayout,
-		long layoutId, String portletId, OrderByComparator orderByComparator)
+		long layoutId, String portletId,
+		OrderByComparator<JournalContentSearch> orderByComparator)
 		throws NoSuchContentSearchException {
 		JournalContentSearch journalContentSearch = findByPrimaryKey(contentSearchId);
 
@@ -3811,7 +3828,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	protected JournalContentSearch getByG_P_L_P_PrevAndNext(Session session,
 		JournalContentSearch journalContentSearch, long groupId,
 		boolean privateLayout, long layoutId, String portletId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalContentSearch> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5141,7 +5159,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	@Override
 	public List<JournalContentSearch> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalContentSearch> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5272,25 +5290,6 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 * Initializes the journal content search persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.journal.model.JournalContentSearch")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<JournalContentSearch>> listenersList = new ArrayList<ModelListener<JournalContentSearch>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<JournalContentSearch>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -5309,8 +5308,8 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No JournalContentSearch exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No JournalContentSearch exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(JournalContentSearchPersistenceImpl.class);
-	private static JournalContentSearch _nullJournalContentSearch = new JournalContentSearchImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(JournalContentSearchPersistenceImpl.class);
+	private static final JournalContentSearch _nullJournalContentSearch = new JournalContentSearchImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -5322,7 +5321,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 			}
 		};
 
-	private static CacheModel<JournalContentSearch> _nullJournalContentSearchCacheModel =
+	private static final CacheModel<JournalContentSearch> _nullJournalContentSearchCacheModel =
 		new CacheModel<JournalContentSearch>() {
 			@Override
 			public JournalContentSearch toEntityModel() {

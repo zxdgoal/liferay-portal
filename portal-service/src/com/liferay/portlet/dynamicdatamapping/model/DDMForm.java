@@ -16,11 +16,12 @@ package com.liferay.portlet.dynamicdatamapping.model;
 
 import java.io.Serializable;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Pablo Carvalho
@@ -31,7 +32,7 @@ public class DDMForm implements Serializable {
 		_availableLocales.add(locale);
 	}
 
-	public List<Locale> getAvailableLocales() {
+	public Set<Locale> getAvailableLocales() {
 		return _availableLocales;
 	}
 
@@ -43,7 +44,7 @@ public class DDMForm implements Serializable {
 		boolean includeNestedDDMFormFields) {
 
 		Map<String, DDMFormField> ddmFormFieldsMap =
-			new HashMap<String, DDMFormField>();
+			new LinkedHashMap<String, DDMFormField>();
 
 		for (DDMFormField ddmFormField : _ddmFormFields) {
 			ddmFormFieldsMap.put(ddmFormField.getName(), ddmFormField);
@@ -61,11 +62,15 @@ public class DDMForm implements Serializable {
 		return _defaultLocale;
 	}
 
-	public void setAvailableLocales(List<Locale> availableLocales) {
+	public void setAvailableLocales(Set<Locale> availableLocales) {
 		_availableLocales = availableLocales;
 	}
 
 	public void setDDMFormFields(List<DDMFormField> ddmFormFields) {
+		for (DDMFormField ddmFormField : ddmFormFields) {
+			ddmFormField.setDDMForm(this);
+		}
+
 		_ddmFormFields = ddmFormFields;
 	}
 
@@ -73,8 +78,8 @@ public class DDMForm implements Serializable {
 		_defaultLocale = defaultLocale;
 	}
 
-	private List<Locale> _availableLocales;
-	private List<DDMFormField> _ddmFormFields = new LinkedList<DDMFormField>();
+	private Set<Locale> _availableLocales;
+	private List<DDMFormField> _ddmFormFields = new ArrayList<DDMFormField>();
 	private Locale _defaultLocale;
 
 }

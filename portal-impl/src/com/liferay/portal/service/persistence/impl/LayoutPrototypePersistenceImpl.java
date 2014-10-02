@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchLayoutPrototypeException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -26,19 +28,15 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.LayoutPrototypeImpl;
 import com.liferay.portal.model.impl.LayoutPrototypeModelImpl;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -46,7 +44,6 @@ import com.liferay.portal.service.persistence.LayoutPrototypePersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +64,7 @@ import java.util.Set;
  * @see LayoutPrototypeUtil
  * @generated
  */
+@ProviderType
 public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPrototype>
 	implements LayoutPrototypePersistence {
 	/*
@@ -154,7 +152,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -274,7 +272,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByUuid_First(uuid,
 				orderByComparator);
@@ -304,7 +302,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		List<LayoutPrototype> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -324,7 +322,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByUuid_Last(uuid,
 				orderByComparator);
@@ -354,7 +352,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -382,7 +380,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype[] findByUuid_PrevAndNext(long layoutPrototypeId,
-		String uuid, OrderByComparator orderByComparator)
+		String uuid, OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = findByPrimaryKey(layoutPrototypeId);
 
@@ -413,7 +411,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype getByUuid_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -574,7 +572,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> filterFindByUuid(String uuid, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<LayoutPrototype> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByUuid(uuid, start, end, orderByComparator);
 		}
@@ -679,7 +677,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype[] filterFindByUuid_PrevAndNext(
-		long layoutPrototypeId, String uuid, OrderByComparator orderByComparator)
+		long layoutPrototypeId, String uuid,
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByUuid_PrevAndNext(layoutPrototypeId, uuid,
@@ -715,7 +714,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype filterGetByUuid_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1085,7 +1084,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<LayoutPrototype> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1215,7 +1214,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
@@ -1249,7 +1248,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		List<LayoutPrototype> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1271,7 +1270,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
@@ -1305,7 +1304,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1334,7 +1333,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype[] findByUuid_C_PrevAndNext(long layoutPrototypeId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = findByPrimaryKey(layoutPrototypeId);
 
@@ -1365,7 +1365,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype getByUuid_C_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1534,7 +1534,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> filterFindByUuid_C(String uuid,
-		long companyId, int start, int end, OrderByComparator orderByComparator) {
+		long companyId, int start, int end,
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByUuid_C(uuid, companyId, start, end, orderByComparator);
 		}
@@ -1645,7 +1646,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	@Override
 	public LayoutPrototype[] filterFindByUuid_C_PrevAndNext(
 		long layoutPrototypeId, String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByUuid_C_PrevAndNext(layoutPrototypeId, uuid, companyId,
@@ -1681,7 +1682,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype filterGetByUuid_C_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2064,7 +2065,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<LayoutPrototype> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2170,7 +2171,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByCompanyId_First(companyId,
 				orderByComparator);
@@ -2200,7 +2201,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		List<LayoutPrototype> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -2221,7 +2222,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByCompanyId_Last(companyId,
 				orderByComparator);
@@ -2251,7 +2252,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -2280,7 +2281,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	@Override
 	public LayoutPrototype[] findByCompanyId_PrevAndNext(
 		long layoutPrototypeId, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = findByPrimaryKey(layoutPrototypeId);
 
@@ -2311,7 +2312,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype getByCompanyId_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2459,7 +2460,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> filterFindByCompanyId(long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<LayoutPrototype> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByCompanyId(companyId, start, end, orderByComparator);
 		}
@@ -2551,7 +2552,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	@Override
 	public LayoutPrototype[] filterFindByCompanyId_PrevAndNext(
 		long layoutPrototypeId, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByCompanyId_PrevAndNext(layoutPrototypeId, companyId,
@@ -2587,7 +2588,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype filterGetByCompanyId_PrevAndNext(
 		Session session, LayoutPrototype layoutPrototype, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2909,7 +2910,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> findByC_A(long companyId, boolean active,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<LayoutPrototype> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3025,7 +3026,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByC_A_First(long companyId, boolean active,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByC_A_First(companyId, active,
 				orderByComparator);
@@ -3059,7 +3060,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByC_A_First(long companyId, boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		List<LayoutPrototype> list = findByC_A(companyId, active, 0, 1,
 				orderByComparator);
 
@@ -3081,7 +3082,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype findByC_A_Last(long companyId, boolean active,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = fetchByC_A_Last(companyId, active,
 				orderByComparator);
@@ -3115,7 +3116,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype fetchByC_A_Last(long companyId, boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		int count = countByC_A(companyId, active);
 
 		if (count == 0) {
@@ -3144,7 +3145,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public LayoutPrototype[] findByC_A_PrevAndNext(long layoutPrototypeId,
-		long companyId, boolean active, OrderByComparator orderByComparator)
+		long companyId, boolean active,
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		LayoutPrototype layoutPrototype = findByPrimaryKey(layoutPrototypeId);
 
@@ -3175,7 +3177,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype getByC_A_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, long companyId, boolean active,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3330,7 +3332,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> filterFindByC_A(long companyId,
-		boolean active, int start, int end, OrderByComparator orderByComparator) {
+		boolean active, int start, int end,
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByC_A(companyId, active, start, end, orderByComparator);
 		}
@@ -3427,7 +3430,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	@Override
 	public LayoutPrototype[] filterFindByC_A_PrevAndNext(
 		long layoutPrototypeId, long companyId, boolean active,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutPrototype> orderByComparator)
 		throws NoSuchLayoutPrototypeException {
 		if (!InlineSQLHelperUtil.isEnabled()) {
 			return findByC_A_PrevAndNext(layoutPrototypeId, companyId, active,
@@ -3463,7 +3466,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 	protected LayoutPrototype filterGetByC_A_PrevAndNext(Session session,
 		LayoutPrototype layoutPrototype, long companyId, boolean active,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutPrototype> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4307,7 +4310,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 */
 	@Override
 	public List<LayoutPrototype> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutPrototype> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4443,25 +4446,6 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	 * Initializes the layout prototype persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.LayoutPrototype")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<LayoutPrototype>> listenersList = new ArrayList<ModelListener<LayoutPrototype>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<LayoutPrototype>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -4490,11 +4474,11 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No LayoutPrototype exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No LayoutPrototype exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(LayoutPrototypePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(LayoutPrototypePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "settings", "active"
 			});
-	private static LayoutPrototype _nullLayoutPrototype = new LayoutPrototypeImpl() {
+	private static final LayoutPrototype _nullLayoutPrototype = new LayoutPrototypeImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -4506,7 +4490,8 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 			}
 		};
 
-	private static CacheModel<LayoutPrototype> _nullLayoutPrototypeCacheModel = new NullCacheModel();
+	private static final CacheModel<LayoutPrototype> _nullLayoutPrototypeCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<LayoutPrototype>,
 		MVCCModel {

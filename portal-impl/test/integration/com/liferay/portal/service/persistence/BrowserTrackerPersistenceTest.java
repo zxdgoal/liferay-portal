@@ -15,7 +15,6 @@
 package com.liferay.portal.service.persistence;
 
 import com.liferay.portal.NoSuchBrowserTrackerException;
-import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -24,75 +23,66 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.model.BrowserTracker;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.BrowserTrackerModelImpl;
 import com.liferay.portal.service.BrowserTrackerLocalServiceUtil;
-import com.liferay.portal.service.persistence.BasePersistence;
-import com.liferay.portal.service.persistence.PersistenceExecutionTestListener;
-import com.liferay.portal.test.LiferayPersistenceIntegrationJUnitTestRunner;
-import com.liferay.portal.test.persistence.test.TransactionalPersistenceAdvice;
+import com.liferay.portal.test.TransactionalTestRule;
+import com.liferay.portal.test.runners.PersistenceIntegrationJUnitTestRunner;
+import com.liferay.portal.tools.DBUpgrader;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.test.RandomTestUtil;
 
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Brian Wing Shun Chan
+ * @generated
  */
-@ExecutionTestListeners(listeners =  {
-	PersistenceExecutionTestListener.class})
-@RunWith(LiferayPersistenceIntegrationJUnitTestRunner.class)
+@RunWith(PersistenceIntegrationJUnitTestRunner.class)
 public class BrowserTrackerPersistenceTest {
-	@Before
-	public void setUp() {
-		_modelListeners = _persistence.getListeners();
+	@ClassRule
+	public static TransactionalTestRule transactionalTestRule = new TransactionalTestRule(Propagation.REQUIRED);
 
-		for (ModelListener<BrowserTracker> modelListener : _modelListeners) {
-			_persistence.unregisterListener(modelListener);
+	@BeforeClass
+	public static void setupClass() throws TemplateException {
+		try {
+			DBUpgrader.upgrade();
 		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		TemplateManagerUtil.init();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Map<Serializable, BasePersistence<?>> basePersistences = _transactionalPersistenceAdvice.getBasePersistences();
+		Iterator<BrowserTracker> iterator = _browserTrackers.iterator();
 
-		Set<Serializable> primaryKeys = basePersistences.keySet();
+		while (iterator.hasNext()) {
+			_persistence.remove(iterator.next());
 
-		for (Serializable primaryKey : primaryKeys) {
-			BasePersistence<?> basePersistence = basePersistences.get(primaryKey);
-
-			try {
-				basePersistence.remove(primaryKey);
-			}
-			catch (Exception e) {
-				if (_log.isDebugEnabled()) {
-					_log.debug("The model with primary key " + primaryKey +
-						" was already deleted");
-				}
-			}
-		}
-
-		_transactionalPersistenceAdvice.reset();
-
-		for (ModelListener<BrowserTracker> modelListener : _modelListeners) {
-			_persistence.registerListener(modelListener);
+			iterator.remove();
 		}
 	}
 
@@ -135,7 +125,7 @@ public class BrowserTrackerPersistenceTest {
 
 		newBrowserTracker.setBrowserKey(RandomTestUtil.nextLong());
 
-		_persistence.update(newBrowserTracker);
+		_browserTrackers.add(_persistence.update(newBrowserTracker));
 
 		BrowserTracker existingBrowserTracker = _persistence.findByPrimaryKey(newBrowserTracker.getPrimaryKey());
 
@@ -195,7 +185,7 @@ public class BrowserTrackerPersistenceTest {
 		}
 	}
 
-	protected OrderByComparator getOrderByComparator() {
+	protected OrderByComparator<BrowserTracker> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("BrowserTracker",
 			"mvccVersion", true, "browserTrackerId", true, "userId", true,
 			"browserKey", true);
@@ -424,13 +414,12 @@ public class BrowserTrackerPersistenceTest {
 
 		browserTracker.setBrowserKey(RandomTestUtil.nextLong());
 
-		_persistence.update(browserTracker);
+		_browserTrackers.add(_persistence.update(browserTracker));
 
 		return browserTracker;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(BrowserTrackerPersistenceTest.class);
-	private ModelListener<BrowserTracker>[] _modelListeners;
-	private BrowserTrackerPersistence _persistence = (BrowserTrackerPersistence)PortalBeanLocatorUtil.locate(BrowserTrackerPersistence.class.getName());
-	private TransactionalPersistenceAdvice _transactionalPersistenceAdvice = (TransactionalPersistenceAdvice)PortalBeanLocatorUtil.locate(TransactionalPersistenceAdvice.class.getName());
+	private List<BrowserTracker> _browserTrackers = new ArrayList<BrowserTracker>();
+	private BrowserTrackerPersistence _persistence = BrowserTrackerUtil.getPersistence();
 }

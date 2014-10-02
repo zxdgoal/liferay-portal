@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchVirtualHostException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.model.impl.VirtualHostImpl;
 import com.liferay.portal.model.impl.VirtualHostModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.VirtualHostPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see VirtualHostUtil
  * @generated
  */
+@ProviderType
 public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	implements VirtualHostPersistence {
 	/*
@@ -1113,7 +1111,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	 */
 	@Override
 	public List<VirtualHost> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<VirtualHost> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1244,25 +1242,6 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	 * Initializes the virtual host persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.VirtualHost")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<VirtualHost>> listenersList = new ArrayList<ModelListener<VirtualHost>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<VirtualHost>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1281,8 +1260,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No VirtualHost exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No VirtualHost exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(VirtualHostPersistenceImpl.class);
-	private static VirtualHost _nullVirtualHost = new VirtualHostImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(VirtualHostPersistenceImpl.class);
+	private static final VirtualHost _nullVirtualHost = new VirtualHostImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1294,7 +1273,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 			}
 		};
 
-	private static CacheModel<VirtualHost> _nullVirtualHostCacheModel = new NullCacheModel();
+	private static final CacheModel<VirtualHost> _nullVirtualHostCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<VirtualHost>,
 		MVCCModel {

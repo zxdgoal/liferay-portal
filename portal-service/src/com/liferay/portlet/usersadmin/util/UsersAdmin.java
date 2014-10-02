@@ -172,12 +172,12 @@ public interface UsersAdmin {
 	public List<EmailAddress> getEmailAddresses(
 		ActionRequest actionRequest, List<EmailAddress> defaultEmailAddresses);
 
-	public OrderByComparator getGroupOrderByComparator(
+	public OrderByComparator<Group> getGroupOrderByComparator(
 		String orderByCol, String orderByType);
 
 	public Long[] getOrganizationIds(List<Organization> organizations);
 
-	public OrderByComparator getOrganizationOrderByComparator(
+	public OrderByComparator<Organization> getOrganizationOrderByComparator(
 		String orderByCol, String orderByType);
 
 	public List<Organization> getOrganizations(Hits hits)
@@ -190,23 +190,21 @@ public interface UsersAdmin {
 	public List<Phone> getPhones(
 		ActionRequest actionRequest, List<Phone> defaultPhones);
 
-	public OrderByComparator getRoleOrderByComparator(
+	public OrderByComparator<Role> getRoleOrderByComparator(
 		String orderByCol, String orderByType);
 
-	public OrderByComparator getUserGroupOrderByComparator(
+	public OrderByComparator<UserGroup> getUserGroupOrderByComparator(
 		String orderByCol, String orderByType);
 
 	public List<UserGroupRole> getUserGroupRoles(PortletRequest portletRequest)
 		throws PortalException;
 
-	public List<UserGroup> getUserGroups(Hits hits)
-		throws PortalException;
+	public List<UserGroup> getUserGroups(Hits hits) throws PortalException;
 
-	public OrderByComparator getUserOrderByComparator(
+	public OrderByComparator<User> getUserOrderByComparator(
 		String orderByCol, String orderByType);
 
-	public List<User> getUsers(Hits hits)
-		throws PortalException;
+	public List<User> getUsers(Hits hits) throws PortalException;
 
 	public List<Website> getWebsites(ActionRequest actionRequest);
 

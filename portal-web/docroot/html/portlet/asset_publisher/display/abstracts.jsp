@@ -41,7 +41,7 @@ String summary = StringUtil.shorten(assetRenderer.getSummary(liferayPortletReque
 %>
 
 <c:if test="<%= show %>">
-	<div class="asset-abstract <%= AssetUtil.isDefaultAssetPublisher(layout, portletDisplay.getId(), portletResource) ? "default-asset-publisher" : StringPool.BLANK %>">
+	<div class="asset-abstract <%= AssetUtil.isDefaultAssetPublisher(layout, portletDisplay.getId(), assetPublisherDisplayContext.getPortletResource()) ? "default-asset-publisher" : StringPool.BLANK %>">
 		<liferay-util:include page="/html/portlet/asset_publisher/asset_actions.jsp" />
 
 		<h4 class="asset-title">
@@ -71,10 +71,10 @@ String summary = StringUtil.shorten(assetRenderer.getSummary(liferayPortletReque
 				String displayDate = StringPool.BLANK;
 
 				if (assetEntry.getPublishDate() != null) {
-					displayDate = LanguageUtil.format(pageContext, "x-ago", LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - assetEntry.getPublishDate().getTime(), true), false);
+					displayDate = LanguageUtil.format(request, "x-ago", LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - assetEntry.getPublishDate().getTime(), true), false);
 				}
 				else if (assetEntry.getModifiedDate() != null) {
-					displayDate = LanguageUtil.format(pageContext, "x-ago", LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - assetEntry.getModifiedDate().getTime(), true), false);
+					displayDate = LanguageUtil.format(request, "x-ago", LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - assetEntry.getModifiedDate().getTime(), true), false);
 				}
 				%>
 

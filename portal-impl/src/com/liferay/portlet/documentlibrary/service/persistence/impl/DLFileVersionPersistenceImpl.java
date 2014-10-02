@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLFileVersionPers
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see DLFileVersionUtil
  * @generated
  */
+@ProviderType
 public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVersion>
 	implements DLFileVersionPersistence {
 	/*
@@ -154,7 +152,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -274,7 +272,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByUuid_First(uuid, orderByComparator);
 
 		if (dlFileVersion != null) {
@@ -302,7 +301,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -322,7 +321,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (dlFileVersion != null) {
@@ -350,7 +350,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -378,7 +378,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByUuid_PrevAndNext(long fileVersionId,
-		String uuid, OrderByComparator orderByComparator)
+		String uuid, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -409,7 +409,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByUuid_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -937,7 +937,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1067,7 +1067,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1100,7 +1101,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1122,7 +1123,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1155,7 +1157,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1184,7 +1186,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByUuid_C_PrevAndNext(long fileVersionId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -1215,7 +1218,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByUuid_C_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1494,7 +1497,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1600,7 +1603,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -1629,7 +1633,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -1650,7 +1654,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -1679,7 +1684,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -1707,7 +1712,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByCompanyId_PrevAndNext(long fileVersionId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -1738,7 +1743,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByCompanyId_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1975,7 +1980,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByFileEntryId(long fileEntryId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2081,7 +2086,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByFileEntryId_First(fileEntryId,
 				orderByComparator);
 
@@ -2110,7 +2116,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByFileEntryId(fileEntryId, 0, 1,
 				orderByComparator);
 
@@ -2131,7 +2137,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByFileEntryId_Last(fileEntryId,
 				orderByComparator);
 
@@ -2160,7 +2167,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByFileEntryId(fileEntryId);
 
 		if (count == 0) {
@@ -2188,7 +2195,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByFileEntryId_PrevAndNext(long fileVersionId,
-		long fileEntryId, OrderByComparator orderByComparator)
+		long fileEntryId, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -2219,7 +2226,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByFileEntryId_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long fileEntryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2456,7 +2463,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByMimeType(String mimeType, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2576,7 +2583,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByMimeType_First(String mimeType,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByMimeType_First(mimeType,
 				orderByComparator);
 
@@ -2605,7 +2613,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByMimeType_First(String mimeType,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByMimeType(mimeType, 0, 1,
 				orderByComparator);
 
@@ -2626,7 +2634,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByMimeType_Last(String mimeType,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByMimeType_Last(mimeType,
 				orderByComparator);
 
@@ -2655,7 +2664,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByMimeType_Last(String mimeType,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByMimeType(mimeType);
 
 		if (count == 0) {
@@ -2683,7 +2692,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByMimeType_PrevAndNext(long fileVersionId,
-		String mimeType, OrderByComparator orderByComparator)
+		String mimeType, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -2714,7 +2723,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByMimeType_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, String mimeType,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2976,7 +2985,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByC_NotS(long companyId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3084,7 +3093,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByC_NotS_First(companyId, status,
 				orderByComparator);
 
@@ -3117,7 +3127,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByC_NotS(companyId, status, 0, 1,
 				orderByComparator);
 
@@ -3139,7 +3149,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByC_NotS_Last(companyId, status,
 				orderByComparator);
 
@@ -3172,7 +3183,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByC_NotS(companyId, status);
 
 		if (count == 0) {
@@ -3201,7 +3212,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByC_NotS_PrevAndNext(long fileVersionId,
-		long companyId, int status, OrderByComparator orderByComparator)
+		long companyId, int status,
+		OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -3232,7 +3244,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByC_NotS_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long companyId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3739,7 +3751,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByF_S(long fileEntryId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3855,7 +3867,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByF_S_First(long fileEntryId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByF_S_First(fileEntryId, status,
 				orderByComparator);
 
@@ -3888,7 +3901,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByF_S_First(long fileEntryId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByF_S(fileEntryId, status, 0, 1,
 				orderByComparator);
 
@@ -3910,7 +3923,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByF_S_Last(long fileEntryId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByF_S_Last(fileEntryId, status,
 				orderByComparator);
 
@@ -3943,7 +3957,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByF_S_Last(long fileEntryId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByF_S(fileEntryId, status);
 
 		if (count == 0) {
@@ -3972,7 +3986,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion[] findByF_S_PrevAndNext(long fileVersionId,
-		long fileEntryId, int status, OrderByComparator orderByComparator)
+		long fileEntryId, int status,
+		OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
@@ -4003,7 +4018,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByF_S_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long fileEntryId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4267,7 +4282,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findByG_F_S(long groupId, long folderId,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4389,7 +4405,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByG_F_S_First(long groupId, long folderId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByG_F_S_First(groupId, folderId,
 				status, orderByComparator);
@@ -4427,7 +4443,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByG_F_S_First(long groupId, long folderId,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByG_F_S(groupId, folderId, status, 0, 1,
 				orderByComparator);
 
@@ -4450,7 +4466,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByG_F_S_Last(long groupId, long folderId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByG_F_S_Last(groupId, folderId,
 				status, orderByComparator);
@@ -4488,7 +4504,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByG_F_S_Last(long groupId, long folderId,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByG_F_S(groupId, folderId, status);
 
 		if (count == 0) {
@@ -4519,7 +4535,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	@Override
 	public DLFileVersion[] findByG_F_S_PrevAndNext(long fileVersionId,
 		long groupId, long folderId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
 		Session session = null;
@@ -4549,7 +4566,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByG_F_S_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long groupId, long folderId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileVersion> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4830,7 +4847,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	@Override
 	public List<DLFileVersion> findByG_F_T_V(long groupId, long folderId,
 		String title, String version, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4986,7 +5003,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByG_F_T_V_First(long groupId, long folderId,
-		String title, String version, OrderByComparator orderByComparator)
+		String title, String version,
+		OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByG_F_T_V_First(groupId, folderId,
 				title, version, orderByComparator);
@@ -5028,7 +5046,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByG_F_T_V_First(long groupId, long folderId,
-		String title, String version, OrderByComparator orderByComparator) {
+		String title, String version,
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		List<DLFileVersion> list = findByG_F_T_V(groupId, folderId, title,
 				version, 0, 1, orderByComparator);
 
@@ -5052,7 +5071,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion findByG_F_T_V_Last(long groupId, long folderId,
-		String title, String version, OrderByComparator orderByComparator)
+		String title, String version,
+		OrderByComparator<DLFileVersion> orderByComparator)
 		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = fetchByG_F_T_V_Last(groupId, folderId,
 				title, version, orderByComparator);
@@ -5094,7 +5114,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public DLFileVersion fetchByG_F_T_V_Last(long groupId, long folderId,
-		String title, String version, OrderByComparator orderByComparator) {
+		String title, String version,
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		int count = countByG_F_T_V(groupId, folderId, title, version);
 
 		if (count == 0) {
@@ -5126,7 +5147,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	@Override
 	public DLFileVersion[] findByG_F_T_V_PrevAndNext(long fileVersionId,
 		long groupId, long folderId, String title, String version,
-		OrderByComparator orderByComparator) throws NoSuchFileVersionException {
+		OrderByComparator<DLFileVersion> orderByComparator)
+		throws NoSuchFileVersionException {
 		DLFileVersion dlFileVersion = findByPrimaryKey(fileVersionId);
 
 		Session session = null;
@@ -5156,7 +5178,8 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 	protected DLFileVersion getByG_F_T_V_PrevAndNext(Session session,
 		DLFileVersion dlFileVersion, long groupId, long folderId, String title,
-		String version, OrderByComparator orderByComparator, boolean previous) {
+		String version, OrderByComparator<DLFileVersion> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5953,6 +5976,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 		dlFileVersionImpl.setFolderId(dlFileVersion.getFolderId());
 		dlFileVersionImpl.setFileEntryId(dlFileVersion.getFileEntryId());
 		dlFileVersionImpl.setTreePath(dlFileVersion.getTreePath());
+		dlFileVersionImpl.setFileName(dlFileVersion.getFileName());
 		dlFileVersionImpl.setExtension(dlFileVersion.getExtension());
 		dlFileVersionImpl.setMimeType(dlFileVersion.getMimeType());
 		dlFileVersionImpl.setTitle(dlFileVersion.getTitle());
@@ -6197,7 +6221,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 */
 	@Override
 	public List<DLFileVersion> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileVersion> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6333,25 +6357,6 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	 * Initializes the document library file version persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.documentlibrary.model.DLFileVersion")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DLFileVersion>> listenersList = new ArrayList<ModelListener<DLFileVersion>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DLFileVersion>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -6370,11 +6375,11 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLFileVersion exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLFileVersion exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DLFileVersionPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DLFileVersionPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "size"
 			});
-	private static DLFileVersion _nullDLFileVersion = new DLFileVersionImpl() {
+	private static final DLFileVersion _nullDLFileVersion = new DLFileVersionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -6386,7 +6391,7 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 			}
 		};
 
-	private static CacheModel<DLFileVersion> _nullDLFileVersionCacheModel = new CacheModel<DLFileVersion>() {
+	private static final CacheModel<DLFileVersion> _nullDLFileVersionCacheModel = new CacheModel<DLFileVersion>() {
 			@Override
 			public DLFileVersion toEntityModel() {
 				return _nullDLFileVersion;

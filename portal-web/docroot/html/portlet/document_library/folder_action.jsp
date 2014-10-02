@@ -114,7 +114,7 @@ String iconMenuId = null;
 %>
 
 <liferay-util:buffer var="iconMenu">
-	<liferay-ui:icon-menu direction='<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? "down" : "left" %>' extended="<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? false : true %>" icon="<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" message='<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>" triggerCssClass="btn btn-default">
+	<liferay-ui:icon-menu direction='<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? "down" : "left" %>' icon="<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" message='<%= dlActionsDisplayContext.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>">
 
 		<%
 		boolean hasViewPermission = DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.VIEW);
@@ -209,8 +209,9 @@ String iconMenuId = null;
 						<portlet:renderURL var="addFolderURL">
 							<portlet:param name="struts_action" value="/document_library/edit_folder" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="parentFolderId" value="<%= String.valueOf(folderId) %>" />
 							<portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" />
+							<portlet:param name="parentFolderId" value="<%= String.valueOf(folderId) %>" />
+							<portlet:param name="ignoreRootFolder" value="<%= Boolean.TRUE.toString() %>" />
 						</portlet:renderURL>
 
 						<liferay-ui:icon
@@ -218,6 +219,33 @@ String iconMenuId = null;
 							message="add-subfolder"
 							url="<%= addFolderURL %>"
 						/>
+					</c:if>
+
+					<c:if test="<%= folder.isMountPoint() %>">
+
+						<%
+						LocalRepository localRepository = RepositoryLocalServiceUtil.getLocalRepositoryImpl(folder.getRepositoryId());
+
+						if (localRepository.isCapabilityProvided(TemporaryFileEntriesCapability.class)) {
+						%>
+
+							<portlet:actionURL var="deleteExpiredTemporaryFileEntriesURL">
+								<portlet:param name="struts_action" value="/document_library/edit_folder" />
+								<portlet:param name="<%= Constants.CMD %>" value="deleteExpiredTemporaryFileEntries" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="repositoryId" value="<%= String.valueOf(folder.getRepositoryId()) %>" />
+							</portlet:actionURL>
+
+							<liferay-ui:icon
+								iconCssClass="icon-remove"
+								message="delete-expired-temporary-files"
+								url="<%= deleteExpiredTemporaryFileEntriesURL %>"
+							/>
+
+						<%
+						}
+						%>
+
 					</c:if>
 				</c:when>
 				<c:otherwise>
@@ -232,7 +260,7 @@ String iconMenuId = null;
 							<portlet:param name="redirect" value="<%= redirect %>" />
 							<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
 							<portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" />
-							<portlet:param name="rootFolder" value="true" />
+							<portlet:param name="rootFolder" value="<%= Boolean.TRUE.toString() %>" />
 						</portlet:renderURL>
 
 						<liferay-ui:icon
@@ -264,8 +292,9 @@ String iconMenuId = null;
 						<portlet:renderURL var="addFolderURL">
 							<portlet:param name="struts_action" value="/document_library/edit_folder" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="parentFolderId" value="<%= String.valueOf(folderId) %>" />
 							<portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" />
+							<portlet:param name="parentFolderId" value="<%= String.valueOf(folderId) %>" />
+							<portlet:param name="ignoreRootFolder" value="<%= Boolean.TRUE.toString() %>" />
 						</portlet:renderURL>
 
 						<liferay-ui:icon
@@ -325,7 +354,7 @@ String iconMenuId = null;
 					</liferay-portlet:renderURL>
 
 					<%
-					String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + HtmlUtil.escapeJS(LanguageUtil.get(pageContext, portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) ? "select-media-type" : "select-document-type")) + "', uri:'" + HtmlUtil.escapeJS(editFileEntryURL.toString()) + "'});";
+					String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + HtmlUtil.escapeJS(LanguageUtil.get(request, portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) ? "select-media-type" : "select-document-type")) + "', uri:'" + HtmlUtil.escapeJS(editFileEntryURL.toString()) + "'});";
 					%>
 
 					<liferay-ui:icon
@@ -438,10 +467,10 @@ String iconMenuId = null;
 		String webDavHelpMessage = null;
 
 		if (BrowserSnifferUtil.isWindows(request)) {
-			webDavHelpMessage = LanguageUtil.format(pageContext, "webdav-windows-help", new Object[] {"http://www.microsoft.com/downloads/details.aspx?FamilyId=17C36612-632E-4C04-9382-987622ED1D64", "http://www.liferay.com/web/guest/community/wiki/-/wiki/Main/WebDAV"}, false);
+			webDavHelpMessage = LanguageUtil.format(request, "webdav-windows-help", new Object[] {"http://www.microsoft.com/downloads/details.aspx?FamilyId=17C36612-632E-4C04-9382-987622ED1D64", "http://www.liferay.com/web/guest/community/wiki/-/wiki/Main/WebDAV"}, false);
 		}
 		else {
-			webDavHelpMessage = LanguageUtil.format(pageContext, "webdav-help", "http://www.liferay.com/web/guest/community/wiki/-/wiki/Main/WebDAV", false);
+			webDavHelpMessage = LanguageUtil.format(request, "webdav-help", "http://www.liferay.com/web/guest/community/wiki/-/wiki/Main/WebDAV", false);
 		}
 		%>
 
@@ -492,7 +521,7 @@ String iconMenuId = null;
 							bodyContent: A.one('#<%= randomNamespace %>webDav').html(),
 							destroyOnHide: true
 						},
-						title: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>'
+						title: '<%= UnicodeLanguageUtil.get(request, "access-from-desktop") %>'
 					}
 				);
 

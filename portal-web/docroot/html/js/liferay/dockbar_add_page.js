@@ -45,6 +45,11 @@ AUI.add(
 						validator: Lang.isString
 					},
 
+					nodes: {
+						getter: '_getNodes',
+						readOnly: true
+					},
+
 					parentLayoutId: {
 						validator: Lang.isNumber
 					},
@@ -76,6 +81,10 @@ AUI.add(
 						var instance = this;
 
 						var nodeList = instance.get(STR_NODE_LIST);
+
+						if (nodeList) {
+							instance._nodes = nodeList.all(instance.get('nodeSelector'));
+						}
 
 						instance._togglerDelegate = new A.TogglerDelegate(
 							{
@@ -216,6 +225,12 @@ AUI.add(
 						return instance._formValidator;
 					},
 
+					_getNodes: function() {
+						var instance = this;
+
+						return instance._nodes;
+					},
+
 					_updateActivePage: function(event) {
 						var instance = this;
 
@@ -239,9 +254,9 @@ AUI.add(
 
 								header.addClass(CSS_ACTIVE);
 
-								instance.byId('addLayoutType').set(STR_VALUE, selectedType);
+								instance.byId('addLayoutType').attr(STR_VALUE, selectedType);
 
-								instance.byId('addLayoutPrototypeId').set(STR_VALUE, selectedPrototypeId);
+								instance.byId('addLayoutPrototypeId').attr(STR_VALUE, selectedPrototypeId);
 							}
 						}
 					},

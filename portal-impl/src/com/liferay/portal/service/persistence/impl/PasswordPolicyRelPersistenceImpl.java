@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchPasswordPolicyRelException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,15 +27,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PasswordPolicyRel;
 import com.liferay.portal.model.impl.PasswordPolicyRelImpl;
 import com.liferay.portal.model.impl.PasswordPolicyRelModelImpl;
@@ -41,7 +39,6 @@ import com.liferay.portal.service.persistence.PasswordPolicyRelPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,6 +59,7 @@ import java.util.Set;
  * @see PasswordPolicyRelUtil
  * @generated
  */
+@ProviderType
 public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<PasswordPolicyRel>
 	implements PasswordPolicyRelPersistence {
 	/*
@@ -154,7 +152,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	@Override
 	public List<PasswordPolicyRel> findByPasswordPolicyId(
 		long passwordPolicyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordPolicyRel> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -264,7 +262,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 */
 	@Override
 	public PasswordPolicyRel findByPasswordPolicyId_First(
-		long passwordPolicyId, OrderByComparator orderByComparator)
+		long passwordPolicyId,
+		OrderByComparator<PasswordPolicyRel> orderByComparator)
 		throws NoSuchPasswordPolicyRelException {
 		PasswordPolicyRel passwordPolicyRel = fetchByPasswordPolicyId_First(passwordPolicyId,
 				orderByComparator);
@@ -294,7 +293,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 */
 	@Override
 	public PasswordPolicyRel fetchByPasswordPolicyId_First(
-		long passwordPolicyId, OrderByComparator orderByComparator) {
+		long passwordPolicyId,
+		OrderByComparator<PasswordPolicyRel> orderByComparator) {
 		List<PasswordPolicyRel> list = findByPasswordPolicyId(passwordPolicyId,
 				0, 1, orderByComparator);
 
@@ -315,7 +315,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 */
 	@Override
 	public PasswordPolicyRel findByPasswordPolicyId_Last(
-		long passwordPolicyId, OrderByComparator orderByComparator)
+		long passwordPolicyId,
+		OrderByComparator<PasswordPolicyRel> orderByComparator)
 		throws NoSuchPasswordPolicyRelException {
 		PasswordPolicyRel passwordPolicyRel = fetchByPasswordPolicyId_Last(passwordPolicyId,
 				orderByComparator);
@@ -345,7 +346,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 */
 	@Override
 	public PasswordPolicyRel fetchByPasswordPolicyId_Last(
-		long passwordPolicyId, OrderByComparator orderByComparator) {
+		long passwordPolicyId,
+		OrderByComparator<PasswordPolicyRel> orderByComparator) {
 		int count = countByPasswordPolicyId(passwordPolicyId);
 
 		if (count == 0) {
@@ -374,7 +376,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	@Override
 	public PasswordPolicyRel[] findByPasswordPolicyId_PrevAndNext(
 		long passwordPolicyRelId, long passwordPolicyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<PasswordPolicyRel> orderByComparator)
 		throws NoSuchPasswordPolicyRelException {
 		PasswordPolicyRel passwordPolicyRel = findByPrimaryKey(passwordPolicyRelId);
 
@@ -406,8 +408,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 
 	protected PasswordPolicyRel getByPasswordPolicyId_PrevAndNext(
 		Session session, PasswordPolicyRel passwordPolicyRel,
-		long passwordPolicyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		long passwordPolicyId,
+		OrderByComparator<PasswordPolicyRel> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1372,7 +1374,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 */
 	@Override
 	public List<PasswordPolicyRel> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<PasswordPolicyRel> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1503,25 +1505,6 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	 * Initializes the password policy rel persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.PasswordPolicyRel")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<PasswordPolicyRel>> listenersList = new ArrayList<ModelListener<PasswordPolicyRel>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<PasswordPolicyRel>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1540,8 +1523,8 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No PasswordPolicyRel exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No PasswordPolicyRel exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(PasswordPolicyRelPersistenceImpl.class);
-	private static PasswordPolicyRel _nullPasswordPolicyRel = new PasswordPolicyRelImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(PasswordPolicyRelPersistenceImpl.class);
+	private static final PasswordPolicyRel _nullPasswordPolicyRel = new PasswordPolicyRelImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1553,7 +1536,7 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 			}
 		};
 
-	private static CacheModel<PasswordPolicyRel> _nullPasswordPolicyRelCacheModel =
+	private static final CacheModel<PasswordPolicyRel> _nullPasswordPolicyRelCacheModel =
 		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<PasswordPolicyRel>,

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.messageboards.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -86,6 +88,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class MBCategoryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MBCategoryLocalService,
 		IdentifiableBean {
@@ -161,8 +164,7 @@ public abstract class MBCategoryLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return mbCategoryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -179,8 +181,8 @@ public abstract class MBCategoryLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return mbCategoryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end);
 	}
@@ -199,9 +201,8 @@ public abstract class MBCategoryLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return mbCategoryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -234,19 +235,6 @@ public abstract class MBCategoryLocalServiceBaseImpl
 	@Override
 	public MBCategory fetchMBCategory(long categoryId) {
 		return mbCategoryPersistence.fetchByPrimaryKey(categoryId);
-	}
-
-	/**
-	 * Returns the message boards category with the matching UUID and company.
-	 *
-	 * @param uuid the message boards category's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards category, or <code>null</code> if a matching message boards category could not be found
-	 */
-	@Override
-	public MBCategory fetchMBCategoryByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return mbCategoryPersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -364,7 +352,7 @@ public abstract class MBCategoryLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteMBCategory((MBCategory)persistedModel);
+		return mbCategoryLocalService.deleteMBCategory((MBCategory)persistedModel);
 	}
 
 	@Override
@@ -373,18 +361,18 @@ public abstract class MBCategoryLocalServiceBaseImpl
 		return mbCategoryPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the message boards category with the matching UUID and company.
-	 *
-	 * @param uuid the message boards category's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards category
-	 * @throws PortalException if a matching message boards category could not be found
-	 */
 	@Override
-	public MBCategory getMBCategoryByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return mbCategoryPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MBCategory> getMBCategoriesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mbCategoryPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MBCategory> getMBCategoriesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end,
+		OrderByComparator<MBCategory> orderByComparator) {
+		return mbCategoryPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

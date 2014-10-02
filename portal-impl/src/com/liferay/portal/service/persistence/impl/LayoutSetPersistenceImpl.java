@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchLayoutSetException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,25 +27,20 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.LayoutSetImpl;
 import com.liferay.portal.model.impl.LayoutSetModelImpl;
 import com.liferay.portal.service.persistence.LayoutSetPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see LayoutSetUtil
  * @generated
  */
+@ProviderType
 public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	implements LayoutSetPersistence {
 	/*
@@ -148,7 +146,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public List<LayoutSet> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutSet> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -254,7 +252,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchLayoutSetException {
+		OrderByComparator<LayoutSet> orderByComparator)
+		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = fetchByGroupId_First(groupId, orderByComparator);
 
 		if (layoutSet != null) {
@@ -282,7 +281,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutSet> orderByComparator) {
 		List<LayoutSet> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -302,7 +301,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchLayoutSetException {
+		OrderByComparator<LayoutSet> orderByComparator)
+		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = fetchByGroupId_Last(groupId, orderByComparator);
 
 		if (layoutSet != null) {
@@ -330,7 +330,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutSet> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -358,7 +358,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet[] findByGroupId_PrevAndNext(long layoutSetId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<LayoutSet> orderByComparator)
 		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = findByPrimaryKey(layoutSetId);
 
@@ -388,8 +388,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	}
 
 	protected LayoutSet getByGroupId_PrevAndNext(Session session,
-		LayoutSet layoutSet, long groupId, OrderByComparator orderByComparator,
-		boolean previous) {
+		LayoutSet layoutSet, long groupId,
+		OrderByComparator<LayoutSet> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -630,7 +630,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	@Override
 	public List<LayoutSet> findByLayoutSetPrototypeUuid(
 		String layoutSetPrototypeUuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutSet> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -755,7 +755,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet findByLayoutSetPrototypeUuid_First(
-		String layoutSetPrototypeUuid, OrderByComparator orderByComparator)
+		String layoutSetPrototypeUuid,
+		OrderByComparator<LayoutSet> orderByComparator)
 		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = fetchByLayoutSetPrototypeUuid_First(layoutSetPrototypeUuid,
 				orderByComparator);
@@ -785,7 +786,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet fetchByLayoutSetPrototypeUuid_First(
-		String layoutSetPrototypeUuid, OrderByComparator orderByComparator) {
+		String layoutSetPrototypeUuid,
+		OrderByComparator<LayoutSet> orderByComparator) {
 		List<LayoutSet> list = findByLayoutSetPrototypeUuid(layoutSetPrototypeUuid,
 				0, 1, orderByComparator);
 
@@ -806,7 +808,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet findByLayoutSetPrototypeUuid_Last(
-		String layoutSetPrototypeUuid, OrderByComparator orderByComparator)
+		String layoutSetPrototypeUuid,
+		OrderByComparator<LayoutSet> orderByComparator)
 		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = fetchByLayoutSetPrototypeUuid_Last(layoutSetPrototypeUuid,
 				orderByComparator);
@@ -836,7 +839,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public LayoutSet fetchByLayoutSetPrototypeUuid_Last(
-		String layoutSetPrototypeUuid, OrderByComparator orderByComparator) {
+		String layoutSetPrototypeUuid,
+		OrderByComparator<LayoutSet> orderByComparator) {
 		int count = countByLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
 
 		if (count == 0) {
@@ -865,7 +869,8 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	@Override
 	public LayoutSet[] findByLayoutSetPrototypeUuid_PrevAndNext(
 		long layoutSetId, String layoutSetPrototypeUuid,
-		OrderByComparator orderByComparator) throws NoSuchLayoutSetException {
+		OrderByComparator<LayoutSet> orderByComparator)
+		throws NoSuchLayoutSetException {
 		LayoutSet layoutSet = findByPrimaryKey(layoutSetId);
 
 		Session session = null;
@@ -895,7 +900,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 
 	protected LayoutSet getByLayoutSetPrototypeUuid_PrevAndNext(
 		Session session, LayoutSet layoutSet, String layoutSetPrototypeUuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutSet> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1907,7 +1912,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 */
 	@Override
 	public List<LayoutSet> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutSet> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2043,25 +2048,6 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	 * Initializes the layout set persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.LayoutSet")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<LayoutSet>> listenersList = new ArrayList<ModelListener<LayoutSet>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<LayoutSet>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2080,11 +2066,11 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No LayoutSet exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No LayoutSet exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(LayoutSetPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(LayoutSetPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"settings"
 			});
-	private static LayoutSet _nullLayoutSet = new LayoutSetImpl() {
+	private static final LayoutSet _nullLayoutSet = new LayoutSetImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2096,7 +2082,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 			}
 		};
 
-	private static CacheModel<LayoutSet> _nullLayoutSetCacheModel = new NullCacheModel();
+	private static final CacheModel<LayoutSet> _nullLayoutSetCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<LayoutSet>,
 		MVCCModel {

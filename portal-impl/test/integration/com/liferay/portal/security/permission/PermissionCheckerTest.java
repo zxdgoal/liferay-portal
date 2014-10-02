@@ -23,8 +23,8 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.OrganizationTestUtil;
 import com.liferay.portal.util.test.RoleTestUtil;
@@ -199,7 +199,7 @@ public class PermissionCheckerTest {
 
 		PermissionChecker permissionChecker = _getPermissionChecker(_user);
 
-		Assert.assertFalse(permissionChecker.isOmniadmin());
+		Assert.assertTrue(permissionChecker.isOmniadmin());
 	}
 
 	@Test
@@ -207,7 +207,7 @@ public class PermissionCheckerTest {
 		PermissionChecker permissionChecker = _getPermissionChecker(
 			TestPropsValues.getUser());
 
-		Assert.assertFalse(permissionChecker.isOmniadmin());
+		Assert.assertTrue(permissionChecker.isOmniadmin());
 	}
 
 	@Test

@@ -14,6 +14,8 @@
 
 package com.liferay.counter.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.counter.NoSuchCounterException;
 import com.liferay.counter.model.Counter;
 import com.liferay.counter.model.impl.CounterImpl;
@@ -29,19 +31,14 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,6 +59,7 @@ import java.util.Set;
  * @see CounterUtil
  * @generated
  */
+@ProviderType
 public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	implements CounterPersistence {
 	/*
@@ -549,7 +547,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	 */
 	@Override
 	public List<Counter> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Counter> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -680,25 +678,6 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	 * Initializes the counter persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.counter.model.Counter")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<Counter>> listenersList = new ArrayList<ModelListener<Counter>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<Counter>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -714,8 +693,8 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	private static final String _ORDER_BY_ENTITY_ALIAS = "counter.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Counter exists with the primary key ";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(CounterPersistenceImpl.class);
-	private static Counter _nullCounter = new CounterImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(CounterPersistenceImpl.class);
+	private static final Counter _nullCounter = new CounterImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -727,7 +706,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 			}
 		};
 
-	private static CacheModel<Counter> _nullCounterCacheModel = new CacheModel<Counter>() {
+	private static final CacheModel<Counter> _nullCounterCacheModel = new CacheModel<Counter>() {
 			@Override
 			public Counter toEntityModel() {
 				return _nullCounter;

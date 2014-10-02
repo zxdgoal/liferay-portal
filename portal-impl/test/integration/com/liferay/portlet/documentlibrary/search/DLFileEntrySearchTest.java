@@ -30,10 +30,10 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.search.BaseSearchTestCase;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portal.util.test.SearchContextTestUtil;
 import com.liferay.portal.util.test.ServiceContextTestUtil;
@@ -44,6 +44,7 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.test.DLAppTestUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -131,10 +132,12 @@ public class DLFileEntrySearchTest extends BaseSearchTestCase {
 			ServiceContext serviceContext)
 		throws Exception {
 
-		String xsd = DDMStructureTestUtil.getSampleStructureXSD("name");
+		String definition = DDMStructureTestUtil.getSampleStructureDefinition(
+			"name");
 
 		_ddmStructure = DDMStructureTestUtil.addStructure(
-			serviceContext.getScopeGroupId(), DLFileEntry.class.getName(), xsd);
+			serviceContext.getScopeGroupId(), DLFileEntry.class.getName(),
+			definition);
 
 		DLFileEntryType dlFileEntryType =
 			DLFileEntryTypeLocalServiceUtil.addFileEntryType(
@@ -183,6 +186,11 @@ public class DLFileEntrySearchTest extends BaseSearchTestCase {
 			folderId, keywords + ".txt", keywords, approved, serviceContext);
 
 		return (DLFileEntry)fileEntry.getModel();
+	}
+
+	@Override
+	protected void deleteBaseModel(long primaryKey) throws Exception {
+		DLFileEntryLocalServiceUtil.deleteDLFileEntry(primaryKey);
 	}
 
 	@Override
@@ -297,12 +305,13 @@ public class DLFileEntrySearchTest extends BaseSearchTestCase {
 	protected void updateDDMStructure(ServiceContext serviceContext)
 		throws Exception {
 
-		String xsd = DDMStructureTestUtil.getSampleStructureXSD("title");
+		String definition = DDMStructureTestUtil.getSampleStructureDefinition(
+			"title");
 
 		DDMStructureLocalServiceUtil.updateStructure(
 			_ddmStructure.getStructureId(),
 			_ddmStructure.getParentStructureId(), _ddmStructure.getNameMap(),
-			_ddmStructure.getDescriptionMap(), xsd, serviceContext);
+			_ddmStructure.getDescriptionMap(), definition, serviceContext);
 	}
 
 	private static final int _FOLDER_NAME_MAX_LENGTH = 100;

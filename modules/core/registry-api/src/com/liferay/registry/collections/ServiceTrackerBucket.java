@@ -14,19 +14,19 @@
 
 package com.liferay.registry.collections;
 
-import com.liferay.registry.ServiceReference;
-
 /**
  * @author Carlos Sierra Andrés
  */
-public interface ServiceTrackerBucket<S, R> {
+public interface ServiceTrackerBucket<SR, TS, R> {
 
 	public R getContent();
 
 	public boolean isDisposable();
 
-	public void remove(ServiceReference<S> serviceReference);
+	public void remove(
+		ServiceReferenceServiceTuple<SR, TS> serviceReferenceServiceTuple);
 
-	public void store(ServiceReference<S> serviceReference);
+	public void store(
+		ServiceReferenceServiceTuple<SR, TS> serviceReferenceServiceTuple);
 
 }

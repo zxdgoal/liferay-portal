@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchResourceBlockException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,16 +27,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceBlock;
 import com.liferay.portal.model.impl.ResourceBlockImpl;
 import com.liferay.portal.model.impl.ResourceBlockModelImpl;
@@ -42,7 +40,6 @@ import com.liferay.portal.service.persistence.ResourceBlockPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see ResourceBlockUtil
  * @generated
  */
+@ProviderType
 public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBlock>
 	implements ResourceBlockPersistence {
 	/*
@@ -156,7 +154,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public List<ResourceBlock> findByC_N(long companyId, String name,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<ResourceBlock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -286,7 +284,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock findByC_N_First(long companyId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = fetchByC_N_First(companyId, name,
 				orderByComparator);
@@ -320,7 +318,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock fetchByC_N_First(long companyId, String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceBlock> orderByComparator) {
 		List<ResourceBlock> list = findByC_N(companyId, name, 0, 1,
 				orderByComparator);
 
@@ -342,7 +340,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock findByC_N_Last(long companyId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = fetchByC_N_Last(companyId, name,
 				orderByComparator);
@@ -376,7 +374,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock fetchByC_N_Last(long companyId, String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceBlock> orderByComparator) {
 		int count = countByC_N(companyId, name);
 
 		if (count == 0) {
@@ -405,7 +403,8 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock[] findByC_N_PrevAndNext(long resourceBlockId,
-		long companyId, String name, OrderByComparator orderByComparator)
+		long companyId, String name,
+		OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = findByPrimaryKey(resourceBlockId);
 
@@ -436,7 +435,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 	protected ResourceBlock getByC_N_PrevAndNext(Session session,
 		ResourceBlock resourceBlock, long companyId, String name,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ResourceBlock> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -728,7 +727,8 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public List<ResourceBlock> findByC_G_N(long companyId, long groupId,
-		String name, int start, int end, OrderByComparator orderByComparator) {
+		String name, int start, int end,
+		OrderByComparator<ResourceBlock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -864,7 +864,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock findByC_G_N_First(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
+		String name, OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = fetchByC_G_N_First(companyId, groupId,
 				name, orderByComparator);
@@ -902,7 +902,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock fetchByC_G_N_First(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator) {
+		String name, OrderByComparator<ResourceBlock> orderByComparator) {
 		List<ResourceBlock> list = findByC_G_N(companyId, groupId, name, 0, 1,
 				orderByComparator);
 
@@ -925,7 +925,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock findByC_G_N_Last(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator)
+		String name, OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = fetchByC_G_N_Last(companyId, groupId,
 				name, orderByComparator);
@@ -963,7 +963,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public ResourceBlock fetchByC_G_N_Last(long companyId, long groupId,
-		String name, OrderByComparator orderByComparator) {
+		String name, OrderByComparator<ResourceBlock> orderByComparator) {
 		int count = countByC_G_N(companyId, groupId, name);
 
 		if (count == 0) {
@@ -994,7 +994,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	@Override
 	public ResourceBlock[] findByC_G_N_PrevAndNext(long resourceBlockId,
 		long companyId, long groupId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ResourceBlock> orderByComparator)
 		throws NoSuchResourceBlockException {
 		ResourceBlock resourceBlock = findByPrimaryKey(resourceBlockId);
 
@@ -1025,7 +1025,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 	protected ResourceBlock getByC_G_N_PrevAndNext(Session session,
 		ResourceBlock resourceBlock, long companyId, long groupId, String name,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ResourceBlock> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2185,7 +2185,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 */
 	@Override
 	public List<ResourceBlock> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ResourceBlock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2316,25 +2316,6 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	 * Initializes the resource block persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.ResourceBlock")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ResourceBlock>> listenersList = new ArrayList<ModelListener<ResourceBlock>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ResourceBlock>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2353,8 +2334,8 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ResourceBlock exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ResourceBlock exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ResourceBlockPersistenceImpl.class);
-	private static ResourceBlock _nullResourceBlock = new ResourceBlockImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ResourceBlockPersistenceImpl.class);
+	private static final ResourceBlock _nullResourceBlock = new ResourceBlockImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2366,7 +2347,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 			}
 		};
 
-	private static CacheModel<ResourceBlock> _nullResourceBlockCacheModel = new NullCacheModel();
+	private static final CacheModel<ResourceBlock> _nullResourceBlockCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<ResourceBlock>,
 		MVCCModel {

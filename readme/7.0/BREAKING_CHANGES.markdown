@@ -20,7 +20,7 @@ feature or API will be dropped in an upcoming version.
 replaces an old API, in spite of the old API being kept in Liferay Portal for
 backwards compatibility.
 
-*This document has been reviewed through commit `4aa4510`.*
+*This document has been reviewed through commit `10c9096`.*
 
 ## Breaking Changes Contribution Guidelines
 
@@ -28,7 +28,7 @@ Each change must have a brief descriptive title and contain the following
 information:
 
 * **[Title]** Provide a brief descriptive title. Use past tense and follow
-the capitalization rules from 
+the capitalization rules from
 <http://en.wikibooks.org/wiki/Basic_Book_Design/Capitalizing_Words_in_Titles>.
 * **Date:** Specify the date you submitted the change. Format the date as
 *YYYY-MMM* (e.g., 2014-Mar) or *YYYY-MMM-DD* (e.g., 2014-Feb-25).
@@ -36,7 +36,7 @@ the capitalization rules from
 (Optional).
 * **What changed?** Identify the affected component and the type of change that
 was made.
-* **Who is affected?** Are end users affected? Are developers affected? If the
+* **Who is affected?** Are end-users affected? Are developers affected? If the
 only affected people are those using a certain feature or API, say so.
 * **How should I update my code?** Explain any client code changes required.
 * **Why was this change made?** Explain the reason for the change. If
@@ -224,49 +224,316 @@ Some content (such as web content) needs the `PortletRequest` and
 `PortletResponse` parameters in order to be rendered.
 
 ---------------------------------------
-### DDM Structure Local Service API has no longer the `updateXSDFieldMetadata()` operation
+
+### Only One Portlet Instance's Settings is Used Per Portlet
+- **Date:** 2014-Jun-06
+- **JIRA Ticket:** LPS-43134
+
+#### What changed?
+Previously, some portlets allowed separate setups per portlet instance,
+regardless of whether the instances were in the same page or in different pages.
+For some of the portlet setup fields, however, it didn't make sense to allow
+different values in different instances. The flexibility of these fields was
+unnecessary and confused users. As part of this change, these fields have been
+moved from portlet instance setup to Site Administration.
+
+The upgrade process takes care of making the necessary database changes. In the
+case of several portlet instances having different configurations, however, only
+one configuration is preserved.
+
+For example, if you configured three Bookmarks portlets where the mail
+configuration was the same, upgrade will be the same and you won't have any
+problem. But if you configured the three portlet instances differently, only one
+configuration will be chosen. To find out which configuration is chosen, you can
+check the log generated in the console by the upgrade process.
+
+Since configuring instances of the same portlet type differently is highly
+discouraged and notoriously problematic, we expect this change will
+inconvenience only a very low minority of portal users.
+
+#### Who is affected?
+Affected users are those who have specified varying configurations for multiple
+portlet instances of a portlet type, that stores configurations at the layout
+level.
+
+#### How should I update my code?
+The upgrade process chooses one portlet instance's configurations and stores it
+at the service level. After the upgrade, you should review the portlet's
+configuration and make any necessary modifications.
+
+#### Why was this change made?
+Unifying portlet and service configuration facilitates managing them.
+
+---------------------------------------
+
+### DDM Structure Local Service API No Longer Has the `updateXSDFieldMetadata()` operation
 - **Date:** 2014-Jun-11
 - **JIRA Ticket:** LPS-47559
 
 #### What changed?
-DDM Structure Local API users should not make direct reference to its internal representation, any call to modify the its content should be done through DDMForm model.
+The `updateXSDFieldMetadata()` operation was removed from the DDM Structure
+Local Service API.
+
+DDM Structure Local API users should reference a structure's internal
+representation; any call to modify a DDM structure's content should be done
+through the DDMForm model.
 
 #### Who is affected?
 Applications that use the DDM Structure Local Service API might be affected.
 
 #### How should I update my code?
-You should always use DDMForm to update the DDM Structure content. You can retrieve it by calling `ddmStructure.getDDMForm()`. Peform any changes to it and then call `DDMStructureLocalServiceUtil.updateDDMStructure(ddmStructure)`.
+You should always use DDMForm to update the DDM Structure content. You can
+retrieve it by calling `ddmStructure.getDDMForm()`. Perform any changes to it and
+then call `DDMStructureLocalServiceUtil.updateDDMStructure(ddmStructure)`.
 
 #### Why was this change made?
-This change gives users the flexibility to modify the structure content without to worry about the DDM Structure internal content representation of data.
+This change gives users the flexibility to modify the structure content without
+concerning themselves with the DDM Structure's internal content representation
+of data.
 
 ---------------------------------------
-### aui:input taglib for type checkbox does not create a hidden input anymore
+
+### The `aui:input` Taglib for Type `checkbox` No Longer Creates a Hidden Input
 - **Date:** 2014-Jun-16
 - **JIRA Ticket:** LPS-44228
 
 #### What changed?
-Whenever the aui:input taglib is used to generate an input of type checkbox, only an input tag will be generated, instead of the checkbox and hidden field it was generating before.
-For this reason, when a checkox is not checked, the parameter is not sent to the server (therefore, doing request.getParameter("checkboxName") will return null when the checkbox was unchecked).
-In order to help developers bypass this situation, we now send with the aui:form a parameter with a list of all the checkboxes that existed in the form called "checkboxNames".
+Whenever the aui:input taglib is used to generate an input of type checkbox,
+only an input tag will be generated, instead of the checkbox and hidden field it
+was generating before.
 
 #### Who is affected?
-Anyone trying to grab the previously generated fields. Mostly affects JavaScript code trying to add some additional actions when clicking on the checkboxes.
-It will also affect java classes assuming that a checkbox would always send a parameter on form submit with a true/false value. Now, the parameter is only sent when the input is checked.
+Anyone trying to grab the previously generated fields is affected. The change
+mostly affects JavaScript code trying to add some additional actions when
+clicking on the checkboxes.
 
 #### How should I update my code?
-- In the frontend javascript code:
- - Remove the `Checkbox` suffix when querying for the node in any of its forms; `A.one(...)`, `$(...)` ...
- - Remove any action trying to set the value of the checkbox on the previously generated hidden field
-- In the backend java code:
- - Use ParamUtil.getBoolean to recover a true/false value if the checkbox was checked or not checked
- - Use PropertiesParamUtil.getProperties to recover true/false for a list of checkboxes
- - Use the parameter called "checkboxNames" to obtain all the checkboxes from the aui:form
- 
+In your front-end JavaScript code, follow these steps:
+
+- Remove the `Checkbox` suffix when querying for the node in any of its forms,
+like `A.one(...)`, `$(...)`, etc.
+- Remove any action that tries to set the value of the checkbox on the
+previously generated hidden field.
 
 #### Why was this change made?
-This change:
-- Makes generated forms more standard and interoperable since it falls back to the checkboxes default behaviour.
-- Allows the form to be submitted properly even when JavaScript is disabled.
+This change makes generated forms more standard and interoperable since it falls
+back to the checkboxes default behavior. It allows the form to be submitted
+properly even when JavaScript is disabled.
+
+---------------------------------------
+
+### Using `util-taglib` No Longer Binds You to Using `portal-service`'s `javax.servlet.jsp` Implementation
+- **Date:** 2014-Jun-19
+- **JIRA Ticket:** LPS-47682
+
+#### What changed?
+Several APIs in `portal-service.jar` contained references to the
+`javax.servlet.jsp` package. This forced `util-taglib`, which depended on many
+of the package's features, to be bound to the same JSP implementation.
+
+Due to this, the following APIs had breaking changes:
+
+- `LanguageUtil`
+- `UnicodeLanguageUtil`
+- `VelocityTaglibImpl`
+- `ThemeUtil`
+- `RuntimePageUtil`
+- `PortletDisplayTemplateUtil`
+- `DDMXSDUtil`
+- `PortletResourceBundles`
+- `ResourceActionsUtil`
+- `PortalUtil`
+
+#### How should I update my code?
+Code invoking the APIs listed above should should be updated to use an
+`HttpServletRequest` parameter instead of the formerly used `PageContext`
+parameter.
+
+#### Why was this change made?
+As stated previously, the use of the `javax.servlet.jsp` API in `portal-service`
+prevented the use of any other JSP impl within plugins (OSGi or otherwise). This
+limited what Liferay could change with respect to providing its own JSP
+implementation within OSGi.
+
+---------------------------------------
+
+### Changes in Exceptions Thrown by User Services
+- **Date:** 2014-Jul-03
+- **JIRA Ticket:** LPS-47130
+
+#### What changed?
+
+In order to provide more information about the root cause of an exception,
+several exceptions have been extended with static inner classes, one for each
+cause. As a result of this effort, some exceptions have been identified that
+really belong as static inner subclasses of existing exceptions.
+
+#### Who is affected?
+
+Client code which is handling any of the following exceptions:
+
+- `DuplicateUserScreenNameException`
+- `DuplicateUserEmailAddressException`
+
+#### How should I update my code?
+
+Replace the old exception with the equivalent inner class exception as follows:
+
+- `DuplicateUserScreenNameException` &rarr;
+`UserScreenNameException.MustNotBeDuplicate`
+- `DuplicateUserEmailAddressException` &rarr;
+`UserEmailAddressException.MustNotBeDuplicate`
+
+#### Why was this change made?
+
+This change provides more information to clients of the services API about the
+root cause of an error. It provides a more helpful error message to the end-user
+and it allows for easier recovery, when possible.
+
+---------------------------------------
+
+### Removed Trash Logic from `DLAppHelperLocalService` Methods
+- **Date:** 2014-Jul-22
+- **JIRA Ticket:** LPS-47508
+
+#### What changed?
+
+The `deleteFileEntry()` and `deleteFolder()` methods in
+`DLAppHelperLocalService` deleted the corresponding trash entry in the database.
+This logic has been removed from these methods.
+
+#### Who is affected?
+
+Every caller of the `deleteFileEntry()` and `deleteFolder()` methods is
+affected.
+
+#### How should I update my code?
+
+There is no direct replacement. Trash operations are now accessible through the
+`TrashCapability` implementations for each repository. The following code
+demonstrates using a `TrashCapability` instance to delete a `FileEntry`:
+
+    Repository repository = getRepository();
+
+    TrashCapability trashCapability = repository.getCapability(
+        TrashCapability.class);
+
+    FileEntry fileEntry = repository.getFileEntry(fileEntryId);
+
+    trashCapability.deleteFileEntry(fileEntry);
+
+Note that the `deleteFileEntry()` and `deleteFolder()` methods in
+`TrashCapability` not only remove the trash entry, but also remove the folder or
+file entry itself, and any associated data, such as assets, previews, etc.
+
+#### Why was this change made?
+
+This change was made to allow different kinds of repositories to support trash
+operations in a uniform way.
+
+---------------------------------------
+
+### Removed Sync Logic from `DLAppHelperLocalService` Methods
+- **Date:** 2014-Sep-05
+- **JIRA Ticket:** LPS-48895
+
+#### What changed?
+
+The `moveFileEntry()` and `moveFolder()` methods in `DLAppHelperLocalService`
+fired Liferay Sync events. These methods have been removed.
+
+#### Who is affected?
+
+Every caller of the `moveFileEntry()` and `moveFolder()` methods is affected.
+
+#### How should I update my code?
+
+There is no direct replacement. Sync operations are now accessible through the
+`SyncCapability` implementations for each repository. The following code
+demonstrates using a `SyncCapability` instance to move a `FileEntry`:
+
+    Repository repository = getRepository();
+
+    SyncCapability syncCapability = repository.getCapability(
+        SyncCapability.class);
+
+    FileEntry fileEntry = repository.getFileEntry(fileEntryId);
+
+    syncCapability.moveFileEntry(fileEntry);
+
+#### Why was this change made?
+
+There are repositories that don't support Liferay Sync operations.
+
+---------------------------------------
+### Removed the .aui namespace from around Bootstrap
+- **Date:** 2014-Sep-26
+- **JIRA Ticket:** LPS-50348
+
+#### What changed?
+
+The `.aui` namespace was removed from prefixing all of Bootstrap's CSS.
+
+#### Who is affected?
+
+Theme and plugin developers that targeted their CSS to relying on the
+namespace.
+
+#### How should I update my code?
+
+Theme developers can still manually add an `aui.css` file in their `_diffs`
+directory, and add it back in, as well as adding the `aui` css class to the
+`$root_css_class` variable.
+
+#### Why was this change made?
+
+Due to changes in the Sass parser, the nesting of third-party libraries was
+causing some syntax errors which broke other functionality (such as RTL
+conversion). There was also a lot of additional complexity for a relatively
+minor benefit.
+
+---------------------------------------
+### Moved MVCPortlet, ActionCommand and ActionCommandCache from util-bridges.jar to portal-service.jar
+- **Date:** 2014-09-26
+- **JIRA Ticket:** LPS-50156
+
+#### What changed?
+
+The classes from package `com.liferay.util.bridges.mvc` in util-bridges.jar
+were moved to a new package `com.liferay.portal.kernel.portlet.bridges.mvc`
+in portal-service.jar
+
+The classes affected are:
+
+```
+com.liferay.util.bridges.mvc.ActionCommand
+com.liferay.util.bridges.mvc.BaseActionCommand
+```
+
+They have are now:
+
+```
+com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand
+com.liferay.portal.kernel.portlet.bridges.mvc.BaseActionCommand
+```
+
+In addition `com.liferay.util.bridges.mvc.MVCPortlet` is a deprecated, but
+was made to extend `com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet`.
+
+#### Who is affected?
+
+This will affect any implementations of ActionCommand.
+
+#### How should I update my code?
+
+Replace imports of `com.liferay.util.bridges.mvc.ActionCommand` by
+`com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand` or
+`com.liferay.util.bridges.mvc.BaseActionCommand` by
+`com.liferay.portal.kernel.portlet.bridges.mvc.BaseActionCommand`
+
+#### Why was this change made?
+
+This change was made in order to avoid duplication of an implementable
+interface in the system. Duplication can cause ClassCastExceptions.
 
 ---------------------------------------

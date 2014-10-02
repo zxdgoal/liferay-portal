@@ -201,11 +201,18 @@ public class DLImpl implements DL {
 
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 
-		DLPortletInstanceSettings dlPortletInstanceSettings =
-			DLPortletInstanceSettings.getInstance(
-				themeDisplay.getLayout(), portletDisplay.getId());
+		long defaultFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
-		long defaultFolderId = dlPortletInstanceSettings.getDefaultFolderId();
+		boolean ignoreRootFolder = ParamUtil.getBoolean(
+			request, "ignoreRootFolder");
+
+		if (!ignoreRootFolder) {
+			DLPortletInstanceSettings dlPortletInstanceSettings =
+				DLPortletInstanceSettings.getInstance(
+					themeDisplay.getLayout(), portletDisplay.getId());
+
+			defaultFolderId = dlPortletInstanceSettings.getDefaultFolderId();
+		}
 
 		List<Folder> ancestorFolders = Collections.emptyList();
 
@@ -275,6 +282,8 @@ public class DLImpl implements DL {
 		String strutsAction = ParamUtil.getString(request, "struts_action");
 
 		long groupId = ParamUtil.getLong(request, "groupId");
+		boolean ignoreRootFolder = ParamUtil.getBoolean(
+			request, "ignoreRootFolder");
 
 		PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -289,6 +298,8 @@ public class DLImpl implements DL {
 
 			portletURL.setParameter("struts_action", strutsAction);
 			portletURL.setParameter("groupId", String.valueOf(groupId));
+			portletURL.setParameter(
+				"ignoreRootFolder", String.valueOf(ignoreRootFolder));
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 			PortalUtil.addPortletBreadcrumbEntry(
@@ -816,13 +827,13 @@ public class DLImpl implements DL {
 		sb.append(fileEntry.getFolderId());
 		sb.append(StringPool.SLASH);
 
-		String title = fileEntry.getTitle();
+		String fileName = fileEntry.getFileName();
 
 		if (fileEntry.isInTrash()) {
-			title = TrashUtil.getOriginalTitle(fileEntry.getTitle());
+			fileName = TrashUtil.getOriginalTitle(fileEntry.getFileName());
 		}
 
-		sb.append(HttpUtil.encodeURL(HtmlUtil.unescape(title)));
+		sb.append(HttpUtil.encodeURL(HtmlUtil.unescape(fileName)));
 
 		sb.append(StringPool.SLASH);
 		sb.append(HttpUtil.encodeURL(fileEntry.getUuid()));
@@ -871,7 +882,7 @@ public class DLImpl implements DL {
 	}
 
 	@Override
-	public OrderByComparator getRepositoryModelOrderByComparator(
+	public <T> OrderByComparator<T> getRepositoryModelOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = true;
@@ -880,28 +891,56 @@ public class DLImpl implements DL {
 			orderByAsc = false;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<T> orderByComparator = null;
 
 		if (orderByCol.equals("creationDate")) {
-			orderByComparator = new RepositoryModelCreateDateComparator(
+			orderByComparator = new RepositoryModelCreateDateComparator<T>(
 				orderByAsc);
 		}
 		else if (orderByCol.equals("downloads")) {
-			orderByComparator = new RepositoryModelReadCountComparator(
+			orderByComparator = new RepositoryModelReadCountComparator<T>(
 				orderByAsc);
 		}
 		else if (orderByCol.equals("modifiedDate")) {
-			orderByComparator = new RepositoryModelModifiedDateComparator(
+			orderByComparator = new RepositoryModelModifiedDateComparator<T>(
 				orderByAsc);
 		}
 		else if (orderByCol.equals("size")) {
-			orderByComparator = new RepositoryModelSizeComparator(orderByAsc);
+			orderByComparator = new RepositoryModelSizeComparator<T>(
+				orderByAsc);
 		}
 		else {
-			orderByComparator = new RepositoryModelNameComparator(orderByAsc);
+			orderByComparator = new RepositoryModelNameComparator<T>(
+				orderByAsc);
 		}
 
 		return orderByComparator;
+	}
+
+	@Override
+	public String getSanitizedFileName(String title, String extension) {
+		String fileName = StringUtil.replace(
+			title, StringPool.SLASH, StringPool.UNDERLINE);
+
+		if (Validator.isNotNull(extension) &&
+			!fileName.endsWith(StringPool.PERIOD + extension)) {
+
+			fileName += StringPool.PERIOD + extension;
+		}
+
+		if (fileName.length() > 255) {
+			int x = fileName.length() - 1;
+
+			if (Validator.isNotNull(extension)) {
+				x = fileName.lastIndexOf(StringPool.PERIOD + extension);
+			}
+
+			int y = x - (fileName.length() - 255);
+
+			fileName = fileName.substring(0, y) + fileName.substring(x);
+		}
+
+		return fileName;
 	}
 
 	@Override
@@ -1063,22 +1102,12 @@ public class DLImpl implements DL {
 			webDavURL.append(MANUAL_CHECK_IN_REQUIRED_PATH);
 		}
 
-		String fileEntryTitle = null;
+		String fileEntryFileName = null;
 
 		Group group = null;
 
 		if (fileEntry != null) {
-			String extension = fileEntry.getExtension();
-
-			fileEntryTitle = HtmlUtil.unescape(fileEntry.getTitle());
-
-			if (openDocumentUrl && isOfficeExtension(extension) &&
-				!fileEntryTitle.endsWith(StringPool.PERIOD + extension)) {
-
-				webDavURL.append(OFFICE_EXTENSION_PATH);
-
-				fileEntryTitle += StringPool.PERIOD + extension;
-			}
+			fileEntryFileName = HtmlUtil.unescape(fileEntry.getFileName());
 
 			group = GroupLocalServiceUtil.getGroup(fileEntry.getGroupId());
 		}
@@ -1114,7 +1143,7 @@ public class DLImpl implements DL {
 
 		if (fileEntry != null) {
 			sb.append(StringPool.SLASH);
-			sb.append(HttpUtil.encodeURL(fileEntryTitle, true));
+			sb.append(HttpUtil.encodeURL(fileEntryFileName, true));
 		}
 
 		webDavURL.append(sb.toString());

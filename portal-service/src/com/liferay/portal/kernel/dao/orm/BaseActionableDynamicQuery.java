@@ -48,8 +48,8 @@ public abstract class BaseActionableDynamicQuery
 		TransactionAttribute.Builder builder =
 			new TransactionAttribute.Builder();
 
-		builder.propagation(Propagation.REQUIRES_NEW);
-		builder.rollbackForClasses(
+		builder.setPropagation(Propagation.REQUIRES_NEW);
+		builder.setRollbackForClasses(
 			PortalException.class, SystemException.class);
 
 		REQUIRES_NEW_TRANSACTION_ATTRIBUTE = builder.build();
@@ -147,6 +147,11 @@ public abstract class BaseActionableDynamicQuery
 	@Override
 	public void setClassLoader(ClassLoader classLoader) {
 		_classLoader = classLoader;
+	}
+
+	@Override
+	public void setCommitImmediately(boolean commitImmediately) {
+		_commitImmediately = commitImmediately;
 	}
 
 	@Override
@@ -352,7 +357,8 @@ public abstract class BaseActionableDynamicQuery
 		}
 
 		SearchEngineUtil.updateDocuments(
-			_searchEngineId, _companyId, new ArrayList<Document>(_documents));
+			_searchEngineId, _companyId, new ArrayList<Document>(_documents),
+			_commitImmediately);
 
 		_documents.clear();
 	}
@@ -372,6 +378,7 @@ public abstract class BaseActionableDynamicQuery
 	private BaseLocalService _baseLocalService;
 	private ClassLoader _classLoader;
 	private Class<?> _clazz;
+	private boolean _commitImmediately;
 	private long _companyId;
 	private Collection<Document> _documents;
 	private Method _dynamicQueryCountMethod;

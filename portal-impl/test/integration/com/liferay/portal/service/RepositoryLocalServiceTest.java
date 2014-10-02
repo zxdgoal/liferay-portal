@@ -14,13 +14,13 @@
 
 package com.liferay.portal.service;
 
-import com.liferay.portal.NoSuchRepositoryEntryException;
+import com.liferay.portal.kernel.repository.InvalidRepositoryIdException;
 import com.liferay.portal.kernel.repository.RepositoryException;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
@@ -92,7 +92,7 @@ public class RepositoryLocalServiceTest {
 			dlFolder.getRepositoryId());
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateLocalRepositoryFromInvalidFolderId()
 		throws Exception {
 
@@ -101,7 +101,7 @@ public class RepositoryLocalServiceTest {
 		RepositoryLocalServiceUtil.getLocalRepositoryImpl(folderId, 0, 0);
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateLocalRepositoryFromNonexistentFileEntryId()
 		throws Exception {
 
@@ -110,7 +110,7 @@ public class RepositoryLocalServiceTest {
 		RepositoryLocalServiceUtil.getLocalRepositoryImpl(0, fileEntryId, 0);
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateLocalRepositoryFromNonexistentFileVersionId()
 		throws Exception {
 
@@ -172,7 +172,7 @@ public class RepositoryLocalServiceTest {
 			dlFolder.getRepositoryId());
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateRepositoryFromNonexistentFileEntryId()
 		throws Exception {
 
@@ -181,7 +181,7 @@ public class RepositoryLocalServiceTest {
 		RepositoryLocalServiceUtil.getRepositoryImpl(0, fileEntryId, 0);
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateRepositoryFromNonexistentFileVersionId()
 		throws Exception {
 
@@ -190,7 +190,7 @@ public class RepositoryLocalServiceTest {
 		RepositoryLocalServiceUtil.getRepositoryImpl(0, 0, fileVersionId);
 	}
 
-	@Test(expected = NoSuchRepositoryEntryException.class)
+	@Test(expected = InvalidRepositoryIdException.class)
 	public void testCreateRepositoryFromNonexistentFolderId() throws Exception {
 		long folderId = RandomTestUtil.randomLong();
 

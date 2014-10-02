@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.persistence;
 
-import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -23,18 +22,18 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BasePersistence;
-import com.liferay.portal.service.persistence.PersistenceExecutionTestListener;
-import com.liferay.portal.test.LiferayPersistenceIntegrationJUnitTestRunner;
-import com.liferay.portal.test.persistence.test.TransactionalPersistenceAdvice;
+import com.liferay.portal.test.TransactionalTestRule;
+import com.liferay.portal.test.runners.PersistenceIntegrationJUnitTestRunner;
+import com.liferay.portal.tools.DBUpgrader;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.test.RandomTestUtil;
 
@@ -45,58 +44,49 @@ import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
 
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Brian Wing Shun Chan
+ * @generated
  */
-@ExecutionTestListeners(listeners =  {
-	PersistenceExecutionTestListener.class})
-@RunWith(LiferayPersistenceIntegrationJUnitTestRunner.class)
+@RunWith(PersistenceIntegrationJUnitTestRunner.class)
 public class MBCategoryPersistenceTest {
-	@Before
-	public void setUp() {
-		_modelListeners = _persistence.getListeners();
+	@ClassRule
+	public static TransactionalTestRule transactionalTestRule = new TransactionalTestRule(Propagation.REQUIRED);
 
-		for (ModelListener<MBCategory> modelListener : _modelListeners) {
-			_persistence.unregisterListener(modelListener);
+	@BeforeClass
+	public static void setupClass() throws TemplateException {
+		try {
+			DBUpgrader.upgrade();
 		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		TemplateManagerUtil.init();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		Map<Serializable, BasePersistence<?>> basePersistences = _transactionalPersistenceAdvice.getBasePersistences();
+		Iterator<MBCategory> iterator = _mbCategories.iterator();
 
-		Set<Serializable> primaryKeys = basePersistences.keySet();
+		while (iterator.hasNext()) {
+			_persistence.remove(iterator.next());
 
-		for (Serializable primaryKey : primaryKeys) {
-			BasePersistence<?> basePersistence = basePersistences.get(primaryKey);
-
-			try {
-				basePersistence.remove(primaryKey);
-			}
-			catch (Exception e) {
-				if (_log.isDebugEnabled()) {
-					_log.debug("The model with primary key " + primaryKey +
-						" was already deleted");
-				}
-			}
-		}
-
-		_transactionalPersistenceAdvice.reset();
-
-		for (ModelListener<MBCategory> modelListener : _modelListeners) {
-			_persistence.registerListener(modelListener);
+			iterator.remove();
 		}
 	}
 
@@ -169,7 +159,7 @@ public class MBCategoryPersistenceTest {
 
 		newMBCategory.setStatusDate(RandomTestUtil.nextDate());
 
-		_persistence.update(newMBCategory);
+		_mbCategories.add(_persistence.update(newMBCategory));
 
 		MBCategory existingMBCategory = _persistence.findByPrimaryKey(newMBCategory.getPrimaryKey());
 
@@ -336,31 +326,6 @@ public class MBCategoryPersistenceTest {
 	}
 
 	@Test
-	public void testCountByG_P_S() {
-		try {
-			_persistence.countByG_P_S(RandomTestUtil.nextLong(),
-				RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
-
-			_persistence.countByG_P_S(0L, 0L, 0);
-		}
-		catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-
-	@Test
-	public void testCountByG_P_SArrayable() {
-		try {
-			_persistence.countByG_P_S(RandomTestUtil.nextLong(),
-				new long[] { RandomTestUtil.nextLong(), 0L },
-				RandomTestUtil.nextInt());
-		}
-		catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
-	}
-
-	@Test
 	public void testCountByNotC_G_P() {
 		try {
 			_persistence.countByNotC_G_P(RandomTestUtil.nextLong(),
@@ -380,6 +345,31 @@ public class MBCategoryPersistenceTest {
 					RandomTestUtil.nextLong(), 0L
 				}, RandomTestUtil.nextLong(),
 				new long[] { RandomTestUtil.nextLong(), 0L });
+		}
+		catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testCountByG_P_S() {
+		try {
+			_persistence.countByG_P_S(RandomTestUtil.nextLong(),
+				RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+
+			_persistence.countByG_P_S(0L, 0L, 0);
+		}
+		catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testCountByG_P_SArrayable() {
+		try {
+			_persistence.countByG_P_S(RandomTestUtil.nextLong(),
+				new long[] { RandomTestUtil.nextLong(), 0L },
+				RandomTestUtil.nextInt());
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -458,7 +448,7 @@ public class MBCategoryPersistenceTest {
 		}
 	}
 
-	protected OrderByComparator getOrderByComparator() {
+	protected OrderByComparator<MBCategory> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("MBCategory", "uuid", true,
 			"categoryId", true, "groupId", true, "companyId", true, "userId",
 			true, "userName", true, "createDate", true, "modifiedDate", true,
@@ -722,13 +712,12 @@ public class MBCategoryPersistenceTest {
 
 		mbCategory.setStatusDate(RandomTestUtil.nextDate());
 
-		_persistence.update(mbCategory);
+		_mbCategories.add(_persistence.update(mbCategory));
 
 		return mbCategory;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(MBCategoryPersistenceTest.class);
-	private ModelListener<MBCategory>[] _modelListeners;
-	private MBCategoryPersistence _persistence = (MBCategoryPersistence)PortalBeanLocatorUtil.locate(MBCategoryPersistence.class.getName());
-	private TransactionalPersistenceAdvice _transactionalPersistenceAdvice = (TransactionalPersistenceAdvice)PortalBeanLocatorUtil.locate(TransactionalPersistenceAdvice.class.getName());
+	private List<MBCategory> _mbCategories = new ArrayList<MBCategory>();
+	private MBCategoryPersistence _persistence = MBCategoryUtil.getPersistence();
 }

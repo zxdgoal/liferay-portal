@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 import net.sf.ehcache.CacheException;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
@@ -45,6 +46,13 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 				properties.getProperty(_REPLICATE_UPDATES), true);
 			_replicateUpdatesViaCopy = GetterUtil.getBoolean(
 				properties.getProperty(_REPLICATE_UPDATES_VIA_COPY));
+		}
+		else {
+			_replicatePuts = true;
+			_replicatePutsViaCopy = false;
+			_replicateRemovals = true;
+			_replicateUpdates = true;
+			_replicateUpdatesViaCopy = false;
 		}
 	}
 
@@ -73,16 +81,18 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 			return;
 		}
 
+		CacheManager cacheManager = ehcache.getCacheManager();
 		Serializable key = (Serializable)element.getObjectKey();
 
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), key, PortalCacheClusterEventType.PUT);
+				cacheManager.getName(), ehcache.getName(), key,
+				PortalCacheClusterEventType.PUT);
 
 		if (_replicatePutsViaCopy) {
-			Serializable value = (Serializable)element.getObjectValue();
-
-			portalCacheClusterEvent.setElementValue(value);
+			portalCacheClusterEvent.setElementValue(
+				(Serializable)element.getObjectValue());
+			portalCacheClusterEvent.setTimeToLive(element.getTimeToLive());
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
@@ -98,11 +108,13 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 			return;
 		}
 
+		CacheManager cacheManager = ehcache.getCacheManager();
 		Serializable key = (Serializable)element.getObjectKey();
 
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), key, PortalCacheClusterEventType.REMOVE);
+				cacheManager.getName(), ehcache.getName(), key,
+				PortalCacheClusterEventType.REMOVE);
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
 	}
@@ -112,22 +124,24 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 		throws CacheException {
 
 		if (!_replicateUpdates ||
-			!ClusterReplicationThreadLocal.isReplicate() ||
-			!ClusterReplicationThreadLocal.isReplicateUpdate()) {
+			!ClusterReplicationThreadLocal.isReplicate()) {
 
 			return;
 		}
 
 		Serializable key = (Serializable)element.getObjectKey();
 
+		CacheManager cacheManager = ehcache.getCacheManager();
+
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), key, PortalCacheClusterEventType.UPDATE);
+				cacheManager.getName(), ehcache.getName(), key,
+				PortalCacheClusterEventType.UPDATE);
 
 		if (_replicateUpdatesViaCopy) {
-			Serializable value = (Serializable)element.getObjectValue();
-
-			portalCacheClusterEvent.setElementValue(value);
+			portalCacheClusterEvent.setElementValue(
+				(Serializable)element.getObjectValue());
+			portalCacheClusterEvent.setTimeToLive(element.getTimeToLive());
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
@@ -141,9 +155,11 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 			return;
 		}
 
+		CacheManager cacheManager = ehcache.getCacheManager();
+
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), null,
+				cacheManager.getName(), ehcache.getName(), null,
 				PortalCacheClusterEventType.REMOVE_ALL);
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
@@ -161,10 +177,10 @@ public class EhcachePortalCacheClusterReplicator implements CacheEventListener {
 	private static final String _REPLICATE_UPDATES_VIA_COPY =
 		"replicateUpdatesViaCopy";
 
-	private boolean _replicatePuts = true;
-	private boolean _replicatePutsViaCopy;
-	private boolean _replicateRemovals = true;
-	private boolean _replicateUpdates = true;
-	private boolean _replicateUpdatesViaCopy;
+	private final boolean _replicatePuts;
+	private final boolean _replicatePutsViaCopy;
+	private final boolean _replicateRemovals;
+	private final boolean _replicateUpdates;
+	private final boolean _replicateUpdatesViaCopy;
 
 }

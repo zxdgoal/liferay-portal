@@ -31,6 +31,8 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.lar.xstream.XStreamAliasRegistryUtil;
+import com.liferay.portal.kernel.lar.xstream.XStreamConverterRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -41,10 +43,15 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.Repository;
+import com.liferay.portal.model.impl.RepositoryEntryImpl;
+import com.liferay.portal.model.impl.RepositoryImpl;
 import com.liferay.portal.repository.liferayrepository.LiferayRepository;
 import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.documentlibrary.lar.xstream.FileEntryConverter;
+import com.liferay.portlet.documentlibrary.lar.xstream.FileVersionConverter;
+import com.liferay.portlet.documentlibrary.lar.xstream.FolderConverter;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
@@ -52,6 +59,10 @@ import com.liferay.portlet.documentlibrary.model.DLFileRank;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFileShortcutImpl;
+import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
@@ -107,6 +118,20 @@ public class DLPortletDataHandler extends BasePortletDataHandler {
 				NAMESPACE, "shortcuts", true, false, null,
 				DLFileShortcut.class.getName()));
 		setPublishToLiveByDefault(PropsValues.DL_PUBLISH_TO_LIVE_BY_DEFAULT);
+
+		XStreamAliasRegistryUtil.register(DLFileEntryImpl.class, "DLFileEntry");
+		XStreamAliasRegistryUtil.register(
+			DLFileEntryTypeImpl.class, "DLFileEntryType");
+		XStreamAliasRegistryUtil.register(
+			DLFileShortcutImpl.class, "DLFileShortcut");
+		XStreamAliasRegistryUtil.register(DLFolderImpl.class, "DLFolder");
+		XStreamAliasRegistryUtil.register(RepositoryImpl.class, "Repository");
+		XStreamAliasRegistryUtil.register(
+			RepositoryEntryImpl.class, "RepositoryEntry");
+
+		XStreamConverterRegistryUtil.register(new FileEntryConverter());
+		XStreamConverterRegistryUtil.register(new FileVersionConverter());
+		XStreamConverterRegistryUtil.register(new FolderConverter());
 	}
 
 	@Override
@@ -347,7 +372,7 @@ public class DLPortletDataHandler extends BasePortletDataHandler {
 
 				Map<Long, Long> folderIds =
 					(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-						Folder.class);
+						Folder.class + ".folderIdsAndRepositoryEntryIds");
 
 				rootFolderId = MapUtil.getLong(
 					folderIds, rootFolderId, rootFolderId);
@@ -495,7 +520,7 @@ public class DLPortletDataHandler extends BasePortletDataHandler {
 							portletDataContext.getScopeGroupId(),
 							portletDataContext.getDateRange(),
 							portletDataContext.getScopeGroupId(),
-							new QueryDefinition(
+							new QueryDefinition<DLFileEntry>(
 								WorkflowConstants.STATUS_APPROVED));
 
 					StagedModelType stagedModelType =
