@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -67,6 +69,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.PasswordPolicyLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class PasswordPolicyLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements PasswordPolicyLocalService,
 		IdentifiableBean {
@@ -144,8 +147,7 @@ public abstract class PasswordPolicyLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return passwordPolicyPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -162,8 +164,8 @@ public abstract class PasswordPolicyLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return passwordPolicyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -182,9 +184,8 @@ public abstract class PasswordPolicyLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return passwordPolicyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -327,7 +328,7 @@ public abstract class PasswordPolicyLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deletePasswordPolicy((PasswordPolicy)persistedModel);
+		return passwordPolicyLocalService.deletePasswordPolicy((PasswordPolicy)persistedModel);
 	}
 
 	@Override

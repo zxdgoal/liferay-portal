@@ -33,6 +33,22 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 		_dlContentLocalService = dlContentLocalService;
 	}
 
+	@Override
+	public com.liferay.portlet.documentlibrary.model.DLContent addContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version, byte[] bytes) {
+		return _dlContentLocalService.addContent(companyId, repositoryId, path,
+			version, bytes);
+	}
+
+	@Override
+	public com.liferay.portlet.documentlibrary.model.DLContent addContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version, java.io.InputStream inputStream, long size) {
+		return _dlContentLocalService.addContent(companyId, repositoryId, path,
+			version, inputStream, size);
+	}
+
 	/**
 	* Adds the document library content to the database. Also notifies the appropriate model listeners.
 	*
@@ -55,6 +71,27 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 	public com.liferay.portlet.documentlibrary.model.DLContent createDLContent(
 		long contentId) {
 		return _dlContentLocalService.createDLContent(contentId);
+	}
+
+	@Override
+	public void deleteContent(long companyId, long repositoryId,
+		java.lang.String path, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_dlContentLocalService.deleteContent(companyId, repositoryId, path,
+			version);
+	}
+
+	@Override
+	public void deleteContents(long companyId, long repositoryId,
+		java.lang.String path) {
+		_dlContentLocalService.deleteContents(companyId, repositoryId, path);
+	}
+
+	@Override
+	public void deleteContentsByDirectory(long companyId, long repositoryId,
+		java.lang.String dirName) {
+		_dlContentLocalService.deleteContentsByDirectory(companyId,
+			repositoryId, dirName);
 	}
 
 	/**
@@ -83,6 +120,16 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 		return _dlContentLocalService.deleteDLContent(dlContent);
 	}
 
+	/**
+	* @throws PortalException
+	*/
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _dlContentLocalService.deletePersistedModel(persistedModel);
+	}
+
 	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _dlContentLocalService.dynamicQuery();
@@ -95,8 +142,7 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _dlContentLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -114,8 +160,7 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _dlContentLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -135,11 +180,10 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _dlContentLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -176,6 +220,56 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 		return _dlContentLocalService.fetchDLContent(contentId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _dlContentLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _dlContentLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.portlet.documentlibrary.model.DLContent getContent(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return _dlContentLocalService.getContent(companyId, repositoryId, path);
+	}
+
+	@Override
+	public com.liferay.portlet.documentlibrary.model.DLContent getContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version)
+		throws com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return _dlContentLocalService.getContent(companyId, repositoryId, path,
+			version);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
+		long companyId, long repositoryId) {
+		return _dlContentLocalService.getContents(companyId, repositoryId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
+		long companyId, long repositoryId, java.lang.String path) {
+		return _dlContentLocalService.getContents(companyId, repositoryId, path);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContentsByDirectory(
+		long companyId, long repositoryId, java.lang.String dirName) {
+		return _dlContentLocalService.getContentsByDirectory(companyId,
+			repositoryId, dirName);
+	}
+
 	/**
 	* Returns the document library content with the primary key.
 	*
@@ -188,28 +282,6 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 		long contentId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _dlContentLocalService.getDLContent(contentId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _dlContentLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _dlContentLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _dlContentLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -239,32 +311,24 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 		return _dlContentLocalService.getDLContentsCount();
 	}
 
-	/**
-	* Updates the document library content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param dlContent the document library content
-	* @return the document library content that was updated
-	*/
-	@Override
-	public com.liferay.portlet.documentlibrary.model.DLContent updateDLContent(
-		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
-		return _dlContentLocalService.updateDLContent(dlContent);
-	}
-
 	@Override
 	public com.liferay.portlet.documentlibrary.model.DLContentDataBlobModel getDataBlobModel(
 		java.io.Serializable primaryKey) {
 		return _dlContentLocalService.getDataBlobModel(primaryKey);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _dlContentLocalService.getBeanIdentifier();
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _dlContentLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public boolean hasContent(long companyId, long repositoryId,
+		java.lang.String path, java.lang.String version) {
+		return _dlContentLocalService.hasContent(companyId, repositoryId, path,
+			version);
 	}
 
 	/**
@@ -278,91 +342,22 @@ public class DLContentLocalServiceWrapper implements DLContentLocalService,
 	}
 
 	@Override
-	public com.liferay.portlet.documentlibrary.model.DLContent addContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version, byte[] bytes) {
-		return _dlContentLocalService.addContent(companyId, repositoryId, path,
-			version, bytes);
-	}
-
-	@Override
-	public com.liferay.portlet.documentlibrary.model.DLContent addContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version, java.io.InputStream inputStream, long size) {
-		return _dlContentLocalService.addContent(companyId, repositoryId, path,
-			version, inputStream, size);
-	}
-
-	@Override
-	public void deleteContent(long companyId, long repositoryId,
-		java.lang.String path, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_dlContentLocalService.deleteContent(companyId, repositoryId, path,
-			version);
-	}
-
-	@Override
-	public void deleteContents(long companyId, long repositoryId,
-		java.lang.String path) {
-		_dlContentLocalService.deleteContents(companyId, repositoryId, path);
-	}
-
-	@Override
-	public void deleteContentsByDirectory(long companyId, long repositoryId,
-		java.lang.String dirName) {
-		_dlContentLocalService.deleteContentsByDirectory(companyId,
-			repositoryId, dirName);
-	}
-
-	@Override
-	public com.liferay.portlet.documentlibrary.model.DLContent getContent(
-		long companyId, long repositoryId, java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return _dlContentLocalService.getContent(companyId, repositoryId, path);
-	}
-
-	@Override
-	public com.liferay.portlet.documentlibrary.model.DLContent getContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return _dlContentLocalService.getContent(companyId, repositoryId, path,
-			version);
-	}
-
-	@Override
-	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
-		long companyId, long repositoryId) {
-		return _dlContentLocalService.getContents(companyId, repositoryId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
-		long companyId, long repositoryId, java.lang.String path) {
-		return _dlContentLocalService.getContents(companyId, repositoryId, path);
-	}
-
-	@Override
-	public java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContentsByDirectory(
-		long companyId, long repositoryId, java.lang.String dirName) {
-		return _dlContentLocalService.getContentsByDirectory(companyId,
-			repositoryId, dirName);
-	}
-
-	@Override
-	public boolean hasContent(long companyId, long repositoryId,
-		java.lang.String path, java.lang.String version) {
-		return _dlContentLocalService.hasContent(companyId, repositoryId, path,
-			version);
-	}
-
-	@Override
 	public void updateDLContent(long companyId, long oldRepositoryId,
 		long newRepositoryId, java.lang.String oldPath, java.lang.String newPath) {
 		_dlContentLocalService.updateDLContent(companyId, oldRepositoryId,
 			newRepositoryId, oldPath, newPath);
+	}
+
+	/**
+	* Updates the document library content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param dlContent the document library content
+	* @return the document library content that was updated
+	*/
+	@Override
+	public com.liferay.portlet.documentlibrary.model.DLContent updateDLContent(
+		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
+		return _dlContentLocalService.updateDLContent(dlContent);
 	}
 
 	/**

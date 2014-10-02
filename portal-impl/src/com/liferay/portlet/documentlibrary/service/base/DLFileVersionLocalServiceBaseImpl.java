@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -71,6 +73,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class DLFileVersionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLFileVersionLocalService,
 		IdentifiableBean {
@@ -146,8 +149,7 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return dlFileVersionPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -164,8 +166,8 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return dlFileVersionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -184,9 +186,8 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return dlFileVersionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -219,20 +220,6 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 	@Override
 	public DLFileVersion fetchDLFileVersion(long fileVersionId) {
 		return dlFileVersionPersistence.fetchByPrimaryKey(fileVersionId);
-	}
-
-	/**
-	 * Returns the document library file version with the matching UUID and company.
-	 *
-	 * @param uuid the document library file version's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching document library file version, or <code>null</code> if a matching document library file version could not be found
-	 */
-	@Override
-	public DLFileVersion fetchDLFileVersionByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return dlFileVersionPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -352,7 +339,7 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteDLFileVersion((DLFileVersion)persistedModel);
+		return dlFileVersionLocalService.deleteDLFileVersion((DLFileVersion)persistedModel);
 	}
 
 	@Override
@@ -361,18 +348,18 @@ public abstract class DLFileVersionLocalServiceBaseImpl
 		return dlFileVersionPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the document library file version with the matching UUID and company.
-	 *
-	 * @param uuid the document library file version's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching document library file version
-	 * @throws PortalException if a matching document library file version could not be found
-	 */
 	@Override
-	public DLFileVersion getDLFileVersionByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return dlFileVersionPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<DLFileVersion> getDLFileVersionsByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return dlFileVersionPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DLFileVersion> getDLFileVersionsByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<DLFileVersion> orderByComparator) {
+		return dlFileVersionPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

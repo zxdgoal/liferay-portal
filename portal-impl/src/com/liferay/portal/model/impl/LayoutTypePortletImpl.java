@@ -29,13 +29,13 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CustomizedPages;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutTemplate;
+import com.liferay.portal.model.LayoutTypeController;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.Plugin;
@@ -53,6 +53,7 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
+import com.liferay.portal.util.LayoutTypePortletFactoryUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsUtil;
@@ -67,8 +68,10 @@ import java.text.Format;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
@@ -79,12 +82,10 @@ import java.util.Map;
 public class LayoutTypePortletImpl
 	extends LayoutTypeImpl implements LayoutTypePortlet {
 
-	public static String generateInstanceId() {
-		return StringUtil.randomString(12);
-	}
+	public LayoutTypePortletImpl(
+		Layout layout, LayoutTypeController layoutTypeController) {
 
-	public LayoutTypePortletImpl(Layout layout) {
-		super(layout);
+		super(layout, layoutTypeController);
 
 		if (_nestedPortletsNamespace == null) {
 			_nestedPortletsNamespace = PortalUtil.getPortletNamespace(
@@ -1043,7 +1044,7 @@ public class LayoutTypePortletImpl
 
 		long plid = getPlid();
 
-		List<String> customPortletIds = new UniqueList<String>();
+		Set<String> customPortletIds = new HashSet<String>();
 
 		for (String columnId : getColumns()) {
 			String value = _portalPreferences.getValue(
@@ -1242,7 +1243,7 @@ public class LayoutTypePortletImpl
 			!PortletConstants.hasInstanceId(portletId)) {
 
 			portletId = PortletConstants.assemblePortletId(
-				portletId, generateInstanceId());
+				portletId, PortletConstants.generateInstanceId());
 		}
 
 		if (hasPortletId(portletId, strictHasPortlet)) {
@@ -1431,7 +1432,8 @@ public class LayoutTypePortletImpl
 		}
 
 		LayoutTypePortletImpl defaultLayoutTypePortletImpl =
-			new LayoutTypePortletImpl(getLayout());
+			(LayoutTypePortletImpl)LayoutTypePortletFactoryUtil.create(
+				getLayout());
 
 		defaultLayoutTypePortletImpl._embeddedPortlets = _embeddedPortlets;
 		defaultLayoutTypePortletImpl._layoutSetPrototypeLayout =
@@ -1686,7 +1688,7 @@ public class LayoutTypePortletImpl
 				String instanceId = null;
 
 				if (PortletConstants.hasInstanceId(portletId)) {
-					instanceId = generateInstanceId();
+					instanceId = PortletConstants.generateInstanceId();
 				}
 
 				newPortletId = PortletConstants.assemblePortletId(
@@ -1798,7 +1800,7 @@ public class LayoutTypePortletImpl
 	}
 
 	protected void onRemoveFromLayout(String[] portletIds) {
-		List<String> portletIdList = new UniqueList<String>();
+		Set<String> portletIdList = new HashSet<String>();
 
 		for (String portletId : portletIds) {
 			removeModesPortletId(portletId);
@@ -1876,7 +1878,7 @@ public class LayoutTypePortletImpl
 	private boolean _customizedView;
 	private Format _dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
 		PropsValues.INDEX_DATE_FORMAT_PATTERN);
-	private List<Portlet> _embeddedPortlets;
+	private transient List<Portlet> _embeddedPortlets;
 	private boolean _enablePortletLayoutListener = true;
 	private Layout _layoutSetPrototypeLayout;
 	private PortalPreferences _portalPreferences;

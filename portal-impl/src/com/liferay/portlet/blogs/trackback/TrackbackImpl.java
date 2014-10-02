@@ -14,11 +14,12 @@
 
 package com.liferay.portlet.blogs.trackback;
 
-import com.liferay.portal.comment.CommentManagerImpl;
 import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.Function;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -27,6 +28,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.blogs.linkback.LinkbackConsumer;
 import com.liferay.portlet.blogs.linkback.LinkbackConsumerUtil;
 import com.liferay.portlet.blogs.model.BlogsEntry;
+import com.liferay.portlet.blogs.util.BlogsUtil;
 
 /**
  * @author Alexander Chow
@@ -71,6 +73,11 @@ public class TrackbackImpl implements Trackback {
 	protected String buildBody(
 		ThemeDisplay themeDisplay, String excerpt, String url) {
 
+		url = StringUtil.replace(
+			url,
+			new String[] {StringPool.CLOSE_BRACKET, StringPool.OPEN_BRACKET},
+			new String[] {"%5D", "%5B"});
+
 		StringBundler sb = new StringBundler(7);
 
 		sb.append("[...] ");
@@ -97,7 +104,7 @@ public class TrackbackImpl implements Trackback {
 		return sb.toString();
 	}
 
-	private CommentManager _commentManager = new CommentManagerImpl();
+	private CommentManager _commentManager = BlogsUtil.getCommentManager();
 	private LinkbackConsumer _linkbackConsumer =
 		LinkbackConsumerUtil.getLinkbackConsumer();
 

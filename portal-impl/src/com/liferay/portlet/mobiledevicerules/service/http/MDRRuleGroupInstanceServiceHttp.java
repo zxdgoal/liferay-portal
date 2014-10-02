@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.mobiledevicerules.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -51,6 +53,7 @@ import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupInstanceService
  * @see com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupInstanceServiceUtil
  * @generated
  */
+@ProviderType
 public class MDRRuleGroupInstanceServiceHttp {
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance addRuleGroupInstance(
 		HttpPrincipal httpPrincipal, long groupId, java.lang.String className,
@@ -152,7 +155,7 @@ public class MDRRuleGroupInstanceServiceHttp {
 	public static java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance> getRuleGroupInstances(
 		HttpPrincipal httpPrincipal, java.lang.String className, long classPK,
 		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance> orderByComparator) {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleGroupInstanceServiceUtil.class,
 					"getRuleGroupInstances",

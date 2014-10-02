@@ -16,10 +16,15 @@ package com.liferay.portal.repository.liferayrepository.model;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.StagedModelType;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.repository.model.RepositoryModelOperation;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
+import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 
@@ -36,7 +41,7 @@ import java.util.Map;
 public class LiferayFileVersion extends LiferayModel implements FileVersion {
 
 	public LiferayFileVersion(DLFileVersion dlFileVersion) {
-		_dlFileVersion = dlFileVersion;
+		this(dlFileVersion, false);
 	}
 
 	public LiferayFileVersion(
@@ -91,6 +96,13 @@ public class LiferayFileVersion extends LiferayModel implements FileVersion {
 	}
 
 	@Override
+	public void execute(RepositoryModelOperation repositoryModelOperation)
+		throws PortalException {
+
+		repositoryModelOperation.execute(this);
+	}
+
+	@Override
 	public Map<String, Serializable> getAttributes() {
 		ExpandoBridge expandoBridge = _dlFileVersion.getExpandoBridge();
 
@@ -111,7 +123,19 @@ public class LiferayFileVersion extends LiferayModel implements FileVersion {
 	public InputStream getContentStream(boolean incrementCounter)
 		throws PortalException {
 
-		return _dlFileVersion.getContentStream(incrementCounter);
+		InputStream inputStream = _dlFileVersion.getContentStream(
+			incrementCounter);
+
+		try {
+			DLAppHelperLocalServiceUtil.getFileAsStream(
+				PrincipalThreadLocal.getUserId(), getFileEntry(),
+				incrementCounter);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		return inputStream;
 	}
 
 	@Override
@@ -153,6 +177,11 @@ public class LiferayFileVersion extends LiferayModel implements FileVersion {
 	@Override
 	public long getFileEntryId() {
 		return _dlFileVersion.getFileEntryId();
+	}
+
+	@Override
+	public String getFileName() {
+		return _dlFileVersion.getFileName();
 	}
 
 	@Override
@@ -385,7 +414,9 @@ public class LiferayFileVersion extends LiferayModel implements FileVersion {
 		}
 	}
 
-	private DLFileVersion _dlFileVersion;
-	private boolean _escapedModel;
+	private static Log _log = LogFactoryUtil.getLog(LiferayFileVersion.class);
+
+	private final DLFileVersion _dlFileVersion;
+	private final boolean _escapedModel;
 
 }

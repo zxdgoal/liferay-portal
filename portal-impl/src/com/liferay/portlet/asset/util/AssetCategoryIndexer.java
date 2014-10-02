@@ -56,6 +56,7 @@ public class AssetCategoryIndexer extends BaseIndexer {
 	public static final String PORTLET_ID = PortletKeys.ASSET_CATEGORIES_ADMIN;
 
 	public AssetCategoryIndexer() {
+		setCommitImmediately(true);
 		setDefaultSelectedFieldNames(
 			Field.ASSET_CATEGORY_ID, Field.COMPANY_ID, Field.GROUP_ID,
 			Field.UID);
@@ -90,6 +91,22 @@ public class AssetCategoryIndexer extends BaseIndexer {
 	public void postProcessContextQuery(
 			BooleanQuery contextQuery, SearchContext searchContext)
 		throws Exception {
+
+		long[] parentCategoryIds = (long[])searchContext.getAttribute(
+			Field.ASSET_PARENT_CATEGORY_IDS);
+
+		if (!ArrayUtil.isEmpty(parentCategoryIds)) {
+			BooleanQuery parentCategoryQuery = BooleanQueryFactoryUtil.create(
+				searchContext);
+
+			for (long parentCategoryId : parentCategoryIds) {
+				parentCategoryQuery.addTerm(
+					Field.ASSET_PARENT_CATEGORY_ID,
+					String.valueOf(parentCategoryId));
+			}
+
+			contextQuery.add(parentCategoryQuery, BooleanClauseOccur.MUST);
+		}
 
 		long[] vocabularyIds = (long[])searchContext.getAttribute(
 			Field.ASSET_VOCABULARY_IDS);
@@ -140,7 +157,7 @@ public class AssetCategoryIndexer extends BaseIndexer {
 
 		SearchEngineUtil.deleteDocument(
 			getSearchEngineId(), assetCategory.getCompanyId(),
-			document.get(Field.UID));
+			document.get(Field.UID), isCommitImmediately());
 	}
 
 	@Override
@@ -162,6 +179,8 @@ public class AssetCategoryIndexer extends BaseIndexer {
 		addSearchAssetCategoryTitles(
 			document, Field.ASSET_CATEGORY_TITLE, categories);
 
+		document.addKeyword(
+			Field.ASSET_PARENT_CATEGORY_ID, category.getParentCategoryId());
 		document.addKeyword(
 			Field.ASSET_VOCABULARY_ID, category.getVocabularyId());
 		document.addLocalizedText(
@@ -192,7 +211,8 @@ public class AssetCategoryIndexer extends BaseIndexer {
 
 		if (document != null) {
 			SearchEngineUtil.updateDocument(
-				getSearchEngineId(), category.getCompanyId(), document);
+				getSearchEngineId(), category.getCompanyId(), document,
+				isCommitImmediately());
 		}
 	}
 

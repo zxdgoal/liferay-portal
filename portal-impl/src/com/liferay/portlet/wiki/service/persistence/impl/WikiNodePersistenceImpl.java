@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.wiki.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -47,7 +45,6 @@ import com.liferay.portlet.wiki.service.persistence.WikiNodePersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +65,7 @@ import java.util.Set;
  * @see WikiNodeUtil
  * @generated
  */
+@ProviderType
 public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	implements WikiNodePersistence {
 	/*
@@ -152,7 +150,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +270,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByUuid_First(uuid, orderByComparator);
 
 		if (wikiNode != null) {
@@ -300,7 +299,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -320,7 +319,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (wikiNode != null) {
@@ -348,7 +348,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -376,7 +376,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByUuid_PrevAndNext(long nodeId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
 		Session session = null;
@@ -405,8 +406,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode getByUuid_PrevAndNext(Session session,
-		WikiNode wikiNode, String uuid, OrderByComparator orderByComparator,
-		boolean previous) {
+		WikiNode wikiNode, String uuid,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -931,7 +932,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1061,7 +1062,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1094,7 +1096,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1116,7 +1118,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1149,7 +1152,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1178,7 +1181,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByUuid_C_PrevAndNext(long nodeId, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<WikiNode> orderByComparator)
 		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
@@ -1209,7 +1212,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 
 	protected WikiNode getByUuid_C_PrevAndNext(Session session,
 		WikiNode wikiNode, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1483,7 +1486,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1589,7 +1592,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByGroupId_First(groupId, orderByComparator);
 
 		if (wikiNode != null) {
@@ -1617,7 +1621,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1637,7 +1641,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByGroupId_Last(groupId, orderByComparator);
 
 		if (wikiNode != null) {
@@ -1665,7 +1670,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1693,7 +1698,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByGroupId_PrevAndNext(long nodeId, long groupId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
 		Session session = null;
@@ -1722,8 +1728,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode getByGroupId_PrevAndNext(Session session,
-		WikiNode wikiNode, long groupId, OrderByComparator orderByComparator,
-		boolean previous) {
+		WikiNode wikiNode, long groupId,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1870,7 +1876,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> filterFindByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -1960,7 +1966,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] filterFindByGroupId_PrevAndNext(long nodeId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<WikiNode> orderByComparator)
 		throws NoSuchNodeException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(nodeId, groupId, orderByComparator);
@@ -1994,8 +2000,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode filterGetByGroupId_PrevAndNext(Session session,
-		WikiNode wikiNode, long groupId, OrderByComparator orderByComparator,
-		boolean previous) {
+		WikiNode wikiNode, long groupId,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2313,7 +2319,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2419,7 +2425,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByCompanyId_First(companyId, orderByComparator);
 
 		if (wikiNode != null) {
@@ -2447,7 +2454,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByCompanyId(companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2467,7 +2474,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByCompanyId_Last(companyId, orderByComparator);
 
 		if (wikiNode != null) {
@@ -2495,7 +2503,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -2523,7 +2531,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByCompanyId_PrevAndNext(long nodeId, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
 		Session session = null;
@@ -2552,8 +2561,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode getByCompanyId_PrevAndNext(Session session,
-		WikiNode wikiNode, long companyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		WikiNode wikiNode, long companyId,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3046,7 +3055,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByG_S(long groupId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3162,7 +3171,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByG_S_First(groupId, status, orderByComparator);
 
 		if (wikiNode != null) {
@@ -3194,7 +3204,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByG_S(groupId, status, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -3215,7 +3225,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByG_S_Last(groupId, status, orderByComparator);
 
 		if (wikiNode != null) {
@@ -3247,7 +3258,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByG_S(groupId, status);
 
 		if (count == 0) {
@@ -3276,7 +3287,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByG_S_PrevAndNext(long nodeId, long groupId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<WikiNode> orderByComparator)
 		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
@@ -3306,8 +3317,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode getByG_S_PrevAndNext(Session session, WikiNode wikiNode,
-		long groupId, int status, OrderByComparator orderByComparator,
-		boolean previous) {
+		long groupId, int status,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3462,7 +3473,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> filterFindByG_S(long groupId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<WikiNode> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_S(groupId, status, start, end, orderByComparator);
 		}
@@ -3557,7 +3568,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] filterFindByG_S_PrevAndNext(long nodeId, long groupId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<WikiNode> orderByComparator)
 		throws NoSuchNodeException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_S_PrevAndNext(nodeId, groupId, status,
@@ -3593,7 +3604,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 
 	protected WikiNode filterGetByG_S_PrevAndNext(Session session,
 		WikiNode wikiNode, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3930,7 +3941,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findByC_S(long companyId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4046,7 +4057,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByC_S_First(companyId, status,
 				orderByComparator);
 
@@ -4079,7 +4091,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByC_S_First(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		List<WikiNode> list = findByC_S(companyId, status, 0, 1,
 				orderByComparator);
 
@@ -4101,7 +4113,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode findByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchNodeException {
+		OrderByComparator<WikiNode> orderByComparator)
+		throws NoSuchNodeException {
 		WikiNode wikiNode = fetchByC_S_Last(companyId, status, orderByComparator);
 
 		if (wikiNode != null) {
@@ -4133,7 +4146,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode fetchByC_S_Last(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		int count = countByC_S(companyId, status);
 
 		if (count == 0) {
@@ -4162,7 +4175,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public WikiNode[] findByC_S_PrevAndNext(long nodeId, long companyId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<WikiNode> orderByComparator)
 		throws NoSuchNodeException {
 		WikiNode wikiNode = findByPrimaryKey(nodeId);
 
@@ -4192,8 +4205,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	}
 
 	protected WikiNode getByC_S_PrevAndNext(Session session, WikiNode wikiNode,
-		long companyId, int status, OrderByComparator orderByComparator,
-		boolean previous) {
+		long companyId, int status,
+		OrderByComparator<WikiNode> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5073,7 +5086,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 */
 	@Override
 	public List<WikiNode> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<WikiNode> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5209,25 +5222,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 * Initializes the wiki node persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.wiki.model.WikiNode")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<WikiNode>> listenersList = new ArrayList<ModelListener<WikiNode>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<WikiNode>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -5256,11 +5250,11 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No WikiNode exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No WikiNode exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(WikiNodePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(WikiNodePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static WikiNode _nullWikiNode = new WikiNodeImpl() {
+	private static final WikiNode _nullWikiNode = new WikiNodeImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -5272,7 +5266,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 			}
 		};
 
-	private static CacheModel<WikiNode> _nullWikiNodeCacheModel = new CacheModel<WikiNode>() {
+	private static final CacheModel<WikiNode> _nullWikiNodeCacheModel = new CacheModel<WikiNode>() {
 			@Override
 			public WikiNode toEntityModel() {
 				return _nullWikiNode;

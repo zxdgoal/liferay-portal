@@ -71,7 +71,7 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 </c:if>
 
 <c:if test="<%= stagedLocally && (BackgroundTaskLocalServiceUtil.getBackgroundTasksCount(liveGroupId, LayoutStagingBackgroundTaskExecutor.class.getName(), false) > 0) %>">
-	<div class="alert alert-block">
+	<div class="alert alert-warning">
 		<liferay-ui:message key="an-inital-staging-publication-is-in-progress" />
 
 		<a id="<portlet:namespace />publishProcessesLink"><liferay-ui:message key="the-status-of-the-publication-can-be-checked-on-the-publish-screen" /></a>
@@ -86,11 +86,11 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 				Liferay.Util.openWindow(
 					{
 						id: 'publishProcesses',
-						title: Liferay.Language.get('initial-publication'),
+						title: '<liferay-ui:message key="initial-publication" />',
 
 						<liferay-portlet:renderURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="publishProcessesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-							<portlet:param name="<%= Constants.CMD %>" value="view_processes" />
 							<portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
+							<portlet:param name="<%= Constants.CMD %>" value="view_processes" />
 							<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
 							<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
 							<portlet:param name="groupId" value="<%= String.valueOf(stagingGroupId) %>" />
@@ -186,7 +186,7 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 
 				<aui:input label="remote-path-context" name="remotePathContext" size="10" type="text" value='<%= liveGroupTypeSettings.getProperty("remotePathContext") %>' />
 
-				<aui:input label='<%= LanguageUtil.get(pageContext, "remote-site-id" ) %>' name="remoteGroupId" size="10" type="text" value='<%= liveGroupTypeSettings.getProperty("remoteGroupId") %>' />
+				<aui:input label='<%= LanguageUtil.get(request, "remote-site-id" ) %>' name="remoteGroupId" size="10" type="text" value='<%= liveGroupTypeSettings.getProperty("remoteGroupId") %>' />
 
 				<aui:input label="use-a-secure-network-connection" name="secureConnection" type="checkbox" value='<%= liveGroupTypeSettings.getProperty("secureConnection") %>' />
 			</aui:fieldset>
@@ -204,7 +204,7 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 			</c:if>
 
 			<aui:fieldset helpMessage="staged-portlets-help" label="staged-content">
-				<div class="alert alert-block">
+				<div class="alert alert-warning">
 					<liferay-ui:message key="staged-portlets-alert" />
 				</div>
 

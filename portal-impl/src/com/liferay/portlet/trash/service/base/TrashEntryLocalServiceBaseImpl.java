@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.trash.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -64,6 +66,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class TrashEntryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements TrashEntryLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class TrashEntryLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return trashEntryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class TrashEntryLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return trashEntryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end);
 	}
@@ -176,9 +178,8 @@ public abstract class TrashEntryLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return trashEntryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -253,7 +254,7 @@ public abstract class TrashEntryLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteTrashEntry((TrashEntry)persistedModel);
+		return trashEntryLocalService.deleteTrashEntry((TrashEntry)persistedModel);
 	}
 
 	@Override

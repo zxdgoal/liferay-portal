@@ -32,7 +32,12 @@ import java.util.Map;
  */
 public class DLSettings {
 
-	public static final String[] MULTI_VALUED_KEYS = {};
+	public static final String[] ALL_KEYS = {
+		"emailFileEntryAddedBody", "emailFileEntryAddedSubject",
+		"emailFileEntryUpdatedBody", "emailFileEntryUpdatedSubject",
+		"emailFromAddress", "emailFromName", "emailFileEntryAddedEnabled",
+		"emailFileEntryUpdatedEnabled", "showHiddenMountFolders"
+	};
 
 	public static DLSettings getInstance(long groupId) throws PortalException {
 		Settings settings = SettingsFactoryUtil.getGroupServiceSettings(
@@ -121,6 +126,10 @@ public class DLSettings {
 		return _typedSettings.getBooleanValue("emailFileEntryUpdatedEnabled");
 	}
 
+	public boolean isShowHiddenMountFolders() {
+		return _typedSettings.getBooleanValue("showHiddenMountFolders");
+	}
+
 	private static FallbackKeys _getFallbackKeys() {
 		FallbackKeys fallbackKeys = new FallbackKeys();
 
@@ -165,6 +174,8 @@ public class DLSettings {
 			PropsKeys.SEARCH_CONTAINER_PAGE_DEFAULT_DELTA);
 		fallbackKeys.add(
 			"showFoldersSearch", PropsKeys.DL_FOLDERS_SEARCH_VISIBLE);
+		fallbackKeys.add(
+			"showHiddenMountFolders", PropsKeys.DL_SHOW_HIDDEN_MOUNT_FOLDERS);
 		fallbackKeys.add("showSubfolders", PropsKeys.DL_SUBFOLDERS_VISIBLE);
 
 		return fallbackKeys;

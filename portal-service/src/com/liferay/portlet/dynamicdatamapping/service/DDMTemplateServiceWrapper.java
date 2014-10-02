@@ -33,26 +33,6 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	}
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _ddmTemplateService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_ddmTemplateService.setBeanIdentifier(beanIdentifier);
-	}
-
-	/**
 	* Adds a template.
 	*
 	* @param groupId the primary key of the group
@@ -239,18 +219,13 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	}
 
 	/**
-	* Returns the template with the ID.
+	* Returns the Spring bean ID for this bean.
 	*
-	* @param templateId the primary key of the template
-	* @return the template with the ID
-	* @throws PortalException if the user did not have permission to view the
-	template or if a matching template could not be found
+	* @return the Spring bean ID for this bean
 	*/
 	@Override
-	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate getTemplate(
-		long templateId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _ddmTemplateService.getTemplate(templateId);
+	public java.lang.String getBeanIdentifier() {
+		return _ddmTemplateService.getBeanIdentifier();
 	}
 
 	/**
@@ -271,20 +246,23 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	}
 
 	/**
-	* Returns the template matching the group and template key, optionally in
-	* the global scope.
+	* Returns the template matching the group and template key, optionally
+	* searching ancestor sites (that have sharing enabled) and global scoped
+	* sites.
 	*
 	* <p>
 	* This method first searches in the group. If the template is still not
 	* found and <code>includeAncestorTemplates</code> is set to
-	* <code>true</code>, this method searches the global group.
+	* <code>true</code>, this method searches the group's ancestor sites (that
+	* have sharing enabled) and lastly searches global scoped sites.
 	* </p>
 	*
 	* @param groupId the primary key of the group
 	* @param classNameId the primary key of the class name for template's
 	related model
 	* @param templateKey the unique string identifying the template
-	* @param includeAncestorTemplates whether to include the global scope in the
+	* @param includeAncestorTemplates whether to include ancestor sites (that
+	have sharing enabled) and include global scoped sites in the
 	search
 	* @return the matching template
 	* @throws PortalException if a matching template could not be found
@@ -296,6 +274,21 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _ddmTemplateService.getTemplate(groupId, classNameId,
 			templateKey, includeAncestorTemplates);
+	}
+
+	/**
+	* Returns the template with the ID.
+	*
+	* @param templateId the primary key of the template
+	* @return the template with the ID
+	* @throws PortalException if the user did not have permission to view the
+	template or if a matching template could not be found
+	*/
+	@Override
+	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate getTemplate(
+		long templateId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _ddmTemplateService.getTemplate(templateId);
 	}
 
 	/**
@@ -405,7 +398,7 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	@Override
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplatesByStructureClassNameId(
 		long groupId, long structureClassNameId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> orderByComparator) {
 		return _ddmTemplateService.getTemplatesByStructureClassNameId(groupId,
 			structureClassNameId, start, end, orderByComparator);
 	}
@@ -468,7 +461,7 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		long companyId, long groupId, long classNameId, long classPK,
 		java.lang.String keywords, java.lang.String type,
 		java.lang.String mode, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> orderByComparator) {
 		return _ddmTemplateService.search(companyId, groupId, classNameId,
 			classPK, keywords, type, mode, start, end, orderByComparator);
 	}
@@ -520,7 +513,7 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		java.lang.String name, java.lang.String description,
 		java.lang.String type, java.lang.String mode,
 		java.lang.String language, boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> orderByComparator) {
 		return _ddmTemplateService.search(companyId, groupId, classNameId,
 			classPK, name, description, type, mode, language, andOperator,
 			start, end, orderByComparator);
@@ -566,7 +559,7 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		long companyId, long[] groupIds, long[] classNameIds, long[] classPKs,
 		java.lang.String keywords, java.lang.String type,
 		java.lang.String mode, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> orderByComparator) {
 		return _ddmTemplateService.search(companyId, groupIds, classNameIds,
 			classPKs, keywords, type, mode, start, end, orderByComparator);
 	}
@@ -618,7 +611,7 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		java.lang.String name, java.lang.String description,
 		java.lang.String type, java.lang.String mode,
 		java.lang.String language, boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> orderByComparator) {
 		return _ddmTemplateService.search(companyId, groupIds, classNameIds,
 			classPKs, name, description, type, mode, language, andOperator,
 			start, end, orderByComparator);
@@ -750,6 +743,53 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	}
 
 	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_ddmTemplateService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
+	* Updates the template matching the ID.
+	*
+	* @param templateId the primary key of the template
+	* @param classPK the primary key of the template's related entity
+	* @param nameMap the template's new locales and localized names
+	* @param descriptionMap the template's new locales and localized
+	description
+	* @param type the template's type. For more information, see {@link
+	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
+	* @param mode the template's mode. For more information, see {@link
+	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
+	* @param language the template's script language. For more information,
+	see {@link
+	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
+	* @param script the template's script
+	* @param cacheable whether the template is cacheable
+	* @param serviceContext the service context to be applied. Can set the
+	modification date.
+	* @return the updated template
+	* @throws PortalException if the user did not have permission to update the
+	template or if a portal exception occurred
+	*/
+	@Override
+	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate updateTemplate(
+		long templateId, long classPK,
+		java.util.Map<java.util.Locale, java.lang.String> nameMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String type, java.lang.String mode,
+		java.lang.String language, java.lang.String script, boolean cacheable,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _ddmTemplateService.updateTemplate(templateId, classPK, nameMap,
+			descriptionMap, type, mode, language, script, cacheable,
+			serviceContext);
+	}
+
+	/**
 	* Updates the template matching the ID.
 	*
 	* @param templateId the primary key of the template
@@ -791,43 +831,6 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 		return _ddmTemplateService.updateTemplate(templateId, classPK, nameMap,
 			descriptionMap, type, mode, language, script, cacheable,
 			smallImage, smallImageURL, smallImageFile, serviceContext);
-	}
-
-	/**
-	* Updates the template matching the ID.
-	*
-	* @param templateId the primary key of the template
-	* @param classPK the primary key of the template's related entity
-	* @param nameMap the template's new locales and localized names
-	* @param descriptionMap the template's new locales and localized
-	description
-	* @param type the template's type. For more information, see {@link
-	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
-	* @param mode the template's mode. For more information, see {@link
-	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
-	* @param language the template's script language. For more information,
-	see {@link
-	com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants}.
-	* @param script the template's script
-	* @param cacheable whether the template is cacheable
-	* @param serviceContext the service context to be applied. Can set the
-	modification date.
-	* @return the updated template
-	* @throws PortalException if the user did not have permission to update the
-	template or if a portal exception occurred
-	*/
-	@Override
-	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate updateTemplate(
-		long templateId, long classPK,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, java.lang.String mode,
-		java.lang.String language, java.lang.String script, boolean cacheable,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _ddmTemplateService.updateTemplate(templateId, classPK, nameMap,
-			descriptionMap, type, mode, language, script, cacheable,
-			serviceContext);
 	}
 
 	/**

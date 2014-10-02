@@ -14,8 +14,12 @@
 
 package com.liferay.portlet.blogs.util.test;
 
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowThreadLocal;
 import com.liferay.portal.model.Group;
@@ -116,7 +120,7 @@ public class BlogsTestUtil {
 		try {
 			WorkflowThreadLocal.setEnabled(true);
 
-			String deckTitle = StringPool.BLANK;
+			String subtitle = StringPool.BLANK;
 			String description = "Description";
 			String content = "Content";
 			int displayDateMonth = 1;
@@ -127,14 +131,34 @@ public class BlogsTestUtil {
 			boolean allowPingbacks = true;
 			boolean allowTrackbacks = true;
 			String[] trackbacks = new String[0];
-			InputStream smallImageInputStream = null;
-			String smallImageURL = StringPool.BLANK;
-			String smallImageFileName = StringPool.BLANK;
+
+			ImageSelector imageSelector = null;
 
 			if (smallImage) {
-				smallImageFileName = "image.jpg";
-				smallImageInputStream = BlogsTestUtil.class.getResourceAsStream(
-					"com/liferay/portal/util/dependencies/test.jpg");
+				Class<?> clazz = BlogsTestUtil.class;
+
+				ClassLoader classLoader = clazz.getClassLoader();
+
+				InputStream inputStream =
+					classLoader.getResourceAsStream(
+						"com/liferay/portal/util/dependencies/test.jpg");
+
+				FileEntry fileEntry = null;
+
+				try {
+					fileEntry = TempFileEntryUtil.getTempFileEntry(
+						serviceContext.getScopeGroupId(), userId,
+						BlogsEntry.class.getName(), "image.jpg");
+				}
+				catch (Exception e) {
+					fileEntry = TempFileEntryUtil.addTempFileEntry(
+						serviceContext.getScopeGroupId(), userId,
+						BlogsEntry.class.getName(), "image.jpg", inputStream,
+						MimeTypesUtil.getContentType("image.jpg"));
+				}
+
+				imageSelector = new ImageSelector(
+					fileEntry.getFileEntryId(), StringPool.BLANK);
 			}
 
 			serviceContext = (ServiceContext)serviceContext.clone();
@@ -143,11 +167,10 @@ public class BlogsTestUtil {
 				WorkflowConstants.ACTION_SAVE_DRAFT);
 
 			BlogsEntry entry = BlogsEntryLocalServiceUtil.addEntry(
-				userId, title, deckTitle, description, content,
-				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, allowPingbacks,
-				allowTrackbacks, trackbacks, smallImage, smallImageURL,
-				smallImageFileName, smallImageInputStream, serviceContext);
+				userId, title, subtitle, description, content, displayDateMonth,
+				displayDateDay, displayDateYear, displayDateHour,
+				displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
+				imageSelector, serviceContext);
 
 			if (approved) {
 				return updateStatus(entry, serviceContext);
@@ -190,13 +213,30 @@ public class BlogsTestUtil {
 	public static BlogsEntry updateEntry(BlogsEntry entry, boolean approved)
 		throws Exception {
 
+		return updateEntry(entry, RandomTestUtil.randomString(), approved);
+	}
+
+	public static BlogsEntry updateEntry(
+			BlogsEntry entry, String title, boolean approved)
+		throws Exception {
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(entry.getGroupId());
+
+		return updateEntry(entry, title, approved, serviceContext);
+	}
+
+	public static BlogsEntry updateEntry(
+			BlogsEntry entry, String title, boolean approved,
+			ServiceContext serviceContext)
+		throws Exception {
+
 		boolean workflowEnabled = WorkflowThreadLocal.isEnabled();
 
 		try {
 			WorkflowThreadLocal.setEnabled(true);
 
-			ServiceContext serviceContext =
-				ServiceContextTestUtil.getServiceContext(entry.getGroupId());
+			serviceContext = (ServiceContext)serviceContext.clone();
 
 			serviceContext.setCommand(Constants.UPDATE);
 			serviceContext.setLayoutFullURL("http://localhost");
@@ -204,11 +244,10 @@ public class BlogsTestUtil {
 				WorkflowConstants.ACTION_SAVE_DRAFT);
 
 			entry = BlogsEntryLocalServiceUtil.updateEntry(
-				entry.getUserId(), entry.getEntryId(),
-				RandomTestUtil.randomString(), entry.getDescription(),
-				entry.getContent(), 1, 1, 2012, 12, 00, true, true,
-				new String[0], entry.getSmallImage(), entry.getSmallImageURL(),
-				StringPool.BLANK, null, serviceContext);
+				entry.getUserId(), entry.getEntryId(), title,
+				entry.getSubtitle(), entry.getDescription(), entry.getContent(),
+				1, 1, 2012, 12, 00, true, true, new String[0], null,
+				serviceContext);
 
 			if (approved) {
 				return updateStatus(entry, serviceContext);

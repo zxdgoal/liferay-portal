@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -47,7 +45,6 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLFileShortcutPer
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +65,7 @@ import java.util.Set;
  * @see DLFileShortcutUtil
  * @generated
  */
+@ProviderType
 public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileShortcut>
 	implements DLFileShortcutPersistence {
 	/*
@@ -155,7 +153,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -275,7 +273,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByUuid_First(uuid,
 				orderByComparator);
 
@@ -304,7 +303,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -324,7 +323,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (dlFileShortcut != null) {
@@ -352,7 +352,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -380,7 +380,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] findByUuid_PrevAndNext(long fileShortcutId,
-		String uuid, OrderByComparator orderByComparator)
+		String uuid, OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
@@ -411,7 +411,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByUuid_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -938,7 +938,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1068,7 +1068,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1101,7 +1102,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1123,7 +1124,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1156,7 +1158,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1185,7 +1187,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] findByUuid_C_PrevAndNext(long fileShortcutId,
-		String uuid, long companyId, OrderByComparator orderByComparator)
+		String uuid, long companyId,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
@@ -1216,7 +1219,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByUuid_C_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1494,7 +1497,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1600,7 +1603,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -1629,7 +1633,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -1650,7 +1654,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -1679,7 +1684,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -1707,7 +1712,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] findByCompanyId_PrevAndNext(long fileShortcutId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
@@ -1738,7 +1743,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByCompanyId_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1975,7 +1980,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByToFileEntryId(long toFileEntryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2085,7 +2090,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByToFileEntryId_First(long toFileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_First(toFileEntryId,
 				orderByComparator);
 
@@ -2114,7 +2120,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByToFileEntryId_First(long toFileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByToFileEntryId(toFileEntryId, 0, 1,
 				orderByComparator);
 
@@ -2135,7 +2141,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByToFileEntryId_Last(long toFileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByToFileEntryId_Last(toFileEntryId,
 				orderByComparator);
 
@@ -2164,7 +2171,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByToFileEntryId_Last(long toFileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByToFileEntryId(toFileEntryId);
 
 		if (count == 0) {
@@ -2193,7 +2200,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public DLFileShortcut[] findByToFileEntryId_PrevAndNext(
 		long fileShortcutId, long toFileEntryId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
 		Session session = null;
@@ -2223,7 +2231,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByToFileEntryId_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long toFileEntryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2462,7 +2470,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByG_F(long groupId, long folderId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2578,7 +2586,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_First(long groupId, long folderId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_First(groupId, folderId,
 				orderByComparator);
 
@@ -2611,7 +2620,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_First(long groupId, long folderId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByG_F(groupId, folderId, 0, 1,
 				orderByComparator);
 
@@ -2633,7 +2642,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_Last(long groupId, long folderId,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_Last(groupId, folderId,
 				orderByComparator);
 
@@ -2666,7 +2676,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_Last(long groupId, long folderId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByG_F(groupId, folderId);
 
 		if (count == 0) {
@@ -2695,7 +2705,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] findByG_F_PrevAndNext(long fileShortcutId,
-		long groupId, long folderId, OrderByComparator orderByComparator)
+		long groupId, long folderId,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
@@ -2726,7 +2737,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByG_F_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2881,7 +2892,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> filterFindByG_F(long groupId, long folderId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F(groupId, folderId, start, end, orderByComparator);
 		}
@@ -2977,7 +2988,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] filterFindByG_F_PrevAndNext(long fileShortcutId,
-		long groupId, long folderId, OrderByComparator orderByComparator)
+		long groupId, long folderId,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F_PrevAndNext(fileShortcutId, groupId, folderId,
@@ -3013,7 +3025,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut filterGetByG_F_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3344,7 +3356,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByC_NotS(long companyId, int status,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3452,7 +3464,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByC_NotS_First(companyId, status,
 				orderByComparator);
 
@@ -3485,7 +3498,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByC_NotS_First(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByC_NotS(companyId, status, 0, 1,
 				orderByComparator);
 
@@ -3507,7 +3520,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByC_NotS_Last(companyId, status,
 				orderByComparator);
 
@@ -3540,7 +3554,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByC_NotS_Last(long companyId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByC_NotS(companyId, status);
 
 		if (count == 0) {
@@ -3569,7 +3583,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut[] findByC_NotS_PrevAndNext(long fileShortcutId,
-		long companyId, int status, OrderByComparator orderByComparator)
+		long companyId, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
@@ -3600,7 +3615,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByC_NotS_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long companyId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3862,7 +3877,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findByG_F_A(long groupId, long folderId,
-		boolean active, int start, int end, OrderByComparator orderByComparator) {
+		boolean active, int start, int end,
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3984,7 +4000,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_A_First(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_A_First(groupId, folderId,
 				active, orderByComparator);
@@ -4022,7 +4038,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_A_First(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator) {
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByG_F_A(groupId, folderId, active, 0,
 				1, orderByComparator);
 
@@ -4045,7 +4061,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_A_Last(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator)
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_A_Last(groupId, folderId,
 				active, orderByComparator);
@@ -4083,7 +4099,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_A_Last(long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator) {
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByG_F_A(groupId, folderId, active);
 
 		if (count == 0) {
@@ -4114,7 +4130,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public DLFileShortcut[] findByG_F_A_PrevAndNext(long fileShortcutId,
 		long groupId, long folderId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
 		Session session = null;
@@ -4144,7 +4161,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByG_F_A_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator, boolean previous) {
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4307,7 +4325,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> filterFindByG_F_A(long groupId, long folderId,
-		boolean active, int start, int end, OrderByComparator orderByComparator) {
+		boolean active, int start, int end,
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F_A(groupId, folderId, active, start, end,
 				orderByComparator);
@@ -4410,7 +4429,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public DLFileShortcut[] filterFindByG_F_A_PrevAndNext(long fileShortcutId,
 		long groupId, long folderId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F_A_PrevAndNext(fileShortcutId, groupId, folderId,
 				active, orderByComparator);
@@ -4445,7 +4465,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut filterGetByG_F_A_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		boolean active, OrderByComparator orderByComparator, boolean previous) {
+		boolean active, OrderByComparator<DLFileShortcut> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4818,7 +4839,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public List<DLFileShortcut> findByG_F_A_S(long groupId, long folderId,
 		boolean active, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4946,7 +4967,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_A_S_First(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_First(groupId, folderId,
 				active, status, orderByComparator);
@@ -4988,7 +5010,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_A_S_First(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator) {
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		List<DLFileShortcut> list = findByG_F_A_S(groupId, folderId, active,
 				status, 0, 1, orderByComparator);
 
@@ -5012,7 +5035,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut findByG_F_A_S_Last(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator)
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = fetchByG_F_A_S_Last(groupId, folderId,
 				active, status, orderByComparator);
@@ -5054,7 +5078,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public DLFileShortcut fetchByG_F_A_S_Last(long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator) {
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		int count = countByG_F_A_S(groupId, folderId, active, status);
 
 		if (count == 0) {
@@ -5086,7 +5111,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public DLFileShortcut[] findByG_F_A_S_PrevAndNext(long fileShortcutId,
 		long groupId, long folderId, boolean active, int status,
-		OrderByComparator orderByComparator) throws NoSuchFileShortcutException {
+		OrderByComparator<DLFileShortcut> orderByComparator)
+		throws NoSuchFileShortcutException {
 		DLFileShortcut dlFileShortcut = findByPrimaryKey(fileShortcutId);
 
 		Session session = null;
@@ -5116,8 +5142,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut getByG_F_A_S_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator,
-		boolean previous) {
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5289,7 +5315,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public List<DLFileShortcut> filterFindByG_F_A_S(long groupId,
 		long folderId, boolean active, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F_A_S(groupId, folderId, active, status, start, end,
 				orderByComparator);
@@ -5397,7 +5423,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	@Override
 	public DLFileShortcut[] filterFindByG_F_A_S_PrevAndNext(
 		long fileShortcutId, long groupId, long folderId, boolean active,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<DLFileShortcut> orderByComparator)
 		throws NoSuchFileShortcutException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_F_A_S_PrevAndNext(fileShortcutId, groupId, folderId,
@@ -5433,8 +5459,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 	protected DLFileShortcut filterGetByG_F_A_S_PrevAndNext(Session session,
 		DLFileShortcut dlFileShortcut, long groupId, long folderId,
-		boolean active, int status, OrderByComparator orderByComparator,
-		boolean previous) {
+		boolean active, int status,
+		OrderByComparator<DLFileShortcut> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -6445,7 +6471,7 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 */
 	@Override
 	public List<DLFileShortcut> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileShortcut> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6581,25 +6607,6 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	 * Initializes the document library file shortcut persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.documentlibrary.model.DLFileShortcut")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DLFileShortcut>> listenersList = new ArrayList<ModelListener<DLFileShortcut>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DLFileShortcut>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -6628,11 +6635,11 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLFileShortcut exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLFileShortcut exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DLFileShortcutPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DLFileShortcutPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "active"
 			});
-	private static DLFileShortcut _nullDLFileShortcut = new DLFileShortcutImpl() {
+	private static final DLFileShortcut _nullDLFileShortcut = new DLFileShortcutImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -6644,7 +6651,8 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 			}
 		};
 
-	private static CacheModel<DLFileShortcut> _nullDLFileShortcutCacheModel = new CacheModel<DLFileShortcut>() {
+	private static final CacheModel<DLFileShortcut> _nullDLFileShortcutCacheModel =
+		new CacheModel<DLFileShortcut>() {
 			@Override
 			public DLFileShortcut toEntityModel() {
 				return _nullDLFileShortcut;

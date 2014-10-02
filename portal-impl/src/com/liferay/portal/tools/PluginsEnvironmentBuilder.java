@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsValues;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -154,6 +154,38 @@ public class PluginsEnvironmentBuilder {
 		sb.append("\t\t</attributes>\n\t</classpathentry>\n");
 	}
 
+	protected void addIvyCacheJar(
+		StringBundler sb, String ivyDirName, String dependencyName) {
+
+		String dirName = ivyDirName + "/cache/" + dependencyName + "/bundles";
+
+		if (!_fileUtil.exists(dirName)) {
+			dirName = ivyDirName + "/cache/" + dependencyName + "/jars";
+
+			if (!_fileUtil.exists(dirName)) {
+				System.out.println("Unable to find jars in " + dirName);
+
+				return;
+			}
+		}
+
+		File dir = new File(dirName);
+
+		File[] files = dir.listFiles();
+
+		for (File file : files) {
+			if (!file.isFile()) {
+				continue;
+			}
+
+			addClasspathEntry(sb, dirName + "/" + file.getName());
+
+			return;
+		}
+
+		throw new RuntimeException("Unable to find jars in " + dirName);
+	}
+
 	protected List<String> getCommonJars() {
 		List<String> jars = new ArrayList<String>();
 
@@ -200,7 +232,7 @@ public class PluginsEnvironmentBuilder {
 			jars.add(currentImportShared + ".jar");
 
 			File currentImportSharedLibDir = new File(
-				projectDir, "/../../shared/" + currentImportShared + "/lib");
+				projectDir, "../../shared/" + currentImportShared + "/lib");
 
 			if (!currentImportSharedLibDir.exists()) {
 				continue;
@@ -254,6 +286,10 @@ public class PluginsEnvironmentBuilder {
 		File projectDir = new File(buildFile.getParent());
 
 		File libDir = new File(projectDir, "lib");
+
+		if (!libDir.exists()) {
+			libDir = new File(projectDir, "docroot/WEB-INF/lib");
+		}
 
 		writeEclipseFiles(libDir, projectDir, dependencyJars);
 
@@ -354,11 +390,11 @@ public class PluginsEnvironmentBuilder {
 			return;
 		}
 
-		List<String> globalJars = new UniqueList<String>();
-		List<String> portalJars = new UniqueList<String>();
+		Set<String> globalJars = new LinkedHashSet<String>();
+		List<String> portalJars = new ArrayList<String>();
 
-		List<String> extGlobalJars = new UniqueList<String>();
-		List<String> extPortalJars = new UniqueList<String>();
+		Set<String> extGlobalJars = new LinkedHashSet<String>();
+		Set<String> extPortalJars = new LinkedHashSet<String>();
 
 		String libDirPath = StringUtil.replace(
 			libDir.getPath(), StringPool.BACK_SLASH, StringPool.SLASH);
@@ -399,8 +435,11 @@ public class PluginsEnvironmentBuilder {
 			globalJars.add("portlet.jar");
 
 			portalJars.addAll(dependencyJars);
+			portalJars.add("bnd.jar");
 			portalJars.add("commons-logging.jar");
 			portalJars.add("log4j.jar");
+
+			portalJars = ListUtil.unique(portalJars);
 
 			Collections.sort(portalJars);
 		}
@@ -487,6 +526,8 @@ public class PluginsEnvironmentBuilder {
 			addClasspathEntry(sb, "/portal/lib/global/" + jar, attributes);
 		}
 
+		portalJars = ListUtil.unique(portalJars);
+
 		Collections.sort(portalJars);
 
 		for (String jar : portalJars) {
@@ -522,6 +563,38 @@ public class PluginsEnvironmentBuilder {
 			}
 			else {
 				addClasspathEntry(sb, "lib/" + jar);
+			}
+		}
+
+		File ivyXmlFile = new File(projectDirName, "ivy.xml");
+
+		if (ivyXmlFile.exists()) {
+			String content = _fileUtil.read(ivyXmlFile);
+
+			if (content.contains("arquillian-junit-container")) {
+				String ivyDirName = ".ivy";
+
+				for (int i = 0; i < 10; i++) {
+					if (_fileUtil.exists(ivyDirName)) {
+						break;
+					}
+
+					ivyDirName = "../" + ivyDirName;
+				}
+
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"com.liferay.arquillian" +
+						"/arquillian-deployment-generator-bnd");
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.apache.felix/org.apache.felix.framework");
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.jboss.arquillian.junit/arquillian-junit-core");
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.jboss.arquillian.test/arquillian-test-api");
 			}
 		}
 

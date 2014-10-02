@@ -73,7 +73,7 @@ public interface DB {
 
 	public static final String TYPE_SYBASE = "sybase";
 
-	void addIndexes(
+	public void addIndexes(
 			Connection con, String indexesSQL, Set<String> validIndexNames)
 		throws IOException;
 
@@ -86,8 +86,7 @@ public interface DB {
 
 	public String buildSQL(String template) throws IOException;
 
-	public void buildSQLFile(String sqlDir, String fileName)
-		throws IOException;
+	public void buildSQLFile(String sqlDir, String fileName) throws IOException;
 
 	public List<Index> getIndexes(Connection con) throws SQLException;
 

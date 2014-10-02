@@ -125,7 +125,7 @@
 		<column name="name" type="String" />
 		<column name="servletContextNames" type="String" />
 		<column name="taskExecutorClassName" type="String" />
-		<column name="taskContext" type="String" />
+		<column name="taskContextMap" type="Map" />
 		<column name="completed" type="boolean" />
 		<column name="completionDate" type="Date" />
 		<column name="status" type="int" />
@@ -287,6 +287,8 @@
 		<reference package-path="com.liferay.portal" entity="PasswordPolicy" />
 		<reference package-path="com.liferay.portal" entity="PortalPreferences" />
 		<reference package-path="com.liferay.portal" entity="Portlet" />
+		<reference package-path="com.liferay.portal" entity="Resource" />
+		<reference package-path="com.liferay.portal" entity="ResourcePermission" />
 		<reference package-path="com.liferay.portal" entity="Role" />
 		<reference package-path="com.liferay.portal" entity="Shard" />
 		<reference package-path="com.liferay.portal" entity="User" />
@@ -781,15 +783,15 @@
 			<finder-column name="privateLayout" />
 			<finder-column name="parentLayoutId" />
 		</finder>
-		<finder name="G_P_F" return-type="Layout" unique="true">
-			<finder-column name="groupId" />
-			<finder-column name="privateLayout" />
-			<finder-column name="friendlyURL" />
-		</finder>
 		<finder name="G_P_T" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="privateLayout" />
 			<finder-column name="type" />
+		</finder>
+		<finder name="G_P_F" return-type="Layout" unique="true">
+			<finder-column name="groupId" />
+			<finder-column name="privateLayout" />
+			<finder-column name="friendlyURL" />
 		</finder>
 		<finder name="G_P_SPLU" return-type="Layout">
 			<finder-column name="groupId" />
@@ -3007,12 +3009,26 @@
 		<finder name="UserId" return-type="Collection">
 			<finder-column name="userId" />
 		</finder>
+		<finder name="U_DT" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="deliveryType" />
+		</finder>
 		<finder name="U_D" return-type="Collection">
 			<finder-column name="userId" />
 			<finder-column name="delivered" />
 		</finder>
 		<finder name="U_A" return-type="Collection">
 			<finder-column name="userId" />
+			<finder-column name="archived" />
+		</finder>
+		<finder name="U_DT_D" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="deliveryType" />
+			<finder-column name="delivered" />
+		</finder>
+		<finder name="U_DT_A" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="deliveryType" />
 			<finder-column name="archived" />
 		</finder>
 		<finder name="U_D_A" return-type="Collection">
@@ -3022,6 +3038,18 @@
 		</finder>
 		<finder name="U_A_A" return-type="Collection">
 			<finder-column name="userId" />
+			<finder-column name="actionRequired" />
+			<finder-column name="archived" />
+		</finder>
+		<finder name="U_DT_D_A" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="deliveryType" />
+			<finder-column name="delivered" />
+			<finder-column name="actionRequired" />
+		</finder>
+		<finder name="U_DT_A_A" return-type="Collection">
+			<finder-column name="userId" />
+			<finder-column name="deliveryType" />
 			<finder-column name="actionRequired" />
 			<finder-column name="archived" />
 		</finder>
@@ -3331,10 +3359,7 @@
 		<exception>DuplicatePasswordPolicy</exception>
 		<exception>DuplicateRole</exception>
 		<exception>DuplicateTeam</exception>
-		<exception>DuplicateUserEmailAddress</exception>
 		<exception>DuplicateUserGroup</exception>
-		<exception>DuplicateUserId</exception>
-		<exception>DuplicateUserScreenName</exception>
 		<exception>EmailAddress</exception>
 		<exception>ExpiredLock</exception>
 		<exception>GroupFriendlyURL</exception>

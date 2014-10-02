@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.expando.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.expando.NoSuchTableException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.expando.service.persistence.ExpandoTablePersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see ExpandoTableUtil
  * @generated
  */
+@ProviderType
 public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTable>
 	implements ExpandoTablePersistence {
 	/*
@@ -153,7 +151,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public List<ExpandoTable> findByC_C(long companyId, long classNameId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<ExpandoTable> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -269,7 +267,8 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public ExpandoTable findByC_C_First(long companyId, long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchTableException {
+		OrderByComparator<ExpandoTable> orderByComparator)
+		throws NoSuchTableException {
 		ExpandoTable expandoTable = fetchByC_C_First(companyId, classNameId,
 				orderByComparator);
 
@@ -302,7 +301,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public ExpandoTable fetchByC_C_First(long companyId, long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoTable> orderByComparator) {
 		List<ExpandoTable> list = findByC_C(companyId, classNameId, 0, 1,
 				orderByComparator);
 
@@ -324,7 +323,8 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public ExpandoTable findByC_C_Last(long companyId, long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchTableException {
+		OrderByComparator<ExpandoTable> orderByComparator)
+		throws NoSuchTableException {
 		ExpandoTable expandoTable = fetchByC_C_Last(companyId, classNameId,
 				orderByComparator);
 
@@ -357,7 +357,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public ExpandoTable fetchByC_C_Last(long companyId, long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoTable> orderByComparator) {
 		int count = countByC_C(companyId, classNameId);
 
 		if (count == 0) {
@@ -386,7 +386,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public ExpandoTable[] findByC_C_PrevAndNext(long tableId, long companyId,
-		long classNameId, OrderByComparator orderByComparator)
+		long classNameId, OrderByComparator<ExpandoTable> orderByComparator)
 		throws NoSuchTableException {
 		ExpandoTable expandoTable = findByPrimaryKey(tableId);
 
@@ -417,7 +417,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 
 	protected ExpandoTable getByC_C_PrevAndNext(Session session,
 		ExpandoTable expandoTable, long companyId, long classNameId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ExpandoTable> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1443,7 +1443,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 */
 	@Override
 	public List<ExpandoTable> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoTable> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1574,25 +1574,6 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	 * Initializes the expando table persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.expando.model.ExpandoTable")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ExpandoTable>> listenersList = new ArrayList<ModelListener<ExpandoTable>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ExpandoTable>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1611,8 +1592,8 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ExpandoTable exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ExpandoTable exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ExpandoTablePersistenceImpl.class);
-	private static ExpandoTable _nullExpandoTable = new ExpandoTableImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ExpandoTablePersistenceImpl.class);
+	private static final ExpandoTable _nullExpandoTable = new ExpandoTableImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1624,7 +1605,7 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 			}
 		};
 
-	private static CacheModel<ExpandoTable> _nullExpandoTableCacheModel = new CacheModel<ExpandoTable>() {
+	private static final CacheModel<ExpandoTable> _nullExpandoTableCacheModel = new CacheModel<ExpandoTable>() {
 			@Override
 			public ExpandoTable toEntityModel() {
 				return _nullExpandoTable;

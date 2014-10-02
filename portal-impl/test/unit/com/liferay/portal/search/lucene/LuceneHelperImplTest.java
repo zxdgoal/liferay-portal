@@ -39,7 +39,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.security.auth.TransientTokenUtil;
 import com.liferay.portal.test.AdviseWith;
-import com.liferay.portal.test.AspectJMockingNewClassLoaderJUnitTestRunner;
+import com.liferay.portal.test.runners.AspectJMockingNewClassLoaderJUnitTestRunner;
 import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PortalUtil;
@@ -194,7 +194,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexClusterEventListener2() throws Exception {
+	public void testLoadIndexClusterEventListener2() {
 		_mockClusterExecutor.setNodeNumber(2);
 		_mockClusterExecutor.setThrowException(true);
 
@@ -227,7 +227,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexClusterEventListener3() throws Exception {
+	public void testLoadIndexClusterEventListener3() {
 		_mockClusterExecutor.setNodeNumber(3);
 
 		CaptureHandler captureHandler = null;
@@ -298,7 +298,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster2() throws Exception {
+	public void testLoadIndexFromCluster2() {
 		_mockClusterExecutor.setNodeNumber(3);
 		_mockClusterExecutor.setAutoResponse(false);
 
@@ -351,7 +351,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster3() throws Exception {
+	public void testLoadIndexFromCluster3() {
 		_mockClusterExecutor.setNodeNumber(2);
 
 		CaptureHandler captureHandler = null;
@@ -393,7 +393,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster4() throws Exception {
+	public void testLoadIndexFromCluster4() {
 		_mockClusterExecutor.setNodeNumber(2);
 		_mockClusterExecutor.setPort(1024);
 
@@ -427,7 +427,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster5() throws Exception {
+	public void testLoadIndexFromCluster5() {
 		_mockClusterExecutor.setNodeNumber(2);
 		_mockClusterExecutor.setInvokeMethodThrowException(true);
 		_mockClusterExecutor.setPort(1024);
@@ -474,7 +474,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster6() throws Exception {
+	public void testLoadIndexFromCluster6() {
 		_mockClusterExecutor.setNodeNumber(1);
 
 		CaptureHandler captureHandler = JDKLoggerTestUtil.configureJDKLogger(
@@ -505,7 +505,7 @@ public class LuceneHelperImplTest {
 		}
 	)
 	@Test
-	public void testLoadIndexFromCluster7() throws Exception {
+	public void testLoadIndexFromCluster7() {
 		CaptureHandler captureHandler = JDKLoggerTestUtil.configureJDKLogger(
 			LuceneHelperImpl.class.getName(), Level.FINE);
 
@@ -685,9 +685,7 @@ public class LuceneHelperImplTest {
 		}
 
 		@Override
-		public FutureClusterResponses execute(ClusterRequest clusterRequest)
-			throws SystemException {
-
+		public FutureClusterResponses execute(ClusterRequest clusterRequest) {
 			if (_throwException) {
 				throw new SystemException();
 			}
@@ -740,9 +738,8 @@ public class LuceneHelperImplTest {
 
 		@Override
 		public void execute(
-				ClusterRequest clusterRequest,
-				ClusterResponseCallback clusterResponseCallback)
-			throws SystemException {
+			ClusterRequest clusterRequest,
+			ClusterResponseCallback clusterResponseCallback) {
 
 			FutureClusterResponses futureClusterResponses = execute(
 				clusterRequest);
@@ -763,10 +760,9 @@ public class LuceneHelperImplTest {
 
 		@Override
 		public void execute(
-				ClusterRequest clusterRequest,
-				ClusterResponseCallback clusterResponseCallback, long timeout,
-				TimeUnit timeUnit)
-			throws SystemException {
+			ClusterRequest clusterRequest,
+			ClusterResponseCallback clusterResponseCallback, long timeout,
+			TimeUnit timeUnit) {
 
 			FutureClusterResponses futureClusterResponses = execute(
 				clusterRequest);
@@ -842,18 +838,18 @@ public class LuceneHelperImplTest {
 			_invokeMethodThrowException = invokeMethodThrowException;
 		}
 
+		public void setNodeNumber(int nodeNumber) {
+			for (int i = 0; i < nodeNumber; i++) {
+				_addresses.add(new AddressImpl(new MockAddress()));
+			}
+		}
+
 		public void setPort(int port) {
 			_port = port;
 		}
 
 		public void setPortalInetAddress(InetAddress portalInetAddress) {
 			_portalInetAddress = portalInetAddress;
-		}
-
-		public void setNodeNumber(int nodeNumber) {
-			for (int i = 0; i < nodeNumber; i++) {
-				_addresses.add(new AddressImpl(new MockAddress()));
-			}
 		}
 
 		public void setThrowException(boolean throwException) {
@@ -897,16 +893,16 @@ public class LuceneHelperImplTest {
 	private class MockIndexAccessor implements IndexAccessor {
 
 		@Override
+		public IndexSearcher acquireIndexSearcher() {
+			return null;
+		}
+
+		@Override
 		public void addDocument(Document document) {
 		}
 
 		@Override
 		public void addDocuments(Collection<Document> documents) {
-		}
-
-		@Override
-		public IndexSearcher acquireIndexSearcher() {
-			return null;
 		}
 
 		@Override
@@ -940,6 +936,10 @@ public class LuceneHelperImplTest {
 			return null;
 		}
 
+		public byte[] getResponseMessage() {
+			return _bytes;
+		}
+
 		@Override
 		public void invalidate() {
 		}
@@ -960,10 +960,6 @@ public class LuceneHelperImplTest {
 
 		@Override
 		public void updateDocument(Term term, Document document) {
-		}
-
-		public byte[] getResponseMessage() {
-			return _bytes;
 		}
 
 		private byte[] _bytes;

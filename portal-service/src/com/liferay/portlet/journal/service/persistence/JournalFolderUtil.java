@@ -88,7 +88,7 @@ public class JournalFolderUtil {
 	 */
 	public static List<JournalFolder> findWithDynamicQuery(
 		DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findWithDynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
@@ -152,7 +152,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByUuid(
 		java.lang.String uuid, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().findByUuid(uuid, start, end, orderByComparator);
 	}
 
@@ -166,7 +166,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByUuid_First(
 		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence().findByUuid_First(uuid, orderByComparator);
 	}
@@ -180,7 +180,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByUuid_First(
 		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
 	}
 
@@ -194,7 +194,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByUuid_Last(
 		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence().findByUuid_Last(uuid, orderByComparator);
 	}
@@ -208,7 +208,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByUuid_Last(
 		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
 	}
 
@@ -223,7 +223,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByUuid_PrevAndNext(
 		long folderId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByUuid_PrevAndNext(folderId, uuid, orderByComparator);
@@ -357,7 +357,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByUuid_C(
 		java.lang.String uuid, long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByUuid_C(uuid, companyId, start, end, orderByComparator);
 	}
@@ -373,7 +373,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByUuid_C_First(
 		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByUuid_C_First(uuid, companyId, orderByComparator);
@@ -389,7 +389,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByUuid_C_First(
 		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
 	}
@@ -405,7 +405,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByUuid_C_Last(
 		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByUuid_C_Last(uuid, companyId, orderByComparator);
@@ -421,7 +421,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByUuid_C_Last(
 		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
 	}
@@ -438,7 +438,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByUuid_C_PrevAndNext(
 		long folderId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByUuid_C_PrevAndNext(folderId, uuid, companyId,
@@ -509,7 +509,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByGroupId(
 		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByGroupId(groupId, start, end, orderByComparator);
 	}
@@ -524,7 +524,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByGroupId_First(
 		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence().findByGroupId_First(groupId, orderByComparator);
 	}
@@ -538,7 +538,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByGroupId_First(
 		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().fetchByGroupId_First(groupId, orderByComparator);
 	}
 
@@ -552,7 +552,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByGroupId_Last(
 		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
 	}
@@ -566,7 +566,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByGroupId_Last(
 		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().fetchByGroupId_Last(groupId, orderByComparator);
 	}
 
@@ -581,7 +581,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByGroupId_PrevAndNext(
 		long folderId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByGroupId_PrevAndNext(folderId, groupId,
@@ -631,7 +631,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> filterFindByGroupId(
 		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .filterFindByGroupId(groupId, start, end, orderByComparator);
 	}
@@ -647,7 +647,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] filterFindByGroupId_PrevAndNext(
 		long folderId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .filterFindByGroupId_PrevAndNext(folderId, groupId,
@@ -726,7 +726,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByCompanyId(
 		long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByCompanyId(companyId, start, end, orderByComparator);
 	}
@@ -741,7 +741,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByCompanyId_First(
 		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByCompanyId_First(companyId, orderByComparator);
@@ -756,7 +756,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByCompanyId_First(
 		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByCompanyId_First(companyId, orderByComparator);
 	}
@@ -771,7 +771,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByCompanyId_Last(
 		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByCompanyId_Last(companyId, orderByComparator);
@@ -786,7 +786,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByCompanyId_Last(
 		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByCompanyId_Last(companyId, orderByComparator);
 	}
@@ -802,7 +802,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByCompanyId_PrevAndNext(
 		long folderId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByCompanyId_PrevAndNext(folderId, companyId,
@@ -874,7 +874,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByG_P(
 		long groupId, long parentFolderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByG_P(groupId, parentFolderId, start, end,
 			orderByComparator);
@@ -891,7 +891,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_First(
 		long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_First(groupId, parentFolderId, orderByComparator);
@@ -907,7 +907,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_First(
 		long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_First(groupId, parentFolderId, orderByComparator);
 	}
@@ -923,7 +923,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_Last(
 		long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_Last(groupId, parentFolderId, orderByComparator);
@@ -939,7 +939,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_Last(
 		long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_Last(groupId, parentFolderId, orderByComparator);
 	}
@@ -956,7 +956,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByG_P_PrevAndNext(
 		long folderId, long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_PrevAndNext(folderId, groupId, parentFolderId,
@@ -1010,7 +1010,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> filterFindByG_P(
 		long groupId, long parentFolderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .filterFindByG_P(groupId, parentFolderId, start, end,
 			orderByComparator);
@@ -1028,7 +1028,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] filterFindByG_P_PrevAndNext(
 		long folderId, long groupId, long parentFolderId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .filterFindByG_P_PrevAndNext(folderId, groupId,
@@ -1176,7 +1176,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByC_NotS(
 		long companyId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByC_NotS(companyId, status, start, end,
 			orderByComparator);
@@ -1193,7 +1193,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByC_NotS_First(
 		long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByC_NotS_First(companyId, status, orderByComparator);
@@ -1209,7 +1209,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByC_NotS_First(
 		long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByC_NotS_First(companyId, status, orderByComparator);
 	}
@@ -1225,7 +1225,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByC_NotS_Last(
 		long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByC_NotS_Last(companyId, status, orderByComparator);
@@ -1241,7 +1241,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByC_NotS_Last(
 		long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByC_NotS_Last(companyId, status, orderByComparator);
 	}
@@ -1258,7 +1258,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByC_NotS_PrevAndNext(
 		long folderId, long companyId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByC_NotS_PrevAndNext(folderId, companyId, status,
@@ -1284,175 +1284,6 @@ public class JournalFolderUtil {
 	*/
 	public static int countByC_NotS(long companyId, int status) {
 		return getPersistence().countByC_NotS(companyId, status);
-	}
-
-	/**
-	* Returns all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the matching journal folders
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
-		long folderId, long companyId, long parentFolderId, int status) {
-		return getPersistence()
-				   .findByF_C_P_NotS(folderId, companyId, parentFolderId, status);
-	}
-
-	/**
-	* Returns a range of all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param start the lower bound of the range of journal folders
-	* @param end the upper bound of the range of journal folders (not inclusive)
-	* @return the range of matching journal folders
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
-		long folderId, long companyId, long parentFolderId, int status,
-		int start, int end) {
-		return getPersistence()
-				   .findByF_C_P_NotS(folderId, companyId, parentFolderId,
-			status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param start the lower bound of the range of journal folders
-	* @param end the upper bound of the range of journal folders (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching journal folders
-	*/
-	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
-		long folderId, long companyId, long parentFolderId, int status,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
-		return getPersistence()
-				   .findByF_C_P_NotS(folderId, companyId, parentFolderId,
-			status, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal folder
-	* @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder findByF_C_P_NotS_First(
-		long folderId, long companyId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portlet.journal.NoSuchFolderException {
-		return getPersistence()
-				   .findByF_C_P_NotS_First(folderId, companyId, parentFolderId,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the first journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder fetchByF_C_P_NotS_First(
-		long folderId, long companyId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
-		return getPersistence()
-				   .fetchByF_C_P_NotS_First(folderId, companyId,
-			parentFolderId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal folder
-	* @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder findByF_C_P_NotS_Last(
-		long folderId, long companyId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portlet.journal.NoSuchFolderException {
-		return getPersistence()
-				   .findByF_C_P_NotS_Last(folderId, companyId, parentFolderId,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the last journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
-	*/
-	public static com.liferay.portlet.journal.model.JournalFolder fetchByF_C_P_NotS_Last(
-		long folderId, long companyId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
-		return getPersistence()
-				   .fetchByF_C_P_NotS_Last(folderId, companyId, parentFolderId,
-			status, orderByComparator);
-	}
-
-	/**
-	* Removes all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63; from the database.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	*/
-	public static void removeByF_C_P_NotS(long folderId, long companyId,
-		long parentFolderId, int status) {
-		getPersistence()
-			.removeByF_C_P_NotS(folderId, companyId, parentFolderId, status);
-	}
-
-	/**
-	* Returns the number of journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
-	*
-	* @param folderId the folder ID
-	* @param companyId the company ID
-	* @param parentFolderId the parent folder ID
-	* @param status the status
-	* @return the number of matching journal folders
-	*/
-	public static int countByF_C_P_NotS(long folderId, long companyId,
-		long parentFolderId, int status) {
-		return getPersistence()
-				   .countByF_C_P_NotS(folderId, companyId, parentFolderId,
-			status);
 	}
 
 	/**
@@ -1577,7 +1408,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByG_P_S(
 		long groupId, long parentFolderId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByG_P_S(groupId, parentFolderId, status, start, end,
 			orderByComparator);
@@ -1595,7 +1426,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_S_First(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_S_First(groupId, parentFolderId, status,
@@ -1613,7 +1444,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_S_First(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_S_First(groupId, parentFolderId, status,
 			orderByComparator);
@@ -1631,7 +1462,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_S_Last(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_S_Last(groupId, parentFolderId, status,
@@ -1649,7 +1480,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_S_Last(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_S_Last(groupId, parentFolderId, status,
 			orderByComparator);
@@ -1668,7 +1499,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByG_P_S_PrevAndNext(
 		long folderId, long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_S_PrevAndNext(folderId, groupId, parentFolderId,
@@ -1727,7 +1558,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> filterFindByG_P_S(
 		long groupId, long parentFolderId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .filterFindByG_P_S(groupId, parentFolderId, status, start,
 			end, orderByComparator);
@@ -1746,7 +1577,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] filterFindByG_P_S_PrevAndNext(
 		long folderId, long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .filterFindByG_P_S_PrevAndNext(folderId, groupId,
@@ -1841,7 +1672,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByG_P_NotS(
 		long groupId, long parentFolderId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .findByG_P_NotS(groupId, parentFolderId, status, start, end,
 			orderByComparator);
@@ -1859,7 +1690,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_NotS_First(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_NotS_First(groupId, parentFolderId, status,
@@ -1877,7 +1708,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_NotS_First(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_NotS_First(groupId, parentFolderId, status,
 			orderByComparator);
@@ -1895,7 +1726,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder findByG_P_NotS_Last(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_NotS_Last(groupId, parentFolderId, status,
@@ -1913,7 +1744,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder fetchByG_P_NotS_Last(
 		long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .fetchByG_P_NotS_Last(groupId, parentFolderId, status,
 			orderByComparator);
@@ -1932,7 +1763,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] findByG_P_NotS_PrevAndNext(
 		long folderId, long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .findByG_P_NotS_PrevAndNext(folderId, groupId,
@@ -1991,7 +1822,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> filterFindByG_P_NotS(
 		long groupId, long parentFolderId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence()
 				   .filterFindByG_P_NotS(groupId, parentFolderId, status,
 			start, end, orderByComparator);
@@ -2010,7 +1841,7 @@ public class JournalFolderUtil {
 	*/
 	public static com.liferay.portlet.journal.model.JournalFolder[] filterFindByG_P_NotS_PrevAndNext(
 		long folderId, long groupId, long parentFolderId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
 		throws com.liferay.portlet.journal.NoSuchFolderException {
 		return getPersistence()
 				   .filterFindByG_P_NotS_PrevAndNext(folderId, groupId,
@@ -2054,6 +1885,175 @@ public class JournalFolderUtil {
 		int status) {
 		return getPersistence()
 				   .filterCountByG_P_NotS(groupId, parentFolderId, status);
+	}
+
+	/**
+	* Returns all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the matching journal folders
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
+		long folderId, long companyId, long parentFolderId, int status) {
+		return getPersistence()
+				   .findByF_C_P_NotS(folderId, companyId, parentFolderId, status);
+	}
+
+	/**
+	* Returns a range of all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param start the lower bound of the range of journal folders
+	* @param end the upper bound of the range of journal folders (not inclusive)
+	* @return the range of matching journal folders
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
+		long folderId, long companyId, long parentFolderId, int status,
+		int start, int end) {
+		return getPersistence()
+				   .findByF_C_P_NotS(folderId, companyId, parentFolderId,
+			status, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.journal.model.impl.JournalFolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param start the lower bound of the range of journal folders
+	* @param end the upper bound of the range of journal folders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching journal folders
+	*/
+	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findByF_C_P_NotS(
+		long folderId, long companyId, long parentFolderId, int status,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
+		return getPersistence()
+				   .findByF_C_P_NotS(folderId, companyId, parentFolderId,
+			status, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal folder
+	* @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
+	*/
+	public static com.liferay.portlet.journal.model.JournalFolder findByF_C_P_NotS_First(
+		long folderId, long companyId, long parentFolderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
+		throws com.liferay.portlet.journal.NoSuchFolderException {
+		return getPersistence()
+				   .findByF_C_P_NotS_First(folderId, companyId, parentFolderId,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the first journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching journal folder, or <code>null</code> if a matching journal folder could not be found
+	*/
+	public static com.liferay.portlet.journal.model.JournalFolder fetchByF_C_P_NotS_First(
+		long folderId, long companyId, long parentFolderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
+		return getPersistence()
+				   .fetchByF_C_P_NotS_First(folderId, companyId,
+			parentFolderId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal folder
+	* @throws com.liferay.portlet.journal.NoSuchFolderException if a matching journal folder could not be found
+	*/
+	public static com.liferay.portlet.journal.model.JournalFolder findByF_C_P_NotS_Last(
+		long folderId, long companyId, long parentFolderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator)
+		throws com.liferay.portlet.journal.NoSuchFolderException {
+		return getPersistence()
+				   .findByF_C_P_NotS_Last(folderId, companyId, parentFolderId,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns the last journal folder in the ordered set where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching journal folder, or <code>null</code> if a matching journal folder could not be found
+	*/
+	public static com.liferay.portlet.journal.model.JournalFolder fetchByF_C_P_NotS_Last(
+		long folderId, long companyId, long parentFolderId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
+		return getPersistence()
+				   .fetchByF_C_P_NotS_Last(folderId, companyId, parentFolderId,
+			status, orderByComparator);
+	}
+
+	/**
+	* Removes all the journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63; from the database.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	*/
+	public static void removeByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status) {
+		getPersistence()
+			.removeByF_C_P_NotS(folderId, companyId, parentFolderId, status);
+	}
+
+	/**
+	* Returns the number of journal folders where folderId &gt; &#63; and companyId = &#63; and parentFolderId = &#63; and status &ne; &#63;.
+	*
+	* @param folderId the folder ID
+	* @param companyId the company ID
+	* @param parentFolderId the parent folder ID
+	* @param status the status
+	* @return the number of matching journal folders
+	*/
+	public static int countByF_C_P_NotS(long folderId, long companyId,
+		long parentFolderId, int status) {
+		return getPersistence()
+				   .countByF_C_P_NotS(folderId, companyId, parentFolderId,
+			status);
 	}
 
 	/**
@@ -2171,7 +2171,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> findAll(
 		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.journal.model.JournalFolder> orderByComparator) {
 		return getPersistence().findAll(start, end, orderByComparator);
 	}
 
@@ -2244,7 +2244,7 @@ public class JournalFolderUtil {
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getDDMStructures(
 		long pk, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> orderByComparator) {
 		return getPersistence()
 				   .getDDMStructures(pk, start, end, orderByComparator);
 	}

@@ -85,7 +85,16 @@ public class SettingsFactoryImpl implements SettingsFactory {
 
 	@Override
 	public List<String> getMultiValuedKeys(String settingsId) {
-		return _multiValuedKeysMap.get(settingsId);
+		settingsId = PortletConstants.getRootPortletId(settingsId);
+
+		List<String> multiValuedKeys = _multiValuedKeysMap.get(settingsId);
+
+		if (multiValuedKeys == null) {
+			throw new IllegalStateException(
+				"No multi valued keys found for settings ID " + settingsId);
+		}
+
+		return multiValuedKeys;
 	}
 
 	@Override
@@ -169,6 +178,13 @@ public class SettingsFactoryImpl implements SettingsFactory {
 		String settingsId, FallbackKeys fallbackKeys,
 		String[] multiValuedKeysArray) {
 
+		settingsId = PortletConstants.getRootPortletId(settingsId);
+
+		if (_multiValuedKeysMap.get(settingsId) != null) {
+			throw new IllegalStateException(
+				"Unable to overwrite multi valued keys for " + settingsId);
+		}
+
 		_fallbackKeysMap.put(settingsId, fallbackKeys);
 
 		List<String> multiValuedKeysList = new ArrayList<String>();
@@ -197,7 +213,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
 	protected PortletPreferences getCompanyPortletPreferences(
 		long companyId, String settingsId) {
 
-		return PortletPreferencesLocalServiceUtil.getPreferences(
+		return PortletPreferencesLocalServiceUtil.getStrictPreferences(
 			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
 			settingsId);
 	}
@@ -211,7 +227,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
 	protected PortletPreferences getGroupPortletPreferences(
 		long companyId, long groupId, String settingsId) {
 
-		return PortletPreferencesLocalServiceUtil.getPreferences(
+		return PortletPreferencesLocalServiceUtil.getStrictPreferences(
 			companyId, groupId, PortletKeys.PREFS_OWNER_TYPE_GROUP, 0,
 			settingsId);
 	}
@@ -272,7 +288,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
 			ownerType = PortletKeys.PREFS_OWNER_TYPE_USER;
 		}
 
-		return PortletPreferencesLocalServiceUtil.getPreferences(
+		return PortletPreferencesLocalServiceUtil.getStrictPreferences(
 			layout.getCompanyId(), ownerId, ownerType, layout.getPlid(),
 			portletId);
 	}

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchContactException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,23 +27,18 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.ContactImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.service.persistence.ContactPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,6 +59,7 @@ import java.util.Set;
  * @see ContactUtil
  * @generated
  */
+@ProviderType
 public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	implements ContactPersistence {
 	/*
@@ -148,7 +146,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public List<Contact> findByCompanyId(long companyId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -254,7 +252,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByCompanyId_First(companyId, orderByComparator);
 
 		if (contact != null) {
@@ -282,7 +281,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		List<Contact> list = findByCompanyId(companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -302,7 +301,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByCompanyId_Last(companyId, orderByComparator);
 
 		if (contact != null) {
@@ -330,7 +330,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -358,7 +358,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact[] findByCompanyId_PrevAndNext(long contactId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<Contact> orderByComparator)
 		throws NoSuchContactException {
 		Contact contact = findByPrimaryKey(contactId);
 
@@ -388,8 +388,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	}
 
 	protected Contact getByCompanyId_PrevAndNext(Session session,
-		Contact contact, long companyId, OrderByComparator orderByComparator,
-		boolean previous) {
+		Contact contact, long companyId,
+		OrderByComparator<Contact> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -623,7 +623,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public List<Contact> findByAccountId(long accountId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -729,7 +729,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByAccountId_First(long accountId,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByAccountId_First(accountId, orderByComparator);
 
 		if (contact != null) {
@@ -757,7 +758,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByAccountId_First(long accountId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		List<Contact> list = findByAccountId(accountId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -777,7 +778,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByAccountId_Last(long accountId,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByAccountId_Last(accountId, orderByComparator);
 
 		if (contact != null) {
@@ -805,7 +807,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByAccountId_Last(long accountId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		int count = countByAccountId(accountId);
 
 		if (count == 0) {
@@ -833,7 +835,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact[] findByAccountId_PrevAndNext(long contactId,
-		long accountId, OrderByComparator orderByComparator)
+		long accountId, OrderByComparator<Contact> orderByComparator)
 		throws NoSuchContactException {
 		Contact contact = findByPrimaryKey(contactId);
 
@@ -863,8 +865,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	}
 
 	protected Contact getByAccountId_PrevAndNext(Session session,
-		Contact contact, long accountId, OrderByComparator orderByComparator,
-		boolean previous) {
+		Contact contact, long accountId,
+		OrderByComparator<Contact> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1101,7 +1103,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public List<Contact> findByC_C(long classNameId, long classPK, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<Contact> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1217,7 +1219,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByC_C_First(classNameId, classPK,
 				orderByComparator);
 
@@ -1250,7 +1253,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		List<Contact> list = findByC_C(classNameId, classPK, 0, 1,
 				orderByComparator);
 
@@ -1272,7 +1275,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchContactException {
+		OrderByComparator<Contact> orderByComparator)
+		throws NoSuchContactException {
 		Contact contact = fetchByC_C_Last(classNameId, classPK,
 				orderByComparator);
 
@@ -1305,7 +1309,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		int count = countByC_C(classNameId, classPK);
 
 		if (count == 0) {
@@ -1334,7 +1338,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public Contact[] findByC_C_PrevAndNext(long contactId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<Contact> orderByComparator)
 		throws NoSuchContactException {
 		Contact contact = findByPrimaryKey(contactId);
 
@@ -1364,8 +1368,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	}
 
 	protected Contact getByC_C_PrevAndNext(Session session, Contact contact,
-		long classNameId, long classPK, OrderByComparator orderByComparator,
-		boolean previous) {
+		long classNameId, long classPK,
+		OrderByComparator<Contact> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2105,7 +2109,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 */
 	@Override
 	public List<Contact> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Contact> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2236,25 +2240,6 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	 * Initializes the contact persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.Contact")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<Contact>> listenersList = new ArrayList<ModelListener<Contact>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<Contact>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2273,8 +2258,8 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Contact exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Contact exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ContactPersistenceImpl.class);
-	private static Contact _nullContact = new ContactImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ContactPersistenceImpl.class);
+	private static final Contact _nullContact = new ContactImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2286,7 +2271,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 			}
 		};
 
-	private static CacheModel<Contact> _nullContactCacheModel = new NullCacheModel();
+	private static final CacheModel<Contact> _nullContactCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<Contact>,
 		MVCCModel {

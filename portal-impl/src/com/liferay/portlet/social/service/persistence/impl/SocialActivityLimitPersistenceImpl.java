@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.social.NoSuchActivityLimitException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.social.service.persistence.SocialActivityLimitPersist
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see SocialActivityLimitUtil
  * @generated
  */
+@ProviderType
 public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<SocialActivityLimit>
 	implements SocialActivityLimitPersistence {
 	/*
@@ -153,7 +151,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public List<SocialActivityLimit> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SocialActivityLimit> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -259,7 +257,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -289,7 +287,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		List<SocialActivityLimit> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -310,7 +308,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -340,7 +338,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -368,7 +366,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit[] findByGroupId_PrevAndNext(
-		long activityLimitId, long groupId, OrderByComparator orderByComparator)
+		long activityLimitId, long groupId,
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = findByPrimaryKey(activityLimitId);
 
@@ -399,7 +398,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 	protected SocialActivityLimit getByGroupId_PrevAndNext(Session session,
 		SocialActivityLimit socialActivityLimit, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialActivityLimit> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -634,7 +634,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public List<SocialActivityLimit> findByUserId(long userId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SocialActivityLimit> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -740,7 +740,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByUserId_First(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByUserId_First(userId,
 				orderByComparator);
@@ -770,7 +770,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByUserId_First(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		List<SocialActivityLimit> list = findByUserId(userId, 0, 1,
 				orderByComparator);
 
@@ -791,7 +791,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByUserId_Last(long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByUserId_Last(userId,
 				orderByComparator);
@@ -821,7 +821,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByUserId_Last(long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		int count = countByUserId(userId);
 
 		if (count == 0) {
@@ -849,7 +849,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit[] findByUserId_PrevAndNext(
-		long activityLimitId, long userId, OrderByComparator orderByComparator)
+		long activityLimitId, long userId,
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = findByPrimaryKey(activityLimitId);
 
@@ -880,7 +881,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 	protected SocialActivityLimit getByUserId_PrevAndNext(Session session,
 		SocialActivityLimit socialActivityLimit, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialActivityLimit> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1119,7 +1121,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public List<SocialActivityLimit> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1235,7 +1238,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByC_C_First(classNameId,
 				classPK, orderByComparator);
@@ -1269,7 +1272,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		List<SocialActivityLimit> list = findByC_C(classNameId, classPK, 0, 1,
 				orderByComparator);
 
@@ -1291,7 +1294,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = fetchByC_C_Last(classNameId,
 				classPK, orderByComparator);
@@ -1325,7 +1328,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit fetchByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		int count = countByC_C(classNameId, classPK);
 
 		if (count == 0) {
@@ -1354,7 +1357,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public SocialActivityLimit[] findByC_C_PrevAndNext(long activityLimitId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+		long classNameId, long classPK,
+		OrderByComparator<SocialActivityLimit> orderByComparator)
 		throws NoSuchActivityLimitException {
 		SocialActivityLimit socialActivityLimit = findByPrimaryKey(activityLimitId);
 
@@ -1385,7 +1389,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 
 	protected SocialActivityLimit getByC_C_PrevAndNext(Session session,
 		SocialActivityLimit socialActivityLimit, long classNameId,
-		long classPK, OrderByComparator orderByComparator, boolean previous) {
+		long classPK, OrderByComparator<SocialActivityLimit> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2562,7 +2567,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	@Override
 	public List<SocialActivityLimit> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityLimit> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2693,25 +2698,6 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 * Initializes the social activity limit persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.social.model.SocialActivityLimit")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SocialActivityLimit>> listenersList = new ArrayList<ModelListener<SocialActivityLimit>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SocialActivityLimit>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2730,8 +2716,8 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SocialActivityLimit exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SocialActivityLimit exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SocialActivityLimitPersistenceImpl.class);
-	private static SocialActivityLimit _nullSocialActivityLimit = new SocialActivityLimitImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(SocialActivityLimitPersistenceImpl.class);
+	private static final SocialActivityLimit _nullSocialActivityLimit = new SocialActivityLimitImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2743,7 +2729,7 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 			}
 		};
 
-	private static CacheModel<SocialActivityLimit> _nullSocialActivityLimitCacheModel =
+	private static final CacheModel<SocialActivityLimit> _nullSocialActivityLimitCacheModel =
 		new CacheModel<SocialActivityLimit>() {
 			@Override
 			public SocialActivityLimit toEntityModel() {

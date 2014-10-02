@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchLayoutFriendlyURLException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,26 +27,21 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutFriendlyURL;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.LayoutFriendlyURLImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 import com.liferay.portal.service.persistence.LayoutFriendlyURLPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,6 +62,7 @@ import java.util.Set;
  * @see LayoutFriendlyURLUtil
  * @generated
  */
+@ProviderType
 public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<LayoutFriendlyURL>
 	implements LayoutFriendlyURLPersistence {
 	/*
@@ -152,7 +150,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +270,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByUuid_First(uuid,
 				orderByComparator);
@@ -302,7 +300,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -322,7 +320,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByUuid_Last(uuid,
 				orderByComparator);
@@ -352,7 +350,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -381,7 +379,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL[] findByUuid_PrevAndNext(
 		long layoutFriendlyURLId, String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -412,7 +410,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByUuid_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -939,7 +937,8 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1069,7 +1068,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByUuid_C_First(uuid,
 				companyId, orderByComparator);
@@ -1103,7 +1102,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1125,7 +1124,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByUuid_C_Last(uuid,
 				companyId, orderByComparator);
@@ -1159,7 +1158,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1189,7 +1188,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL[] findByUuid_C_PrevAndNext(
 		long layoutFriendlyURLId, String uuid, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -1220,7 +1219,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByUuid_C_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1496,7 +1495,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1602,7 +1601,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -1632,7 +1631,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -1653,7 +1652,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -1683,7 +1682,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1712,7 +1711,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL[] findByGroupId_PrevAndNext(
 		long layoutFriendlyURLId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -1743,7 +1742,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByGroupId_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1980,7 +1979,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2086,7 +2085,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByCompanyId_First(companyId,
 				orderByComparator);
@@ -2116,7 +2115,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -2137,7 +2136,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByCompanyId_Last(companyId,
 				orderByComparator);
@@ -2167,7 +2166,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -2196,7 +2195,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL[] findByCompanyId_PrevAndNext(
 		long layoutFriendlyURLId, long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -2227,7 +2226,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByCompanyId_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2460,7 +2459,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByPlid(long plid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2566,7 +2565,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByPlid_First(long plid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByPlid_First(plid,
 				orderByComparator);
@@ -2596,7 +2595,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByPlid_First(long plid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByPlid(plid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2616,7 +2615,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByPlid_Last(long plid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByPlid_Last(plid,
 				orderByComparator);
@@ -2646,7 +2645,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByPlid_Last(long plid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByPlid(plid);
 
 		if (count == 0) {
@@ -2674,7 +2673,8 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL[] findByPlid_PrevAndNext(
-		long layoutFriendlyURLId, long plid, OrderByComparator orderByComparator)
+		long layoutFriendlyURLId, long plid,
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -2705,7 +2705,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByPlid_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, long plid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2944,7 +2944,8 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findByP_F(long plid, String friendlyURL,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3075,7 +3076,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByP_F_First(long plid, String friendlyURL,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByP_F_First(plid,
 				friendlyURL, orderByComparator);
@@ -3109,7 +3110,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByP_F_First(long plid, String friendlyURL,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByP_F(plid, friendlyURL, 0, 1,
 				orderByComparator);
 
@@ -3131,7 +3132,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL findByP_F_Last(long plid, String friendlyURL,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByP_F_Last(plid,
 				friendlyURL, orderByComparator);
@@ -3165,7 +3166,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL fetchByP_F_Last(long plid, String friendlyURL,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByP_F(plid, friendlyURL);
 
 		if (count == 0) {
@@ -3194,7 +3195,8 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public LayoutFriendlyURL[] findByP_F_PrevAndNext(long layoutFriendlyURLId,
-		long plid, String friendlyURL, OrderByComparator orderByComparator)
+		long plid, String friendlyURL,
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -3225,7 +3227,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 
 	protected LayoutFriendlyURL getByP_F_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, long plid, String friendlyURL,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3776,7 +3778,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public List<LayoutFriendlyURL> findByG_P_F(long groupId,
 		boolean privateLayout, String friendlyURL, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3914,7 +3916,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL findByG_P_F_First(long groupId,
 		boolean privateLayout, String friendlyURL,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByG_P_F_First(groupId,
 				privateLayout, friendlyURL, orderByComparator);
@@ -3953,7 +3955,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL fetchByG_P_F_First(long groupId,
 		boolean privateLayout, String friendlyURL,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		List<LayoutFriendlyURL> list = findByG_P_F(groupId, privateLayout,
 				friendlyURL, 0, 1, orderByComparator);
 
@@ -3977,7 +3979,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL findByG_P_F_Last(long groupId,
 		boolean privateLayout, String friendlyURL,
-		OrderByComparator orderByComparator)
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = fetchByG_P_F_Last(groupId,
 				privateLayout, friendlyURL, orderByComparator);
@@ -4016,7 +4018,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL fetchByG_P_F_Last(long groupId,
 		boolean privateLayout, String friendlyURL,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		int count = countByG_P_F(groupId, privateLayout, friendlyURL);
 
 		if (count == 0) {
@@ -4047,7 +4049,8 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	@Override
 	public LayoutFriendlyURL[] findByG_P_F_PrevAndNext(
 		long layoutFriendlyURLId, long groupId, boolean privateLayout,
-		String friendlyURL, OrderByComparator orderByComparator)
+		String friendlyURL,
+		OrderByComparator<LayoutFriendlyURL> orderByComparator)
 		throws NoSuchLayoutFriendlyURLException {
 		LayoutFriendlyURL layoutFriendlyURL = findByPrimaryKey(layoutFriendlyURLId);
 
@@ -4080,7 +4083,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	protected LayoutFriendlyURL getByG_P_F_PrevAndNext(Session session,
 		LayoutFriendlyURL layoutFriendlyURL, long groupId,
 		boolean privateLayout, String friendlyURL,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5455,7 +5458,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 */
 	@Override
 	public List<LayoutFriendlyURL> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<LayoutFriendlyURL> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5591,25 +5594,6 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	 * Initializes the layout friendly u r l persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.LayoutFriendlyURL")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<LayoutFriendlyURL>> listenersList = new ArrayList<ModelListener<LayoutFriendlyURL>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<LayoutFriendlyURL>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -5628,11 +5612,11 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No LayoutFriendlyURL exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No LayoutFriendlyURL exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(LayoutFriendlyURLPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(LayoutFriendlyURLPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static LayoutFriendlyURL _nullLayoutFriendlyURL = new LayoutFriendlyURLImpl() {
+	private static final LayoutFriendlyURL _nullLayoutFriendlyURL = new LayoutFriendlyURLImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -5644,7 +5628,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 			}
 		};
 
-	private static CacheModel<LayoutFriendlyURL> _nullLayoutFriendlyURLCacheModel =
+	private static final CacheModel<LayoutFriendlyURL> _nullLayoutFriendlyURLCacheModel =
 		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<LayoutFriendlyURL>,

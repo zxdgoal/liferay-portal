@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatamapping.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -26,8 +28,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -36,7 +36,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -48,7 +47,6 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplatePer
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +67,7 @@ import java.util.Set;
  * @see DDMTemplateUtil
  * @generated
  */
+@ProviderType
 public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	implements DDMTemplatePersistence {
 	/*
@@ -152,7 +151,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +271,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByUuid_First(uuid, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -300,7 +300,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -320,7 +320,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -348,7 +349,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -376,7 +377,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByUuid_PrevAndNext(long templateId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
 		Session session = null;
@@ -406,7 +408,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByUuid_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -930,7 +932,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1060,7 +1062,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByUuid_C_First(uuid, companyId,
 				orderByComparator);
 
@@ -1093,7 +1096,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByUuid_C(uuid, companyId, 0, 1,
 				orderByComparator);
 
@@ -1115,7 +1118,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByUuid_C_Last(uuid, companyId,
 				orderByComparator);
 
@@ -1148,7 +1152,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -1177,7 +1181,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByUuid_C_PrevAndNext(long templateId, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -1208,7 +1212,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByUuid_C_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, String uuid, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1481,7 +1485,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1587,7 +1591,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -1616,7 +1621,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1636,7 +1641,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByGroupId_Last(groupId, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -1664,7 +1670,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1692,7 +1698,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByGroupId_PrevAndNext(long templateId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -1723,7 +1729,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByGroupId_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1871,7 +1877,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -1961,7 +1967,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] filterFindByGroupId_PrevAndNext(long templateId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(templateId, groupId,
@@ -1997,7 +2003,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByGroupId_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2312,7 +2318,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByClassPK(long classPK, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2418,7 +2424,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByClassPK_First(long classPK,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByClassPK_First(classPK,
 				orderByComparator);
 
@@ -2447,7 +2454,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByClassPK_First(long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByClassPK(classPK, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2467,7 +2474,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByClassPK_Last(long classPK,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByClassPK_Last(classPK, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -2495,7 +2503,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByClassPK_Last(long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByClassPK(classPK);
 
 		if (count == 0) {
@@ -2523,7 +2531,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByClassPK_PrevAndNext(long templateId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -2554,7 +2562,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByClassPK_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2789,7 +2797,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByTemplateKey(String templateKey, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2909,7 +2917,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByTemplateKey_First(String templateKey,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByTemplateKey_First(templateKey,
 				orderByComparator);
 
@@ -2938,7 +2947,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByTemplateKey_First(String templateKey,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByTemplateKey(templateKey, 0, 1,
 				orderByComparator);
 
@@ -2959,7 +2968,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByTemplateKey_Last(String templateKey,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByTemplateKey_Last(templateKey,
 				orderByComparator);
 
@@ -2988,7 +2998,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByTemplateKey_Last(String templateKey,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByTemplateKey(templateKey);
 
 		if (count == 0) {
@@ -3016,7 +3026,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByTemplateKey_PrevAndNext(long templateId,
-		String templateKey, OrderByComparator orderByComparator)
+		String templateKey, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -3047,7 +3057,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByTemplateKey_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, String templateKey,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3308,7 +3318,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByType(String type, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3428,7 +3438,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByType_First(String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByType_First(type, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -3456,7 +3467,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByType_First(String type,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByType(type, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -3476,7 +3487,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByType_Last(String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByType_Last(type, orderByComparator);
 
 		if (ddmTemplate != null) {
@@ -3504,7 +3516,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByType_Last(String type,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByType(type);
 
 		if (count == 0) {
@@ -3532,7 +3544,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByType_PrevAndNext(long templateId, String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
 		Session session = null;
@@ -3562,7 +3575,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByType_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, String type,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3825,7 +3838,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByLanguage(String language, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3945,7 +3958,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByLanguage_First(String language,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByLanguage_First(language,
 				orderByComparator);
 
@@ -3974,7 +3988,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByLanguage_First(String language,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByLanguage(language, 0, 1,
 				orderByComparator);
 
@@ -3995,7 +4009,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByLanguage_Last(String language,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByLanguage_Last(language,
 				orderByComparator);
 
@@ -4024,7 +4039,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByLanguage_Last(String language,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByLanguage(language);
 
 		if (count == 0) {
@@ -4052,7 +4067,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByLanguage_PrevAndNext(long templateId,
-		String language, OrderByComparator orderByComparator)
+		String language, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -4083,7 +4098,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByLanguage_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, String language,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4562,7 +4577,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByG_C(long groupId, long classNameId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4678,7 +4693,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_First(long groupId, long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_First(groupId, classNameId,
 				orderByComparator);
 
@@ -4711,7 +4727,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_First(long groupId, long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByG_C(groupId, classNameId, 0, 1,
 				orderByComparator);
 
@@ -4733,7 +4749,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_Last(long groupId, long classNameId,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_Last(groupId, classNameId,
 				orderByComparator);
 
@@ -4766,7 +4783,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_Last(long groupId, long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByG_C(groupId, classNameId);
 
 		if (count == 0) {
@@ -4795,7 +4812,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByG_C_PrevAndNext(long templateId, long groupId,
-		long classNameId, OrderByComparator orderByComparator)
+		long classNameId, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -4826,7 +4843,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByG_C_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4981,7 +4998,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> filterFindByG_C(long groupId, long classNameId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C(groupId, classNameId, start, end, orderByComparator);
 		}
@@ -5076,7 +5093,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] filterFindByG_C_PrevAndNext(long templateId,
-		long groupId, long classNameId, OrderByComparator orderByComparator)
+		long groupId, long classNameId,
+		OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_PrevAndNext(templateId, groupId, classNameId,
@@ -5112,7 +5130,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByG_C_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5452,7 +5470,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByG_CPK(long groupId, long classPK, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5568,7 +5586,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_CPK_First(long groupId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_CPK_First(groupId, classPK,
 				orderByComparator);
 
@@ -5601,7 +5620,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_CPK_First(long groupId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByG_CPK(groupId, classPK, 0, 1,
 				orderByComparator);
 
@@ -5623,7 +5642,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_CPK_Last(long groupId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_CPK_Last(groupId, classPK,
 				orderByComparator);
 
@@ -5656,7 +5676,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_CPK_Last(long groupId, long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByG_CPK(groupId, classPK);
 
 		if (count == 0) {
@@ -5685,7 +5705,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByG_CPK_PrevAndNext(long templateId, long groupId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -5716,7 +5736,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByG_CPK_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5871,7 +5891,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> filterFindByG_CPK(long groupId, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_CPK(groupId, classPK, start, end, orderByComparator);
 		}
@@ -5966,7 +5986,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] filterFindByG_CPK_PrevAndNext(long templateId,
-		long groupId, long classPK, OrderByComparator orderByComparator)
+		long groupId, long classPK,
+		OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_CPK_PrevAndNext(templateId, groupId, classPK,
@@ -6002,7 +6023,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByG_CPK_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -6192,7 +6213,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> filterFindByG_CPK(long[] groupIds, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupIds)) {
 			return findByG_CPK(groupIds, classPK, start, end, orderByComparator);
 		}
@@ -6339,7 +6360,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByG_CPK(long[] groupIds, long classPK,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (groupIds == null) {
 			groupIds = new long[0];
 		}
@@ -6820,7 +6841,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByG_C_C(long groupId, long classNameId,
-		long classPK, int start, int end, OrderByComparator orderByComparator) {
+		long classPK, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6942,7 +6964,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_C_First(long groupId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_First(groupId, classNameId,
 				classPK, orderByComparator);
@@ -6980,7 +7002,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_C_First(long groupId, long classNameId,
-		long classPK, OrderByComparator orderByComparator) {
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByG_C_C(groupId, classNameId, classPK, 0,
 				1, orderByComparator);
 
@@ -7003,7 +7025,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_C_Last(long groupId, long classNameId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_Last(groupId, classNameId,
 				classPK, orderByComparator);
@@ -7041,7 +7063,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_C_Last(long groupId, long classNameId,
-		long classPK, OrderByComparator orderByComparator) {
+		long classPK, OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByG_C_C(groupId, classNameId, classPK);
 
 		if (count == 0) {
@@ -7071,7 +7093,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate[] findByG_C_C_PrevAndNext(long templateId, long groupId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+		long classNameId, long classPK,
+		OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
@@ -7102,7 +7125,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByG_C_C_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7265,7 +7288,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> filterFindByG_C_C(long groupId, long classNameId,
-		long classPK, int start, int end, OrderByComparator orderByComparator) {
+		long classPK, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C(groupId, classNameId, classPK, start, end,
 				orderByComparator);
@@ -7367,7 +7391,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] filterFindByG_C_C_PrevAndNext(long templateId,
 		long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_PrevAndNext(templateId, groupId, classNameId,
 				classPK, orderByComparator);
@@ -7402,7 +7427,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByG_C_C_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7602,7 +7627,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public List<DDMTemplate> filterFindByG_C_C(long[] groupIds,
 		long classNameId, long classPK, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupIds)) {
 			return findByG_C_C(groupIds, classNameId, classPK, start, end,
 				orderByComparator);
@@ -7758,7 +7783,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByG_C_C(long[] groupIds, long classNameId,
-		long classPK, int start, int end, OrderByComparator orderByComparator) {
+		long classPK, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		if (groupIds == null) {
 			groupIds = new long[0];
 		}
@@ -8551,7 +8577,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findByC_C_T(long classNameId, long classPK,
-		String type, int start, int end, OrderByComparator orderByComparator) {
+		String type, int start, int end,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -8687,7 +8714,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByC_C_T_First(long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator)
+		String type, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByC_C_T_First(classNameId, classPK,
 				type, orderByComparator);
@@ -8725,7 +8752,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByC_C_T_First(long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator) {
+		String type, OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByC_C_T(classNameId, classPK, type, 0, 1,
 				orderByComparator);
 
@@ -8748,7 +8775,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByC_C_T_Last(long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator)
+		String type, OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByC_C_T_Last(classNameId, classPK, type,
 				orderByComparator);
@@ -8786,7 +8813,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByC_C_T_Last(long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator) {
+		String type, OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByC_C_T(classNameId, classPK, type);
 
 		if (count == 0) {
@@ -8817,7 +8844,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] findByC_C_T_PrevAndNext(long templateId,
 		long classNameId, long classPK, String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
 		Session session = null;
@@ -8847,7 +8875,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByC_C_T_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long classNameId, long classPK, String type,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -9155,7 +9183,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public List<DDMTemplate> findByG_C_C_T(long groupId, long classNameId,
 		long classPK, String type, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -9297,7 +9325,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_C_T_First(long groupId, long classNameId,
-		long classPK, String type, OrderByComparator orderByComparator)
+		long classPK, String type,
+		OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_T_First(groupId, classNameId,
 				classPK, type, orderByComparator);
@@ -9339,7 +9368,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_C_T_First(long groupId, long classNameId,
-		long classPK, String type, OrderByComparator orderByComparator) {
+		long classPK, String type,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByG_C_C_T(groupId, classNameId, classPK,
 				type, 0, 1, orderByComparator);
 
@@ -9363,7 +9393,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate findByG_C_C_T_Last(long groupId, long classNameId,
-		long classPK, String type, OrderByComparator orderByComparator)
+		long classPK, String type,
+		OrderByComparator<DDMTemplate> orderByComparator)
 		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_T_Last(groupId, classNameId,
 				classPK, type, orderByComparator);
@@ -9405,7 +9436,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public DDMTemplate fetchByG_C_C_T_Last(long groupId, long classNameId,
-		long classPK, String type, OrderByComparator orderByComparator) {
+		long classPK, String type,
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByG_C_C_T(groupId, classNameId, classPK, type);
 
 		if (count == 0) {
@@ -9437,7 +9469,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] findByG_C_C_T_PrevAndNext(long templateId,
 		long groupId, long classNameId, long classPK, String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
 		Session session = null;
@@ -9467,7 +9500,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByG_C_C_T_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator, boolean previous) {
+		String type, OrderByComparator<DDMTemplate> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -9653,7 +9687,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public List<DDMTemplate> filterFindByG_C_C_T(long groupId,
 		long classNameId, long classPK, String type, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_T(groupId, classNameId, classPK, type, start,
 				end, orderByComparator);
@@ -9774,7 +9808,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] filterFindByG_C_C_T_PrevAndNext(long templateId,
 		long groupId, long classNameId, long classPK, String type,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_T_PrevAndNext(templateId, groupId, classNameId,
 				classPK, type, orderByComparator);
@@ -9810,7 +9845,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByG_C_C_T_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		String type, OrderByComparator orderByComparator, boolean previous) {
+		String type, OrderByComparator<DDMTemplate> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -10252,7 +10288,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public List<DDMTemplate> findByG_C_C_T_M(long groupId, long classNameId,
 		long classPK, String type, String mode, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -10415,7 +10451,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate findByG_C_C_T_M_First(long groupId, long classNameId,
 		long classPK, String type, String mode,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_T_M_First(groupId, classNameId,
 				classPK, type, mode, orderByComparator);
 
@@ -10461,7 +10498,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate fetchByG_C_C_T_M_First(long groupId, long classNameId,
 		long classPK, String type, String mode,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		List<DDMTemplate> list = findByG_C_C_T_M(groupId, classNameId, classPK,
 				type, mode, 0, 1, orderByComparator);
 
@@ -10487,7 +10524,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate findByG_C_C_T_M_Last(long groupId, long classNameId,
 		long classPK, String type, String mode,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = fetchByG_C_C_T_M_Last(groupId, classNameId,
 				classPK, type, mode, orderByComparator);
 
@@ -10533,7 +10571,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate fetchByG_C_C_T_M_Last(long groupId, long classNameId,
 		long classPK, String type, String mode,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		int count = countByG_C_C_T_M(groupId, classNameId, classPK, type, mode);
 
 		if (count == 0) {
@@ -10566,7 +10604,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] findByG_C_C_T_M_PrevAndNext(long templateId,
 		long groupId, long classNameId, long classPK, String type, String mode,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		DDMTemplate ddmTemplate = findByPrimaryKey(templateId);
 
 		Session session = null;
@@ -10598,8 +10637,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate getByG_C_C_T_M_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		String type, String mode, OrderByComparator orderByComparator,
-		boolean previous) {
+		String type, String mode,
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -10807,7 +10846,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public List<DDMTemplate> filterFindByG_C_C_T_M(long groupId,
 		long classNameId, long classPK, String type, String mode, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DDMTemplate> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_T_M(groupId, classNameId, classPK, type, mode,
 				start, end, orderByComparator);
@@ -10947,7 +10986,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	@Override
 	public DDMTemplate[] filterFindByG_C_C_T_M_PrevAndNext(long templateId,
 		long groupId, long classNameId, long classPK, String type, String mode,
-		OrderByComparator orderByComparator) throws NoSuchTemplateException {
+		OrderByComparator<DDMTemplate> orderByComparator)
+		throws NoSuchTemplateException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_C_C_T_M_PrevAndNext(templateId, groupId,
 				classNameId, classPK, type, mode, orderByComparator);
@@ -10984,8 +11024,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	protected DDMTemplate filterGetByG_C_C_T_M_PrevAndNext(Session session,
 		DDMTemplate ddmTemplate, long groupId, long classNameId, long classPK,
-		String type, String mode, OrderByComparator orderByComparator,
-		boolean previous) {
+		String type, String mode,
+		OrderByComparator<DDMTemplate> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -12312,7 +12352,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 */
 	@Override
 	public List<DDMTemplate> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMTemplate> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -12448,25 +12488,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	 * Initializes the d d m template persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.dynamicdatamapping.model.DDMTemplate")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DDMTemplate>> listenersList = new ArrayList<ModelListener<DDMTemplate>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DDMTemplate>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -12495,11 +12516,11 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DDMTemplate exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DDMTemplate exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DDMTemplatePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DDMTemplatePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "type", "mode"
 			});
-	private static DDMTemplate _nullDDMTemplate = new DDMTemplateImpl() {
+	private static final DDMTemplate _nullDDMTemplate = new DDMTemplateImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -12511,7 +12532,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 			}
 		};
 
-	private static CacheModel<DDMTemplate> _nullDDMTemplateCacheModel = new CacheModel<DDMTemplate>() {
+	private static final CacheModel<DDMTemplate> _nullDDMTemplateCacheModel = new CacheModel<DDMTemplate>() {
 			@Override
 			public DDMTemplate toEntityModel() {
 				return _nullDDMTemplate;

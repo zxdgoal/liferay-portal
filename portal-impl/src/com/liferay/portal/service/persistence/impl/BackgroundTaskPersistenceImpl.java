@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchBackgroundTaskException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -26,8 +28,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -36,14 +36,12 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BackgroundTask;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.BackgroundTaskImpl;
 import com.liferay.portal.model.impl.BackgroundTaskModelImpl;
 import com.liferay.portal.service.persistence.BackgroundTaskPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +62,7 @@ import java.util.Set;
  * @see BackgroundTaskUtil
  * @generated
  */
+@ProviderType
 public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<BackgroundTask>
 	implements BackgroundTaskPersistence {
 	/*
@@ -153,7 +152,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -259,7 +258,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -289,7 +288,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -310,7 +309,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -340,7 +339,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -368,7 +367,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask[] findByGroupId_PrevAndNext(long backgroundTaskId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -399,7 +398,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByGroupId_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -637,7 +636,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -743,7 +742,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByCompanyId_First(companyId,
 				orderByComparator);
@@ -773,7 +772,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -794,7 +793,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByCompanyId_Last(companyId,
 				orderByComparator);
@@ -824,7 +823,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -852,7 +851,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask[] findByCompanyId_PrevAndNext(long backgroundTaskId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -883,7 +882,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByCompanyId_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1118,7 +1117,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByStatus(int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1224,7 +1223,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByStatus_First(int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByStatus_First(status,
 				orderByComparator);
@@ -1254,7 +1253,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByStatus_First(int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByStatus(status, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1274,7 +1273,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByStatus_Last(int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByStatus_Last(status,
 				orderByComparator);
@@ -1304,7 +1303,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByStatus_Last(int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByStatus(status);
 
 		if (count == 0) {
@@ -1332,7 +1331,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask[] findByStatus_PrevAndNext(long backgroundTaskId,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -1363,7 +1362,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByStatus_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1609,7 +1608,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T(long groupId,
 		String taskExecutorClassName, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1740,7 +1739,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_T_First(long groupId,
-		String taskExecutorClassName, OrderByComparator orderByComparator)
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_First(groupId,
 				taskExecutorClassName, orderByComparator);
@@ -1774,7 +1774,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_T_First(long groupId,
-		String taskExecutorClassName, OrderByComparator orderByComparator) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_T(groupId, taskExecutorClassName,
 				0, 1, orderByComparator);
 
@@ -1796,7 +1797,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_T_Last(long groupId,
-		String taskExecutorClassName, OrderByComparator orderByComparator)
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_Last(groupId,
 				taskExecutorClassName, orderByComparator);
@@ -1830,7 +1832,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_T_Last(long groupId,
-		String taskExecutorClassName, OrderByComparator orderByComparator) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_T(groupId, taskExecutorClassName);
 
 		if (count == 0) {
@@ -1860,7 +1863,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByG_T_PrevAndNext(long backgroundTaskId,
 		long groupId, String taskExecutorClassName,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -1891,8 +1894,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByG_T_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId,
-		String taskExecutorClassName, OrderByComparator orderByComparator,
-		boolean previous) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2067,7 +2070,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T(long groupId,
 		String[] taskExecutorClassNames, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		if (taskExecutorClassNames == null) {
 			taskExecutorClassNames = new String[0];
 		}
@@ -2467,7 +2470,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByG_S(long groupId, int status, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2583,7 +2586,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_S_First(groupId, status,
 				orderByComparator);
@@ -2617,7 +2620,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_S(groupId, status, 0, 1,
 				orderByComparator);
 
@@ -2639,7 +2642,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_S_Last(groupId, status,
 				orderByComparator);
@@ -2673,7 +2676,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_S(groupId, status);
 
 		if (count == 0) {
@@ -2702,7 +2705,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask[] findByG_S_PrevAndNext(long backgroundTaskId,
-		long groupId, int status, OrderByComparator orderByComparator)
+		long groupId, int status,
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -2733,7 +2737,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByG_S_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2989,7 +2993,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByT_S(String taskExecutorClassName,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3120,7 +3125,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByT_S_First(String taskExecutorClassName,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByT_S_First(taskExecutorClassName,
 				status, orderByComparator);
@@ -3154,7 +3159,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByT_S_First(String taskExecutorClassName,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByT_S(taskExecutorClassName, status, 0,
 				1, orderByComparator);
 
@@ -3176,7 +3181,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByT_S_Last(String taskExecutorClassName,
-		int status, OrderByComparator orderByComparator)
+		int status, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByT_S_Last(taskExecutorClassName,
 				status, orderByComparator);
@@ -3210,7 +3215,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByT_S_Last(String taskExecutorClassName,
-		int status, OrderByComparator orderByComparator) {
+		int status, OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByT_S(taskExecutorClassName, status);
 
 		if (count == 0) {
@@ -3240,7 +3245,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByT_S_PrevAndNext(long backgroundTaskId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -3271,7 +3276,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByT_S_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, String taskExecutorClassName,
-		int status, OrderByComparator orderByComparator, boolean previous) {
+		int status, OrderByComparator<BackgroundTask> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3445,7 +3451,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findByT_S(String[] taskExecutorClassNames,
-		int status, int start, int end, OrderByComparator orderByComparator) {
+		int status, int start, int end,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		if (taskExecutorClassNames == null) {
 			taskExecutorClassNames = new String[0];
 		}
@@ -3868,7 +3875,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_N_T(long groupId, String name,
 		String taskExecutorClassName, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4019,7 +4026,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_N_T_First(long groupId, String name,
-		String taskExecutorClassName, OrderByComparator orderByComparator)
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_N_T_First(groupId, name,
 				taskExecutorClassName, orderByComparator);
@@ -4057,7 +4065,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_N_T_First(long groupId, String name,
-		String taskExecutorClassName, OrderByComparator orderByComparator) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_N_T(groupId, name,
 				taskExecutorClassName, 0, 1, orderByComparator);
 
@@ -4080,7 +4089,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask findByG_N_T_Last(long groupId, String name,
-		String taskExecutorClassName, OrderByComparator orderByComparator)
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_N_T_Last(groupId, name,
 				taskExecutorClassName, orderByComparator);
@@ -4118,7 +4128,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public BackgroundTask fetchByG_N_T_Last(long groupId, String name,
-		String taskExecutorClassName, OrderByComparator orderByComparator) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_N_T(groupId, name, taskExecutorClassName);
 
 		if (count == 0) {
@@ -4149,7 +4160,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByG_N_T_PrevAndNext(long backgroundTaskId,
 		long groupId, String name, String taskExecutorClassName,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -4180,8 +4191,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 
 	protected BackgroundTask getByG_N_T_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId, String name,
-		String taskExecutorClassName, OrderByComparator orderByComparator,
-		boolean previous) {
+		String taskExecutorClassName,
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -4527,7 +4538,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T_C(long groupId,
 		String taskExecutorClassName, boolean completed, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -4665,7 +4676,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_T_C_First(long groupId,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_C_First(groupId,
 				taskExecutorClassName, completed, orderByComparator);
@@ -4704,7 +4715,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_T_C_First(long groupId,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_T_C(groupId, taskExecutorClassName,
 				completed, 0, 1, orderByComparator);
 
@@ -4728,7 +4739,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_T_C_Last(long groupId,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_C_Last(groupId,
 				taskExecutorClassName, completed, orderByComparator);
@@ -4767,7 +4778,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_T_C_Last(long groupId,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_T_C(groupId, taskExecutorClassName, completed);
 
 		if (count == 0) {
@@ -4798,7 +4809,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByG_T_C_PrevAndNext(long backgroundTaskId,
 		long groupId, String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -4830,7 +4841,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	protected BackgroundTask getByG_T_C_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5013,7 +5024,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T_C(long groupId,
 		String[] taskExecutorClassNames, boolean completed, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		if (taskExecutorClassNames == null) {
 			taskExecutorClassNames = new String[0];
 		}
@@ -5466,7 +5477,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T_S(long groupId,
 		String taskExecutorClassName, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -5604,7 +5615,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_T_S_First(long groupId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_S_First(groupId,
 				taskExecutorClassName, status, orderByComparator);
@@ -5643,7 +5654,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_T_S_First(long groupId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_T_S(groupId, taskExecutorClassName,
 				status, 0, 1, orderByComparator);
 
@@ -5667,7 +5678,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_T_S_Last(long groupId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_T_S_Last(groupId,
 				taskExecutorClassName, status, orderByComparator);
@@ -5706,7 +5717,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_T_S_Last(long groupId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_T_S(groupId, taskExecutorClassName, status);
 
 		if (count == 0) {
@@ -5737,7 +5748,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByG_T_S_PrevAndNext(long backgroundTaskId,
 		long groupId, String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -5769,7 +5780,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	protected BackgroundTask getByG_T_S_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId,
 		String taskExecutorClassName, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -5952,7 +5963,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_T_S(long groupId,
 		String[] taskExecutorClassNames, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		if (taskExecutorClassNames == null) {
 			taskExecutorClassNames = new String[0];
 		}
@@ -6403,7 +6414,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public List<BackgroundTask> findByG_N_T_C(long groupId, String name,
 		String taskExecutorClassName, boolean completed, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -6563,7 +6574,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_N_T_C_First(long groupId, String name,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_N_T_C_First(groupId, name,
 				taskExecutorClassName, completed, orderByComparator);
@@ -6606,7 +6617,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_N_T_C_First(long groupId, String name,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		List<BackgroundTask> list = findByG_N_T_C(groupId, name,
 				taskExecutorClassName, completed, 0, 1, orderByComparator);
 
@@ -6631,7 +6642,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask findByG_N_T_C_Last(long groupId, String name,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator)
+		OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = fetchByG_N_T_C_Last(groupId, name,
 				taskExecutorClassName, completed, orderByComparator);
@@ -6674,7 +6685,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask fetchByG_N_T_C_Last(long groupId, String name,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		int count = countByG_N_T_C(groupId, name, taskExecutorClassName,
 				completed);
 
@@ -6708,7 +6719,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	@Override
 	public BackgroundTask[] findByG_N_T_C_PrevAndNext(long backgroundTaskId,
 		long groupId, String name, String taskExecutorClassName,
-		boolean completed, OrderByComparator orderByComparator)
+		boolean completed, OrderByComparator<BackgroundTask> orderByComparator)
 		throws NoSuchBackgroundTaskException {
 		BackgroundTask backgroundTask = findByPrimaryKey(backgroundTaskId);
 
@@ -6742,7 +6753,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	protected BackgroundTask getByG_N_T_C_PrevAndNext(Session session,
 		BackgroundTask backgroundTask, long groupId, String name,
 		String taskExecutorClassName, boolean completed,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<BackgroundTask> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -7473,7 +7484,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		backgroundTaskImpl.setName(backgroundTask.getName());
 		backgroundTaskImpl.setServletContextNames(backgroundTask.getServletContextNames());
 		backgroundTaskImpl.setTaskExecutorClassName(backgroundTask.getTaskExecutorClassName());
-		backgroundTaskImpl.setTaskContext(backgroundTask.getTaskContext());
+		backgroundTaskImpl.setTaskContextMap(backgroundTask.getTaskContextMap());
 		backgroundTaskImpl.setCompleted(backgroundTask.isCompleted());
 		backgroundTaskImpl.setCompletionDate(backgroundTask.getCompletionDate());
 		backgroundTaskImpl.setStatus(backgroundTask.getStatus());
@@ -7709,7 +7720,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 */
 	@Override
 	public List<BackgroundTask> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BackgroundTask> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -7840,25 +7851,6 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	 * Initializes the background task persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.BackgroundTask")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<BackgroundTask>> listenersList = new ArrayList<ModelListener<BackgroundTask>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<BackgroundTask>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -7877,8 +7869,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No BackgroundTask exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No BackgroundTask exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(BackgroundTaskPersistenceImpl.class);
-	private static BackgroundTask _nullBackgroundTask = new BackgroundTaskImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(BackgroundTaskPersistenceImpl.class);
+	private static final BackgroundTask _nullBackgroundTask = new BackgroundTaskImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -7890,7 +7882,8 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 			}
 		};
 
-	private static CacheModel<BackgroundTask> _nullBackgroundTaskCacheModel = new NullCacheModel();
+	private static final CacheModel<BackgroundTask> _nullBackgroundTaskCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<BackgroundTask>,
 		MVCCModel {

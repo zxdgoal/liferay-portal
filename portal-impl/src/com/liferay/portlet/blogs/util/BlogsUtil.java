@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.blogs.util;
 
+import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
+import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchContainerResults;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -51,6 +53,18 @@ public class BlogsUtil {
 
 	public static final String DISPLAY_STYLE_TITLE = "title";
 
+	public static CommentManager getCommentManager() {
+		return (CommentManager)PortalBeanLocatorUtil.locate(
+			CommentManager.class.getName());
+	}
+
+	public static int getCommentsCount(BlogsEntry entry) {
+		CommentManager commentManager = getCommentManager();
+
+		return commentManager.getCommentsCount(
+			BlogsEntry.class.getName(), entry.getEntryId());
+	}
+
 	public static Map<String, String> getEmailDefinitionTerms(
 		PortletRequest portletRequest, String emailFromAddress,
 		String emailFromName) {
@@ -87,6 +101,11 @@ public class BlogsUtil {
 		definitionTerms.put(
 			"[$BLOGS_ENTRY_TITLE$]",
 			LanguageUtil.get(themeDisplay.getLocale(), "the-blog-entry-title"));
+		definitionTerms.put(
+			"[$BLOGS_ENTRY_UPDATE_COMMENT$]",
+			LanguageUtil.get(
+				themeDisplay.getLocale(),
+				"the-comment-of-the-user-who-updated-the-blog-entry"));
 		definitionTerms.put(
 			"[$BLOGS_ENTRY_USER_ADDRESS$]",
 			LanguageUtil.get(

@@ -114,6 +114,16 @@ public abstract class BaseSeleniumImpl
 	}
 
 	@Override
+	public void assertHTMLSourceTextNotPresent(String value) throws Exception {
+		LiferaySeleniumHelper.assertHTMLSourceTextNotPresent(this, value);
+	}
+
+	@Override
+	public void assertHTMLSourceTextPresent(String value) throws Exception {
+		LiferaySeleniumHelper.assertHTMLSourceTextPresent(this, value);
+	}
+
+	@Override
 	public void assertJavaScriptErrors(String ignoreJavaScriptError)
 		throws Exception {
 	}
@@ -357,6 +367,16 @@ public abstract class BaseSeleniumImpl
 	}
 
 	@Override
+	public boolean isHTMLSourceTextPresent(String value) throws Exception {
+		return LiferaySeleniumHelper.isHTMLSourceTextPresent(this, value);
+	}
+
+	@Override
+	public boolean isMobileDeviceEnabled() {
+		return LiferaySeleniumHelper.isMobileDeviceEnabled();
+	}
+
+	@Override
 	public boolean isNotChecked(String locator) {
 		return LiferaySeleniumHelper.isNotChecked(this, locator);
 	}
@@ -515,6 +535,17 @@ public abstract class BaseSeleniumImpl
 	}
 
 	@Override
+	public void saveScreenshotBeforeAction(boolean actionFailed)
+		throws Exception {
+
+		if (!TestPropsValues.SAVE_SCREENSHOT) {
+			return;
+		}
+
+		LiferaySeleniumHelper.saveScreenshotBeforeAction(this, actionFailed);
+	}
+
+	@Override
 	public void scrollWebElementIntoView(String locator) throws Exception {
 	}
 
@@ -543,6 +574,11 @@ public abstract class BaseSeleniumImpl
 	@Override
 	public void sendKeys(String locator, String value) {
 		_commandProcessor.doCommand("sendKeys", new String[] {locator, value});
+	}
+
+	@Override
+	public void sendKeysAceEditor(String locator, String value) {
+		LiferaySeleniumHelper.typeAceEditor(this, locator, value);
 	}
 
 	@Override
@@ -586,6 +622,10 @@ public abstract class BaseSeleniumImpl
 
 	@Override
 	public void setTimeoutImplicit(String timeout) {
+	}
+
+	@Override
+	public void setWindowSize(String coordString) {
 	}
 
 	@Override
@@ -670,6 +710,11 @@ public abstract class BaseSeleniumImpl
 	}
 
 	@Override
+	public void tap(String locator) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void typeAceEditor(String locator, String value) {
 		LiferaySeleniumHelper.typeAceEditor(this, locator, value);
 	}
@@ -681,12 +726,12 @@ public abstract class BaseSeleniumImpl
 
 	@Override
 	public void typeKeys(String locator, String value) {
-		typeKeys(locator, value, false);
+		sendKeys(locator, value);
 	}
 
 	@Override
-	public void typeKeys(String locator, String value, boolean typeAceEditor) {
-		sendKeys(locator, value);
+	public void typeScreen(String value) {
+		LiferaySeleniumHelper.typeScreen(value);
 	}
 
 	@Override

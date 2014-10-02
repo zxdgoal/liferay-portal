@@ -25,10 +25,10 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.test.CompanyTestUtil;
 import com.liferay.portal.util.test.GroupTestUtil;
@@ -113,6 +113,19 @@ public class JournalTestUtilTest {
 	}
 
 	@Test
+	public void testAddDDMStructureWithDefinition() throws Exception {
+		Assert.assertNotNull(
+			DDMStructureTestUtil.addStructure(JournalArticle.class.getName()));
+	}
+
+	@Test
+	public void testAddDDMStructureWithDefinitionAndLocale() throws Exception {
+		Assert.assertNotNull(
+			DDMStructureTestUtil.addStructure(
+				JournalArticle.class.getName(), LocaleUtil.getSiteDefault()));
+	}
+
+	@Test
 	public void testAddDDMStructureWithLocale() throws Exception {
 		Assert.assertNotNull(
 			DDMStructureTestUtil.addStructure(
@@ -141,19 +154,6 @@ public class JournalTestUtilTest {
 				PortalUtil.getDefaultCompanyId(), availableLocales,
 				defaultLocale);
 		}
-	}
-
-	@Test
-	public void testAddDDMStructureWithXSD() throws Exception {
-		Assert.assertNotNull(
-			DDMStructureTestUtil.addStructure(JournalArticle.class.getName()));
-	}
-
-	@Test
-	public void testAddDDMStructureWithXSDAndLocale() throws Exception {
-		Assert.assertNotNull(
-			DDMStructureTestUtil.addStructure(
-				JournalArticle.class.getName(), LocaleUtil.getSiteDefault()));
 	}
 
 	@Test
@@ -233,8 +233,9 @@ public class JournalTestUtilTest {
 	}
 
 	@Test
-	public void testGetSampleStructureXSD() {
-		Assert.assertNotNull(DDMStructureTestUtil.getSampleStructureXSD());
+	public void testGetSampleStructureDefinition() {
+		Assert.assertNotNull(
+			DDMStructureTestUtil.getSampleStructureDefinition());
 	}
 
 	@Test

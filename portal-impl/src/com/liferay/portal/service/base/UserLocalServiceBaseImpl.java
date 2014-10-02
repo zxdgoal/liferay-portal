@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -111,6 +113,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.UserLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements UserLocalService, IdentifiableBean {
 	/*
@@ -185,8 +188,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return userPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -203,8 +205,8 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return userPersistence.findWithDynamicQuery(dynamicQuery, start, end);
 	}
 
@@ -222,9 +224,8 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return userPersistence.findWithDynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -363,7 +364,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteUser((User)persistedModel);
+		return userLocalService.deleteUser((User)persistedModel);
 	}
 
 	@Override
@@ -520,7 +521,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<User> getGroupUsers(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<User> orderByComparator) {
 		return groupPersistence.getUsers(groupId, start, end, orderByComparator);
 	}
 
@@ -649,7 +650,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<User> getOrganizationUsers(long organizationId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<User> orderByComparator) {
 		return organizationPersistence.getUsers(organizationId, start, end,
 			orderByComparator);
 	}
@@ -782,7 +783,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<User> getRoleUsers(long roleId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<User> orderByComparator) {
 		return rolePersistence.getUsers(roleId, start, end, orderByComparator);
 	}
 
@@ -912,7 +913,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<User> getTeamUsers(long teamId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<User> orderByComparator) {
 		return teamPersistence.getUsers(teamId, start, end, orderByComparator);
 	}
 
@@ -1044,7 +1045,7 @@ public abstract class UserLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<User> getUserGroupUsers(long userGroupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<User> orderByComparator) {
 		return userGroupPersistence.getUsers(userGroupId, start, end,
 			orderByComparator);
 	}

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,14 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.softwarecatalog.NoSuchProductScreenshotException;
@@ -42,7 +41,6 @@ import com.liferay.portlet.softwarecatalog.service.persistence.SCProductScreensh
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +61,7 @@ import java.util.Set;
  * @see SCProductScreenshotUtil
  * @generated
  */
+@ProviderType
 public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCProductScreenshot>
 	implements SCProductScreenshotPersistence {
 	/*
@@ -155,7 +154,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public List<SCProductScreenshot> findByProductEntryId(long productEntryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<SCProductScreenshot> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -265,7 +265,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public SCProductScreenshot findByProductEntryId_First(long productEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SCProductScreenshot> orderByComparator)
 		throws NoSuchProductScreenshotException {
 		SCProductScreenshot scProductScreenshot = fetchByProductEntryId_First(productEntryId,
 				orderByComparator);
@@ -295,7 +295,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public SCProductScreenshot fetchByProductEntryId_First(
-		long productEntryId, OrderByComparator orderByComparator) {
+		long productEntryId,
+		OrderByComparator<SCProductScreenshot> orderByComparator) {
 		List<SCProductScreenshot> list = findByProductEntryId(productEntryId,
 				0, 1, orderByComparator);
 
@@ -316,7 +317,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public SCProductScreenshot findByProductEntryId_Last(long productEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SCProductScreenshot> orderByComparator)
 		throws NoSuchProductScreenshotException {
 		SCProductScreenshot scProductScreenshot = fetchByProductEntryId_Last(productEntryId,
 				orderByComparator);
@@ -346,7 +347,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public SCProductScreenshot fetchByProductEntryId_Last(long productEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductScreenshot> orderByComparator) {
 		int count = countByProductEntryId(productEntryId);
 
 		if (count == 0) {
@@ -375,7 +376,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	@Override
 	public SCProductScreenshot[] findByProductEntryId_PrevAndNext(
 		long productScreenshotId, long productEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SCProductScreenshot> orderByComparator)
 		throws NoSuchProductScreenshotException {
 		SCProductScreenshot scProductScreenshot = findByPrimaryKey(productScreenshotId);
 
@@ -407,7 +408,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 
 	protected SCProductScreenshot getByProductEntryId_PrevAndNext(
 		Session session, SCProductScreenshot scProductScreenshot,
-		long productEntryId, OrderByComparator orderByComparator,
+		long productEntryId,
+		OrderByComparator<SCProductScreenshot> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -1888,7 +1890,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 */
 	@Override
 	public List<SCProductScreenshot> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductScreenshot> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2019,25 +2021,6 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	 * Initializes the s c product screenshot persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.softwarecatalog.model.SCProductScreenshot")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SCProductScreenshot>> listenersList = new ArrayList<ModelListener<SCProductScreenshot>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SCProductScreenshot>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2056,8 +2039,8 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SCProductScreenshot exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SCProductScreenshot exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SCProductScreenshotPersistenceImpl.class);
-	private static SCProductScreenshot _nullSCProductScreenshot = new SCProductScreenshotImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(SCProductScreenshotPersistenceImpl.class);
+	private static final SCProductScreenshot _nullSCProductScreenshot = new SCProductScreenshotImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2069,7 +2052,7 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 			}
 		};
 
-	private static CacheModel<SCProductScreenshot> _nullSCProductScreenshotCacheModel =
+	private static final CacheModel<SCProductScreenshot> _nullSCProductScreenshotCacheModel =
 		new CacheModel<SCProductScreenshot>() {
 			@Override
 			public SCProductScreenshot toEntityModel() {

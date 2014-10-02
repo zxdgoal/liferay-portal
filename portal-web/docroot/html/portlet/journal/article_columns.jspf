@@ -16,7 +16,7 @@
 
 <liferay-ui:search-container-column-text
 	name="id"
-	value="<%= curArticle.getArticleId() %>"
+	value="<%= HtmlUtil.escape(curArticle.getArticleId()) %>"
 />
 
 <liferay-ui:search-container-column-text
@@ -42,7 +42,8 @@
 		cssClass="entry-display-style selectable"
 		iconCssClass="<%= assetRenderer.getIconCssClass() %>"
 		label="<%= true %>"
-		message="<%= curArticle.getTitle(locale) %>"
+		localizeMessage="<%= false %>"
+		message="<%= HtmlUtil.escape(curArticle.getTitle(locale)) %>"
 		method="get"
 		url="<%= rowURL.toString() %>"
 	/>
@@ -59,7 +60,6 @@
 					<dt>
 						<liferay-ui:message key="site" />:
 					</dt>
-
 					<dd>
 
 						<%
@@ -83,7 +83,6 @@
 					<dt>
 						<liferay-ui:message key="scope" />:
 					</dt>
-
 					<dd>
 						<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>
 					</dd>
@@ -118,7 +117,7 @@ DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(scopeGroup
 
 <liferay-ui:search-container-column-text
 	name="type"
-	value="<%= ddmStructure.getName(locale) %>"
+	value="<%= HtmlUtil.escape(ddmStructure.getName(locale)) %>"
 />
 
 <liferay-ui:search-container-column-jsp

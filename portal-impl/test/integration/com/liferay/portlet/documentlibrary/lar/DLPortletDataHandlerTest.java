@@ -28,8 +28,8 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Repository;
 import com.liferay.portal.repository.liferayrepository.LiferayRepository;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.test.GroupTestUtil;
@@ -121,7 +121,7 @@ public class DLPortletDataHandlerTest extends BasePortletDataHandlerTestCase {
 
 		DLAppServiceUtil.moveFolderToTrash(parentFolder.getFolderId());
 
-		DLFolderLocalServiceUtil.deleteFolder(parentFolder.getFolderId());
+		DLAppServiceUtil.deleteFolder(parentFolder.getFolderId());
 
 		GroupLocalServiceUtil.deleteGroup(group);
 

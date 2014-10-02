@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.shopping.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -57,6 +59,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.shopping.service.ShoppingOrderItemLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements ShoppingOrderItemLocalService,
 		IdentifiableBean {
@@ -134,8 +137,7 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return shoppingOrderItemPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -152,8 +154,8 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return shoppingOrderItemPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -172,9 +174,8 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return shoppingOrderItemPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -250,7 +251,7 @@ public abstract class ShoppingOrderItemLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteShoppingOrderItem((ShoppingOrderItem)persistedModel);
+		return shoppingOrderItemLocalService.deleteShoppingOrderItem((ShoppingOrderItem)persistedModel);
 	}
 
 	@Override

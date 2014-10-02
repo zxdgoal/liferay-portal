@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -60,6 +62,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AssetCategoryPropertyLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return assetCategoryPropertyPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return assetCategoryPropertyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +178,8 @@ public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return assetCategoryPropertyPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -255,7 +256,7 @@ public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteAssetCategoryProperty((AssetCategoryProperty)persistedModel);
+		return assetCategoryPropertyLocalService.deleteAssetCategoryProperty((AssetCategoryProperty)persistedModel);
 	}
 
 	@Override

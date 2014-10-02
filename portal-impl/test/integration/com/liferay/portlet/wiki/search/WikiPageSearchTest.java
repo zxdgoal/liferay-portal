@@ -22,10 +22,10 @@ import com.liferay.portal.model.ClassedModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.search.BaseSearchTestCase;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
 import com.liferay.portal.test.Sync;
 import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.wiki.asset.WikiPageAssetRenderer;
@@ -114,6 +114,11 @@ public class WikiPageSearchTest extends BaseSearchTestCase {
 			TestPropsValues.getUserId(),
 			(Long)parentBaseModel.getPrimaryKeyObj(),
 			RandomTestUtil.randomString(), keywords, approved, serviceContext);
+	}
+
+	@Override
+	protected void deleteBaseModel(long primaryKey) throws Exception {
+		WikiPageLocalServiceUtil.deleteWikiPage(primaryKey);
 	}
 
 	@Override

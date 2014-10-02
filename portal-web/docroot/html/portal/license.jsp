@@ -362,7 +362,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 					<div id="node_<%= clusterNode.getClusterNodeId() %>_serverInfo">
 						<div style="text-align: center;">
-							<img alt="<liferay-ui:message key="loading" />" src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
+							<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="loading" />" src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
 						</div>
 					</div>
 				</td>
@@ -398,7 +398,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 					<div id="node_<%= clusterNode.getClusterNodeId() %>_licenseProperties">
 						<div style="text-align: center;">
-							<img alt="<liferay-ui:message key="loading" />" src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
+							<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="loading" />" src="<%= themeDisplay.getPathThemeImages() %>/aui/loading_indicator.gif" />
 						</div>
 					</div>
 				</td>
@@ -487,6 +487,8 @@ dateFormatDateTime.setTimeZone(timeZone);
 					function(message) {
 						var A = AUI();
 
+						var LString = A.Lang.String;
+
 						A.one('#node_<%= clusterNode.getClusterNodeId() %>_register').attr('disabled', false);
 
 						if (!message) {
@@ -512,8 +514,8 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 							addColumn(row, productEntryName);
 							addColumn(row, getLicenseState(message[i].licenseState));
-							addColumn(row, Liferay.Util.escapeHTML(message[i].owner));
-							addColumn(row, Liferay.Util.escapeHTML(message[i].description));
+							addColumn(row, LString.escapeHTML(message[i].owner));
+							addColumn(row, LString.escapeHTML(message[i].description));
 							addColumn(row, message[i].type);
 							addColumn(row, new Date(Number(message[i].startDate)).toLocaleDateString());
 							addColumn(row, new Date(Number(message[i].expirationDate)).toLocaleDateString());
@@ -617,7 +619,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 				for (Map.Entry<String, String> entry : orderProducts.entrySet()) {
 					String key = entry.getKey();
 
-					String licensesLeft = LanguageUtil.get(pageContext, entry.getValue());
+					String licensesLeft = LanguageUtil.get(request, entry.getValue());
 				%>
 
 					<c:choose>

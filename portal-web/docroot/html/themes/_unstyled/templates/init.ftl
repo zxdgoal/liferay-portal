@@ -6,7 +6,7 @@
 <#assign theme_timestamp = themeDisplay.getTheme().getTimestamp() />
 <#assign theme_settings = themeDisplay.getThemeSettings() />
 
-<#assign root_css_class = "aui " + languageUtil.get(locale, "lang.dir") />
+<#assign root_css_class = languageUtil.get(locale, "lang.dir") />
 <#assign css_class = htmlUtil.escape(theme_display.getColorScheme().getCssClass()) + " yui3-skin-sam" />
 
 <#assign liferay_toggle_controls = sessionClicks.get(request, "liferay_toggle_controls", "visible") />
@@ -123,7 +123,10 @@
 
 <#if show_my_account>
 	<#assign my_account_text = languageUtil.get(locale, "my-account") />
-	<#assign my_account_url = htmlUtil.escape(theme_display.getURLMyAccount().toString()) />
+
+	<#if theme_display.getURLMyAccount()??>
+		<#assign my_account_url = htmlUtil.escape(theme_display.getURLMyAccount().toString()) />
+	</#if>
 </#if>
 
 <#assign show_page_settings = theme_display.isShowPageSettingsIcon() />
@@ -131,7 +134,10 @@
 
 <#if show_page_settings>
 	<#assign page_settings_text = languageUtil.get(locale, "manage-pages") />
-	<#assign page_settings_url = htmlUtil.escape(theme_display.getURLPageSettings().toString()) />
+
+	<#if theme_display.getURLPageSettings()??>
+		<#assign page_settings_url = htmlUtil.escape(theme_display.getURLPageSettings().toString()) />
+	</#if>
 </#if>
 
 <#assign show_sign_in = theme_display.isShowSignInIcon() />
@@ -292,11 +298,15 @@
 </#if>
 
 <#if page_group.isLayoutPrototype()>
-	<#assign the_title = page_group.getDescriptiveName() />
+	<#assign the_title = page_group.getDescriptiveName(locale) />
 </#if>
 
 <#if tilesTitle == "">
 	<#assign the_title = htmlUtil.escape(the_title) />
+</#if>
+
+<#if the_title != "" && company_name != site_name && !page_group.isLayoutPrototype()>
+	<#assign the_title = the_title + " - " + site_name />
 </#if>
 
 <#if layouts??>
@@ -326,7 +336,7 @@
 
 <#assign logo_description = "" />
 
-<#if !$show_site_name>
+<#if !show_site_name>
 	<#assign logo_description = htmlUtil.escape(site_name) />
 </#if>
 
@@ -384,6 +394,7 @@
 <#-- ---------- Date ---------- -->
 
 <#assign date = dateUtil />
+
 <#assign current_time = date.newDate() />
 <#assign the_year = current_time?date?string("yyyy") />
 

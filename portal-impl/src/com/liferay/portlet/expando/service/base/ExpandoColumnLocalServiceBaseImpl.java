@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.expando.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -63,6 +65,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class ExpandoColumnLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements ExpandoColumnLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return expandoColumnPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return expandoColumnPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +178,8 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return expandoColumnPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -254,7 +255,7 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteExpandoColumn((ExpandoColumn)persistedModel);
+		return expandoColumnLocalService.deleteExpandoColumn((ExpandoColumn)persistedModel);
 	}
 
 	@Override

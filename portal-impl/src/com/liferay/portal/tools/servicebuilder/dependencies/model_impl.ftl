@@ -26,6 +26,8 @@ import ${packagePath}.model.${entity.name}Soap;
 
 import ${packagePath}.service.${entity.name}LocalServiceUtil;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
@@ -37,6 +39,7 @@ import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -89,6 +92,7 @@ import java.util.TreeSet;
 	@JSON(strict = true)
 </#if>
 
+@ProviderType
 public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> implements ${entity.name}Model {
 
 	/*
@@ -214,14 +218,14 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			<#assign columnBitmask = 1>
 
 			<#list entity.finderColumnsList as column>
-				public static long ${column.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
+				public static final long ${column.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
 
 				<#assign columnBitmask = columnBitmask * 2>
 			</#list>
 
 			<#list orderList as order>
 				<#if !entity.finderColumnsList?seq_contains(order)>
-					public static long ${order.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
+					public static final long ${order.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
 
 					<#assign columnBitmask = columnBitmask * 2>
 				</#if>
@@ -400,7 +404,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			<#if column.isPrimitiveType()>
 				${serviceBuilder.getPrimitiveObj(column.type)}
 			<#else>
-				${column.type}
+				${column.genericizedType}
 			</#if>
 
 			${column.name} =
@@ -408,7 +412,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			<#if column.isPrimitiveType()>
 				(${serviceBuilder.getPrimitiveObj(column.type)})
 			<#else>
-				(${column.type})
+				(${column.genericizedType})
 			</#if>
 
 			attributes.get("${column.name}");
@@ -449,7 +453,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		</#if>
 
 		@Override
-		public ${column.type} get${column.methodName}() {
+		public ${column.genericizedType} get${column.methodName}() {
 			<#if column.type == "String" && column.isConvertNull()>
 				if (_${column.name} == null) {
 					return StringPool.BLANK;
@@ -532,7 +536,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		</#if>
 
 		@Override
-		public void set${column.methodName}(${column.type} ${column.name}) {
+		public void set${column.methodName}(${column.genericizedType} ${column.name}) {
 			<#if column.name == "uuid">
 				<#if column.isFinderPath()>
 					if (_originalUuid == null) {
@@ -660,7 +664,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 	<#list cacheFields as cacheField>
 		<#assign variableName = serviceBuilder.getVariableName(cacheField)>
-		<#assign methodName = textFormatter.format(variableName, 6)>
+		<#assign methodName = serviceBuilder.getCacheFieldMethodName(cacheField)>
 		<#assign typeName = cacheField.getType().getGenericValue()>
 
 		<#if methodName != "DefaultLanguageId">
@@ -716,6 +720,10 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		public String getContainerModelName() {
 			<#if entity.hasColumn("name")>
 				return String.valueOf(getName());
+			<#elseif entity.hasColumn("title")>
+				<#assign titleColumn = entity.getColumn("title")>
+
+				return String.valueOf(getTitle(<#if titleColumn.isLocalized()>LocaleThreadLocal.getThemeDisplayLocale()</#if>));
 			<#else>
 				return String.valueOf(getContainerModelId());
 			</#if>
@@ -794,7 +802,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 			TrashHandler trashHandler = getTrashHandler();
 
-			if (!Validator.isNull(trashHandler.getContainerModelClassName())) {
+			if (!Validator.isNull(trashHandler.getContainerModelClassName(getPrimaryKey()))) {
 				ContainerModel containerModel = null;
 
 				try {
@@ -811,7 +819,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 						return trashedModel.getTrashEntry();
 					}
 
-					trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName());
+					trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName(containerModel.getContainerModelId()));
 
 					if (trashHandler == null) {
 						return null;
@@ -848,7 +856,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		public boolean isInTrashContainer() {
 			TrashHandler trashHandler = getTrashHandler();
 
-			if ((trashHandler == null) || Validator.isNull(trashHandler.getContainerModelClassName())) {
+			if ((trashHandler == null) || Validator.isNull(trashHandler.getContainerModelClassName(getPrimaryKey()))) {
 				return false;
 			}
 
@@ -1274,7 +1282,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 		<#list cacheFields as cacheField>
 			<#assign variableName = serviceBuilder.getVariableName(cacheField)>
-			<#assign methodName = textFormatter.format(variableName, 6)>
+			<#assign methodName = serviceBuilder.getCacheFieldMethodName(cacheField)>
 
 			set${methodName}(null);
 		</#list>
@@ -1314,7 +1322,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		</#list>
 
 		<#list cacheFields as cacheField>
-			<#assign methodName = textFormatter.format(serviceBuilder.getVariableName(cacheField), 6)>
+			<#assign methodName = serviceBuilder.getCacheFieldMethodName(cacheField)>
 
 			${entity.varName}CacheModel.${cacheField.name} = get${methodName}();
 		</#list>
@@ -1366,15 +1374,15 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		return sb.toString();
 	}
 
-	private static ClassLoader _classLoader = ${entity.name}.class.getClassLoader();
+	private static final ClassLoader _classLoader = ${entity.name}.class.getClassLoader();
 
-	private static Class<?>[] _escapedModelInterfaces = new Class[] {${entity.name}.class};
+	private static final Class<?>[] _escapedModelInterfaces = new Class[] {${entity.name}.class};
 
 	<#list entity.regularColList as column>
 		<#if (column.type == "Blob") && column.lazy>
 			private ${entity.name}${column.methodName}BlobModel _${column.name}BlobModel;
 		<#else>
-			private ${column.type} _${column.name};
+			private ${column.genericizedType} _${column.name};
 
 			<#if column.localized>
 				private String _${column.name}CurrentLanguageId;

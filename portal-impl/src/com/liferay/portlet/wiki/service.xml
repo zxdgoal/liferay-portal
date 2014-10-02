@@ -79,7 +79,7 @@
 
 		<!-- Resource -->
 
-		<column name="resourcePrimKey" type="long" filter-primary="true" />
+		<column name="resourcePrimKey" type="long" filter-primary="true" container-model="true" />
 
 		<!-- Group instance -->
 
@@ -321,6 +321,7 @@
 		<exception>DuplicateNodeName</exception>
 		<exception>DuplicatePage</exception>
 		<exception>ImportFiles</exception>
+		<exception>NodeChange</exception>
 		<exception>NodeName</exception>
 		<exception>NoSuchNode</exception>
 		<exception>NoSuchPage</exception>

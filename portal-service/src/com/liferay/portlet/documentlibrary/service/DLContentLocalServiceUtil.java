@@ -40,6 +40,20 @@ public class DLContentLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.documentlibrary.service.impl.DLContentLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.portlet.documentlibrary.model.DLContent addContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version, byte[] bytes) {
+		return getService()
+				   .addContent(companyId, repositoryId, path, version, bytes);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLContent addContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version, java.io.InputStream inputStream, long size) {
+		return getService()
+				   .addContent(companyId, repositoryId, path, version,
+			inputStream, size);
+	}
 
 	/**
 	* Adds the document library content to the database. Also notifies the appropriate model listeners.
@@ -61,6 +75,22 @@ public class DLContentLocalServiceUtil {
 	public static com.liferay.portlet.documentlibrary.model.DLContent createDLContent(
 		long contentId) {
 		return getService().createDLContent(contentId);
+	}
+
+	public static void deleteContent(long companyId, long repositoryId,
+		java.lang.String path, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().deleteContent(companyId, repositoryId, path, version);
+	}
+
+	public static void deleteContents(long companyId, long repositoryId,
+		java.lang.String path) {
+		getService().deleteContents(companyId, repositoryId, path);
+	}
+
+	public static void deleteContentsByDirectory(long companyId,
+		long repositoryId, java.lang.String dirName) {
+		getService().deleteContentsByDirectory(companyId, repositoryId, dirName);
 	}
 
 	/**
@@ -87,6 +117,15 @@ public class DLContentLocalServiceUtil {
 		return getService().deleteDLContent(dlContent);
 	}
 
+	/**
+	* @throws PortalException
+	*/
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return getService().dynamicQuery();
 	}
@@ -97,8 +136,7 @@ public class DLContentLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -115,8 +153,7 @@ public class DLContentLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -135,11 +172,10 @@ public class DLContentLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -173,6 +209,48 @@ public class DLContentLocalServiceUtil {
 		return getService().fetchDLContent(contentId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLContent getContent(
+		long companyId, long repositoryId, java.lang.String path)
+		throws com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return getService().getContent(companyId, repositoryId, path);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLContent getContent(
+		long companyId, long repositoryId, java.lang.String path,
+		java.lang.String version)
+		throws com.liferay.portlet.documentlibrary.NoSuchContentException {
+		return getService().getContent(companyId, repositoryId, path, version);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
+		long companyId, long repositoryId) {
+		return getService().getContents(companyId, repositoryId);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
+		long companyId, long repositoryId, java.lang.String path) {
+		return getService().getContents(companyId, repositoryId, path);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContentsByDirectory(
+		long companyId, long repositoryId, java.lang.String dirName) {
+		return getService()
+				   .getContentsByDirectory(companyId, repositoryId, dirName);
+	}
+
 	/**
 	* Returns the document library content with the primary key.
 	*
@@ -184,25 +262,6 @@ public class DLContentLocalServiceUtil {
 		long contentId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getDLContent(contentId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -230,29 +289,20 @@ public class DLContentLocalServiceUtil {
 		return getService().getDLContentsCount();
 	}
 
-	/**
-	* Updates the document library content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param dlContent the document library content
-	* @return the document library content that was updated
-	*/
-	public static com.liferay.portlet.documentlibrary.model.DLContent updateDLContent(
-		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
-		return getService().updateDLContent(dlContent);
-	}
-
 	public static com.liferay.portlet.documentlibrary.model.DLContentDataBlobModel getDataBlobModel(
 		java.io.Serializable primaryKey) {
 		return getService().getDataBlobModel(primaryKey);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static boolean hasContent(long companyId, long repositoryId,
+		java.lang.String path, java.lang.String version) {
+		return getService().hasContent(companyId, repositoryId, path, version);
 	}
 
 	/**
@@ -264,78 +314,22 @@ public class DLContentLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static com.liferay.portlet.documentlibrary.model.DLContent addContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version, byte[] bytes) {
-		return getService()
-				   .addContent(companyId, repositoryId, path, version, bytes);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLContent addContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version, java.io.InputStream inputStream, long size) {
-		return getService()
-				   .addContent(companyId, repositoryId, path, version,
-			inputStream, size);
-	}
-
-	public static void deleteContent(long companyId, long repositoryId,
-		java.lang.String path, java.lang.String version)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		getService().deleteContent(companyId, repositoryId, path, version);
-	}
-
-	public static void deleteContents(long companyId, long repositoryId,
-		java.lang.String path) {
-		getService().deleteContents(companyId, repositoryId, path);
-	}
-
-	public static void deleteContentsByDirectory(long companyId,
-		long repositoryId, java.lang.String dirName) {
-		getService().deleteContentsByDirectory(companyId, repositoryId, dirName);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLContent getContent(
-		long companyId, long repositoryId, java.lang.String path)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return getService().getContent(companyId, repositoryId, path);
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLContent getContent(
-		long companyId, long repositoryId, java.lang.String path,
-		java.lang.String version)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portlet.documentlibrary.NoSuchContentException {
-		return getService().getContent(companyId, repositoryId, path, version);
-	}
-
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
-		long companyId, long repositoryId) {
-		return getService().getContents(companyId, repositoryId);
-	}
-
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContents(
-		long companyId, long repositoryId, java.lang.String path) {
-		return getService().getContents(companyId, repositoryId, path);
-	}
-
-	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLContent> getContentsByDirectory(
-		long companyId, long repositoryId, java.lang.String dirName) {
-		return getService()
-				   .getContentsByDirectory(companyId, repositoryId, dirName);
-	}
-
-	public static boolean hasContent(long companyId, long repositoryId,
-		java.lang.String path, java.lang.String version) {
-		return getService().hasContent(companyId, repositoryId, path, version);
-	}
-
 	public static void updateDLContent(long companyId, long oldRepositoryId,
 		long newRepositoryId, java.lang.String oldPath, java.lang.String newPath) {
 		getService()
 			.updateDLContent(companyId, oldRepositoryId, newRepositoryId,
 			oldPath, newPath);
+	}
+
+	/**
+	* Updates the document library content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param dlContent the document library content
+	* @return the document library content that was updated
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLContent updateDLContent(
+		com.liferay.portlet.documentlibrary.model.DLContent dlContent) {
+		return getService().updateDLContent(dlContent);
 	}
 
 	public static DLContentLocalService getService() {

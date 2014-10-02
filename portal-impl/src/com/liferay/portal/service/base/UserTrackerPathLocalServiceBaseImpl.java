@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -56,6 +58,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.UserTrackerPathLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class UserTrackerPathLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements UserTrackerPathLocalService,
 		IdentifiableBean {
@@ -132,8 +135,7 @@ public abstract class UserTrackerPathLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return userTrackerPathPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -150,8 +152,8 @@ public abstract class UserTrackerPathLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return userTrackerPathPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -170,9 +172,8 @@ public abstract class UserTrackerPathLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return userTrackerPathPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -248,7 +249,7 @@ public abstract class UserTrackerPathLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteUserTrackerPath((UserTrackerPath)persistedModel);
+		return userTrackerPathLocalService.deleteUserTrackerPath((UserTrackerPath)persistedModel);
 	}
 
 	@Override

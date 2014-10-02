@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.journal.NoSuchArticleResourceException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.journal.service.persistence.JournalArticleResourcePer
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see JournalArticleResourceUtil
  * @generated
  */
+@ProviderType
 public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<JournalArticleResource>
 	implements JournalArticleResourcePersistence {
 	/*
@@ -154,7 +152,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public List<JournalArticleResource> findByUuid(String uuid, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<JournalArticleResource> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -274,7 +272,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = fetchByUuid_First(uuid,
 				orderByComparator);
@@ -304,7 +302,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleResource> orderByComparator) {
 		List<JournalArticleResource> list = findByUuid(uuid, 0, 1,
 				orderByComparator);
 
@@ -325,7 +323,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = fetchByUuid_Last(uuid,
 				orderByComparator);
@@ -355,7 +353,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleResource> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -383,7 +381,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource[] findByUuid_PrevAndNext(
-		long resourcePrimKey, String uuid, OrderByComparator orderByComparator)
+		long resourcePrimKey, String uuid,
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = findByPrimaryKey(resourcePrimKey);
 
@@ -414,7 +413,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 
 	protected JournalArticleResource getByUuid_PrevAndNext(Session session,
 		JournalArticleResource journalArticleResource, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalArticleResource> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -938,7 +938,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public List<JournalArticleResource> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<JournalArticleResource> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1044,7 +1044,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -1074,7 +1074,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleResource> orderByComparator) {
 		List<JournalArticleResource> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -1095,7 +1095,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -1125,7 +1125,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleResource> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -1153,7 +1153,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public JournalArticleResource[] findByGroupId_PrevAndNext(
-		long resourcePrimKey, long groupId, OrderByComparator orderByComparator)
+		long resourcePrimKey, long groupId,
+		OrderByComparator<JournalArticleResource> orderByComparator)
 		throws NoSuchArticleResourceException {
 		JournalArticleResource journalArticleResource = findByPrimaryKey(resourcePrimKey);
 
@@ -1184,7 +1185,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 
 	protected JournalArticleResource getByGroupId_PrevAndNext(Session session,
 		JournalArticleResource journalArticleResource, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<JournalArticleResource> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2261,7 +2263,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 */
 	@Override
 	public List<JournalArticleResource> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<JournalArticleResource> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2397,25 +2399,6 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 * Initializes the journal article resource persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.journal.model.JournalArticleResource")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<JournalArticleResource>> listenersList = new ArrayList<ModelListener<JournalArticleResource>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<JournalArticleResource>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2434,11 +2417,11 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No JournalArticleResource exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No JournalArticleResource exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(JournalArticleResourcePersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(JournalArticleResourcePersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static JournalArticleResource _nullJournalArticleResource = new JournalArticleResourceImpl() {
+	private static final JournalArticleResource _nullJournalArticleResource = new JournalArticleResourceImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2450,7 +2433,7 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 			}
 		};
 
-	private static CacheModel<JournalArticleResource> _nullJournalArticleResourceCacheModel =
+	private static final CacheModel<JournalArticleResource> _nullJournalArticleResourceCacheModel =
 		new CacheModel<JournalArticleResource>() {
 			@Override
 			public JournalArticleResource toEntityModel() {

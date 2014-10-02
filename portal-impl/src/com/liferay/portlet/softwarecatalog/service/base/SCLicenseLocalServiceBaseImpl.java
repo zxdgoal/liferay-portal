@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -58,6 +60,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.softwarecatalog.service.SCLicenseLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements SCLicenseLocalService, IdentifiableBean {
 	/*
@@ -131,8 +134,7 @@ public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return scLicensePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -149,8 +151,8 @@ public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return scLicensePersistence.findWithDynamicQuery(dynamicQuery, start,
 			end);
 	}
@@ -169,9 +171,8 @@ public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return scLicensePersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -246,7 +247,7 @@ public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteSCLicense((SCLicense)persistedModel);
+		return scLicenseLocalService.deleteSCLicense((SCLicense)persistedModel);
 	}
 
 	@Override
@@ -394,7 +395,7 @@ public abstract class SCLicenseLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	@Override
 	public List<SCLicense> getSCProductEntrySCLicenses(long productEntryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SCLicense> orderByComparator) {
 		return scProductEntryPersistence.getSCLicenses(productEntryId, start,
 			end, orderByComparator);
 	}

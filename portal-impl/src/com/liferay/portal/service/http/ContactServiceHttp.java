@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -49,6 +51,7 @@ import com.liferay.portal.service.ContactServiceUtil;
  * @see com.liferay.portal.service.ContactServiceUtil
  * @generated
  */
+@ProviderType
 public class ContactServiceHttp {
 	public static com.liferay.portal.model.Contact getContact(
 		HttpPrincipal httpPrincipal, long contactId)
@@ -84,7 +87,7 @@ public class ContactServiceHttp {
 	public static java.util.List<com.liferay.portal.model.Contact> getContacts(
 		HttpPrincipal httpPrincipal, long classNameId, long classPK, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portal.model.Contact> orderByComparator)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			MethodKey methodKey = new MethodKey(ContactServiceUtil.class,

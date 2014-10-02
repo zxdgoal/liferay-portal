@@ -160,7 +160,7 @@ public class SetUtil {
 	}
 
 	public static <E> Set<E> fromCollection(Collection<? extends E> c) {
-		if ((c != null) && Set.class.isAssignableFrom(c.getClass())) {
+		if ((c != null) && (c instanceof Set)) {
 			return (Set<E>)c;
 		}
 
@@ -184,16 +184,15 @@ public class SetUtil {
 	public static Set<String> fromFile(File file) throws IOException {
 		Set<String> set = new HashSet<String>();
 
-		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
-			new FileReader(file));
+		try (UnsyncBufferedReader unsyncBufferedReader =
+				new UnsyncBufferedReader(new FileReader(file))) {
 
-		String s = StringPool.BLANK;
+			String s = StringPool.BLANK;
 
-		while ((s = unsyncBufferedReader.readLine()) != null) {
-			set.add(s);
+			while ((s = unsyncBufferedReader.readLine()) != null) {
+				set.add(s);
+			}
 		}
-
-		unsyncBufferedReader.close();
 
 		return set;
 	}

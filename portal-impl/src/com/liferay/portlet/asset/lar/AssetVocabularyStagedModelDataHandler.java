@@ -14,10 +14,13 @@
 
 package com.liferay.portlet.asset.lar;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
+import com.liferay.portal.kernel.lar.StagedModelModifiedDateComparator;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -29,6 +32,7 @@ import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetVocabularyUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -47,13 +51,37 @@ public class AssetVocabularyStagedModelDataHandler
 	public void deleteStagedModel(
 		String uuid, long groupId, String className, String extraData) {
 
-		AssetVocabulary vocabulary =
-			AssetVocabularyLocalServiceUtil.
-				fetchAssetVocabularyByUuidAndGroupId(uuid, groupId);
+		AssetVocabulary vocabulary = fetchStagedModelByUuidAndGroupId(
+			uuid, groupId);
 
 		if (vocabulary != null) {
 			AssetVocabularyLocalServiceUtil.deleteAssetVocabulary(vocabulary);
 		}
+	}
+
+	@Override
+	public AssetVocabulary fetchStagedModelByUuidAndCompanyId(
+		String uuid, long companyId) {
+
+		List<AssetVocabulary> vocabularies =
+			AssetVocabularyLocalServiceUtil.
+				getAssetVocabulariesByUuidAndCompanyId(
+					uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					new StagedModelModifiedDateComparator<AssetVocabulary>());
+
+		if (ListUtil.isEmpty(vocabularies)) {
+			return null;
+		}
+
+		return vocabularies.get(0);
+	}
+
+	@Override
+	public AssetVocabulary fetchStagedModelByUuidAndGroupId(
+		String uuid, long groupId) {
+
+		return AssetVocabularyLocalServiceUtil.
+			fetchAssetVocabularyByUuidAndGroupId(uuid, groupId);
 	}
 
 	@Override
@@ -106,9 +134,8 @@ public class AssetVocabularyStagedModelDataHandler
 			long vocabularyId)
 		throws Exception {
 
-		AssetVocabulary existingVocabulary =
-			AssetVocabularyLocalServiceUtil.
-				fetchAssetVocabularyByUuidAndGroupId(uuid, groupId);
+		AssetVocabulary existingVocabulary = fetchMissingReference(
+			uuid, groupId);
 
 		Map<Long, Long> vocabularyIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
@@ -130,13 +157,8 @@ public class AssetVocabularyStagedModelDataHandler
 		AssetVocabulary importedVocabulary = null;
 
 		AssetVocabulary existingVocabulary =
-			AssetVocabularyUtil.fetchByUUID_G(
+			fetchStagedModelByUuidAndGroupId(
 				vocabulary.getUuid(), portletDataContext.getScopeGroupId());
-
-		if (existingVocabulary == null) {
-			existingVocabulary = AssetVocabularyUtil.fetchByUUID_G(
-				vocabulary.getUuid(), portletDataContext.getCompanyGroupId());
-		}
 
 		if (existingVocabulary == null) {
 			String name = getVocabularyName(
@@ -212,22 +234,6 @@ public class AssetVocabularyStagedModelDataHandler
 		titleMap.put(PortalUtil.getSiteDefaultLocale(groupId), name);
 
 		return titleMap;
-	}
-
-	@Override
-	protected boolean validateMissingReference(
-			String uuid, long companyId, long groupId)
-		throws Exception {
-
-		AssetVocabulary vocabulary =
-			AssetVocabularyLocalServiceUtil.
-				fetchAssetVocabularyByUuidAndGroupId(uuid, groupId);
-
-		if (vocabulary == null) {
-			return false;
-		}
-
-		return true;
 	}
 
 }

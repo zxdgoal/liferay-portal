@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatamapping.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,14 +26,10 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.dynamicdatamapping.NoSuchStructureLinkException;
@@ -42,7 +40,6 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureLi
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see DDMStructureLinkUtil
  * @generated
  */
+@ProviderType
 public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStructureLink>
 	implements DDMStructureLinkPersistence {
 	/*
@@ -154,7 +152,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public List<DDMStructureLink> findByClassNameId(long classNameId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -260,7 +259,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink findByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = fetchByClassNameId_First(classNameId,
 				orderByComparator);
@@ -290,7 +289,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink fetchByClassNameId_First(long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		List<DDMStructureLink> list = findByClassNameId(classNameId, 0, 1,
 				orderByComparator);
 
@@ -311,7 +310,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink findByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = fetchByClassNameId_Last(classNameId,
 				orderByComparator);
@@ -341,7 +340,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink fetchByClassNameId_Last(long classNameId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		int count = countByClassNameId(classNameId);
 
 		if (count == 0) {
@@ -370,7 +369,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	@Override
 	public DDMStructureLink[] findByClassNameId_PrevAndNext(
 		long structureLinkId, long classNameId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = findByPrimaryKey(structureLinkId);
 
@@ -401,7 +400,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 	protected DDMStructureLink getByClassNameId_PrevAndNext(Session session,
 		DDMStructureLink ddmStructureLink, long classNameId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMStructureLink> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -843,7 +842,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public List<DDMStructureLink> findByStructureId(long structureId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -949,7 +949,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink findByStructureId_First(long structureId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = fetchByStructureId_First(structureId,
 				orderByComparator);
@@ -979,7 +979,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink fetchByStructureId_First(long structureId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		List<DDMStructureLink> list = findByStructureId(structureId, 0, 1,
 				orderByComparator);
 
@@ -1000,7 +1000,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink findByStructureId_Last(long structureId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = fetchByStructureId_Last(structureId,
 				orderByComparator);
@@ -1030,7 +1030,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public DDMStructureLink fetchByStructureId_Last(long structureId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		int count = countByStructureId(structureId);
 
 		if (count == 0) {
@@ -1059,7 +1059,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	@Override
 	public DDMStructureLink[] findByStructureId_PrevAndNext(
 		long structureLinkId, long structureId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DDMStructureLink> orderByComparator)
 		throws NoSuchStructureLinkException {
 		DDMStructureLink ddmStructureLink = findByPrimaryKey(structureLinkId);
 
@@ -1090,7 +1090,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 	protected DDMStructureLink getByStructureId_PrevAndNext(Session session,
 		DDMStructureLink ddmStructureLink, long structureId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DDMStructureLink> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1829,7 +1829,7 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 */
 	@Override
 	public List<DDMStructureLink> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DDMStructureLink> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1960,25 +1960,6 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	 * Initializes the d d m structure link persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.dynamicdatamapping.model.DDMStructureLink")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DDMStructureLink>> listenersList = new ArrayList<ModelListener<DDMStructureLink>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DDMStructureLink>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1997,8 +1978,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DDMStructureLink exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DDMStructureLink exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DDMStructureLinkPersistenceImpl.class);
-	private static DDMStructureLink _nullDDMStructureLink = new DDMStructureLinkImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(DDMStructureLinkPersistenceImpl.class);
+	private static final DDMStructureLink _nullDDMStructureLink = new DDMStructureLinkImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2010,7 +1991,8 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 			}
 		};
 
-	private static CacheModel<DDMStructureLink> _nullDDMStructureLinkCacheModel = new CacheModel<DDMStructureLink>() {
+	private static final CacheModel<DDMStructureLink> _nullDDMStructureLinkCacheModel =
+		new CacheModel<DDMStructureLink>() {
 			@Override
 			public DDMStructureLink toEntityModel() {
 				return _nullDDMStructureLink;

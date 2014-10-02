@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
+		var LString = Lang.String;
+
 		var AObject = A.Object;
 
 		var BOUNDING_BOX = 'boundingBox';
@@ -79,7 +81,7 @@ AUI.add(
 
 							return value;
 						},
-						value: ''
+						value: []
 					},
 
 					curEntryIds: {
@@ -92,7 +94,12 @@ AUI.add(
 
 							return value;
 						},
-						value: ''
+						value: []
+					},
+
+					label: {
+						validator: '_isValidString',
+						value: Liferay.Language.get('select')
 					},
 
 					labelNode: {
@@ -154,8 +161,8 @@ AUI.add(
 				NAME: NAME,
 
 				prototype: {
-					UI_EVENTS: {},
 					TREEVIEWS: {},
+					UI_EVENTS: {},
 
 					renderUI: function() {
 						var instance = this;
@@ -197,6 +204,8 @@ AUI.add(
 								};
 
 								entry[matchKey] = curEntries[index];
+
+								entry.value = LString.unescapeHTML(entry.value);
 
 								instance.entries.add(entry);
 							}
@@ -255,7 +264,7 @@ AUI.add(
 									},
 									checked: checked,
 									id: treeId,
-									label: Liferay.Util.escapeHTML(item.titleCurrentValue),
+									label: LString.escapeHTML(item.titleCurrentValue),
 									leaf: !item.hasChildren,
 									paginator: instance._getPaginatorConfig(item),
 									type: type
@@ -454,7 +463,7 @@ AUI.add(
 
 						entry[matchKey] = entryMatchKey;
 
-						entry.value = A.Lang.String.unescapeHTML(entry.value);
+						entry.value = LString.unescapeHTML(entry.value);
 
 						instance.entries.add(entry);
 					},
@@ -562,7 +571,7 @@ AUI.add(
 								children: [
 									{
 										icon: 'icon-search',
-										label: Liferay.Language.get('select'),
+										label: instance.get('label'),
 										on: {
 											click: A.bind('_showSelectPopup', instance)
 										},
@@ -656,7 +665,7 @@ AUI.add(
 						var instance = this;
 
 						var popup = instance._popup;
-						var vocabularyTitle = Liferay.Util.escapeHTML(item.titleCurrentValue);
+						var vocabularyTitle = LString.escapeHTML(item.titleCurrentValue);
 						var vocabularyId = item.vocabularyId;
 
 						if (item.groupId == themeDisplay.getCompanyGroupId()) {

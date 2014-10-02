@@ -19,8 +19,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexWriter;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.IndexWriter;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.search.SpellCheckIndexWriter;
+import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.search.elasticsearch.connection.ElasticsearchConnectionManager;
 import com.liferay.portal.search.elasticsearch.util.DocumentTypes;
 import com.liferay.portal.search.elasticsearch.util.LogUtil;
@@ -38,10 +41,14 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(immediate = true, service = IndexWriter.class)
 public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 	@Override
@@ -49,7 +56,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		throws SearchException {
 
 		_elasticsearchUpdateDocumentCommand.updateDocument(
-			DocumentTypes.LIFERAY, searchContext, document);
+			DocumentTypes.LIFERAY, searchContext, document, false);
 	}
 
 	@Override
@@ -58,7 +65,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		throws SearchException {
 
 		_elasticsearchUpdateDocumentCommand.updateDocuments(
-			DocumentTypes.LIFERAY, searchContext, documents);
+			DocumentTypes.LIFERAY, searchContext, documents, false);
 	}
 
 	@Override
@@ -71,6 +78,12 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 			DeleteRequestBuilder deleteRequestBuilder = client.prepareDelete(
 				String.valueOf(searchContext.getCompanyId()),
 				DocumentTypes.LIFERAY, uid);
+
+			if (PortalRunMode.isTestMode() ||
+				searchContext.isCommitImmediately()) {
+
+				deleteRequestBuilder.setRefresh(true);
+			}
 
 			Future<DeleteResponse> future = deleteRequestBuilder.execute();
 
@@ -100,6 +113,12 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 						DocumentTypes.LIFERAY, uid);
 
 				bulkRequestBuilder.add(deleteRequestBuilder);
+			}
+
+			if (PortalRunMode.isTestMode()||
+				searchContext.isCommitImmediately()) {
+
+				bulkRequestBuilder.setRefresh(true);
 			}
 
 			Future<BulkResponse> future = bulkRequestBuilder.execute();
@@ -145,12 +164,14 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		}
 	}
 
+	@Reference
 	public void setElasticsearchConnectionManager(
 		ElasticsearchConnectionManager elasticsearchConnectionManager) {
 
 		_elasticsearchConnectionManager = elasticsearchConnectionManager;
 	}
 
+	@Reference
 	public void setElasticsearchUpdateDocumentCommand(
 		ElasticsearchUpdateDocumentCommand elasticsearchUpdateDocumentCommand) {
 
@@ -159,11 +180,19 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 	}
 
 	@Override
+	@Reference
+	public void setSpellCheckIndexWriter(
+		SpellCheckIndexWriter spellCheckIndexWriter) {
+
+		super.setSpellCheckIndexWriter(spellCheckIndexWriter);
+	}
+
+	@Override
 	public void updateDocument(SearchContext searchContext, Document document)
 		throws SearchException {
 
 		_elasticsearchUpdateDocumentCommand.updateDocument(
-			DocumentTypes.LIFERAY, searchContext, document);
+			DocumentTypes.LIFERAY, searchContext, document, true);
 	}
 
 	@Override
@@ -172,7 +201,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		throws SearchException {
 
 		_elasticsearchUpdateDocumentCommand.updateDocuments(
-			DocumentTypes.LIFERAY, searchContext, documents);
+			DocumentTypes.LIFERAY, searchContext, documents, true);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

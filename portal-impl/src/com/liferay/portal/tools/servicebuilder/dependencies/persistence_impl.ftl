@@ -14,7 +14,12 @@ package ${packagePath}.service.persistence.impl;
 
 <#assign noSuchEntity = serviceBuilder.getNoSuchEntityException(entity)>
 
-import ${packagePath}.${noSuchEntity}Exception;
+<#if osgiModule>
+	import ${packagePath}.exception.${noSuchEntity}Exception;
+<#else>
+	import ${packagePath}.${noSuchEntity}Exception;
+</#if>
+
 import ${packagePath}.model.${entity.name};
 import ${packagePath}.model.impl.${entity.name}Impl;
 import ${packagePath}.model.impl.${entity.name}ModelImpl;
@@ -23,6 +28,8 @@ import ${packagePath}.service.persistence.${entity.name}Persistence;
 <#if entity.hasCompoundPK()>
 	import ${packagePath}.service.persistence.${entity.PKClassName};
 </#if>
+
+import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -50,7 +57,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -62,7 +68,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.MVCCModel;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -106,6 +111,7 @@ import java.util.Set;
  * @see ${entity.name}Util
  * @generated
  */
+@ProviderType
 public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.name}> implements ${entity.name}Persistence {
 
 	/*
@@ -1004,7 +1010,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @return the ordered range of ${entity.humanNames}
 	 */
 	@Override
-	public List<${entity.name}> findAll(int start, int end, OrderByComparator orderByComparator) {
+	public List<${entity.name}> findAll(int start, int end, OrderByComparator<${entity.name}> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1181,7 +1187,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 * @return the ordered range of ${tempEntity.humanNames} associated with the ${entity.humanName}
 			 */
 			@Override
-			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end, OrderByComparator orderByComparator) {
+			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end, OrderByComparator<${tempEntity.packagePath}.model.${tempEntity.name}> orderByComparator) {
 				return ${entity.varName}To${tempEntity.name}TableMapper.getRightBaseModels(pk, start, end, orderByComparator);
 			}
 
@@ -1614,22 +1620,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * Initializes the ${entity.humanName} persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(${propsUtil}.get("value.object.listener.${packagePath}.model.${entity.name}")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<${entity.name}>> listenersList = new ArrayList<ModelListener<${entity.name}>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<${entity.name}>)InstanceFactory.newInstance(getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 
 		<#list entity.columnList as column>
 			<#if column.isCollection() && column.isMappingManyToMany()>
@@ -1741,10 +1731,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = <#if pluginName != "">GetterUtil.getBoolean(PropsUtil.get(PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE))<#else>com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE</#if>;
 
-	private static Log _log = LogFactoryUtil.getLog(${entity.name}PersistenceImpl.class);
+	private static final Log _log = LogFactoryUtil.getLog(${entity.name}PersistenceImpl.class);
 
 	<#if entity.badNamedColumnsList?size != 0>
-		private static Set<String> _badColumnNames = SetUtil.fromArray(
+		private static final Set<String> _badColumnNames = SetUtil.fromArray(
 			new String[] {
 				<#list entity.badNamedColumnsList as column>
 					"${column.name}"
@@ -1756,7 +1746,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			});
 	</#if>
 
-	private static ${entity.name} _null${entity.name} = new ${entity.name}Impl() {
+	private static final ${entity.name} _null${entity.name} = new ${entity.name}Impl() {
 
 		@Override
 		public Object clone() {
@@ -1770,7 +1760,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 	};
 
-	private static CacheModel<${entity.name}> _null${entity.name}CacheModel =
+	private static final CacheModel<${entity.name}> _null${entity.name}CacheModel =
 
 	<#if entity.isMvccEnabled()>
 		new NullCacheModel();

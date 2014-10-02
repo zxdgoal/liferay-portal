@@ -63,12 +63,20 @@ public class RoleStagedModelDataHandler
 
 		Group group = GroupLocalServiceUtil.getGroup(groupId);
 
-		Role role = RoleLocalServiceUtil.fetchRoleByUuidAndCompanyId(
+		Role role = fetchStagedModelByUuidAndCompanyId(
 			uuid, group.getCompanyId());
 
 		if (role != null) {
 			RoleLocalServiceUtil.deleteRole(role);
 		}
+	}
+
+	@Override
+	public Role fetchStagedModelByUuidAndCompanyId(
+		String uuid, long companyId) {
+
+		return RoleLocalServiceUtil.fetchRoleByUuidAndCompanyId(
+			uuid, companyId);
 	}
 
 	@Override
@@ -161,7 +169,7 @@ public class RoleStagedModelDataHandler
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			role);
 
-		Role existingRole = RoleLocalServiceUtil.fetchRoleByUuidAndCompanyId(
+		Role existingRole = fetchStagedModelByUuidAndCompanyId(
 			role.getUuid(), portletDataContext.getCompanyId());
 
 		if (existingRole == null) {
@@ -298,7 +306,7 @@ public class RoleStagedModelDataHandler
 			ResourcePermissionServiceUtil.addResourcePermission(
 				portletDataContext.getCompanyGroupId(),
 				portletDataContext.getCompanyId(), permission.getName(), scope,
-				String.valueOf(portletDataContext.getCompanyGroupId()),
+				String.valueOf(portletDataContext.getCompanyId()),
 				importedRole.getRoleId(), permission.getActionId());
 		}
 		else if (scope == ResourceConstants.SCOPE_GROUP) {

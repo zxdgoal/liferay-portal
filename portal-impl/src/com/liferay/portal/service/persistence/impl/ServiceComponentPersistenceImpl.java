@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchServiceComponentException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ServiceComponent;
 import com.liferay.portal.model.impl.ServiceComponentImpl;
 import com.liferay.portal.model.impl.ServiceComponentModelImpl;
@@ -43,7 +41,6 @@ import com.liferay.portal.service.persistence.ServiceComponentPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see ServiceComponentUtil
  * @generated
  */
+@ProviderType
 public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<ServiceComponent>
 	implements ServiceComponentPersistence {
 	/*
@@ -156,7 +154,8 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public List<ServiceComponent> findByBuildNamespace(String buildNamespace,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<ServiceComponent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -281,7 +280,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public ServiceComponent findByBuildNamespace_First(String buildNamespace,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ServiceComponent> orderByComparator)
 		throws NoSuchServiceComponentException {
 		ServiceComponent serviceComponent = fetchByBuildNamespace_First(buildNamespace,
 				orderByComparator);
@@ -311,7 +310,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public ServiceComponent fetchByBuildNamespace_First(String buildNamespace,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ServiceComponent> orderByComparator) {
 		List<ServiceComponent> list = findByBuildNamespace(buildNamespace, 0,
 				1, orderByComparator);
 
@@ -332,7 +331,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public ServiceComponent findByBuildNamespace_Last(String buildNamespace,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ServiceComponent> orderByComparator)
 		throws NoSuchServiceComponentException {
 		ServiceComponent serviceComponent = fetchByBuildNamespace_Last(buildNamespace,
 				orderByComparator);
@@ -362,7 +361,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public ServiceComponent fetchByBuildNamespace_Last(String buildNamespace,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ServiceComponent> orderByComparator) {
 		int count = countByBuildNamespace(buildNamespace);
 
 		if (count == 0) {
@@ -391,7 +390,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	@Override
 	public ServiceComponent[] findByBuildNamespace_PrevAndNext(
 		long serviceComponentId, String buildNamespace,
-		OrderByComparator orderByComparator)
+		OrderByComparator<ServiceComponent> orderByComparator)
 		throws NoSuchServiceComponentException {
 		ServiceComponent serviceComponent = findByPrimaryKey(serviceComponentId);
 
@@ -422,8 +421,8 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 
 	protected ServiceComponent getByBuildNamespace_PrevAndNext(
 		Session session, ServiceComponent serviceComponent,
-		String buildNamespace, OrderByComparator orderByComparator,
-		boolean previous) {
+		String buildNamespace,
+		OrderByComparator<ServiceComponent> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1454,7 +1453,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	@Override
 	public List<ServiceComponent> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ServiceComponent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1590,25 +1589,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 * Initializes the service component persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.ServiceComponent")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ServiceComponent>> listenersList = new ArrayList<ModelListener<ServiceComponent>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ServiceComponent>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1627,11 +1607,11 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ServiceComponent exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ServiceComponent exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ServiceComponentPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(ServiceComponentPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"data"
 			});
-	private static ServiceComponent _nullServiceComponent = new ServiceComponentImpl() {
+	private static final ServiceComponent _nullServiceComponent = new ServiceComponentImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1643,7 +1623,8 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			}
 		};
 
-	private static CacheModel<ServiceComponent> _nullServiceComponentCacheModel = new NullCacheModel();
+	private static final CacheModel<ServiceComponent> _nullServiceComponentCacheModel =
+		new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<ServiceComponent>,
 		MVCCModel {

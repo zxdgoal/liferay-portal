@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchCountryException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,25 +27,20 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.CountryImpl;
 import com.liferay.portal.model.impl.CountryModelImpl;
 import com.liferay.portal.service.persistence.CountryPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see CountryUtil
  * @generated
  */
+@ProviderType
 public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	implements CountryPersistence {
 	/*
@@ -846,7 +844,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public List<Country> findByActive(boolean active, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Country> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -952,7 +950,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public Country findByActive_First(boolean active,
-		OrderByComparator orderByComparator) throws NoSuchCountryException {
+		OrderByComparator<Country> orderByComparator)
+		throws NoSuchCountryException {
 		Country country = fetchByActive_First(active, orderByComparator);
 
 		if (country != null) {
@@ -980,7 +979,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public Country fetchByActive_First(boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Country> orderByComparator) {
 		List<Country> list = findByActive(active, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1000,7 +999,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public Country findByActive_Last(boolean active,
-		OrderByComparator orderByComparator) throws NoSuchCountryException {
+		OrderByComparator<Country> orderByComparator)
+		throws NoSuchCountryException {
 		Country country = fetchByActive_Last(active, orderByComparator);
 
 		if (country != null) {
@@ -1028,7 +1028,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public Country fetchByActive_Last(boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Country> orderByComparator) {
 		int count = countByActive(active);
 
 		if (count == 0) {
@@ -1056,7 +1056,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public Country[] findByActive_PrevAndNext(long countryId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchCountryException {
+		OrderByComparator<Country> orderByComparator)
+		throws NoSuchCountryException {
 		Country country = findByPrimaryKey(countryId);
 
 		Session session = null;
@@ -1085,7 +1086,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	}
 
 	protected Country getByActive_PrevAndNext(Session session, Country country,
-		boolean active, OrderByComparator orderByComparator, boolean previous) {
+		boolean active, OrderByComparator<Country> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1859,7 +1861,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	@Override
 	public List<Country> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Country> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1995,25 +1997,6 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 * Initializes the country persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.Country")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<Country>> listenersList = new ArrayList<ModelListener<Country>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<Country>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2032,11 +2015,11 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Country exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Country exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(CountryPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(CountryPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"number", "idd", "active"
 			});
-	private static Country _nullCountry = new CountryImpl() {
+	private static final Country _nullCountry = new CountryImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2048,7 +2031,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 			}
 		};
 
-	private static CacheModel<Country> _nullCountryCacheModel = new NullCacheModel();
+	private static final CacheModel<Country> _nullCountryCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<Country>,
 		MVCCModel {

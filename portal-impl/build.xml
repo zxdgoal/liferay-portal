@@ -225,6 +225,26 @@ public class Creole10Parser]]></replacevalue>
 		<ant dir="../portal-web" target="build-css" />
 	</target>
 
+	<target name="build-ehcache-xsd">
+		<get dest="ehcache.xsd" src="http://ehcache.org/ehcache.xsd" />
+
+		<xmltask dest="src/ehcache/ehcache.xsd" source="ehcache.xsd">
+			<replace path="/xs:schema/xs:element[@name='ehcache']/xs:complexType/xs:attribute[@name='name']/@use" withText="required" />
+		</xmltask>
+
+		<replace file="src/ehcache/ehcache.xsd">
+			<replacefilter>
+				<replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>]]></replacetoken>
+				<replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!-- @generated -->
+]]></replacevalue>
+			</replacefilter>
+		</replace>
+
+		<delete file="ehcache.xsd" />
+	</target>
+
 	<target name="build-db">
 		<ant dir="../sql" target="build-db" />
 	</target>
@@ -552,15 +572,15 @@ public class Creole10Parser]]></replacevalue>
 		<mkdir dir="${tstamp.value}/compass" />
 
 		<get
-			dest="${tstamp.value}/compass/compass-0.12.2.gem"
-			src="http://rubygems.org/downloads/compass-0.12.2.gem"
+			dest="${tstamp.value}/compass/compass-1.0.1.gem"
+			src="http://rubygems.org/downloads/compass-1.0.1.gem"
 		/>
 
 		<java
 			fork="true"
 			jar="${project.dir}/lib/portal/jruby.jar"
 		>
-			<arg line="-S gem install -i ./${tstamp.value}/output ${tstamp.value}/compass/compass-0.12.2.gem --no-rdoc --no-ri" />
+			<arg line="-S gem install -i ./${tstamp.value}/output ${tstamp.value}/compass/compass-1.0.1.gem --no-rdoc --no-ri" />
 		</java>
 
 		<if>
@@ -583,8 +603,8 @@ public class Creole10Parser]]></replacevalue>
 
 	<target name="build-selenium-java-jar">
 		<get
-			dest="selenium-firefox-driver-2.33.0-sources.jar"
-			src="http://search.maven.org/remotecontent?filepath=org/seleniumhq/selenium/selenium-firefox-driver/2.33.0/selenium-firefox-driver-2.33.0-sources.jar"
+			dest="selenium-firefox-driver-2.42.2-sources.jar"
+			src="http://search.maven.org/remotecontent?filepath=org/seleniumhq/selenium/selenium-firefox-driver/2.42.2/selenium-firefox-driver-2.42.2-sources.jar"
 		/>
 
 		<tstamp>
@@ -593,14 +613,14 @@ public class Creole10Parser]]></replacevalue>
 
 		<unzip
 			dest="${tstamp.value}"
-			src="selenium-firefox-driver-2.33.0-sources.jar"
+			src="selenium-firefox-driver-2.42.2-sources.jar"
 		>
 			<patternset>
 				<include name="**/FirefoxDriver.java" />
 			</patternset>
 		</unzip>
 
-		<delete file="selenium-firefox-driver-2.33.0-sources.jar" />
+		<delete file="selenium-firefox-driver-2.42.2-sources.jar" />
 
 		<replace file="${tstamp.value}/org/openqa/selenium/firefox/FirefoxDriver.java">
 			<replacefilter token="localhost" value="127.0.0.1" />
@@ -959,12 +979,6 @@ public class Creole10Parser]]></replacevalue>
 		</antcall>
 	</target>
 
-	<target name="build-service-portlet-polls">
-		<antcall target="build-service">
-			<param name="service.file" value="${basedir}/src/com/liferay/portlet/polls/service.xml" />
-		</antcall>
-	</target>
-
 	<target name="build-service-portlet-ratings">
 		<antcall target="build-service">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/ratings/service.xml" />
@@ -1015,7 +1029,6 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-service-portlet-journal" />
 		<antcall target="build-service-portlet-messageboards" />
 		<antcall target="build-service-portlet-mobiledevicerules" />
-		<antcall target="build-service-portlet-polls" />
 		<antcall target="build-service-portlet-ratings" />
 		<antcall target="build-service-portlet-shopping" />
 		<antcall target="build-service-portlet-social" />
@@ -1262,12 +1275,6 @@ public class Creole10Parser]]></replacevalue>
 		</antcall>
 	</target>
 
-	<target name="build-wsdd-portlet-polls">
-		<antcall target="build-wsdd">
-			<param name="service.file" value="${basedir}/src/com/liferay/portlet/polls/service.xml" />
-		</antcall>
-	</target>
-
 	<target name="build-wsdd-portlet-ratings">
 		<antcall target="build-wsdd">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/ratings/service.xml" />
@@ -1317,7 +1324,6 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-wsdd-portlet-journal" />
 		<antcall target="build-wsdd-portlet-messageboards" />
 		<antcall target="build-wsdd-portlet-mobiledevicerules" />
-		<antcall target="build-wsdd-portlet-polls" />
 		<antcall target="build-wsdd-portlet-ratings" />
 		<antcall target="build-wsdd-portlet-shopping" />
 		<antcall target="build-wsdd-portlet-social" />

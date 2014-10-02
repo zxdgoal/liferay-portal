@@ -18,8 +18,8 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.test.AssertUtils;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portlet.documentlibrary.model.DLContent;
 import com.liferay.portlet.documentlibrary.store.Store;
@@ -377,9 +377,6 @@ public class DLContentLocalServiceTest {
 
 	private static final byte[] _DATA_VERSION_2 = new byte[_DATA_SIZE];
 
-	private long _companyId;
-	private DLContentLocalService _dlContentLocalService;
-
 	static {
 		for (int i = 0; i < _DATA_SIZE; i++) {
 			_DATA_VERSION_1[i] = (byte)i;
@@ -387,6 +384,8 @@ public class DLContentLocalServiceTest {
 		}
 	}
 
+	private long _companyId;
+	private DLContentLocalService _dlContentLocalService;
 	private long _repositoryId;
 
 }

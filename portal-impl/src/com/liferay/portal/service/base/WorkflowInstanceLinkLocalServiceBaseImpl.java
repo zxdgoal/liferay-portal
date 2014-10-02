@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -60,6 +62,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.WorkflowInstanceLinkLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class WorkflowInstanceLinkLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements WorkflowInstanceLinkLocalService,
 		IdentifiableBean {
@@ -139,8 +142,7 @@ public abstract class WorkflowInstanceLinkLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return workflowInstanceLinkPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -157,8 +159,8 @@ public abstract class WorkflowInstanceLinkLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return workflowInstanceLinkPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -177,9 +179,8 @@ public abstract class WorkflowInstanceLinkLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return workflowInstanceLinkPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -258,7 +259,7 @@ public abstract class WorkflowInstanceLinkLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteWorkflowInstanceLink((WorkflowInstanceLink)persistedModel);
+		return workflowInstanceLinkLocalService.deleteWorkflowInstanceLink((WorkflowInstanceLink)persistedModel);
 	}
 
 	@Override

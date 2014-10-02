@@ -25,6 +25,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.trash.model.TrashEntry;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.portlet.PortletRequest;
 
@@ -159,8 +160,7 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found
 	 */
-	public void deleteTrashEntry(long classPK)
-		throws PortalException;
+	public void deleteTrashEntry(long classPK) throws PortalException;
 
 	/**
 	 * Returns the class name handled by this trash handler.
@@ -182,15 +182,25 @@ public interface TrashHandler {
 
 	/**
 	 * Returns the parent container model's class name.
+	 *
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             #getContainerModelClassName(long)}
 	 */
+	@Deprecated
 	public String getContainerModelClassName();
+
+	public String getContainerModelClassName(long classPK);
 
 	/**
 	 * Returns the name of the container model (e.g. folder name).
 	 *
-	 * @return the name of the container model
+	 * @return     the name of the container model
+	 * @deprecated As of 7.0.0, replaced by {@link #getContainerModelName(long)}
 	 */
+	@Deprecated
 	public String getContainerModelName();
+
+	public String getContainerModelName(long classPK) throws PortalException;
 
 	/**
 	 * Returns a range of all the container models that are children of the
@@ -264,6 +274,9 @@ public interface TrashHandler {
 	 */
 	public String getDeleteMessage();
 
+	public long getDestinationContainerModelId(
+		long classPK, long destinationContainerModelId);
+
 	/**
 	 * Returns the parent container model of the model entity with the primary
 	 * key.
@@ -328,12 +341,25 @@ public interface TrashHandler {
 	public String getRestoreMessage(PortletRequest portletRequest, long classPK)
 		throws PortalException;
 
+	public String getRootContainerModelClassName();
+
+	public long getRootContainerModelId(long classPK) throws PortalException;
+
 	/**
 	 * Returns the name of the root container (e.g. "home").
 	 *
 	 * @return the name of the root container
 	 */
 	public String getRootContainerModelName();
+
+	public List<ContainerModel> getRootContainerModels(long groupId)
+		throws PortalException;
+
+	public int getRootContainerModelsCount(long groupId) throws PortalException;
+
+	public String getRootContainerModelTitle(
+			long containerModelId, Locale locale)
+		throws PortalException;
 
 	/**
 	 * Returns the name of the subcontainer model (e.g. for a folder the
@@ -468,8 +494,7 @@ public interface TrashHandler {
 			long classPK, int start, int end)
 		throws PortalException;
 
-	public TrashEntry getTrashEntry(long classPK)
-		throws PortalException;
+	public TrashEntry getTrashEntry(long classPK) throws PortalException;
 
 	/**
 	 * Returns the trash renderer associated to the model entity with the
@@ -480,8 +505,7 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found
 	 */
-	public TrashRenderer getTrashRenderer(long classPK)
-		throws PortalException;
+	public TrashRenderer getTrashRenderer(long classPK) throws PortalException;
 
 	/**
 	 * Returns <code>true</code> if the user has the required permission to
@@ -534,8 +558,7 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found in the portal
 	 */
-	public boolean isInTrash(long classPK)
-		throws PortalException;
+	public boolean isInTrash(long classPK) throws PortalException;
 
 	/**
 	 * Returns <code>true</code> if the model entity with the primary key is in
@@ -548,8 +571,7 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found in the portal
 	 */
-	public boolean isInTrashContainer(long classPK)
-		throws PortalException;
+	public boolean isInTrashContainer(long classPK) throws PortalException;
 
 	/**
 	 * Returns <code>true</code> if the entity can be moved from one container
@@ -576,8 +598,9 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found
 	 */
-	public boolean isRestorable(long classPK)
-		throws PortalException;
+	public boolean isRestorable(long classPK) throws PortalException;
+
+	public boolean isRootContainerModelMovable();
 
 	/**
 	 * Moves the entity with the class primary key to the container model with
@@ -653,7 +676,6 @@ public interface TrashHandler {
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found
 	 */
-	public void updateTitle(long classPK, String title)
-		throws PortalException;
+	public void updateTitle(long classPK, String title) throws PortalException;
 
 }

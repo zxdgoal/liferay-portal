@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.wiki.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -97,6 +99,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements WikiPageLocalService, IdentifiableBean {
 	/*
@@ -170,8 +173,7 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return wikiPagePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -188,8 +190,8 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return wikiPagePersistence.findWithDynamicQuery(dynamicQuery, start, end);
 	}
 
@@ -207,9 +209,8 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return wikiPagePersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -242,18 +243,6 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public WikiPage fetchWikiPage(long pageId) {
 		return wikiPagePersistence.fetchByPrimaryKey(pageId);
-	}
-
-	/**
-	 * Returns the wiki page with the matching UUID and company.
-	 *
-	 * @param uuid the wiki page's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki page, or <code>null</code> if a matching wiki page could not be found
-	 */
-	@Override
-	public WikiPage fetchWikiPageByUuidAndCompanyId(String uuid, long companyId) {
-		return wikiPagePersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -377,7 +366,7 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteWikiPage((WikiPage)persistedModel);
+		return wikiPageLocalService.deleteWikiPage((WikiPage)persistedModel);
 	}
 
 	@Override
@@ -386,18 +375,18 @@ public abstract class WikiPageLocalServiceBaseImpl extends BaseLocalServiceImpl
 		return wikiPagePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the wiki page with the matching UUID and company.
-	 *
-	 * @param uuid the wiki page's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching wiki page
-	 * @throws PortalException if a matching wiki page could not be found
-	 */
 	@Override
-	public WikiPage getWikiPageByUuidAndCompanyId(String uuid, long companyId)
-		throws PortalException {
-		return wikiPagePersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<WikiPage> getWikiPagesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return wikiPagePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<WikiPage> getWikiPagesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end,
+		OrderByComparator<WikiPage> orderByComparator) {
+		return wikiPagePersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

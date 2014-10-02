@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.expando.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.expando.NoSuchRowException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.expando.service.persistence.ExpandoRowPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see ExpandoRowUtil
  * @generated
  */
+@ProviderType
 public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	implements ExpandoRowPersistence {
 	/*
@@ -148,7 +146,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public List<ExpandoRow> findByTableId(long tableId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -254,7 +252,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow findByTableId_First(long tableId,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = fetchByTableId_First(tableId, orderByComparator);
 
 		if (expandoRow != null) {
@@ -282,7 +281,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow fetchByTableId_First(long tableId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		List<ExpandoRow> list = findByTableId(tableId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -302,7 +301,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow findByTableId_Last(long tableId,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = fetchByTableId_Last(tableId, orderByComparator);
 
 		if (expandoRow != null) {
@@ -330,7 +330,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow fetchByTableId_Last(long tableId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		int count = countByTableId(tableId);
 
 		if (count == 0) {
@@ -358,7 +358,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow[] findByTableId_PrevAndNext(long rowId, long tableId,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = findByPrimaryKey(rowId);
 
 		Session session = null;
@@ -388,7 +389,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 
 	protected ExpandoRow getByTableId_PrevAndNext(Session session,
 		ExpandoRow expandoRow, long tableId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ExpandoRow> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -620,7 +621,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public List<ExpandoRow> findByClassPK(long classPK, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -726,7 +727,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow findByClassPK_First(long classPK,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = fetchByClassPK_First(classPK, orderByComparator);
 
 		if (expandoRow != null) {
@@ -754,7 +756,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow fetchByClassPK_First(long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		List<ExpandoRow> list = findByClassPK(classPK, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -774,7 +776,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow findByClassPK_Last(long classPK,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = fetchByClassPK_Last(classPK, orderByComparator);
 
 		if (expandoRow != null) {
@@ -802,7 +805,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow fetchByClassPK_Last(long classPK,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		int count = countByClassPK(classPK);
 
 		if (count == 0) {
@@ -830,7 +833,8 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public ExpandoRow[] findByClassPK_PrevAndNext(long rowId, long classPK,
-		OrderByComparator orderByComparator) throws NoSuchRowException {
+		OrderByComparator<ExpandoRow> orderByComparator)
+		throws NoSuchRowException {
 		ExpandoRow expandoRow = findByPrimaryKey(rowId);
 
 		Session session = null;
@@ -860,7 +864,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 
 	protected ExpandoRow getByClassPK_PrevAndNext(Session session,
 		ExpandoRow expandoRow, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<ExpandoRow> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1821,7 +1825,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 */
 	@Override
 	public List<ExpandoRow> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ExpandoRow> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1957,25 +1961,6 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	 * Initializes the expando row persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.expando.model.ExpandoRow")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ExpandoRow>> listenersList = new ArrayList<ModelListener<ExpandoRow>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ExpandoRow>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1994,11 +1979,11 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ExpandoRow exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ExpandoRow exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ExpandoRowPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(ExpandoRowPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"rowId"
 			});
-	private static ExpandoRow _nullExpandoRow = new ExpandoRowImpl() {
+	private static final ExpandoRow _nullExpandoRow = new ExpandoRowImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2010,7 +1995,7 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 			}
 		};
 
-	private static CacheModel<ExpandoRow> _nullExpandoRowCacheModel = new CacheModel<ExpandoRow>() {
+	private static final CacheModel<ExpandoRow> _nullExpandoRowCacheModel = new CacheModel<ExpandoRow>() {
 			@Override
 			public ExpandoRow toEntityModel() {
 				return _nullExpandoRow;

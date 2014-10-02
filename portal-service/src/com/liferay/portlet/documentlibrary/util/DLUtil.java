@@ -258,11 +258,15 @@ public class DLUtil {
 			absoluteURL);
 	}
 
-	public static OrderByComparator getRepositoryModelOrderByComparator(
+	public static <T> OrderByComparator<T> getRepositoryModelOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		return getDL().getRepositoryModelOrderByComparator(
 			orderByCol, orderByType);
+	}
+
+	public static String getSanitizedFileName(String title, String extension) {
+		return getDL().getSanitizedFileName(title, extension);
 	}
 
 	public static String getTempFileId(long id, String version) {

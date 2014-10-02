@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.messageboards.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -74,6 +76,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.messageboards.service.MBDiscussionLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class MBDiscussionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MBDiscussionLocalService,
 		IdentifiableBean {
@@ -149,8 +152,7 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return mbDiscussionPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -167,8 +169,8 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return mbDiscussionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -187,9 +189,8 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return mbDiscussionPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -222,19 +223,6 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	@Override
 	public MBDiscussion fetchMBDiscussion(long discussionId) {
 		return mbDiscussionPersistence.fetchByPrimaryKey(discussionId);
-	}
-
-	/**
-	 * Returns the message boards discussion with the matching UUID and company.
-	 *
-	 * @param uuid the message boards discussion's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards discussion, or <code>null</code> if a matching message boards discussion could not be found
-	 */
-	@Override
-	public MBDiscussion fetchMBDiscussionByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return mbDiscussionPersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -356,7 +344,7 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteMBDiscussion((MBDiscussion)persistedModel);
+		return mbDiscussionLocalService.deleteMBDiscussion((MBDiscussion)persistedModel);
 	}
 
 	@Override
@@ -365,18 +353,18 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 		return mbDiscussionPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the message boards discussion with the matching UUID and company.
-	 *
-	 * @param uuid the message boards discussion's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching message boards discussion
-	 * @throws PortalException if a matching message boards discussion could not be found
-	 */
 	@Override
-	public MBDiscussion getMBDiscussionByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return mbDiscussionPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<MBDiscussion> getMBDiscussionsByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return mbDiscussionPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<MBDiscussion> getMBDiscussionsByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end,
+		OrderByComparator<MBDiscussion> orderByComparator) {
+		return mbDiscussionPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**

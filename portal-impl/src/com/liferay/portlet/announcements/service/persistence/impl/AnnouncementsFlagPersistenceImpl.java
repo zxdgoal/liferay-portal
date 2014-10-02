@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.announcements.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,14 +26,10 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.announcements.NoSuchFlagException;
@@ -42,7 +40,6 @@ import com.liferay.portlet.announcements.service.persistence.AnnouncementsFlagPe
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +60,7 @@ import java.util.Set;
  * @see AnnouncementsFlagUtil
  * @generated
  */
+@ProviderType
 public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<AnnouncementsFlag>
 	implements AnnouncementsFlagPersistence {
 	/*
@@ -154,7 +152,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public List<AnnouncementsFlag> findByEntryId(long entryId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<AnnouncementsFlag> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -260,7 +258,8 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public AnnouncementsFlag findByEntryId_First(long entryId,
-		OrderByComparator orderByComparator) throws NoSuchFlagException {
+		OrderByComparator<AnnouncementsFlag> orderByComparator)
+		throws NoSuchFlagException {
 		AnnouncementsFlag announcementsFlag = fetchByEntryId_First(entryId,
 				orderByComparator);
 
@@ -289,7 +288,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public AnnouncementsFlag fetchByEntryId_First(long entryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AnnouncementsFlag> orderByComparator) {
 		List<AnnouncementsFlag> list = findByEntryId(entryId, 0, 1,
 				orderByComparator);
 
@@ -310,7 +309,8 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public AnnouncementsFlag findByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator) throws NoSuchFlagException {
+		OrderByComparator<AnnouncementsFlag> orderByComparator)
+		throws NoSuchFlagException {
 		AnnouncementsFlag announcementsFlag = fetchByEntryId_Last(entryId,
 				orderByComparator);
 
@@ -339,7 +339,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public AnnouncementsFlag fetchByEntryId_Last(long entryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AnnouncementsFlag> orderByComparator) {
 		int count = countByEntryId(entryId);
 
 		if (count == 0) {
@@ -367,7 +367,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public AnnouncementsFlag[] findByEntryId_PrevAndNext(long flagId,
-		long entryId, OrderByComparator orderByComparator)
+		long entryId, OrderByComparator<AnnouncementsFlag> orderByComparator)
 		throws NoSuchFlagException {
 		AnnouncementsFlag announcementsFlag = findByPrimaryKey(flagId);
 
@@ -398,7 +398,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 
 	protected AnnouncementsFlag getByEntryId_PrevAndNext(Session session,
 		AnnouncementsFlag announcementsFlag, long entryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<AnnouncementsFlag> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1386,7 +1386,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 */
 	@Override
 	public List<AnnouncementsFlag> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<AnnouncementsFlag> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1517,25 +1517,6 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	 * Initializes the announcements flag persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.announcements.model.AnnouncementsFlag")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<AnnouncementsFlag>> listenersList = new ArrayList<ModelListener<AnnouncementsFlag>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<AnnouncementsFlag>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -1554,8 +1535,8 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No AnnouncementsFlag exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No AnnouncementsFlag exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(AnnouncementsFlagPersistenceImpl.class);
-	private static AnnouncementsFlag _nullAnnouncementsFlag = new AnnouncementsFlagImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(AnnouncementsFlagPersistenceImpl.class);
+	private static final AnnouncementsFlag _nullAnnouncementsFlag = new AnnouncementsFlagImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -1567,7 +1548,7 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 			}
 		};
 
-	private static CacheModel<AnnouncementsFlag> _nullAnnouncementsFlagCacheModel =
+	private static final CacheModel<AnnouncementsFlag> _nullAnnouncementsFlagCacheModel =
 		new CacheModel<AnnouncementsFlag>() {
 			@Override
 			public AnnouncementsFlag toEntityModel() {

@@ -19,7 +19,6 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
@@ -77,7 +76,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
@@ -945,8 +943,8 @@ public class PortalUtil {
 		return getPortal().getFirstMyAccountPortlet(themeDisplay);
 	}
 
-	public static String getFirstPageLayoutTypes(PageContext pageContext) {
-		return getPortal().getFirstPageLayoutTypes(pageContext);
+	public static String getFirstPageLayoutTypes(HttpServletRequest request) {
+		return getPortal().getFirstPageLayoutTypes(request);
 	}
 
 	public static Portlet getFirstSiteAdministrationPortlet(
@@ -1117,14 +1115,6 @@ public class PortalUtil {
 			requestContext);
 	}
 
-	public static String getLayoutEditPage(Layout layout) {
-		return getPortal().getLayoutEditPage(layout);
-	}
-
-	public static String getLayoutEditPage(String type) {
-		return getPortal().getLayoutEditPage(type);
-	}
-
 	public static String getLayoutFriendlyURL(
 			Layout layout, ThemeDisplay themeDisplay)
 		throws PortalException {
@@ -1230,14 +1220,6 @@ public class PortalUtil {
 		throws PortalException {
 
 		return getPortal().getLayoutURL(themeDisplay);
-	}
-
-	public static String getLayoutViewPage(Layout layout) {
-		return getPortal().getLayoutViewPage(layout);
-	}
-
-	public static String getLayoutViewPage(String type) {
-		return getPortal().getLayoutViewPage(type);
 	}
 
 	public static LiferayPortletRequest getLiferayPortletRequest(
@@ -1538,7 +1520,7 @@ public class PortalUtil {
 
 	public static PortletConfig getPortletConfig(
 			long companyId, String portletId, ServletContext servletContext)
-		throws PortletException, SystemException {
+		throws PortletException {
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(
 			companyId, portletId);
@@ -1991,6 +1973,10 @@ public class PortalUtil {
 		return getPortal().getUserValue(userId, param, defaultValue);
 	}
 
+	public static String getValidPortalDomain(long companyId, String domain) {
+		return getPortal().getValidPortalDomain(companyId, domain);
+	}
+
 	public static long getValidUserId(long companyId, long userId)
 		throws PortalException {
 
@@ -2153,30 +2139,6 @@ public class PortalUtil {
 		return getPortal().isLayoutDescendant(layout, layoutId);
 	}
 
-	public static boolean isLayoutFirstPageable(Layout layout) {
-		return getPortal().isLayoutFirstPageable(layout);
-	}
-
-	public static boolean isLayoutFirstPageable(String type) {
-		return getPortal().isLayoutFirstPageable(type);
-	}
-
-	public static boolean isLayoutFriendliable(Layout layout) {
-		return getPortal().isLayoutFriendliable(layout);
-	}
-
-	public static boolean isLayoutFriendliable(String type) {
-		return getPortal().isLayoutFriendliable(type);
-	}
-
-	public static boolean isLayoutParentable(Layout layout) {
-		return getPortal().isLayoutParentable(layout);
-	}
-
-	public static boolean isLayoutParentable(String type) {
-		return getPortal().isLayoutParentable(type);
-	}
-
 	public static boolean isLayoutSitemapable(Layout layout) {
 		return getPortal().isLayoutSitemapable(layout);
 	}
@@ -2199,6 +2161,10 @@ public class PortalUtil {
 
 	public static boolean isOmniadmin(long userId) {
 		return getPortal().isOmniadmin(userId);
+	}
+
+	public static boolean isOmniadmin(User user) {
+		return getPortal().isOmniadmin(user);
 	}
 
 	public static boolean isReservedParameter(String name) {

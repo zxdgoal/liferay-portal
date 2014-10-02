@@ -39,11 +39,14 @@ public interface LiferaySelenium extends Selenium {
 
 	public void assertElementPresent(String locator) throws Exception;
 
-	public void assertEmailBody(String index, String body)
-		throws Exception;
+	public void assertEmailBody(String index, String body) throws Exception;
 
 	public void assertEmailSubject(String index, String subject)
 		throws Exception;
+
+	public void assertHTMLSourceTextNotPresent(String value) throws Exception;
+
+	public void assertHTMLSourceTextPresent(String value) throws Exception;
 
 	public void assertJavaScriptErrors(String ignoreJavaScriptError)
 		throws Exception;
@@ -139,6 +142,10 @@ public interface LiferaySelenium extends Selenium {
 
 	public boolean isElementPresentAfterWait(String locator) throws Exception;
 
+	public boolean isHTMLSourceTextPresent(String value) throws Exception;
+
+	public boolean isMobileDeviceEnabled();
+
 	public boolean isNotChecked(String locator);
 
 	public boolean isNotPartialText(String locator, String value);
@@ -187,6 +194,9 @@ public interface LiferaySelenium extends Selenium {
 
 	public void saveScreenshotAndSource() throws Exception;
 
+	public void saveScreenshotBeforeAction(boolean actionFailed)
+		throws Exception;
+
 	public void scrollWebElementIntoView(String locator) throws Exception;
 
 	public void selectAndWait(String selectLocator, String optionLocator);
@@ -199,6 +209,8 @@ public interface LiferaySelenium extends Selenium {
 		throws Exception;
 
 	public void sendKeys(String locator, String value);
+
+	public void sendKeysAceEditor(String locator, String value);
 
 	public void sendLogger(String id, String status);
 
@@ -215,6 +227,8 @@ public interface LiferaySelenium extends Selenium {
 	public void setPrimaryTestSuiteName(String primaryTestSuiteName);
 
 	public void setTimeoutImplicit(String timeout);
+
+	public void setWindowSize(String coordString);
 
 	public void sikuliAssertElementNotPresent(String image) throws Exception;
 
@@ -250,11 +264,13 @@ public interface LiferaySelenium extends Selenium {
 
 	public void stopLogger();
 
+	public void tap(String locator);
+
 	public void typeAceEditor(String locator, String value);
 
 	public void typeFrame(String locator, String value);
 
-	public void typeKeys(String locator, String value, boolean typeAceEditor);
+	public void typeScreen(String value);
 
 	public void uploadCommonFile(String locator, String value);
 

@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtilAdvice;
 import com.liferay.portal.kernel.util.ThreadUtil;
 import com.liferay.portal.test.AdviseWith;
-import com.liferay.portal.test.AspectJMockingNewJVMJUnitTestRunner;
+import com.liferay.portal.test.runners.AspectJMockingNewJVMJUnitTestRunner;
 
 import java.io.IOException;
 
@@ -132,7 +132,7 @@ public class MailboxUtilTest {
 		Assert.assertTrue(reaperThread.isAlive());
 
 		BlockingQueue<Object> overdueMailQueue =
-			(BlockingQueue<Object>)ReflectionTestUtil.getFieldValue(
+			ReflectionTestUtil.getFieldValue(
 				MailboxUtil.class, "_overdueMailQueue");
 
 		while (!overdueMailQueue.isEmpty());

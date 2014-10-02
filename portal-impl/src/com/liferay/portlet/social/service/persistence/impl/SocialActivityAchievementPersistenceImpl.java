@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,15 +26,11 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.social.NoSuchActivityAchievementException;
@@ -43,7 +41,6 @@ import com.liferay.portlet.social.service.persistence.SocialActivityAchievementP
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see SocialActivityAchievementUtil
  * @generated
  */
+@ProviderType
 public class SocialActivityAchievementPersistenceImpl
 	extends BasePersistenceImpl<SocialActivityAchievement>
 	implements SocialActivityAchievementPersistence {
@@ -155,7 +153,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public List<SocialActivityAchievement> findByGroupId(long groupId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -261,7 +260,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -291,7 +290,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		List<SocialActivityAchievement> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -312,7 +311,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -342,7 +341,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -371,7 +370,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public SocialActivityAchievement[] findByGroupId_PrevAndNext(
 		long activityAchievementId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = findByPrimaryKey(activityAchievementId);
 
@@ -402,7 +401,9 @@ public class SocialActivityAchievementPersistenceImpl
 
 	protected SocialActivityAchievement getByGroupId_PrevAndNext(
 		Session session, SocialActivityAchievement socialActivityAchievement,
-		long groupId, OrderByComparator orderByComparator, boolean previous) {
+		long groupId,
+		OrderByComparator<SocialActivityAchievement> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -642,7 +643,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public List<SocialActivityAchievement> findByG_U(long groupId, long userId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -758,7 +760,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_U_First(groupId,
 				userId, orderByComparator);
@@ -792,7 +794,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_U_First(long groupId,
-		long userId, OrderByComparator orderByComparator) {
+		long userId,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		List<SocialActivityAchievement> list = findByG_U(groupId, userId, 0, 1,
 				orderByComparator);
 
@@ -814,7 +817,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_U_Last(groupId,
 				userId, orderByComparator);
@@ -848,7 +851,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		int count = countByG_U(groupId, userId);
 
 		if (count == 0) {
@@ -878,7 +881,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public SocialActivityAchievement[] findByG_U_PrevAndNext(
 		long activityAchievementId, long groupId, long userId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = findByPrimaryKey(activityAchievementId);
 
@@ -909,7 +912,9 @@ public class SocialActivityAchievementPersistenceImpl
 
 	protected SocialActivityAchievement getByG_U_PrevAndNext(Session session,
 		SocialActivityAchievement socialActivityAchievement, long groupId,
-		long userId, OrderByComparator orderByComparator, boolean previous) {
+		long userId,
+		OrderByComparator<SocialActivityAchievement> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1160,7 +1165,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public List<SocialActivityAchievement> findByG_N(long groupId, String name,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1291,7 +1297,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_N_First(long groupId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_N_First(groupId,
 				name, orderByComparator);
@@ -1325,7 +1331,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_N_First(long groupId,
-		String name, OrderByComparator orderByComparator) {
+		String name,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		List<SocialActivityAchievement> list = findByG_N(groupId, name, 0, 1,
 				orderByComparator);
 
@@ -1347,7 +1354,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_N_Last(long groupId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_N_Last(groupId,
 				name, orderByComparator);
@@ -1381,7 +1388,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_N_Last(long groupId, String name,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		int count = countByG_N(groupId, name);
 
 		if (count == 0) {
@@ -1411,7 +1418,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public SocialActivityAchievement[] findByG_N_PrevAndNext(
 		long activityAchievementId, long groupId, String name,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = findByPrimaryKey(activityAchievementId);
 
@@ -1442,7 +1449,9 @@ public class SocialActivityAchievementPersistenceImpl
 
 	protected SocialActivityAchievement getByG_N_PrevAndNext(Session session,
 		SocialActivityAchievement socialActivityAchievement, long groupId,
-		String name, OrderByComparator orderByComparator, boolean previous) {
+		String name,
+		OrderByComparator<SocialActivityAchievement> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1725,7 +1734,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public List<SocialActivityAchievement> findByG_F(long groupId,
 		boolean firstInGroup, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1841,7 +1850,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_F_First(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_F_First(groupId,
 				firstInGroup, orderByComparator);
@@ -1875,7 +1885,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_F_First(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator) {
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		List<SocialActivityAchievement> list = findByG_F(groupId, firstInGroup,
 				0, 1, orderByComparator);
 
@@ -1897,7 +1908,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_F_Last(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_F_Last(groupId,
 				firstInGroup, orderByComparator);
@@ -1931,7 +1943,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_F_Last(long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator) {
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		int count = countByG_F(groupId, firstInGroup);
 
 		if (count == 0) {
@@ -1961,7 +1974,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public SocialActivityAchievement[] findByG_F_PrevAndNext(
 		long activityAchievementId, long groupId, boolean firstInGroup,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = findByPrimaryKey(activityAchievementId);
 
@@ -1992,7 +2005,8 @@ public class SocialActivityAchievementPersistenceImpl
 
 	protected SocialActivityAchievement getByG_F_PrevAndNext(Session session,
 		SocialActivityAchievement socialActivityAchievement, long groupId,
-		boolean firstInGroup, OrderByComparator orderByComparator,
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -2545,7 +2559,7 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public List<SocialActivityAchievement> findByG_U_F(long groupId,
 		long userId, boolean firstInGroup, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2667,7 +2681,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_U_F_First(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		long userId, boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_First(groupId,
 				userId, firstInGroup, orderByComparator);
@@ -2705,7 +2720,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_U_F_First(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator) {
+		long userId, boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		List<SocialActivityAchievement> list = findByG_U_F(groupId, userId,
 				firstInGroup, 0, 1, orderByComparator);
 
@@ -2728,7 +2744,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement findByG_U_F_Last(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator)
+		long userId, boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = fetchByG_U_F_Last(groupId,
 				userId, firstInGroup, orderByComparator);
@@ -2766,7 +2783,8 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public SocialActivityAchievement fetchByG_U_F_Last(long groupId,
-		long userId, boolean firstInGroup, OrderByComparator orderByComparator) {
+		long userId, boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		int count = countByG_U_F(groupId, userId, firstInGroup);
 
 		if (count == 0) {
@@ -2797,7 +2815,8 @@ public class SocialActivityAchievementPersistenceImpl
 	@Override
 	public SocialActivityAchievement[] findByG_U_F_PrevAndNext(
 		long activityAchievementId, long groupId, long userId,
-		boolean firstInGroup, OrderByComparator orderByComparator)
+		boolean firstInGroup,
+		OrderByComparator<SocialActivityAchievement> orderByComparator)
 		throws NoSuchActivityAchievementException {
 		SocialActivityAchievement socialActivityAchievement = findByPrimaryKey(activityAchievementId);
 
@@ -2831,7 +2850,8 @@ public class SocialActivityAchievementPersistenceImpl
 	protected SocialActivityAchievement getByG_U_F_PrevAndNext(
 		Session session, SocialActivityAchievement socialActivityAchievement,
 		long groupId, long userId, boolean firstInGroup,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3695,7 +3715,7 @@ public class SocialActivityAchievementPersistenceImpl
 	 */
 	@Override
 	public List<SocialActivityAchievement> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityAchievement> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3826,25 +3846,6 @@ public class SocialActivityAchievementPersistenceImpl
 	 * Initializes the social activity achievement persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.social.model.SocialActivityAchievement")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SocialActivityAchievement>> listenersList = new ArrayList<ModelListener<SocialActivityAchievement>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SocialActivityAchievement>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3864,8 +3865,9 @@ public class SocialActivityAchievementPersistenceImpl
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SocialActivityAchievement exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SocialActivityAchievement exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SocialActivityAchievementPersistenceImpl.class);
-	private static SocialActivityAchievement _nullSocialActivityAchievement = new SocialActivityAchievementImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(SocialActivityAchievementPersistenceImpl.class);
+	private static final SocialActivityAchievement _nullSocialActivityAchievement =
+		new SocialActivityAchievementImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3877,7 +3879,7 @@ public class SocialActivityAchievementPersistenceImpl
 			}
 		};
 
-	private static CacheModel<SocialActivityAchievement> _nullSocialActivityAchievementCacheModel =
+	private static final CacheModel<SocialActivityAchievement> _nullSocialActivityAchievementCacheModel =
 		new CacheModel<SocialActivityAchievement>() {
 			@Override
 			public SocialActivityAchievement toEntityModel() {

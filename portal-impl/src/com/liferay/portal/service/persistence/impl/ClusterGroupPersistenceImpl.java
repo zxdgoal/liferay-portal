@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchClusterGroupException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -24,23 +26,18 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ClusterGroup;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.ClusterGroupImpl;
 import com.liferay.portal.model.impl.ClusterGroupModelImpl;
 import com.liferay.portal.service.persistence.ClusterGroupPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,6 +58,7 @@ import java.util.Set;
  * @see ClusterGroupUtil
  * @generated
  */
+@ProviderType
 public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGroup>
 	implements ClusterGroupPersistence {
 	/*
@@ -555,7 +553,7 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 	 */
 	@Override
 	public List<ClusterGroup> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<ClusterGroup> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -686,25 +684,6 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 	 * Initializes the cluster group persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.ClusterGroup")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<ClusterGroup>> listenersList = new ArrayList<ModelListener<ClusterGroup>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<ClusterGroup>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -720,8 +699,8 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 	private static final String _ORDER_BY_ENTITY_ALIAS = "clusterGroup.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ClusterGroup exists with the primary key ";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(ClusterGroupPersistenceImpl.class);
-	private static ClusterGroup _nullClusterGroup = new ClusterGroupImpl() {
+	private static final Log _log = LogFactoryUtil.getLog(ClusterGroupPersistenceImpl.class);
+	private static final ClusterGroup _nullClusterGroup = new ClusterGroupImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -733,7 +712,7 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 			}
 		};
 
-	private static CacheModel<ClusterGroup> _nullClusterGroupCacheModel = new NullCacheModel();
+	private static final CacheModel<ClusterGroup> _nullClusterGroupCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<ClusterGroup>,
 		MVCCModel {

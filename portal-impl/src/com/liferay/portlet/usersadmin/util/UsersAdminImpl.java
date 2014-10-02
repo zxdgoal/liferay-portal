@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
@@ -600,7 +599,7 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public OrderByComparator getGroupOrderByComparator(
+	public OrderByComparator<Group> getGroupOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -609,7 +608,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<Group> orderByComparator = null;
 
 		if (orderByCol.equals("name")) {
 			orderByComparator = new GroupNameComparator(orderByAsc);
@@ -642,7 +641,7 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public OrderByComparator getOrganizationOrderByComparator(
+	public OrderByComparator<Organization> getOrganizationOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -651,7 +650,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<Organization> orderByComparator = null;
 
 		if (orderByCol.equals("name")) {
 			orderByComparator = new OrganizationNameComparator(orderByAsc);
@@ -831,7 +830,7 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public OrderByComparator getRoleOrderByComparator(
+	public OrderByComparator<Role> getRoleOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -840,7 +839,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<Role> orderByComparator = null;
 
 		if (orderByCol.equals("name")) {
 			orderByComparator = new RoleNameComparator(orderByAsc);
@@ -859,7 +858,7 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public OrderByComparator getUserGroupOrderByComparator(
+	public OrderByComparator<UserGroup> getUserGroupOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -868,7 +867,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<UserGroup> orderByComparator = null;
 
 		if (orderByCol.equals("name")) {
 			orderByComparator = new UserGroupNameComparator(orderByAsc);
@@ -887,41 +886,27 @@ public class UsersAdminImpl implements UsersAdmin {
 	public List<UserGroupRole> getUserGroupRoles(PortletRequest portletRequest)
 		throws PortalException {
 
-		List<UserGroupRole> userGroupRoles = new UniqueList<UserGroupRole>();
-
-		long[] groupRolesRoleIds = StringUtil.split(
-			ParamUtil.getString(portletRequest, "groupRolesRoleIds"), 0L);
-		long[] groupRolesGroupIds = StringUtil.split(
-			ParamUtil.getString(portletRequest, "groupRolesGroupIds"), 0L);
-
-		if (groupRolesGroupIds.length != groupRolesRoleIds.length) {
-			return userGroupRoles;
-		}
-
 		User user = PortalUtil.getSelectedUser(portletRequest);
 
-		long userId = 0;
-
-		if (user != null) {
-			userId = user.getUserId();
+		if (user == null) {
+			return Collections.emptyList();
 		}
 
-		for (int i = 0; i < groupRolesGroupIds.length; i++) {
-			if ((groupRolesGroupIds[i] == 0) || (groupRolesRoleIds[i] == 0)) {
-				continue;
-			}
+		Set<UserGroupRole> userGroupRoles =
+			new HashSet<UserGroupRole>(
+				UserGroupRoleLocalServiceUtil.getUserGroupRoles(
+					user.getUserId()));
 
-			UserGroupRolePK userGroupRolePK = new UserGroupRolePK(
-				userId, groupRolesGroupIds[i], groupRolesRoleIds[i]);
+		userGroupRoles.addAll(
+			getUserGroupRoles(
+				portletRequest, user, "addGroupRolesGroupIds",
+				"addGroupRolesRoleIds"));
+		userGroupRoles.removeAll(
+			getUserGroupRoles(
+				portletRequest, user, "deleteGroupRolesGroupIds",
+				"deleteGroupRolesRoleIds"));
 
-			UserGroupRole userGroupRole =
-				UserGroupRoleLocalServiceUtil.createUserGroupRole(
-					userGroupRolePK);
-
-			userGroupRoles.add(userGroupRole);
-		}
-
-		return userGroupRoles;
+		return new ArrayList<UserGroupRole>(userGroupRoles);
 	}
 
 	@Override
@@ -957,7 +942,7 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public OrderByComparator getUserOrderByComparator(
+	public OrderByComparator<User> getUserOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;
@@ -966,7 +951,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			orderByAsc = true;
 		}
 
-		OrderByComparator orderByComparator = null;
+		OrderByComparator<User> orderByComparator = null;
 
 		if (orderByCol.equals("email-address")) {
 			orderByComparator = new UserEmailAddressComparator(orderByAsc);
@@ -1425,6 +1410,45 @@ public class UsersAdminImpl implements UsersAdmin {
 				WebsiteServiceUtil.deleteWebsite(website.getWebsiteId());
 			}
 		}
+	}
+
+	protected Set<UserGroupRole> getUserGroupRoles(
+		PortletRequest portletRequest, User user, String groupIdsParam,
+		String roleIdsParam) {
+
+		Set<UserGroupRole> userGroupRoles = new HashSet<UserGroupRole>();
+
+		long[] groupRolesGroupIds = StringUtil.split(
+			ParamUtil.getString(portletRequest, groupIdsParam), 0L);
+		long[] groupRolesRoleIds = StringUtil.split(
+			ParamUtil.getString(portletRequest, roleIdsParam), 0L);
+
+		if (groupRolesGroupIds.length != groupRolesRoleIds.length) {
+			return userGroupRoles;
+		}
+
+		long userId = 0;
+
+		if (user != null) {
+			userId = user.getUserId();
+		}
+
+		for (int i = 0; i < groupRolesGroupIds.length; i++) {
+			if ((groupRolesGroupIds[i] == 0) || (groupRolesRoleIds[i] == 0)) {
+				continue;
+			}
+
+			UserGroupRolePK userGroupRolePK = new UserGroupRolePK(
+				userId, groupRolesGroupIds[i], groupRolesRoleIds[i]);
+
+			UserGroupRole userGroupRole =
+				UserGroupRoleLocalServiceUtil.createUserGroupRole(
+					userGroupRolePK);
+
+			userGroupRoles.add(userGroupRole);
+		}
+
+		return userGroupRoles;
 	}
 
 }

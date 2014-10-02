@@ -2,6 +2,8 @@ package ${packagePath}.model.impl;
 
 import ${packagePath}.model.${entity.name};
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
@@ -11,6 +13,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 
 import java.util.Date;
 import java.util.Map;
@@ -22,6 +25,7 @@ import java.util.Map;
  * @see ${entity.name}
  * @generated
  */
+@ProviderType
 public class ${entity.name}CacheModel implements CacheModel<${entity.name}>, Externalizable
 	<#if entity.isMvccEnabled()>
 		, MVCCModel
@@ -95,7 +99,7 @@ public class ${entity.name}CacheModel implements CacheModel<${entity.name}>, Ext
 		${entity.varName}Impl.resetOriginalValues();
 
 		<#list cacheFields as cacheField>
-			<#assign methodName = textFormatter.format(serviceBuilder.getVariableName(cacheField), 6)>
+			<#assign methodName = serviceBuilder.getCacheFieldMethodName(cacheField)>
 
 			${entity.varName}Impl.set${methodName}(${cacheField.name});
 		</#list>
@@ -134,7 +138,7 @@ public class ${entity.name}CacheModel implements CacheModel<${entity.name}>, Ext
 			<#elseif column.type == "String">
 				${column.name} = objectInput.readUTF();
 			<#elseif column.type != "Blob">
-				${column.name} = (${column.type})objectInput.readObject();
+				${column.name} = (${column.genericizedType})objectInput.readObject();
 			</#if>
 		</#list>
 
@@ -172,7 +176,7 @@ public class ${entity.name}CacheModel implements CacheModel<${entity.name}>, Ext
 			<#if column.type == "Date">
 				public long ${column.name};
 			<#else>
-				public ${column.type} ${column.name};
+				public ${column.genericizedType} ${column.name};
 			</#if>
 		</#if>
 	</#list>

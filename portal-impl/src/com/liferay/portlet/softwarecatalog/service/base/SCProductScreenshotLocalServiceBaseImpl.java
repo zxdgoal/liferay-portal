@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -58,6 +60,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.softwarecatalog.service.SCProductScreenshotLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class SCProductScreenshotLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SCProductScreenshotLocalService,
 		IdentifiableBean {
@@ -136,8 +139,7 @@ public abstract class SCProductScreenshotLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return scProductScreenshotPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -154,8 +156,8 @@ public abstract class SCProductScreenshotLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return scProductScreenshotPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -174,9 +176,8 @@ public abstract class SCProductScreenshotLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return scProductScreenshotPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -253,7 +254,7 @@ public abstract class SCProductScreenshotLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteSCProductScreenshot((SCProductScreenshot)persistedModel);
+		return scProductScreenshotLocalService.deleteSCProductScreenshot((SCProductScreenshot)persistedModel);
 	}
 
 	@Override

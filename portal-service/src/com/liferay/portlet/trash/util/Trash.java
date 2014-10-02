@@ -17,6 +17,7 @@ package com.liferay.portlet.trash.util;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.Group;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,14 +43,16 @@ public interface Trash {
 	public static final String TRASH_TIME_SEPARATOR = "_TRASH_TIME_";
 
 	public void addBaseModelBreadcrumbEntries(
-			HttpServletRequest request, String className, long classPK,
-			PortletURL containerModelURL)
-		throws PortalException;
+			HttpServletRequest request,
+			LiferayPortletResponse liferayPortletResponse, String className,
+			long classPK, PortletURL containerModelURL)
+		throws PortalException, PortletException;
 
 	public void addContainerModelBreadcrumbEntries(
-			HttpServletRequest request, String className, long classPK,
-			PortletURL containerModelURL)
-		throws PortalException;
+			HttpServletRequest request,
+			LiferayPortletResponse liferayPortletResponse, String className,
+			long classPK, PortletURL containerModelURL)
+		throws PortalException, PortletException;
 
 	public void addTrashSessionMessages(
 		ActionRequest actionRequest, List<TrashedModel> trashedModels);
@@ -68,10 +72,9 @@ public interface Trash {
 			String[] attachmentFileNames)
 		throws PortalException;
 
-	public List<TrashEntry> getEntries(Hits hits)
-		throws PortalException;
+	public List<TrashEntry> getEntries(Hits hits) throws PortalException;
 
-	public OrderByComparator getEntryOrderByComparator(
+	public OrderByComparator<TrashEntry> getEntryOrderByComparator(
 		String orderByCol, String orderByType);
 
 	public int getMaxAge(Group group) throws PortalException;
@@ -85,6 +88,8 @@ public interface Trash {
 
 	public String getOriginalTitle(String title);
 
+	public String getOriginalTitle(String title, String paramName);
+
 	public String getTrashTime(String title, String separator);
 
 	public String getTrashTitle(long trashEntryId);
@@ -96,7 +101,8 @@ public interface Trash {
 	public boolean isInTrash(String className, long classPK)
 		throws PortalException;
 
-	public boolean isTrashEnabled(long groupId)
-		throws PortalException;
+	public boolean isTrashEnabled(Group group);
+
+	public boolean isTrashEnabled(long groupId) throws PortalException;
 
 }

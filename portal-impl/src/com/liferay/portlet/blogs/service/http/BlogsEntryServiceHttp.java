@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.blogs.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -51,6 +53,7 @@ import com.liferay.portlet.blogs.service.BlogsEntryServiceUtil;
  * @see com.liferay.portlet.blogs.service.BlogsEntryServiceUtil
  * @generated
  */
+@ProviderType
 public class BlogsEntryServiceHttp {
 	public static com.liferay.portlet.blogs.model.BlogsEntry addEntry(
 		HttpPrincipal httpPrincipal, java.lang.String title,
@@ -98,13 +101,12 @@ public class BlogsEntryServiceHttp {
 
 	public static com.liferay.portlet.blogs.model.BlogsEntry addEntry(
 		HttpPrincipal httpPrincipal, java.lang.String title,
-		java.lang.String deckTitle, java.lang.String description,
+		java.lang.String subtitle, java.lang.String description,
 		java.lang.String content, int displayDateMonth, int displayDateDay,
 		int displayDateYear, int displayDateHour, int displayDateMinute,
 		boolean allowPingbacks, boolean allowTrackbacks,
-		java.lang.String[] trackbacks, boolean smallImage,
-		java.lang.String smallImageURL, java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		java.lang.String[] trackbacks,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
@@ -112,11 +114,10 @@ public class BlogsEntryServiceHttp {
 					"addEntry", _addEntryParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, title,
-					deckTitle, description, content, displayDateMonth,
+					subtitle, description, content, displayDateMonth,
 					displayDateDay, displayDateYear, displayDateHour,
 					displayDateMinute, allowPingbacks, allowTrackbacks,
-					trackbacks, smallImage, smallImageURL, smallImageFileName,
-					smallImageInputStream, serviceContext);
+					trackbacks, imageSelector, serviceContext);
 
 			Object returnObj = null;
 
@@ -765,13 +766,12 @@ public class BlogsEntryServiceHttp {
 
 	public static com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
 		HttpPrincipal httpPrincipal, long entryId, java.lang.String title,
-		java.lang.String deckTitle, java.lang.String description,
+		java.lang.String subtitle, java.lang.String description,
 		java.lang.String content, int displayDateMonth, int displayDateDay,
 		int displayDateYear, int displayDateHour, int displayDateMinute,
 		boolean allowPingbacks, boolean allowTrackbacks,
-		java.lang.String[] trackbacks, boolean smallImage,
-		java.lang.String smallImageURL, java.lang.String smallImageFileName,
-		java.io.InputStream smallImageInputStream,
+		java.lang.String[] trackbacks,
+		com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector imageSelector,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
@@ -779,11 +779,10 @@ public class BlogsEntryServiceHttp {
 					"updateEntry", _updateEntryParameterTypes22);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, entryId,
-					title, deckTitle, description, content, displayDateMonth,
+					title, subtitle, description, content, displayDateMonth,
 					displayDateDay, displayDateYear, displayDateHour,
 					displayDateMinute, allowPingbacks, allowTrackbacks,
-					trackbacks, smallImage, smallImageURL, smallImageFileName,
-					smallImageInputStream, serviceContext);
+					trackbacks, imageSelector, serviceContext);
 
 			Object returnObj = null;
 
@@ -820,8 +819,8 @@ public class BlogsEntryServiceHttp {
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, int.class, int.class,
 			int.class, int.class, int.class, boolean.class, boolean.class,
-			java.lang.String[].class, boolean.class, java.lang.String.class,
-			java.lang.String.class, java.io.InputStream.class,
+			java.lang.String[].class,
+			com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _deleteEntryParameterTypes2 = new Class[] {
@@ -902,8 +901,8 @@ public class BlogsEntryServiceHttp {
 			long.class, java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, int.class, int.class,
 			int.class, int.class, int.class, boolean.class, boolean.class,
-			java.lang.String[].class, boolean.class, java.lang.String.class,
-			java.lang.String.class, java.io.InputStream.class,
+			java.lang.String[].class,
+			com.liferay.portal.kernel.servlet.taglib.ui.ImageSelector.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 }

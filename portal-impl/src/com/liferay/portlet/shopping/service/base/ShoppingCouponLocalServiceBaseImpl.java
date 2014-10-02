@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.shopping.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -63,6 +65,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.shopping.service.ShoppingCouponLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class ShoppingCouponLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements ShoppingCouponLocalService,
 		IdentifiableBean {
@@ -138,8 +141,7 @@ public abstract class ShoppingCouponLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return shoppingCouponPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +158,8 @@ public abstract class ShoppingCouponLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return shoppingCouponPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +178,8 @@ public abstract class ShoppingCouponLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return shoppingCouponPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -254,7 +255,7 @@ public abstract class ShoppingCouponLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteShoppingCoupon((ShoppingCoupon)persistedModel);
+		return shoppingCouponLocalService.deleteShoppingCoupon((ShoppingCoupon)persistedModel);
 	}
 
 	@Override

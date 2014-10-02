@@ -25,20 +25,20 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
-import com.liferay.portal.test.ResetDatabaseExecutionTestListener;
+import com.liferay.portal.test.DeleteAfterTestRun;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.ResetDatabaseExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portal.util.test.RandomTestUtil;
+import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetVocabulary;
 import com.liferay.portlet.asset.util.test.AssetTestUtil;
-import com.liferay.portlet.bookmarks.model.BookmarksEntry;
-import com.liferay.portlet.bookmarks.model.BookmarksFolder;
-import com.liferay.portlet.bookmarks.util.test.BookmarksTestUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,11 +61,18 @@ public class PortletDataContextReferencesTest {
 
 	@Before
 	public void setUp() throws Exception {
+		ClassNameLocalServiceUtil.addClassName(
+			MockBookmarksEntry.class.getName());
+		ClassNameLocalServiceUtil.addClassName(
+			MockBookmarksFolder.class.getName());
+
+		_group = GroupTestUtil.addGroup();
+
 		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
 
 		_portletDataContext =
 			PortletDataContextFactoryUtil.createExportPortletDataContext(
-				TestPropsValues.getCompanyId(), TestPropsValues.getGroupId(),
+				TestPropsValues.getCompanyId(), _group.getGroupId(),
 				new HashMap<String, String[]>(), null, null, zipWriter);
 
 		Document document = SAXReaderUtil.createDocument();
@@ -81,9 +88,8 @@ public class PortletDataContextReferencesTest {
 		_portletDataContext.setMissingReferencesElement(
 			missingReferencesElement);
 
-		_bookmarksEntry = BookmarksTestUtil.addEntry(true);
-		_bookmarksFolder = BookmarksTestUtil.addFolder(
-			TestPropsValues.getGroupId(), RandomTestUtil.randomString());
+		_mockBookmarksEntry = new MockBookmarksEntry();
+		_mockBookmarksFolder = new MockBookmarksFolder();
 	}
 
 	@Test
@@ -92,10 +98,10 @@ public class PortletDataContextReferencesTest {
 			PortletKeys.ASSET_PUBLISHER);
 
 		AssetVocabulary assetVocabulary = AssetTestUtil.addVocabulary(
-			TestPropsValues.getGroupId());
+			_group.getGroupId());
 
 		AssetCategory assetCategory = AssetTestUtil.addCategory(
-			TestPropsValues.getGroupId(), assetVocabulary.getVocabularyId());
+			_group.getGroupId(), assetVocabulary.getVocabularyId());
 
 		_portletDataContext.addReferenceElement(
 			portlet, _portletDataContext.getExportDataRootElement(),
@@ -120,15 +126,17 @@ public class PortletDataContextReferencesTest {
 
 	@Test
 	public void testMissingNotMissingReference() throws Exception {
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			true);
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, false);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			false);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -141,12 +149,13 @@ public class PortletDataContextReferencesTest {
 
 	@Test
 	public void testMissingReference() throws Exception {
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			true);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -159,33 +168,36 @@ public class PortletDataContextReferencesTest {
 		Element missingReferenceElement = missingReferenceElements.get(0);
 
 		Assert.assertEquals(
-			_bookmarksFolder.getModelClassName(),
+			_mockBookmarksFolder.getModelClassName(),
 			missingReferenceElement.attributeValue("class-name"));
 		Assert.assertEquals(
-			String.valueOf(_bookmarksFolder.getPrimaryKeyObj()),
+			String.valueOf(_mockBookmarksFolder.getPrimaryKeyObj()),
 			missingReferenceElement.attributeValue("class-pk"));
 	}
 
 	@Test
 	public void testMultipleMissingNotMissingReference() throws Exception {
-		Element bookmarksEntryElement1 =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement1 =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement1, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement1,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			true);
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement1, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, false);
+			_mockBookmarksEntry, mockBookmarksEntryElement1,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			false);
 
-		BookmarksEntry bookmarksEntry = BookmarksTestUtil.addEntry(true);
+		MockBookmarksEntry mockBookmarksEntry = new MockBookmarksEntry();
 
-		Element bookmarksEntryElement2 =
-			_portletDataContext.getExportDataElement(bookmarksEntry);
+		Element mockBookmarksEntryElement2 =
+			_portletDataContext.getExportDataElement(mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			bookmarksEntry, bookmarksEntryElement2, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, true);
+			mockBookmarksEntry, mockBookmarksEntryElement2,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			true);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -203,11 +215,11 @@ public class PortletDataContextReferencesTest {
 
 		_portletDataContext.addReferenceElement(
 			portlet, _portletDataContext.getExportDataRootElement(),
-			_bookmarksEntry, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
+			_mockBookmarksEntry, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
 			true);
 		_portletDataContext.addReferenceElement(
 			portlet, _portletDataContext.getExportDataRootElement(),
-			_bookmarksEntry, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
+			_mockBookmarksEntry, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
 			true);
 
 		Element missingReferencesElement =
@@ -222,24 +234,26 @@ public class PortletDataContextReferencesTest {
 		Element missingReferenceElement = missingReferenceElements.get(0);
 
 		Assert.assertEquals(
-			BookmarksEntry.class.getName(),
+			MockBookmarksEntry.class.getName(),
 			missingReferenceElement.attributeValue("class-name"));
 		Assert.assertEquals(
-			String.valueOf(_bookmarksEntry.getEntryId()),
+			String.valueOf(_mockBookmarksEntry.getPrimaryKeyObj()),
 			missingReferenceElement.attributeValue("class-pk"));
 	}
 
 	@Test
 	public void testNotMissingMissingReference() throws Exception {
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, false);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			false);
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			true);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -252,12 +266,13 @@ public class PortletDataContextReferencesTest {
 
 	@Test
 	public void testNotMissingReference() throws Exception {
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_PARENT, false);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_PARENT,
+			false);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -274,20 +289,20 @@ public class PortletDataContextReferencesTest {
 
 		_portletDataContext.setZipWriter(zipWriter);
 
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
 		_portletDataContext.addClassedModel(
-			bookmarksEntryElement,
-			ExportImportPathUtil.getModelPath(_bookmarksEntry),
-			_bookmarksEntry);
+			mockBookmarksEntryElement,
+			ExportImportPathUtil.getModelPath(_mockBookmarksEntry),
+			_mockBookmarksEntry);
 
-		Element bookmarksFolderElement =
-			_portletDataContext.getExportDataElement(_bookmarksFolder);
+		Element mockBookmarksFolderElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksFolder);
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksFolder, bookmarksFolderElement, _bookmarksEntry,
-			PortletDataContext.REFERENCE_TYPE_CHILD, true);
+			_mockBookmarksFolder, mockBookmarksFolderElement,
+			_mockBookmarksEntry, PortletDataContext.REFERENCE_TYPE_CHILD, true);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -300,18 +315,20 @@ public class PortletDataContextReferencesTest {
 
 	@Test
 	public void testSameMissingReferenceMultipleTimes() throws Exception {
-		Element bookmarksEntryElement =
-			_portletDataContext.getExportDataElement(_bookmarksEntry);
+		Element mockBookmarksEntryElement =
+			_portletDataContext.getExportDataElement(_mockBookmarksEntry);
 
-		bookmarksEntryElement.addAttribute(
-			"path", ExportImportPathUtil.getModelPath(_bookmarksEntry));
+		mockBookmarksEntryElement.addAttribute(
+			"path", ExportImportPathUtil.getModelPath(_mockBookmarksEntry));
 
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_DEPENDENCY, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
+			true);
 		_portletDataContext.addReferenceElement(
-			_bookmarksEntry, bookmarksEntryElement, _bookmarksFolder,
-			PortletDataContext.REFERENCE_TYPE_DEPENDENCY, true);
+			_mockBookmarksEntry, mockBookmarksEntryElement,
+			_mockBookmarksFolder, PortletDataContext.REFERENCE_TYPE_DEPENDENCY,
+			true);
 
 		Element missingReferencesElement =
 			_portletDataContext.getMissingReferencesElement();
@@ -323,7 +340,7 @@ public class PortletDataContextReferencesTest {
 
 		List<Element> referencesElements =
 			_portletDataContext.getReferenceElements(
-				_bookmarksEntry, BookmarksFolder.class);
+				_mockBookmarksEntry, MockBookmarksFolder.class);
 
 		Assert.assertEquals(2, referencesElements.size());
 
@@ -334,8 +351,11 @@ public class PortletDataContextReferencesTest {
 		}
 	}
 
-	private BookmarksEntry _bookmarksEntry;
-	private BookmarksFolder _bookmarksFolder;
+	@DeleteAfterTestRun
+	private Group _group;
+
+	private MockBookmarksEntry _mockBookmarksEntry;
+	private MockBookmarksFolder _mockBookmarksFolder;
 	private PortletDataContext _portletDataContext;
 
 }

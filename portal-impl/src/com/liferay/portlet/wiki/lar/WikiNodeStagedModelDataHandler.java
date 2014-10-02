@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
@@ -26,6 +27,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.service.WikiNodeLocalServiceUtil;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,13 +43,34 @@ public class WikiNodeStagedModelDataHandler
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
 
-		WikiNode wikiNode =
-			WikiNodeLocalServiceUtil.fetchWikiNodeByUuidAndGroupId(
-				uuid, groupId);
+		WikiNode wikiNode = fetchStagedModelByUuidAndGroupId(uuid, groupId);
 
 		if (wikiNode != null) {
 			WikiNodeLocalServiceUtil.deleteNode(wikiNode);
 		}
+	}
+
+	@Override
+	public WikiNode fetchStagedModelByUuidAndCompanyId(
+		String uuid, long companyId) {
+
+		List<WikiNode> wikiNodes =
+			WikiNodeLocalServiceUtil.getWikiNodesByUuidAndCompanyId(
+				uuid, companyId);
+
+		if (ListUtil.isEmpty(wikiNodes)) {
+			return null;
+		}
+
+		return wikiNodes.get(0);
+	}
+
+	@Override
+	public WikiNode fetchStagedModelByUuidAndGroupId(
+		String uuid, long groupId) {
+
+		return WikiNodeLocalServiceUtil.fetchWikiNodeByUuidAndGroupId(
+			uuid, groupId);
 	}
 
 	@Override
@@ -72,8 +95,7 @@ public class WikiNodeStagedModelDataHandler
 			long nodeId)
 		throws Exception {
 
-		WikiNode existingNode =
-			WikiNodeLocalServiceUtil.fetchNodeByUuidAndGroupId(uuid, groupId);
+		WikiNode existingNode = fetchMissingReference(uuid, groupId);
 
 		Map<Long, Long> nodeIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
@@ -95,9 +117,8 @@ public class WikiNodeStagedModelDataHandler
 		WikiNode importedNode = null;
 
 		if (portletDataContext.isDataStrategyMirror()) {
-			WikiNode existingNode =
-				WikiNodeLocalServiceUtil.fetchNodeByUuidAndGroupId(
-					node.getUuid(), portletDataContext.getScopeGroupId());
+			WikiNode existingNode = fetchStagedModelByUuidAndGroupId(
+				node.getUuid(), portletDataContext.getScopeGroupId());
 
 			String initialNodeName = PropsValues.WIKI_INITIAL_NODE_NAME;
 
@@ -154,9 +175,8 @@ public class WikiNodeStagedModelDataHandler
 
 		long userId = portletDataContext.getUserId(node.getUserUuid());
 
-		WikiNode existingNode =
-			WikiNodeLocalServiceUtil.fetchNodeByUuidAndGroupId(
-				node.getUuid(), portletDataContext.getScopeGroupId());
+		WikiNode existingNode = fetchStagedModelByUuidAndGroupId(
+			node.getUuid(), portletDataContext.getScopeGroupId());
 
 		if ((existingNode == null) || !existingNode.isInTrash()) {
 			return;
@@ -187,21 +207,6 @@ public class WikiNodeStagedModelDataHandler
 			portletDataContext, node,
 			nodeName.concat(StringPool.SPACE).concat(String.valueOf(count)),
 			++count);
-	}
-
-	@Override
-	protected boolean validateMissingReference(
-			String uuid, long companyId, long groupId)
-		throws Exception {
-
-		WikiNode node = WikiNodeLocalServiceUtil.fetchNodeByUuidAndGroupId(
-			uuid, groupId);
-
-		if (node == null) {
-			return false;
-		}
-
-		return true;
 	}
 
 }

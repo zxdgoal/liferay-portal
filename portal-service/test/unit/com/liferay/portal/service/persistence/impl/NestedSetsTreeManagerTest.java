@@ -14,7 +14,6 @@
 
 package com.liferay.portal.service.persistence.impl;
 
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.test.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -433,11 +432,6 @@ public class NestedSetsTreeManagerTest {
 		}
 
 		@Override
-		public long getPrimaryKey() {
-			return _primaryKey;
-		}
-
-		@Override
 		public long getNestedSetsTreeNodeLeft() {
 			return _nestedSetsTreeNodeLeft;
 		}
@@ -450,6 +444,11 @@ public class NestedSetsTreeManagerTest {
 		@Override
 		public long getNestedSetsTreeNodeScopeId() {
 			return 0;
+		}
+
+		@Override
+		public long getPrimaryKey() {
+			return _primaryKey;
 		}
 
 		@Override
@@ -487,9 +486,7 @@ public class NestedSetsTreeManagerTest {
 		extends NestedSetsTreeManager<SimpleNestedSetsTreeNode> {
 
 		@Override
-		public void delete(SimpleNestedSetsTreeNode simpleNestedSetsTreeNode)
-			throws SystemException {
-
+		public void delete(SimpleNestedSetsTreeNode simpleNestedSetsTreeNode) {
 			super.delete(simpleNestedSetsTreeNode);
 
 			_simpleNestedSetsTreeNodeList.remove(simpleNestedSetsTreeNode);
@@ -501,9 +498,8 @@ public class NestedSetsTreeManagerTest {
 
 		@Override
 		public void insert(
-				SimpleNestedSetsTreeNode simpleNestedSetsTreeNode,
-				SimpleNestedSetsTreeNode parentSimpleNestedSetsTreeNode)
-			throws SystemException {
+			SimpleNestedSetsTreeNode simpleNestedSetsTreeNode,
+			SimpleNestedSetsTreeNode parentSimpleNestedSetsTreeNode) {
 
 			super.insert(
 				simpleNestedSetsTreeNode, parentSimpleNestedSetsTreeNode);

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.asset.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -75,6 +77,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class AssetCategoryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AssetCategoryLocalService,
 		IdentifiableBean {
@@ -150,8 +153,7 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return assetCategoryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -168,8 +170,8 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return assetCategoryPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -188,9 +190,8 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return assetCategoryPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -223,20 +224,6 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	@Override
 	public AssetCategory fetchAssetCategory(long categoryId) {
 		return assetCategoryPersistence.fetchByPrimaryKey(categoryId);
-	}
-
-	/**
-	 * Returns the asset category with the matching UUID and company.
-	 *
-	 * @param uuid the asset category's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset category, or <code>null</code> if a matching asset category could not be found
-	 */
-	@Override
-	public AssetCategory fetchAssetCategoryByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return assetCategoryPersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -348,7 +335,7 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteAssetCategory((AssetCategory)persistedModel);
+		return assetCategoryLocalService.deleteAssetCategory((AssetCategory)persistedModel);
 	}
 
 	@Override
@@ -357,18 +344,18 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 		return assetCategoryPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the asset category with the matching UUID and company.
-	 *
-	 * @param uuid the asset category's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching asset category
-	 * @throws PortalException if a matching asset category could not be found
-	 */
 	@Override
-	public AssetCategory getAssetCategoryByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return assetCategoryPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return assetCategoryPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<AssetCategory> getAssetCategoriesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<AssetCategory> orderByComparator) {
+		return assetCategoryPersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -520,7 +507,7 @@ public abstract class AssetCategoryLocalServiceBaseImpl
 	 */
 	@Override
 	public List<AssetCategory> getAssetEntryAssetCategories(long entryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<AssetCategory> orderByComparator) {
 		return assetEntryPersistence.getAssetCategories(entryId, start, end,
 			orderByComparator);
 	}

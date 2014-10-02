@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.test.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.test.AdviseWith;
-import com.liferay.portal.test.AspectJMockingNewClassLoaderJUnitTestRunner;
+import com.liferay.portal.test.runners.AspectJMockingNewClassLoaderJUnitTestRunner;
 import com.liferay.portal.util.FileImpl;
 
 import java.io.Serializable;
@@ -106,7 +106,7 @@ public class IntrabandProxyInstallationUtilTest {
 
 	@AdviseWith(adviceClasses = {PortalExecutorManagerUtilAdvice.class})
 	@Test
-	public void testInstallSkeletonLocally() throws Exception {
+	public void testInstallSkeletonLocally() {
 		IntrabandProxyInstallationUtil.checkProxyMethodSignatures(
 			IntrabandProxyInstallationUtil.installSkeleton(
 				TestClass.class, _targetLocator),
@@ -119,9 +119,8 @@ public class IntrabandProxyInstallationUtilTest {
 			AsyncIntrabandProxySkeleton.class,
 			intrabandProxySkeleton.getClass());
 
-		intrabandProxySkeleton =
-			(IntrabandProxySkeleton)ReflectionTestUtil.getFieldValue(
-				intrabandProxySkeleton, "_intrabandProxySkeleton");
+		intrabandProxySkeleton = ReflectionTestUtil.getFieldValue(
+			intrabandProxySkeleton, "_intrabandProxySkeleton");
 
 		Assert.assertEquals(
 			_targetLocator,
@@ -181,9 +180,8 @@ public class IntrabandProxyInstallationUtilTest {
 			AsyncIntrabandProxySkeleton.class,
 			intrabandProxySkeleton.getClass());
 
-		intrabandProxySkeleton =
-			(IntrabandProxySkeleton)ReflectionTestUtil.getFieldValue(
-				intrabandProxySkeleton, "_intrabandProxySkeleton");
+		intrabandProxySkeleton = ReflectionTestUtil.getFieldValue(
+			intrabandProxySkeleton, "_intrabandProxySkeleton");
 
 		Assert.assertEquals(
 			_targetLocator,
@@ -269,15 +267,15 @@ public class IntrabandProxyInstallationUtilTest {
 
 	private abstract class TestClass {
 
-		@Id
-		public abstract String getId();
+		@SuppressWarnings("unused")
+		public void copyMethod() {
+		}
 
 		@Proxy
 		public abstract Object doStuff();
 
-		@SuppressWarnings("unused")
-		public void copyMethod() {
-		}
+		@Id
+		public abstract String getId();
 
 	}
 

@@ -16,17 +16,20 @@ package com.liferay.portal.lar;
 
 import com.liferay.portal.LayoutImportException;
 import com.liferay.portal.NoSuchPortletPreferencesException;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.ExportImportHelperUtil;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
+import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataContextFactoryUtil;
 import com.liferay.portal.kernel.lar.PortletDataException;
 import com.liferay.portal.kernel.lar.PortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
+import com.liferay.portal.kernel.lar.PortletDataHandlerStatusMessageSenderUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.StagingUtil;
@@ -169,18 +172,6 @@ public class PortletExporter {
 			return;
 		}
 
-		long lastPublishDate = GetterUtil.getLong(
-			jxPortletPreferences.getValue(
-				"last-publish-date", StringPool.BLANK));
-
-		Date startDate = portletDataContext.getStartDate();
-
-		if ((lastPublishDate > 0) && (startDate != null) &&
-			(lastPublishDate < startDate.getTime())) {
-
-			portletDataContext.setStartDate(new Date(lastPublishDate));
-		}
-
 		String data = null;
 
 		long groupId = portletDataContext.getGroupId();
@@ -201,7 +192,6 @@ public class PortletExporter {
 		}
 		finally {
 			portletDataContext.setGroupId(groupId);
-			portletDataContext.setStartDate(startDate);
 		}
 
 		if (Validator.isNull(data)) {
@@ -263,8 +253,6 @@ public class PortletExporter {
 		StopWatch stopWatch = new StopWatch();
 
 		stopWatch.start();
-
-		LayoutCache layoutCache = new LayoutCache();
 
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
@@ -391,7 +379,7 @@ public class PortletExporter {
 				layout.getCompanyId(), portletId, parameterMap);
 
 		exportPortlet(
-			portletDataContext, layoutCache, portletId, layout, rootElement,
+			portletDataContext, portletId, layout, rootElement,
 			exportPermissions,
 			exportPortletControlsMap.get(
 				PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS),
@@ -650,11 +638,10 @@ public class PortletExporter {
 	}
 
 	protected void exportPortlet(
-			PortletDataContext portletDataContext, LayoutCache layoutCache,
-			String portletId, Layout layout, Element parentElement,
-			boolean exportPermissions, boolean exportPortletArchivedSetups,
-			boolean exportPortletData, boolean exportPortletSetup,
-			boolean exportPortletUserPreferences)
+			PortletDataContext portletDataContext, String portletId,
+			Layout layout, Element parentElement, boolean exportPermissions,
+			boolean exportPortletArchivedSetups, boolean exportPortletData,
+			boolean exportPortletSetup, boolean exportPortletUserPreferences)
 		throws Exception {
 
 		long plid = PortletKeys.PREFS_OWNER_ID_DEFAULT;
@@ -683,6 +670,25 @@ public class PortletExporter {
 			portletDataContext.hasNotUniquePerLayout(portletId)) {
 
 			return;
+		}
+
+		if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
+			PortletDataContext clonedPortletDataContext =
+				PortletDataContextFactoryUtil.clonePortletDataContext(
+					portletDataContext);
+
+			ManifestSummary manifestSummary =
+				clonedPortletDataContext.getManifestSummary();
+
+			manifestSummary.resetCounters();
+
+			PortletDataHandler portletDataHandler =
+				portlet.getPortletDataHandlerInstance();
+
+			portletDataHandler.prepareManifestSummary(clonedPortletDataContext);
+
+			PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+				"portlet", portletId, manifestSummary);
 		}
 
 		Document document = SAXReaderUtil.createDocument();
@@ -827,8 +833,7 @@ public class PortletExporter {
 
 		if (exportPermissions) {
 			_permissionExporter.exportPortletPermissions(
-				portletDataContext, layoutCache, portletId, layout,
-				portletElement);
+				portletDataContext, portletId, layout, portletElement);
 		}
 
 		// Zip

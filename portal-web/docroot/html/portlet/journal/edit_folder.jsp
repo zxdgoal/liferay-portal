@@ -73,14 +73,12 @@ if (workflowEnabled) {
 			<aui:field-wrapper label="parent-folder">
 
 				<%
-				String parentFolderName = LanguageUtil.get(pageContext, "home");
+				String parentFolderName = LanguageUtil.get(request, "home");
 
-				try {
-					JournalFolder parentFolder = JournalFolderServiceUtil.getFolder(parentFolderId);
+				JournalFolder parentFolder = JournalFolderServiceUtil.fetchFolder(parentFolderId);
 
+				if (parentFolder != null) {
 					parentFolderName = parentFolder.getName();
-				}
-				catch (NoSuchFolderException nsfe) {
 				}
 				%>
 
@@ -179,9 +177,9 @@ if (workflowEnabled) {
 					}
 					%>
 
-					<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_INHERIT %>" id="restrictionTypeInherit" label='<%= workflowEnabled ? LanguageUtil.format(locale, "use-structure-restrictions-and-workflow-of-the-parent-folder-x", parentFolderName) : LanguageUtil.format(locale, "use-structure-restrictions-of-the-parent-folder-x", parentFolderName) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_INHERIT %>" />
+					<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_INHERIT %>" id="restrictionTypeInherit" label='<%= workflowEnabled ? LanguageUtil.format(locale, "use-structure-restrictions-and-workflow-of-the-parent-folder-x", HtmlUtil.escape(parentFolderName)) : LanguageUtil.format(locale, "use-structure-restrictions-of-the-parent-folder-x", HtmlUtil.escape(parentFolderName)) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_INHERIT %>" />
 
-					<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_DDM_STRUCTURES_AND_WORKFLOW %>" id="restrictionTypeDefined" label='<%= workflowEnabled ? LanguageUtil.format(locale, "define-specific-structure-restrictions-and-workflow-for-this-folder-x", folder.getName()) : LanguageUtil.format(locale, "define-specific-structure-restrictions-for-this-folder-x", folder.getName()) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_DDM_STRUCTURES_AND_WORKFLOW %>" />
+					<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_DDM_STRUCTURES_AND_WORKFLOW %>" id="restrictionTypeDefined" label='<%= workflowEnabled ? LanguageUtil.format(locale, "define-specific-structure-restrictions-and-workflow-for-this-folder-x", HtmlUtil.escape(folder.getName())) : LanguageUtil.format(locale, "define-specific-structure-restrictions-for-this-folder-x", HtmlUtil.escape(folder.getName())) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_DDM_STRUCTURES_AND_WORKFLOW %>" />
 
 					<div class='<%= (folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_DDM_STRUCTURES_AND_WORKFLOW) ? StringPool.BLANK : "hide" %>' id="<portlet:namespace />restrictionTypeDefinedDiv">
 						<liferay-ui:search-container
@@ -194,13 +192,12 @@ if (workflowEnabled) {
 
 							<liferay-ui:search-container-row
 								className="com.liferay.portlet.dynamicdatamapping.model.DDMStructure"
-								escapedModel="<%= true %>"
 								keyProperty="structureId"
 								modelVar="ddmStructure"
 							>
 								<liferay-ui:search-container-column-text
 									name="name"
-									value="<%= ddmStructure.getName(locale) %>"
+									value="<%= HtmlUtil.escape(ddmStructure.getName(locale)) %>"
 								/>
 
 								<c:if test="<%= workflowEnabled %>">
@@ -257,7 +254,7 @@ if (workflowEnabled) {
 				<c:if test="<%= workflowEnabled %>">
 					<c:choose>
 						<c:when test="<%= !rootFolder %>">
-							<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_WORKFLOW %>" id="restrictionTypeWorkflow" label='<%= LanguageUtil.format(locale, "default-workflow-for-this-folder-x", folder.getName()) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_WORKFLOW %>" />
+							<aui:input checked="<%= folder.getRestrictionType() == JournalFolderConstants.RESTRICTION_TYPE_WORKFLOW %>" id="restrictionTypeWorkflow" label='<%= LanguageUtil.format(locale, "default-workflow-for-this-folder-x", HtmlUtil.escape(folder.getName())) %>' name="restrictionType" type="radio" value="<%= JournalFolderConstants.RESTRICTION_TYPE_WORKFLOW %>" />
 						</c:when>
 						<c:otherwise>
 							<aui:input name="restrictionType" type="hidden" value="<%= JournalFolderConstants.RESTRICTION_TYPE_WORKFLOW %>" />
@@ -345,7 +342,7 @@ if (workflowEnabled) {
 				refererPortletName: '<%= PortletKeys.JOURNAL_CONTENT %>',
 				showAncestorScopes: true,
 				struts_action: '/dynamic_data_mapping/select_structure',
-				title: '<%= UnicodeLanguageUtil.get(pageContext, "structures") %>'
+				title: '<%= UnicodeLanguageUtil.get(request, "structures") %>'
 			},
 			function(event) {
 				<portlet:namespace />selectStructure(event.ddmstructureid, event.name);
@@ -408,13 +405,13 @@ if (workflowEnabled) {
 if (folder != null) {
 	JournalUtil.addPortletBreadcrumbEntries(folderId, request, renderResponse);
 
-	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "edit"), currentURL);
+	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, "edit"), currentURL);
 }
 else {
 	if (parentFolderId > 0) {
 		JournalUtil.addPortletBreadcrumbEntries(parentFolderId, request, renderResponse);
 	}
 
-	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "add-folder"), currentURL);
+	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, "add-folder"), currentURL);
 }
 %>

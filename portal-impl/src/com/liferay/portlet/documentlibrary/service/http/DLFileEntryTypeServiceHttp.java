@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -51,6 +53,7 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeServiceUtil;
  * @see com.liferay.portlet.documentlibrary.service.DLFileEntryTypeServiceUtil
  * @generated
  */
+@ProviderType
 public class DLFileEntryTypeServiceHttp {
 	public static com.liferay.portlet.documentlibrary.model.DLFileEntryType addFileEntryType(
 		HttpPrincipal httpPrincipal, long groupId,
@@ -302,7 +305,7 @@ public class DLFileEntryTypeServiceHttp {
 		HttpPrincipal httpPrincipal, long companyId, long[] groupIds,
 		java.lang.String keywords, boolean includeBasicFileEntryType,
 		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portlet.documentlibrary.model.DLFileEntryType> orderByComparator) {
 		try {
 			MethodKey methodKey = new MethodKey(DLFileEntryTypeServiceUtil.class,
 					"search", _searchParameterTypes8);

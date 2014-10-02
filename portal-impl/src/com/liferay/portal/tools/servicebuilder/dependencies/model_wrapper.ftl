@@ -9,6 +9,8 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 
+import java.io.Serializable;
+
 import java.sql.Blob;
 
 import java.util.Date;
@@ -25,10 +27,7 @@ import java.util.Map;
  * @generated
  */
 
-<#if pluginName == "">
-	@ProviderType
-</#if>
-
+@ProviderType
 public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${entity.name}> {
 
 	public ${entity.name}Wrapper(${entity.name} ${entity.varName}) {
@@ -62,7 +61,7 @@ public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${ent
 			<#if column.isPrimitiveType()>
 				${serviceBuilder.getPrimitiveObj(column.type)}
 			<#else>
-				${column.type}
+				${column.genericizedType}
 			</#if>
 
 			${column.name} =
@@ -70,7 +69,7 @@ public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${ent
 			<#if column.isPrimitiveType()>
 				(${serviceBuilder.getPrimitiveObj(column.type)})
 			<#else>
-				(${column.type})
+				(${column.genericizedType})
 			</#if>
 
 			attributes.get("${column.name}");
@@ -82,7 +81,7 @@ public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${ent
 	}
 
 	<#list methods as method>
-		<#if !method.isConstructor() && !method.isStatic() && method.isPublic() && !serviceBuilder.isDuplicateMethod(method, tempMap) && !(method.name == "equals" && (parameters?size == 1))>
+		<#if !method.isConstructor() && !method.isStatic() && method.isPublic() && !(method.name == "equals" && (parameters?size == 1))>
 			<#if method.name == "getStagedModelType">
 				<#assign hasGetStagedModelTypeMethod = true>
 			</#if>
@@ -227,6 +226,6 @@ public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${ent
 		_${entity.varName}.resetOriginalValues();
 	}
 
-	private ${entity.name} _${entity.varName};
+	private final ${entity.name} _${entity.varName};
 
 }

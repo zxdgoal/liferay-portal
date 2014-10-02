@@ -65,19 +65,20 @@ portletURL.setParameter("struts_action", "/journal/view_feeds");
 			</aui:nav>
 
 			<aui:nav-bar-search
-				cssClass="pull-right"
 				file="/html/portlet/journal/feed_search.jsp"
 				searchContainer="<%= searchContainer %>"
 			/>
 		</aui:nav-bar>
 
-		<div class="separator"><!-- --></div>
-
-		<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteFeeds();" %>' value="delete" />
-
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/journal/feed_search_results.jspf" %>
 		</liferay-ui:search-container-results>
+
+		<c:if test="<%= !results.isEmpty() %>">
+			<div class="separator"><!-- --></div>
+
+			<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteFeeds();" %>' value="delete" />
+		</c:if>
 
 		<liferay-ui:search-container-row
 			className="com.liferay.portlet.journal.model.JournalFeed"
@@ -130,7 +131,7 @@ portletURL.setParameter("struts_action", "/journal/view_feeds");
 		window,
 		'<portlet:namespace />deleteFeeds',
 		function() {
-			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-feeds") %>')) {
+			if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-the-selected-feeds") %>')) {
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 				document.<portlet:namespace />fm.<portlet:namespace />groupId.value = '<%= scopeGroupId %>';
 				document.<portlet:namespace />fm.<portlet:namespace />deleteFeedIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');

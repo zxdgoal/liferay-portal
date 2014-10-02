@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.softwarecatalog.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -26,8 +28,6 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.service.persistence.impl.TableMapper;
@@ -50,7 +49,6 @@ import com.liferay.portlet.softwarecatalog.service.persistence.SCProductEntryPer
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,6 +69,7 @@ import java.util.Set;
  * @see SCProductEntryUtil
  * @generated
  */
+@ProviderType
 public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProductEntry>
 	implements SCProductEntryPersistence {
 	/*
@@ -161,7 +160,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> findByGroupId(long groupId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -267,7 +266,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByGroupId_First(groupId,
 				orderByComparator);
 
@@ -296,7 +296,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		List<SCProductEntry> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -317,7 +317,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByGroupId_Last(groupId,
 				orderByComparator);
 
@@ -346,7 +347,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -374,7 +375,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry[] findByGroupId_PrevAndNext(long productEntryId,
-		long groupId, OrderByComparator orderByComparator)
+		long groupId, OrderByComparator<SCProductEntry> orderByComparator)
 		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = findByPrimaryKey(productEntryId);
 
@@ -405,7 +406,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	protected SCProductEntry getByGroupId_PrevAndNext(Session session,
 		SCProductEntry scProductEntry, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SCProductEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -553,7 +554,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> filterFindByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SCProductEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId(groupId, start, end, orderByComparator);
 		}
@@ -644,7 +645,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry[] filterFindByGroupId_PrevAndNext(
-		long productEntryId, long groupId, OrderByComparator orderByComparator)
+		long productEntryId, long groupId,
+		OrderByComparator<SCProductEntry> orderByComparator)
 		throws NoSuchProductEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByGroupId_PrevAndNext(productEntryId, groupId,
@@ -680,7 +682,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	protected SCProductEntry filterGetByGroupId_PrevAndNext(Session session,
 		SCProductEntry scProductEntry, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SCProductEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1002,7 +1004,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SCProductEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1108,7 +1110,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByCompanyId_First(companyId,
 				orderByComparator);
 
@@ -1137,7 +1140,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		List<SCProductEntry> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
@@ -1158,7 +1161,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByCompanyId_Last(companyId,
 				orderByComparator);
 
@@ -1187,7 +1191,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
@@ -1215,7 +1219,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry[] findByCompanyId_PrevAndNext(long productEntryId,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<SCProductEntry> orderByComparator)
 		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = findByPrimaryKey(productEntryId);
 
@@ -1246,7 +1250,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	protected SCProductEntry getByCompanyId_PrevAndNext(Session session,
 		SCProductEntry scProductEntry, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SCProductEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1487,7 +1491,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> findByG_U(long groupId, long userId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SCProductEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1603,7 +1607,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByG_U_First(groupId, userId,
 				orderByComparator);
 
@@ -1636,7 +1641,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByG_U_First(long groupId, long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		List<SCProductEntry> list = findByG_U(groupId, userId, 0, 1,
 				orderByComparator);
 
@@ -1658,7 +1663,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry findByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) throws NoSuchProductEntryException {
+		OrderByComparator<SCProductEntry> orderByComparator)
+		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = fetchByG_U_Last(groupId, userId,
 				orderByComparator);
 
@@ -1691,7 +1697,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry fetchByG_U_Last(long groupId, long userId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		int count = countByG_U(groupId, userId);
 
 		if (count == 0) {
@@ -1720,7 +1726,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry[] findByG_U_PrevAndNext(long productEntryId,
-		long groupId, long userId, OrderByComparator orderByComparator)
+		long groupId, long userId,
+		OrderByComparator<SCProductEntry> orderByComparator)
 		throws NoSuchProductEntryException {
 		SCProductEntry scProductEntry = findByPrimaryKey(productEntryId);
 
@@ -1751,7 +1758,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	protected SCProductEntry getByG_U_PrevAndNext(Session session,
 		SCProductEntry scProductEntry, long groupId, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SCProductEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1906,7 +1913,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> filterFindByG_U(long groupId, long userId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<SCProductEntry> orderByComparator) {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U(groupId, userId, start, end, orderByComparator);
 		}
@@ -2002,7 +2009,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public SCProductEntry[] filterFindByG_U_PrevAndNext(long productEntryId,
-		long groupId, long userId, OrderByComparator orderByComparator)
+		long groupId, long userId,
+		OrderByComparator<SCProductEntry> orderByComparator)
 		throws NoSuchProductEntryException {
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
 			return findByG_U_PrevAndNext(productEntryId, groupId, userId,
@@ -2038,7 +2046,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 	protected SCProductEntry filterGetByG_U_PrevAndNext(Session session,
 		SCProductEntry scProductEntry, long groupId, long userId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SCProductEntry> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3217,7 +3225,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<SCProductEntry> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SCProductEntry> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3402,7 +3410,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 */
 	@Override
 	public List<com.liferay.portlet.softwarecatalog.model.SCLicense> getSCLicenses(
-		long pk, int start, int end, OrderByComparator orderByComparator) {
+		long pk, int start, int end,
+		OrderByComparator<com.liferay.portlet.softwarecatalog.model.SCLicense> orderByComparator) {
 		return scProductEntryToSCLicenseTableMapper.getRightBaseModels(pk,
 			start, end, orderByComparator);
 	}
@@ -3627,26 +3636,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 * Initializes the s c product entry persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.softwarecatalog.model.SCProductEntry")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SCProductEntry>> listenersList = new ArrayList<ModelListener<SCProductEntry>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SCProductEntry>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
-
 		scProductEntryToSCLicenseTableMapper = TableMapperFactory.getTableMapper("SCLicenses_SCProductEntries",
 				"productEntryId", "licenseId", this, scLicensePersistence);
 	}
@@ -3682,11 +3671,11 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SCProductEntry exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SCProductEntry exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SCProductEntryPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(SCProductEntryPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"type"
 			});
-	private static SCProductEntry _nullSCProductEntry = new SCProductEntryImpl() {
+	private static final SCProductEntry _nullSCProductEntry = new SCProductEntryImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3698,7 +3687,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			}
 		};
 
-	private static CacheModel<SCProductEntry> _nullSCProductEntryCacheModel = new CacheModel<SCProductEntry>() {
+	private static final CacheModel<SCProductEntry> _nullSCProductEntryCacheModel =
+		new CacheModel<SCProductEntry>() {
 			@Override
 			public SCProductEntry toEntityModel() {
 				return _nullSCProductEntry;

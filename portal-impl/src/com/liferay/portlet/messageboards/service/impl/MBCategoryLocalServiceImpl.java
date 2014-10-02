@@ -235,13 +235,6 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 			}
 		}
 
-		// Indexer
-
-		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
-			MBMessage.class);
-
-		indexer.delete(category);
-
 		// Threads
 
 		mbThreadLocalService.deleteThreads(
@@ -513,8 +506,9 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 	public List<MBCategory> getSubscribedCategories(
 		long groupId, long userId, int start, int end) {
 
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY, start, end, null);
+		QueryDefinition<MBCategory> queryDefinition =
+			new QueryDefinition<MBCategory>(
+				WorkflowConstants.STATUS_ANY, start, end, null);
 
 		return mbCategoryFinder.findByS_G_U_P(
 			groupId, userId, null, queryDefinition);
@@ -522,8 +516,8 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 
 	@Override
 	public int getSubscribedCategoriesCount(long groupId, long userId) {
-		QueryDefinition queryDefinition = new QueryDefinition(
-			WorkflowConstants.STATUS_ANY);
+		QueryDefinition<MBCategory> queryDefinition =
+			new QueryDefinition<MBCategory>(WorkflowConstants.STATUS_ANY);
 
 		return mbCategoryFinder.countByS_G_U_P(
 			groupId, userId, null, queryDefinition);
@@ -583,12 +577,8 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 
 			// Category
 
-			TrashEntry trashEntry = category.getTrashEntry();
-
-			TrashVersion trashVersion =
-				trashVersionLocalService.fetchVersion(
-					trashEntry.getEntryId(), MBCategory.class.getName(),
-					category.getCategoryId());
+			TrashVersion trashVersion = trashVersionLocalService.fetchVersion(
+				MBCategory.class.getName(), category.getCategoryId());
 
 			int status = WorkflowConstants.STATUS_APPROVED;
 
@@ -611,8 +601,7 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 			List<Object> categoriesAndThreads = getCategoriesAndThreads(
 				category.getGroupId(), categoryId);
 
-			restoreDependentsFromTrash(
-				user, categoriesAndThreads, trashEntry.getEntryId());
+			restoreDependentsFromTrash(user, categoriesAndThreads);
 		}
 
 		return moveCategory(categoryId, newCategoryId, false);
@@ -666,8 +655,7 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 		List<Object> categoriesAndThreads = getCategoriesAndThreads(
 			category.getGroupId(), categoryId);
 
-		restoreDependentsFromTrash(
-			user, categoriesAndThreads, trashEntry.getEntryId());
+		restoreDependentsFromTrash(user, categoriesAndThreads);
 
 		// Trash
 
@@ -992,7 +980,7 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 	}
 
 	protected void restoreDependentsFromTrash(
-			User user, List<Object> categoriesAndThreads, long trashEntryId)
+			User user, List<Object> categoriesAndThreads)
 		throws PortalException {
 
 		for (Object object : categoriesAndThreads) {
@@ -1002,17 +990,13 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 
 				MBThread thread = (MBThread)object;
 
-				TrashEntry trashEntry = trashEntryLocalService.fetchEntry(
-					MBThread.class.getName(), thread.getThreadId());
-
-				if (trashEntry != null) {
+				if (!thread.isInTrashImplicitly()) {
 					continue;
 				}
 
 				TrashVersion trashVersion =
 					trashVersionLocalService.fetchVersion(
-						trashEntryId, MBThread.class.getName(),
-						thread.getThreadId());
+						MBThread.class.getName(), thread.getThreadId());
 
 				int oldStatus = WorkflowConstants.STATUS_APPROVED;
 
@@ -1027,7 +1011,7 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 				// Threads
 
 				mbThreadLocalService.restoreDependentsFromTrash(
-					user.getUserId(), thread.getThreadId(), trashEntryId);
+					user.getUserId(), thread.getThreadId());
 
 				// Trash
 
@@ -1048,17 +1032,13 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 
 				MBCategory category = (MBCategory)object;
 
-				TrashEntry trashEntry = trashEntryLocalService.fetchEntry(
-					MBCategory.class.getName(), category.getCategoryId());
-
-				if (trashEntry != null) {
+				if (!category.isInTrashImplicitly()) {
 					continue;
 				}
 
 				TrashVersion trashVersion =
 					trashVersionLocalService.fetchVersion(
-						trashEntryId, MBCategory.class.getName(),
-						category.getCategoryId());
+						MBCategory.class.getName(), category.getCategoryId());
 
 				int oldStatus = WorkflowConstants.STATUS_APPROVED;
 
@@ -1075,8 +1055,7 @@ public class MBCategoryLocalServiceImpl extends MBCategoryLocalServiceBaseImpl {
 				restoreDependentsFromTrash(
 					user,
 					getCategoriesAndThreads(
-						category.getGroupId(), category.getCategoryId()),
-					trashEntryId);
+						category.getGroupId(), category.getCategoryId()));
 
 				// Trash
 

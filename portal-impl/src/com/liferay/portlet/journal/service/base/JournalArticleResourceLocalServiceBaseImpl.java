@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.journal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -57,6 +59,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class JournalArticleResourceLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements JournalArticleResourceLocalService,
 		IdentifiableBean {
@@ -135,8 +138,7 @@ public abstract class JournalArticleResourceLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return journalArticleResourcePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -153,8 +155,8 @@ public abstract class JournalArticleResourceLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return journalArticleResourcePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -173,9 +175,8 @@ public abstract class JournalArticleResourceLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return journalArticleResourcePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -265,7 +266,7 @@ public abstract class JournalArticleResourceLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteJournalArticleResource((JournalArticleResource)persistedModel);
+		return journalArticleResourceLocalService.deleteJournalArticleResource((JournalArticleResource)persistedModel);
 	}
 
 	@Override

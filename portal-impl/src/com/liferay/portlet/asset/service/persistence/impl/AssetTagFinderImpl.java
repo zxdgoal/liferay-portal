@@ -97,7 +97,7 @@ public class AssetTagFinderImpl
 
 	@Override
 	public AssetTag filterFindByG_N(long groupId, String name)
-		throws NoSuchTagException, SystemException {
+		throws NoSuchTagException {
 
 		return doFindByG_N(groupId, name, true);
 	}
@@ -105,7 +105,7 @@ public class AssetTagFinderImpl
 	@Override
 	public List<AssetTag> filterFindByG_C_N(
 		long groupId, long classNameId, String name, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<AssetTag> obc) {
 
 		return doFindByG_C_N(groupId, classNameId, name, start, end, obc, true);
 	}
@@ -113,7 +113,7 @@ public class AssetTagFinderImpl
 	@Override
 	public List<AssetTag> filterFindByG_N_P(
 		long[] groupIds, String name, String[] tagProperties, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<AssetTag> obc) {
 
 		return doFindByG_N_P(
 			groupIds, name, tagProperties, start, end, obc, true);
@@ -121,7 +121,7 @@ public class AssetTagFinderImpl
 
 	@Override
 	public AssetTag findByG_N(long groupId, String name)
-		throws NoSuchTagException, SystemException {
+		throws NoSuchTagException {
 
 		return doFindByG_N(groupId, name, false);
 	}
@@ -129,7 +129,7 @@ public class AssetTagFinderImpl
 	@Override
 	public List<AssetTag> findByG_C_N(
 		long groupId, long classNameId, String name, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<AssetTag> obc) {
 
 		return doFindByG_C_N(
 			groupId, classNameId, name, start, end, obc, false);
@@ -138,7 +138,7 @@ public class AssetTagFinderImpl
 	@Override
 	public List<AssetTag> findByG_N_P(
 		long[] groupIds, String name, String[] tagProperties, int start,
-		int end, OrderByComparator obc) {
+		int end, OrderByComparator<AssetTag> obc) {
 
 		return doFindByG_N_P(
 			groupIds, name, tagProperties, start, end, obc, false);
@@ -345,7 +345,7 @@ public class AssetTagFinderImpl
 
 	protected AssetTag doFindByG_N(
 			long groupId, String name, boolean inlineSQLHelper)
-		throws NoSuchTagException, SystemException {
+		throws NoSuchTagException {
 
 		name = StringUtil.toLowerCase(name.trim());
 
@@ -400,7 +400,7 @@ public class AssetTagFinderImpl
 
 	protected List<AssetTag> doFindByG_C_N(
 		long groupId, long classNameId, String name, int start, int end,
-		OrderByComparator obc, boolean inlineSQLHelper) {
+		OrderByComparator<AssetTag> obc, boolean inlineSQLHelper) {
 
 		Session session = null;
 
@@ -443,7 +443,7 @@ public class AssetTagFinderImpl
 
 	protected List<AssetTag> doFindByG_N_P(
 		long[] groupIds, String name, String[] tagProperties, int start,
-		int end, OrderByComparator obc, boolean inlineSQLHelper) {
+		int end, OrderByComparator<AssetTag> obc, boolean inlineSQLHelper) {
 
 		Session session = null;
 

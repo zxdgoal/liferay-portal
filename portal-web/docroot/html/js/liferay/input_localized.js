@@ -5,6 +5,10 @@ AUI.add(
 
 		var AArray = A.Array;
 
+		var AObject = A.Object;
+
+		var REGEX_DELIMITER_NS = /_/g;
+
 		var SELECTOR_LANG_VALUE = '.language-value';
 
 		var STR_BLANK = '';
@@ -188,19 +192,26 @@ AUI.add(
 						return items[selected];
 					},
 
+					getValue: function(languageId) {
+						var instance = this;
+
+						if (!Lang.isValue(languageId)) {
+							languageId = defaultLanguageId;
+						}
+
+						return instance._getInputLanguage(languageId).val();
+					},
+
 					selectFlag: function(languageId) {
 						var instance = this;
 
 						var inputPlaceholder = instance.get(STR_INPUT_PLACEHOLDER);
 
-						var inputLanguage = instance._getInputLanguage(languageId);
-						var defaultInputLanguage = instance._getInputLanguage(defaultLanguageId);
-
-						var defaultLanguageValue = defaultInputLanguage.val();
+						var defaultLanguageValue = instance.getValue(defaultLanguageId);
 
 						var editor = instance.get('editor');
 
-						inputPlaceholder.val(inputLanguage.val());
+						inputPlaceholder.val(instance.getValue(languageId));
 
 						inputPlaceholder.attr('dir', Liferay.Language.direction[languageId]);
 						inputPlaceholder.attr('placeholder', defaultLanguageValue);
@@ -443,7 +454,8 @@ AUI.add(
 							var itemsError = instance.get(STR_ITEMS_ERROR);
 
 							return Lang.sub(
-								instance.ITEM_TEMPLATE, {
+								instance.ITEM_TEMPLATE,
+								{
 									column: column,
 									index: index,
 									row: row,
@@ -569,6 +581,29 @@ AUI.add(
 		);
 
 		Liferay.InputLocalized = InputLocalized;
+
+		Liferay.on(
+			'destroyPortlet',
+			function(event) {
+				AObject.each(
+					Liferay.InputLocalized._instances,
+					function(item, index) {
+						if (item.get('namespace').replace(REGEX_DELIMITER_NS, STR_BLANK) === event.portletId) {
+							item.destroy();
+						}
+					}
+				);
+
+				AObject.each(
+					Liferay.InputLocalized._registered,
+					function(item, index) {
+						if (item.namespace.replace(REGEX_DELIMITER_NS, STR_BLANK) === event.portletId) {
+							Liferay.InputLocalized.unregister(index);
+						}
+					}
+				);
+			}
+		);
 	},
 	'',
 	{

@@ -52,12 +52,13 @@ import com.liferay.portal.nio.intraband.proxy.IntrabandProxyUtil.MethodsBag;
 import com.liferay.portal.nio.intraband.proxy.IntrabandProxyUtil.TemplateSkeleton;
 import com.liferay.portal.nio.intraband.proxy.IntrabandProxyUtil.TemplateStub;
 import com.liferay.portal.test.AdviseWith;
-import com.liferay.portal.test.AspectJMockingNewClassLoaderJUnitTestRunner;
+import com.liferay.portal.test.runners.AspectJMockingNewClassLoaderJUnitTestRunner;
 import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -364,8 +365,6 @@ public class IntrabandProxyUtilTest {
 		RegistrationReference registrationReference =
 			new MockRegistrationReference(autoReplyMockIntraband);
 
-		ExceptionHandler exceptionHandler = new WarnLogExceptionHandler();
-
 		CaptureHandler captureHandler = JDKLoggerTestUtil.configureJDKLogger(
 			stubClass.getName(), Level.INFO);
 
@@ -375,7 +374,8 @@ public class IntrabandProxyUtilTest {
 			List<LogRecord> logRecords = captureHandler.getLogRecords();
 
 			stubObject = constructor.newInstance(
-				testId, registrationReference, exceptionHandler);
+				testId, registrationReference,
+				WarnLogExceptionHandler.INSTANCE);
 
 			Assert.assertEquals(2, logRecords.size());
 
@@ -398,7 +398,7 @@ public class IntrabandProxyUtilTest {
 			ReflectionTestUtil.getFieldValue(
 				stubObject, "_registrationReference"));
 		Assert.assertSame(
-			exceptionHandler,
+			WarnLogExceptionHandler.INSTANCE,
 			ReflectionTestUtil.getFieldValue(stubObject, "_exceptionHandler"));
 		Assert.assertSame(
 			autoReplyMockIntraband,
@@ -413,7 +413,7 @@ public class IntrabandProxyUtilTest {
 			String.class, RegistrationReference.class, ExceptionHandler.class);
 
 		stubObject = constructor.newInstance(
-			testId, registrationReference, exceptionHandler);
+			testId, registrationReference, WarnLogExceptionHandler.INSTANCE);
 
 		for (Method idMethod : _getIdMethods(TestGenerateStubFunction2.class)) {
 			Assert.assertEquals(
@@ -577,11 +577,11 @@ public class IntrabandProxyUtilTest {
 
 		IntrabandProxyUtil.newStubInstance(
 			stubClass, "id", new MockRegistrationReference(null),
-			new WarnLogExceptionHandler());
+			WarnLogExceptionHandler.INSTANCE);
 
 		try {
 			IntrabandProxyUtil.newStubInstance(
-				stubClass, "id", null, new WarnLogExceptionHandler());
+				stubClass, "id", null, WarnLogExceptionHandler.INSTANCE);
 
 			Assert.fail();
 		}
@@ -600,7 +600,7 @@ public class IntrabandProxyUtilTest {
 
 		try {
 			IntrabandProxyUtil.newStubInstance(
-				stubClass, "id", null, new WarnLogExceptionHandler());
+				stubClass, "id", null, WarnLogExceptionHandler.INSTANCE);
 
 			Assert.fail();
 		}
@@ -616,7 +616,7 @@ public class IntrabandProxyUtilTest {
 
 		IntrabandProxyUtil.newStubInstance(
 			stubClass, "id", new MockRegistrationReference(null),
-			new WarnLogExceptionHandler());
+			WarnLogExceptionHandler.INSTANCE);
 	}
 
 	@Test
@@ -716,7 +716,7 @@ public class IntrabandProxyUtilTest {
 	}
 
 	@Test
-	public void testTemplateSkeleton() throws Exception {
+	public void testTemplateSkeleton() throws ClassNotFoundException {
 		class TestTemplateSkeleton extends TemplateSkeleton {
 
 			TestTemplateSkeleton(TargetLocator targetLocator) {
@@ -726,8 +726,7 @@ public class IntrabandProxyUtilTest {
 			@Override
 			protected void doDispatch(
 					RegistrationReference registrationReference,
-					Datagram datagram, Deserializer deserializer)
-				throws Exception {
+					Datagram datagram, Deserializer deserializer) {
 
 				int i = deserializer.readInt();
 
@@ -837,7 +836,7 @@ public class IntrabandProxyUtilTest {
 	}
 
 	@Test
-	public void testTemplateStub() throws Exception {
+	public void testTemplateStub() {
 		try {
 			new TemplateStub(null, null, null);
 
@@ -893,20 +892,17 @@ public class IntrabandProxyUtilTest {
 			mockIntraband,
 			ReflectionTestUtil.getFieldValue(templateStub, "_intraband"));
 
-		ExceptionHandler exceptionHandler = new WarnLogExceptionHandler();
-
 		templateStub = new TemplateStub(
-			"id", mockRegistrationReference, exceptionHandler);
+			"id", mockRegistrationReference, WarnLogExceptionHandler.INSTANCE);
 
 		Assert.assertEquals(
-			"id",
-			ReflectionTestUtil.getFieldValue(templateStub, "_id"));
+			"id", ReflectionTestUtil.getFieldValue(templateStub, "_id"));
 		Assert.assertSame(
 			mockRegistrationReference,
 			ReflectionTestUtil.getFieldValue(
 				templateStub, "_registrationReference"));
 		Assert.assertSame(
-			exceptionHandler,
+			WarnLogExceptionHandler.INSTANCE,
 			ReflectionTestUtil.getFieldValue(
 				templateStub, "_exceptionHandler"));
 		Assert.assertSame(
@@ -986,13 +982,17 @@ public class IntrabandProxyUtilTest {
 
 	@AdviseWith(adviceClasses = {DisableProxyClassesDump.class})
 	@Test
-	public void testToClassProxyClassesDumpDisabled() throws Exception {
+	public void testToClassProxyClassesDumpDisabled()
+		throws FileNotFoundException {
+
 		_doTestToClass(false, false);
 	}
 
 	@AdviseWith(adviceClasses = {EnableProxyClassesDump.class})
 	@Test
-	public void testToClassProxyClassesDumpEnabled() throws Exception {
+	public void testToClassProxyClassesDumpEnabled()
+		throws FileNotFoundException {
+
 		_doTestToClass(true, true);
 		_doTestToClass(true, false);
 	}
@@ -1977,7 +1977,7 @@ public class IntrabandProxyUtilTest {
 
 	private void _doTestToClass(
 			boolean proxyClassesDumpEnabled, boolean logEnabled)
-		throws Exception {
+		throws FileNotFoundException {
 
 		class TestClass {
 		}
@@ -2428,6 +2428,11 @@ public class IntrabandProxyUtilTest {
 		new HashMap<Class<?>, Object>();
 	private static Map<Class<?>, Object> _sampleValueMap =
 		new HashMap<Class<?>, Object>();
+	private static Type[] _types = {
+		Type.BOOLEAN_TYPE, Type.BYTE_TYPE, Type.CHAR_TYPE, Type.DOUBLE_TYPE,
+		Type.FLOAT_TYPE, Type.INT_TYPE, Type.LONG_TYPE, Type.SHORT_TYPE,
+		Type.getType(String.class), Type.getType(Object.class)
+	};
 
 	static {
 		_autoboxingMap.put(boolean.class, Boolean.class);
@@ -2465,12 +2470,6 @@ public class IntrabandProxyUtilTest {
 		_sampleValueMap.put(Object.class, new Locale("en"));
 		_sampleValueMap.put(void.class, null);
 	}
-
-	private static Type[] _types = {
-		Type.BOOLEAN_TYPE, Type.BYTE_TYPE, Type.CHAR_TYPE, Type.DOUBLE_TYPE,
-		Type.FLOAT_TYPE, Type.INT_TYPE, Type.LONG_TYPE, Type.SHORT_TYPE,
-		Type.getType(String.class), Type.getType(Object.class)
-	};
 
 	private static class AutoReplyMockIntraband extends MockIntraband {
 
@@ -2514,10 +2513,10 @@ public class IntrabandProxyUtilTest {
 				datagram, serializer.toByteBuffer());
 		}
 
+		private int _index;
+		private Method _method;
 		private final String _skeletonId;
 		private final String _targetId;
-		private Method _method;
-		private int _index;
 
 	}
 
@@ -2558,16 +2557,6 @@ public class IntrabandProxyUtilTest {
 
 	private static abstract class TestExtractMethodsClass5 {
 
-		@Id
-		public String getId1() {
-			return null;
-		}
-
-		@Id
-		public String getId2() {
-			return null;
-		}
-
 		@Proxy
 		public void doStuff1() {
 		}
@@ -2582,6 +2571,24 @@ public class IntrabandProxyUtilTest {
 
 		public abstract void doStuff4();
 
+		@Id
+		public String getId1() {
+			return null;
+		}
+
+		@Id
+		public String getId2() {
+			return null;
+		}
+
+	}
+
+	private static abstract class TestGenerateClass1
+		extends TestProxyMethodsClass implements TestGenerateInterface1 {
+	}
+
+	private static abstract class TestGenerateClass2
+		extends TestProxyMethodsClass implements TestGenerateInterface2 {
 	}
 
 	private static class TestGenerateStubFunction1 {
@@ -2603,6 +2610,43 @@ public class IntrabandProxyUtilTest {
 					TestGenerateStubFunction1.class.getName() + " in <clinit>");
 			}
 		}
+
+	}
+
+	private static abstract class TestGenerateStubFunction2
+		extends TestProxyMethodsClass
+		implements TestEmptyMethodsInterface, TestIdMethodsInterface {
+
+		@SuppressWarnings("unused")
+		public void copyMethod1() {
+			if (_log.isInfoEnabled()) {
+				_log.info("copyMethod1");
+			}
+		}
+
+		@SuppressWarnings("unused")
+		protected void copyMethod2() {
+			if (_log.isInfoEnabled()) {
+				_log.info("copyMethod2");
+			}
+		}
+
+		@SuppressWarnings("unused")
+		void copyMethod3() {
+			if (_log.isInfoEnabled()) {
+				_log.info("copyMethod3");
+			}
+		}
+
+		@SuppressWarnings("unused")
+		private void copyMethod4() {
+			if (_log.isInfoEnabled()) {
+				_log.info("copyMethod4");
+			}
+		}
+
+		private static Log _log = LogFactoryUtil.getLog(
+			TestGenerateStubFunction2.class);
 
 	}
 
@@ -2656,6 +2700,29 @@ public class IntrabandProxyUtilTest {
 
 	}
 
+	private static abstract class TestProxyMethodsClass
+		implements TestProxyMethodsInterface {
+
+		@Proxy
+		protected abstract short syncCallShort(
+				boolean z, byte b, char c, double d, float f, int i, long j,
+				short s, String string, Date date, Object obj)
+			throws InterruptedException, IOException;
+
+		@Proxy
+		abstract Object syncCallObject(
+				boolean z, byte b, char c, double d, float f, int i, long j,
+				short s, String string, Date date, Object obj)
+			throws InterruptedException, IOException;
+
+		@Proxy
+		abstract String syncCallString(
+				boolean z, byte b, char c, double d, float f, int i, long j,
+				short s, String string, Date date, Object obj)
+			throws InterruptedException, IOException;
+
+	}
+
 	private static class TestValidateClass {
 
 		@SuppressWarnings("unused")
@@ -2689,62 +2756,25 @@ public class IntrabandProxyUtilTest {
 
 	private interface TestEmptyMethodsInterface {
 
-		public void testVoid();
-
-		public float testFloat();
-
-		public long testLong();
-
-		public double testDouble();
-
 		public boolean testBoolean();
-
-		public char testChar();
 
 		public byte testByte();
 
-		public short testShort();
+		public char testChar();
+
+		public double testDouble();
+
+		public float testFloat();
 
 		public int testInt();
 
+		public long testLong();
+
 		public Object testObject();
 
-	}
+		public short testShort();
 
-	private static abstract class TestGenerateStubFunction2
-		extends TestProxyMethodsClass
-		implements TestEmptyMethodsInterface, TestIdMethodsInterface {
-
-		@SuppressWarnings("unused")
-		public void copyMethod1() {
-			if (_log.isInfoEnabled()) {
-				_log.info("copyMethod1");
-			}
-		}
-
-		@SuppressWarnings("unused")
-		protected void copyMethod2() {
-			if (_log.isInfoEnabled()) {
-				_log.info("copyMethod2");
-			}
-		}
-
-		@SuppressWarnings("unused")
-		void copyMethod3() {
-			if (_log.isInfoEnabled()) {
-				_log.info("copyMethod3");
-			}
-		}
-
-		@SuppressWarnings("unused")
-		private void copyMethod4() {
-			if (_log.isInfoEnabled()) {
-				_log.info("copyMethod4");
-			}
-		}
-
-		private static Log _log = LogFactoryUtil.getLog(
-			TestGenerateStubFunction2.class);
+		public void testVoid();
 
 	}
 
@@ -2755,14 +2785,6 @@ public class IntrabandProxyUtilTest {
 
 	private interface TestGenerateInterface2
 		extends TestIdMethodsInterface, TestGenerateInterface1 {
-	}
-
-	private static abstract class TestGenerateClass1
-		extends TestProxyMethodsClass implements TestGenerateInterface1 {
-	}
-
-	private static abstract class TestGenerateClass2
-		extends TestProxyMethodsClass implements TestGenerateInterface2 {
 	}
 
 	private interface TestIdMethodsInterface {
@@ -2820,29 +2842,6 @@ public class IntrabandProxyUtilTest {
 
 		@Proxy
 		public long syncCallLong(
-				boolean z, byte b, char c, double d, float f, int i, long j,
-				short s, String string, Date date, Object obj)
-			throws InterruptedException, IOException;
-
-	}
-
-	private static abstract class TestProxyMethodsClass
-		implements TestProxyMethodsInterface {
-
-		@Proxy
-		protected abstract short syncCallShort(
-				boolean z, byte b, char c, double d, float f, int i, long j,
-				short s, String string, Date date, Object obj)
-			throws InterruptedException, IOException;
-
-		@Proxy
-		abstract Object syncCallObject(
-				boolean z, byte b, char c, double d, float f, int i, long j,
-				short s, String string, Date date, Object obj)
-			throws InterruptedException, IOException;
-
-		@Proxy
-		abstract String syncCallString(
 				boolean z, byte b, char c, double d, float f, int i, long j,
 				short s, String string, Date date, Object obj)
 			throws InterruptedException, IOException;

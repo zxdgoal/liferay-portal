@@ -94,9 +94,7 @@
 		<field name="taskExecutorClassName" type="String">
 			<hint name="max-length">200</hint>
 		</field>
-		<field name="taskContext" type="String">
-			<hint-collection name="CLOB" />
-		</field>
+		<field name="taskContextMap" type="Map" />
 		<field name="completed" type="boolean" />
 		<field name="completionDate" type="Date" />
 		<field name="status" type="int" />
@@ -535,7 +533,7 @@
 			<hint name="max-length">200</hint>
 		</field>
 		<field name="owner" type="String">
-			<hint name="max-length">255</hint>
+			<hint name="max-length">1024</hint>
 		</field>
 		<field name="inheritable" type="boolean" />
 		<field name="expirationDate" type="Date" />
@@ -1223,6 +1221,7 @@
 		<field name="title" type="String" />
 		<field name="content" type="String">
 			<hint-collection name="CLOB" />
+			<sanitize content-type="text/html" modes="ALL" />
 		</field>
 		<field name="url" type="String">
 			<hint-collection name="URL" />
@@ -1390,7 +1389,7 @@
 			<sanitize content-type="text/plain" modes="ALL" />
 			<validator name="required" />
 		</field>
-		<field name="deckTitle" type="String">
+		<field name="subtitle" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="urlTitle" type="String">
@@ -1411,6 +1410,7 @@
 			<hint-collection name="CLOB" />
 		</field>
 		<field name="smallImage" type="boolean" />
+		<field name="smallImageFileEntryId" type="long" />
 		<field name="smallImageId" type="long" />
 		<field name="smallImageURL" type="String">
 			<hint-collection name="URL" />
@@ -1557,6 +1557,9 @@
 		<field name="name" type="String">
 			<hint name="max-length">255</hint>
 		</field>
+		<field name="fileName" type="String">
+			<hint name="max-length">255</hint>
+		</field>
 		<field name="extension" type="String" />
 		<field name="mimeType" type="String" />
 		<field name="title" type="String">
@@ -1649,6 +1652,9 @@
 		<field name="fileEntryId" type="long" />
 		<field name="treePath" type="String">
 			<hint name="max-length">4000</hint>
+		</field>
+		<field name="fileName" type="String">
+			<hint name="max-length">255</hint>
 		</field>
 		<field name="extension" type="String" />
 		<field name="mimeType" type="String" />
@@ -1780,7 +1786,7 @@
 		<field name="description" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="xml" type="String">
+		<field name="data" type="String">
 			<hint-collection name="CLOB" />
 		</field>
 	</model>
@@ -1812,7 +1818,7 @@
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="xsd" type="String">
+		<field name="definition" type="String">
 			<hint-collection name="CLOB" />
 		</field>
 		<field name="storageType" type="String" />
@@ -1835,7 +1841,10 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="classNameId" type="long" />
 		<field name="classPK" type="long" />
-		<field name="templateKey" type="String" />
+		<field name="templateKey" type="String">
+			<hint name="upper-case">true</hint>
+			<hint name="auto-escape">false</hint>
+		</field>
 		<field name="name" type="String" localized="true">
 			<validator name="required" />
 		</field>
@@ -2287,56 +2296,6 @@
 		<field name="ruleGroupId" type="long" />
 		<field name="priority" type="int" />
 	</model>
-	<model name="com.liferay.portlet.polls.model.PollsChoice">
-		<field name="uuid" type="String" />
-		<field name="choiceId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="questionId" type="long" />
-		<field name="name" type="String" />
-		<field name="description" type="String" localized="true">
-			<hint name="max-length">1000</hint>
-		</field>
-	</model>
-	<model name="com.liferay.portlet.polls.model.PollsQuestion">
-		<field name="uuid" type="String" />
-		<field name="questionId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="title" type="String" localized="true">
-			<hint name="max-length">500</hint>
-			<validator name="required" />
-		</field>
-		<field name="description" type="String" localized="true">
-			<hint-collection name="TEXTAREA" />
-			<validator name="required" />
-		</field>
-		<field name="expirationDate" type="Date">
-			<hint name="default-month-delta">1</hint>
-		</field>
-		<field name="lastVoteDate" type="Date" />
-	</model>
-	<model name="com.liferay.portlet.polls.model.PollsVote">
-		<field name="uuid" type="String" />
-		<field name="voteId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="questionId" type="long" />
-		<field name="choiceId" type="long" />
-		<field name="voteDate" type="Date" />
-	</model>
 	<model name="com.liferay.portlet.ratings.model.RatingsEntry">
 		<field name="uuid" type="String" />
 		<field name="entryId" type="long" />
@@ -2565,7 +2524,9 @@
 	<model name="com.liferay.portlet.shopping.model.ShoppingOrderItem">
 		<field name="orderItemId" type="long" />
 		<field name="orderId" type="long" />
-		<field name="itemId" type="String" />
+		<field name="itemId" type="String">
+			<hint-collection name="CLOB" />
+		</field>
 		<field name="sku" type="String" />
 		<field name="name" type="String">
 			<hint name="max-length">200</hint>

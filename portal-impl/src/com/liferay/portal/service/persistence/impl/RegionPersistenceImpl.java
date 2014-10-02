@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchRegionException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,17 +27,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.model.impl.RegionImpl;
 import com.liferay.portal.model.impl.RegionModelImpl;
@@ -43,7 +41,6 @@ import com.liferay.portal.service.persistence.RegionPersistence;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +61,7 @@ import java.util.Set;
  * @see RegionUtil
  * @generated
  */
+@ProviderType
 public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	implements RegionPersistence {
 	/*
@@ -151,7 +149,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public List<Region> findByCountryId(long countryId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -257,7 +255,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByCountryId_First(long countryId,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByCountryId_First(countryId, orderByComparator);
 
 		if (region != null) {
@@ -285,7 +284,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByCountryId_First(long countryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		List<Region> list = findByCountryId(countryId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -305,7 +304,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByCountryId_Last(long countryId,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByCountryId_Last(countryId, orderByComparator);
 
 		if (region != null) {
@@ -333,7 +333,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByCountryId_Last(long countryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		int count = countByCountryId(countryId);
 
 		if (count == 0) {
@@ -361,7 +361,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region[] findByCountryId_PrevAndNext(long regionId, long countryId,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = findByPrimaryKey(regionId);
 
 		Session session = null;
@@ -390,7 +391,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	protected Region getByCountryId_PrevAndNext(Session session, Region region,
-		long countryId, OrderByComparator orderByComparator, boolean previous) {
+		long countryId, OrderByComparator<Region> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -623,7 +625,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public List<Region> findByActive(boolean active, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -729,7 +731,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByActive_First(boolean active,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByActive_First(active, orderByComparator);
 
 		if (region != null) {
@@ -757,7 +760,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByActive_First(boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		List<Region> list = findByActive(active, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -777,7 +780,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByActive_Last(boolean active,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByActive_Last(active, orderByComparator);
 
 		if (region != null) {
@@ -805,7 +809,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByActive_Last(boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		int count = countByActive(active);
 
 		if (count == 0) {
@@ -833,7 +837,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region[] findByActive_PrevAndNext(long regionId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = findByPrimaryKey(regionId);
 
 		Session session = null;
@@ -862,7 +867,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	protected Region getByActive_PrevAndNext(Session session, Region region,
-		boolean active, OrderByComparator orderByComparator, boolean previous) {
+		boolean active, OrderByComparator<Region> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1356,7 +1362,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public List<Region> findByC_A(long countryId, boolean active, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<Region> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1472,7 +1478,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByC_A_First(long countryId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByC_A_First(countryId, active, orderByComparator);
 
 		if (region != null) {
@@ -1504,7 +1511,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByC_A_First(long countryId, boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		List<Region> list = findByC_A(countryId, active, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1525,7 +1532,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region findByC_A_Last(long countryId, boolean active,
-		OrderByComparator orderByComparator) throws NoSuchRegionException {
+		OrderByComparator<Region> orderByComparator)
+		throws NoSuchRegionException {
 		Region region = fetchByC_A_Last(countryId, active, orderByComparator);
 
 		if (region != null) {
@@ -1557,7 +1565,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region fetchByC_A_Last(long countryId, boolean active,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		int count = countByC_A(countryId, active);
 
 		if (count == 0) {
@@ -1586,7 +1594,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public Region[] findByC_A_PrevAndNext(long regionId, long countryId,
-		boolean active, OrderByComparator orderByComparator)
+		boolean active, OrderByComparator<Region> orderByComparator)
 		throws NoSuchRegionException {
 		Region region = findByPrimaryKey(regionId);
 
@@ -1616,8 +1624,8 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	}
 
 	protected Region getByC_A_PrevAndNext(Session session, Region region,
-		long countryId, boolean active, OrderByComparator orderByComparator,
-		boolean previous) {
+		long countryId, boolean active,
+		OrderByComparator<Region> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2382,7 +2390,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 */
 	@Override
 	public List<Region> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Region> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2518,25 +2526,6 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	 * Initializes the region persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.Region")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<Region>> listenersList = new ArrayList<ModelListener<Region>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<Region>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2555,11 +2544,11 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Region exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Region exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(RegionPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(RegionPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"active"
 			});
-	private static Region _nullRegion = new RegionImpl() {
+	private static final Region _nullRegion = new RegionImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2571,7 +2560,7 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 			}
 		};
 
-	private static CacheModel<Region> _nullRegionCacheModel = new NullCacheModel();
+	private static final CacheModel<Region> _nullRegionCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<Region>,
 		MVCCModel {

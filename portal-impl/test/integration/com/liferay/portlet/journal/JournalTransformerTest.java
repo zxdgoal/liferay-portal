@@ -25,8 +25,8 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.test.DeleteAfterTestRun;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
@@ -70,10 +70,10 @@ public class JournalTransformerTest {
 
 		JournalTestUtil.addMetadataElement(linkElement, "en_US", "link");
 
-		String xsd = document.asXML();
+		String definition = document.asXML();
 
 		_ddmStructure = DDMStructureTestUtil.addStructure(
-			JournalArticle.class.getName(), xsd);
+			JournalArticle.class.getName(), definition);
 
 		String xsl = "$name.getData()";
 

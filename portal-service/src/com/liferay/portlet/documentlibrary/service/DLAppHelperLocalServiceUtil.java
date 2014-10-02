@@ -40,25 +40,6 @@ public class DLAppHelperLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.documentlibrary.service.impl.DLAppHelperLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
 	public static void addFileEntry(long userId,
 		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
 		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
@@ -110,6 +91,15 @@ public class DLAppHelperLocalServiceUtil {
 		getService().deleteRepositoryFileEntries(repositoryId);
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
 	public static void getFileAsStream(long userId,
 		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
 		boolean incrementCounter) {
@@ -157,12 +147,6 @@ public class DLAppHelperLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 		getService()
 			.moveDependentsToTrash(dlFileEntriesAndDLFolders, trashEntryId);
-	}
-
-	public static void moveFileEntry(
-		com.liferay.portal.kernel.repository.model.FileEntry fileEntry)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		getService().moveFileEntry(fileEntry);
 	}
 
 	public static com.liferay.portal.kernel.repository.model.FileEntry moveFileEntryFromTrash(
@@ -217,11 +201,6 @@ public class DLAppHelperLocalServiceUtil {
 		return getService().moveFileShortcutToTrash(userId, dlFileShortcut);
 	}
 
-	public static void moveFolder(
-		com.liferay.portal.kernel.repository.model.Folder folder) {
-		getService().moveFolder(folder);
-	}
-
 	public static com.liferay.portal.kernel.repository.model.Folder moveFolderFromTrash(
 		long userId, com.liferay.portal.kernel.repository.model.Folder folder,
 		long parentFolderId,
@@ -246,17 +225,17 @@ public class DLAppHelperLocalServiceUtil {
 		return getService().moveFolderToTrash(userId, folder);
 	}
 
-	public static void registerDLSyncEventCallback(java.lang.String event,
-		com.liferay.portal.kernel.repository.model.FileEntry fileEntry)
+	public static void restoreDependentsFromTrash(
+		java.util.List<java.lang.Object> dlFileEntriesAndDLFolders)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		getService().registerDLSyncEventCallback(event, fileEntry);
+		getService().restoreDependentsFromTrash(dlFileEntriesAndDLFolders);
 	}
 
-	public static void registerDLSyncEventCallback(java.lang.String event,
-		com.liferay.portal.kernel.repository.model.Folder folder) {
-		getService().registerDLSyncEventCallback(event, folder);
-	}
-
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link
+	#restoreDependentsFromTrash(List)}
+	*/
+	@Deprecated
 	public static void restoreDependentsFromTrash(
 		java.util.List<java.lang.Object> dlFileEntriesAndDLFolders,
 		long trashEntryId)
@@ -283,14 +262,13 @@ public class DLAppHelperLocalServiceUtil {
 		getService().restoreFolderFromTrash(userId, folder);
 	}
 
-	public static com.liferay.portlet.asset.model.AssetEntry updateAsset(
-		long userId,
-		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
-		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
-		long assetClassPk)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService()
-				   .updateAsset(userId, fileEntry, fileVersion, assetClassPk);
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	public static com.liferay.portlet.asset.model.AssetEntry updateAsset(
@@ -303,6 +281,16 @@ public class DLAppHelperLocalServiceUtil {
 		return getService()
 				   .updateAsset(userId, fileEntry, fileVersion,
 			assetCategoryIds, assetTagNames, assetLinkEntryIds);
+	}
+
+	public static com.liferay.portlet.asset.model.AssetEntry updateAsset(
+		long userId,
+		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
+		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
+		long assetClassPk)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .updateAsset(userId, fileEntry, fileVersion, assetClassPk);
 	}
 
 	public static com.liferay.portlet.asset.model.AssetEntry updateAsset(

@@ -16,8 +16,8 @@ package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 
 import java.io.InputStream;
 
@@ -78,11 +78,9 @@ public class FileImplExtractTest {
 
 		Assert.assertEquals("Extract test.", text);
 
-		// PDFBOX-890
+		text = extractText("test.pdf");
 
-		//text = _extractText("test.pdf");
-
-		//assertEquals("Extract test.", text);
+		Assert.assertEquals("Extract test.", text);
 	}
 
 	@Test

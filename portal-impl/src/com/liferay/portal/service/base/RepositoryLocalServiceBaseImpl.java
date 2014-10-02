@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -83,6 +85,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.RepositoryLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class RepositoryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements RepositoryLocalService,
 		IdentifiableBean {
@@ -158,8 +161,7 @@ public abstract class RepositoryLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return repositoryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -176,8 +178,8 @@ public abstract class RepositoryLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return repositoryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end);
 	}
@@ -196,9 +198,8 @@ public abstract class RepositoryLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return repositoryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -231,19 +232,6 @@ public abstract class RepositoryLocalServiceBaseImpl
 	@Override
 	public Repository fetchRepository(long repositoryId) {
 		return repositoryPersistence.fetchByPrimaryKey(repositoryId);
-	}
-
-	/**
-	 * Returns the repository with the matching UUID and company.
-	 *
-	 * @param uuid the repository's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching repository, or <code>null</code> if a matching repository could not be found
-	 */
-	@Override
-	public Repository fetchRepositoryByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return repositoryPersistence.fetchByUuid_C_First(uuid, companyId, null);
 	}
 
 	/**
@@ -364,7 +352,7 @@ public abstract class RepositoryLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteRepository((Repository)persistedModel);
+		return repositoryLocalService.deleteRepository((Repository)persistedModel);
 	}
 
 	@Override
@@ -373,18 +361,18 @@ public abstract class RepositoryLocalServiceBaseImpl
 		return repositoryPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the repository with the matching UUID and company.
-	 *
-	 * @param uuid the repository's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching repository
-	 * @throws PortalException if a matching repository could not be found
-	 */
 	@Override
-	public Repository getRepositoryByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return repositoryPersistence.findByUuid_C_First(uuid, companyId, null);
+	public List<Repository> getRepositoriesByUuidAndCompanyId(String uuid,
+		long companyId) {
+		return repositoryPersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<Repository> getRepositoriesByUuidAndCompanyId(String uuid,
+		long companyId, int start, int end,
+		OrderByComparator<Repository> orderByComparator) {
+		return repositoryPersistence.findByUuid_C(uuid, companyId, start, end,
+			orderByComparator);
 	}
 
 	/**

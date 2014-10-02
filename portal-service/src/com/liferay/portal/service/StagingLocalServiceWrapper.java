@@ -30,26 +30,6 @@ public class StagingLocalServiceWrapper implements StagingLocalService,
 		_stagingLocalService = stagingLocalService;
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _stagingLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_stagingLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
 	@Override
 	public void checkDefaultLayoutSetBranches(long userId,
 		com.liferay.portal.model.Group liveGroup, boolean branchingPublic,
@@ -102,15 +82,25 @@ public class StagingLocalServiceWrapper implements StagingLocalService,
 
 	@Override
 	public void enableRemoteStaging(long userId,
-		com.liferay.portal.model.Group liveGroup, boolean branchingPublic,
+		com.liferay.portal.model.Group stagingGroup, boolean branchingPublic,
 		boolean branchingPrivate, java.lang.String remoteAddress,
 		int remotePort, java.lang.String remotePathContext,
 		boolean secureConnection, long remoteGroupId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		_stagingLocalService.enableRemoteStaging(userId, liveGroup,
+		_stagingLocalService.enableRemoteStaging(userId, stagingGroup,
 			branchingPublic, branchingPrivate, remoteAddress, remotePort,
 			remotePathContext, secureConnection, remoteGroupId, serviceContext);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _stagingLocalService.getBeanIdentifier();
 	}
 
 	@Override
@@ -120,6 +110,16 @@ public class StagingLocalServiceWrapper implements StagingLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_stagingLocalService.publishStagingRequest(userId, stagingRequestId,
 			privateLayout, parameterMap);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_stagingLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	@Override

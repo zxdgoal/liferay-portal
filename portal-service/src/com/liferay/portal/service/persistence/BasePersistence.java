@@ -117,8 +117,7 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	public T fetchByPrimaryKey(Serializable primaryKey);
 
 	public Map<Serializable, T> fetchByPrimaryKeys(
-			Set<Serializable> primaryKeys)
-		throws SystemException;
+		Set<Serializable> primaryKeys);
 
 	/**
 	 * Returns the model instance with the primary key or throws a {@link
@@ -132,7 +131,7 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	 *         system exception occurred
 	 */
 	public T findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException;
+		throws NoSuchModelException;
 
 	/**
 	 * Performs a dynamic query on the database and returns the matching rows.
@@ -140,8 +139,7 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	 * @param  dynamicQuery the dynamic query
 	 * @return the matching rows
 	 */
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(DynamicQuery dynamicQuery);
+	public <V> List<V> findWithDynamicQuery(DynamicQuery dynamicQuery);
 
 	/**
 	 * Performs a dynamic query on the database and returns a range of the
@@ -165,8 +163,7 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	 *         com.liferay.portal.kernel.dao.orm.Query,
 	 *         com.liferay.portal.kernel.dao.orm.Dialect, int, int)
 	 */
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(
+	public <V> List<V> findWithDynamicQuery(
 		DynamicQuery dynamicQuery, int start, int end);
 
 	/**
@@ -190,10 +187,9 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	 *         (optionally <code>null</code>)
 	 * @return the ordered range of matching rows
 	 */
-	@SuppressWarnings("rawtypes")
-	public List findWithDynamicQuery(
+	public <V> List<V> findWithDynamicQuery(
 		DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator);
+		OrderByComparator<V> orderByComparator);
 
 	public void flush();
 
@@ -242,8 +238,7 @@ public interface BasePersistence<T extends BaseModel<T>> {
 	 * @throws NoSuchModelException if an instance of this model with the
 	 *         primary key could not be found
 	 */
-	public T remove(Serializable primaryKey)
-		throws NoSuchModelException, SystemException;
+	public T remove(Serializable primaryKey) throws NoSuchModelException;
 
 	/**
 	 * Removes the model instance from the database. Also notifies the

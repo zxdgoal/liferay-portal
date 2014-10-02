@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -25,8 +27,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.documentlibrary.NoSuchContentException;
@@ -45,7 +44,6 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLContentPersiste
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +64,7 @@ import java.util.Set;
  * @see DLContentUtil
  * @generated
  */
+@ProviderType
 public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	implements DLContentPersistence {
 	/*
@@ -156,7 +155,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public List<DLContent> findByC_R(long companyId, long repositoryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLContent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -272,7 +271,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_First(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) throws NoSuchContentException {
+		OrderByComparator<DLContent> orderByComparator)
+		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_First(companyId, repositoryId,
 				orderByComparator);
 
@@ -305,7 +305,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_First(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLContent> orderByComparator) {
 		List<DLContent> list = findByC_R(companyId, repositoryId, 0, 1,
 				orderByComparator);
 
@@ -327,7 +327,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_Last(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) throws NoSuchContentException {
+		OrderByComparator<DLContent> orderByComparator)
+		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_Last(companyId, repositoryId,
 				orderByComparator);
 
@@ -360,7 +361,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_Last(long companyId, long repositoryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLContent> orderByComparator) {
 		int count = countByC_R(companyId, repositoryId);
 
 		if (count == 0) {
@@ -389,7 +390,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent[] findByC_R_PrevAndNext(long contentId, long companyId,
-		long repositoryId, OrderByComparator orderByComparator)
+		long repositoryId, OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = findByPrimaryKey(contentId);
 
@@ -420,7 +421,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 	protected DLContent getByC_R_PrevAndNext(Session session,
 		DLContent dlContent, long companyId, long repositoryId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLContent> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -681,7 +682,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public List<DLContent> findByC_R_P(long companyId, long repositoryId,
-		String path, int start, int end, OrderByComparator orderByComparator) {
+		String path, int start, int end,
+		OrderByComparator<DLContent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -817,7 +819,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_P_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
+		String path, OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_P_First(companyId, repositoryId, path,
 				orderByComparator);
@@ -855,7 +857,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_P_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator) {
+		String path, OrderByComparator<DLContent> orderByComparator) {
 		List<DLContent> list = findByC_R_P(companyId, repositoryId, path, 0, 1,
 				orderByComparator);
 
@@ -878,7 +880,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_P_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
+		String path, OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_P_Last(companyId, repositoryId, path,
 				orderByComparator);
@@ -916,7 +918,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_P_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator) {
+		String path, OrderByComparator<DLContent> orderByComparator) {
 		int count = countByC_R_P(companyId, repositoryId, path);
 
 		if (count == 0) {
@@ -946,7 +948,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent[] findByC_R_P_PrevAndNext(long contentId, long companyId,
-		long repositoryId, String path, OrderByComparator orderByComparator)
+		long repositoryId, String path,
+		OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = findByPrimaryKey(contentId);
 
@@ -977,7 +980,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 	protected DLContent getByC_R_P_PrevAndNext(Session session,
 		DLContent dlContent, long companyId, long repositoryId, String path,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLContent> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1270,7 +1273,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public List<DLContent> findByC_R_LikeP(long companyId, long repositoryId,
-		String path, int start, int end, OrderByComparator orderByComparator) {
+		String path, int start, int end,
+		OrderByComparator<DLContent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1400,7 +1404,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_LikeP_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
+		String path, OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_LikeP_First(companyId, repositoryId,
 				path, orderByComparator);
@@ -1438,7 +1442,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_LikeP_First(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator) {
+		String path, OrderByComparator<DLContent> orderByComparator) {
 		List<DLContent> list = findByC_R_LikeP(companyId, repositoryId, path,
 				0, 1, orderByComparator);
 
@@ -1461,7 +1465,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent findByC_R_LikeP_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator)
+		String path, OrderByComparator<DLContent> orderByComparator)
 		throws NoSuchContentException {
 		DLContent dlContent = fetchByC_R_LikeP_Last(companyId, repositoryId,
 				path, orderByComparator);
@@ -1499,7 +1503,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public DLContent fetchByC_R_LikeP_Last(long companyId, long repositoryId,
-		String path, OrderByComparator orderByComparator) {
+		String path, OrderByComparator<DLContent> orderByComparator) {
 		int count = countByC_R_LikeP(companyId, repositoryId, path);
 
 		if (count == 0) {
@@ -1530,7 +1534,8 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	@Override
 	public DLContent[] findByC_R_LikeP_PrevAndNext(long contentId,
 		long companyId, long repositoryId, String path,
-		OrderByComparator orderByComparator) throws NoSuchContentException {
+		OrderByComparator<DLContent> orderByComparator)
+		throws NoSuchContentException {
 		DLContent dlContent = findByPrimaryKey(contentId);
 
 		Session session = null;
@@ -1560,7 +1565,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 	protected DLContent getByC_R_LikeP_PrevAndNext(Session session,
 		DLContent dlContent, long companyId, long repositoryId, String path,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLContent> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2716,7 +2721,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 */
 	@Override
 	public List<DLContent> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLContent> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2852,25 +2857,6 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	 * Initializes the document library content persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.documentlibrary.model.DLContent")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DLContent>> listenersList = new ArrayList<ModelListener<DLContent>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DLContent>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2889,11 +2875,11 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLContent exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLContent exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DLContentPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DLContentPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"path", "data", "size"
 			});
-	private static DLContent _nullDLContent = new DLContentImpl() {
+	private static final DLContent _nullDLContent = new DLContentImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2905,7 +2891,7 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 			}
 		};
 
-	private static CacheModel<DLContent> _nullDLContentCacheModel = new CacheModel<DLContent>() {
+	private static final CacheModel<DLContent> _nullDLContentCacheModel = new CacheModel<DLContent>() {
 			@Override
 			public DLContent toEntityModel() {
 				return _nullDLContent;

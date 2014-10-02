@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.portal.kernel.lar.PortletDataHandlerStatusMessageSenderUtil;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.lar.UserIdStrategy;
+import com.liferay.portal.kernel.lar.xstream.XStreamAliasRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
@@ -65,6 +66,7 @@ import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.impl.LayoutImpl;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -299,11 +301,6 @@ public class LayoutImporter {
 		ManifestSummary manifestSummary =
 			ExportImportHelperUtil.getManifestSummary(portletDataContext);
 
-		if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
-			PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
-				"layout", manifestSummary);
-		}
-
 		portletDataContext.setManifestSummary(manifestSummary);
 
 		// Layout and layout set prototype
@@ -443,12 +440,32 @@ public class LayoutImporter {
 				groupId, privateLayout, settings);
 		}
 
-		// Read asset tags, expando tables, locks, and permissions to make them
-		// available to the data handlers through the context
-
 		Element portletsElement = rootElement.element("portlets");
 
 		List<Element> portletElements = portletsElement.elements("portlet");
+
+		if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
+			List<String> portletIds = new ArrayList<String>();
+
+			for (Element portletElement : portletElements) {
+				String portletId = portletElement.attributeValue("portlet-id");
+
+				Portlet portlet = PortletLocalServiceUtil.getPortletById(
+					portletDataContext.getCompanyId(), portletId);
+
+				if (!portlet.isActive() || portlet.isUndeployedPortlet()) {
+					continue;
+				}
+
+				portletIds.add(portletId);
+			}
+
+			PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+				"layout", ArrayUtil.toStringArray(portletIds), manifestSummary);
+		}
+
+		// Read asset tags, expando tables, locks, and permissions to make them
+		// available to the data handlers through the portlet data context
 
 		if (importPermissions) {
 			for (Element portletElement : portletElements) {
@@ -595,6 +612,11 @@ public class LayoutImporter {
 			portletDataContext.setPlid(plid);
 			portletDataContext.setOldPlid(oldPlid);
 
+			if (BackgroundTaskThreadLocal.hasBackgroundTask()) {
+				PortletDataHandlerStatusMessageSenderUtil.sendStatusMessage(
+					"portlet", portletId, manifestSummary);
+			}
+
 			Document portletDocument = SAXReaderUtil.read(
 				portletDataContext.getZipEntryAsString(portletPath));
 
@@ -726,6 +748,11 @@ public class LayoutImporter {
 
 		GroupLocalServiceUtil.updateSite(groupId, true);
 
+		// Page priorities
+
+		updateLayoutPriorities(
+			portletDataContext, layoutElements, privateLayout);
+
 		// Last merge time is updated only if there aren not any modified
 		// layouts
 
@@ -774,11 +801,6 @@ public class LayoutImporter {
 				LayoutSetLocalServiceUtil.updateLayoutSet(layoutSet);
 			}
 		}
-
-		// Page priorities
-
-		updateLayoutPriorities(
-			portletDataContext, layoutElements, privateLayout);
 
 		// Deletion system events
 
@@ -1147,6 +1169,7 @@ public class LayoutImporter {
 	}
 
 	private LayoutImporter() {
+		XStreamAliasRegistryUtil.register(LayoutImpl.class, "Layout");
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(LayoutImporter.class);

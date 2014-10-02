@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.social.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,16 +26,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.social.NoSuchActivityCounterException;
@@ -44,7 +42,6 @@ import com.liferay.portlet.social.service.persistence.SocialActivityCounterPersi
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,6 +62,7 @@ import java.util.Set;
  * @see SocialActivityCounterUtil
  * @generated
  */
+@ProviderType
 public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<SocialActivityCounter>
 	implements SocialActivityCounterPersistence {
 	/*
@@ -154,7 +152,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public List<SocialActivityCounter> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<SocialActivityCounter> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -260,7 +258,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter findByGroupId_First(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByGroupId_First(groupId,
 				orderByComparator);
@@ -290,7 +288,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter fetchByGroupId_First(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		List<SocialActivityCounter> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
@@ -311,7 +309,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter findByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByGroupId_Last(groupId,
 				orderByComparator);
@@ -341,7 +339,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter fetchByGroupId_Last(long groupId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		int count = countByGroupId(groupId);
 
 		if (count == 0) {
@@ -370,7 +368,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter[] findByGroupId_PrevAndNext(
 		long activityCounterId, long groupId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = findByPrimaryKey(activityCounterId);
 
@@ -401,7 +399,8 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 	protected SocialActivityCounter getByGroupId_PrevAndNext(Session session,
 		SocialActivityCounter socialActivityCounter, long groupId,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialActivityCounter> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -640,7 +639,8 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public List<SocialActivityCounter> findByC_C(long classNameId,
-		long classPK, int start, int end, OrderByComparator orderByComparator) {
+		long classPK, int start, int end,
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -756,7 +756,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter findByC_C_First(long classNameId,
-		long classPK, OrderByComparator orderByComparator)
+		long classPK, OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByC_C_First(classNameId,
 				classPK, orderByComparator);
@@ -790,7 +790,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter fetchByC_C_First(long classNameId,
-		long classPK, OrderByComparator orderByComparator) {
+		long classPK, OrderByComparator<SocialActivityCounter> orderByComparator) {
 		List<SocialActivityCounter> list = findByC_C(classNameId, classPK, 0,
 				1, orderByComparator);
 
@@ -812,7 +812,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByC_C_Last(classNameId,
 				classPK, orderByComparator);
@@ -846,7 +846,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public SocialActivityCounter fetchByC_C_Last(long classNameId,
-		long classPK, OrderByComparator orderByComparator) {
+		long classPK, OrderByComparator<SocialActivityCounter> orderByComparator) {
 		int count = countByC_C(classNameId, classPK);
 
 		if (count == 0) {
@@ -876,7 +876,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter[] findByC_C_PrevAndNext(
 		long activityCounterId, long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = findByPrimaryKey(activityCounterId);
 
@@ -907,7 +907,9 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 	protected SocialActivityCounter getByC_C_PrevAndNext(Session session,
 		SocialActivityCounter socialActivityCounter, long classNameId,
-		long classPK, OrderByComparator orderByComparator, boolean previous) {
+		long classPK,
+		OrderByComparator<SocialActivityCounter> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1176,7 +1178,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public List<SocialActivityCounter> findByG_C_C_O(long groupId,
 		long classNameId, long classPK, int ownerType, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1305,7 +1307,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter findByG_C_C_O_First(long groupId,
 		long classNameId, long classPK, int ownerType,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByG_C_C_O_First(groupId,
 				classNameId, classPK, ownerType, orderByComparator);
@@ -1348,7 +1350,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter fetchByG_C_C_O_First(long groupId,
 		long classNameId, long classPK, int ownerType,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		List<SocialActivityCounter> list = findByG_C_C_O(groupId, classNameId,
 				classPK, ownerType, 0, 1, orderByComparator);
 
@@ -1373,7 +1375,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter findByG_C_C_O_Last(long groupId,
 		long classNameId, long classPK, int ownerType,
-		OrderByComparator orderByComparator)
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = fetchByG_C_C_O_Last(groupId,
 				classNameId, classPK, ownerType, orderByComparator);
@@ -1416,7 +1418,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter fetchByG_C_C_O_Last(long groupId,
 		long classNameId, long classPK, int ownerType,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		int count = countByG_C_C_O(groupId, classNameId, classPK, ownerType);
 
 		if (count == 0) {
@@ -1448,7 +1450,8 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	@Override
 	public SocialActivityCounter[] findByG_C_C_O_PrevAndNext(
 		long activityCounterId, long groupId, long classNameId, long classPK,
-		int ownerType, OrderByComparator orderByComparator)
+		int ownerType,
+		OrderByComparator<SocialActivityCounter> orderByComparator)
 		throws NoSuchActivityCounterException {
 		SocialActivityCounter socialActivityCounter = findByPrimaryKey(activityCounterId);
 
@@ -1482,7 +1485,8 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	protected SocialActivityCounter getByG_C_C_O_PrevAndNext(Session session,
 		SocialActivityCounter socialActivityCounter, long groupId,
 		long classNameId, long classPK, int ownerType,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<SocialActivityCounter> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -3118,7 +3122,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 */
 	@Override
 	public List<SocialActivityCounter> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<SocialActivityCounter> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3254,25 +3258,6 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 * Initializes the social activity counter persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.social.model.SocialActivityCounter")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<SocialActivityCounter>> listenersList = new ArrayList<ModelListener<SocialActivityCounter>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<SocialActivityCounter>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3291,11 +3276,11 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SocialActivityCounter exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SocialActivityCounter exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(SocialActivityCounterPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(SocialActivityCounterPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"active"
 			});
-	private static SocialActivityCounter _nullSocialActivityCounter = new SocialActivityCounterImpl() {
+	private static final SocialActivityCounter _nullSocialActivityCounter = new SocialActivityCounterImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3307,7 +3292,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 			}
 		};
 
-	private static CacheModel<SocialActivityCounter> _nullSocialActivityCounterCacheModel =
+	private static final CacheModel<SocialActivityCounter> _nullSocialActivityCounterCacheModel =
 		new CacheModel<SocialActivityCounter>() {
 			@Override
 			public SocialActivityCounter toEntityModel() {

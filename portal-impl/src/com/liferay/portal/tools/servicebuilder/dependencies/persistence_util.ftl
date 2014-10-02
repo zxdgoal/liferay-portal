@@ -1,8 +1,8 @@
 package ${packagePath}.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import ${packagePath}.model.${entity.name};
+
+import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
@@ -30,11 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see ${entity.name}PersistenceImpl
  * @generated
  */
-
-<#if pluginName == "">
-	@ProviderType
-</#if>
-
+@ProviderType
 public class ${entity.name}Util {
 
 	/*
@@ -81,7 +77,7 @@ public class ${entity.name}Util {
 	/**
 	 * @see com.liferay.portal.service.persistence.BasePersistence#findWithDynamicQuery(DynamicQuery, int, int, OrderByComparator)
 	 */
-	public static List<${entity.name}> findWithDynamicQuery(DynamicQuery dynamicQuery, int start, int end, OrderByComparator orderByComparator) {
+	public static List<${entity.name}> findWithDynamicQuery(DynamicQuery dynamicQuery, int start, int end, OrderByComparator<${entity.name}> orderByComparator) {
 		return getPersistence().findWithDynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 

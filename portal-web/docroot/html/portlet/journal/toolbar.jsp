@@ -17,8 +17,6 @@
 <%@ include file="/html/portlet/journal/init.jsp" %>
 
 <%
-String strutsAction = ParamUtil.getString(request, "struts_action");
-
 long folderId = GetterUtil.getLong((String)liferayPortletRequest.getAttribute("view.jsp-folderId"));
 
 PortletURL portletURL = liferayPortletResponse.createRenderURL();
@@ -27,10 +25,17 @@ portletURL.setParameter("struts_action", "/journal/view");
 portletURL.setParameter("folderId", String.valueOf(folderId));
 %>
 
-<aui:form action="<%= portletURL.toString() %>" method="post" name="fm1" onSubmit="event.preventDefault();">
+<aui:form action="<%= portletURL.toString() %>" method="post" name="fm1">
 	<aui:nav-bar>
 		<aui:nav collapsible="<%= true %>" cssClass="nav-display-style-buttons navbar-nav" icon="th-list" id="displayStyleButtons">
-			<c:if test='<%= !strutsAction.equals("/journal/search") %>'>
+
+			<%
+			String keywords = ParamUtil.getString(request, "keywords");
+
+			boolean advancedSearch = ParamUtil.getBoolean(liferayPortletRequest, ArticleDisplayTerms.ADVANCED_SEARCH);
+			%>
+
+			<c:if test="<%= Validator.isNull(keywords) && !advancedSearch %>">
 				<liferay-util:include page="/html/portlet/journal/display_style_buttons.jsp" />
 			</c:if>
 		</aui:nav>
@@ -87,7 +92,7 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 			</c:if>
 		</aui:nav>
 
-		<aui:nav-bar-search cssClass="navbar-search-advanced" file="/html/portlet/journal/article_search.jsp" />
+		<aui:nav-bar-search file="/html/portlet/journal/article_search.jsp" />
 	</aui:nav-bar>
 </aui:form>
 
@@ -97,7 +102,7 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 			Liferay.Util.openWindow(
 				{
 					id: '<portlet:namespace />openFeedsView',
-					title: '<%= UnicodeLanguageUtil.get(pageContext, "feeds") %>',
+					title: '<%= UnicodeLanguageUtil.get(request, "feeds") %>',
 					uri: '<liferay-portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/journal/view_feeds" /></liferay-portlet:renderURL>'
 				}
 			);
@@ -109,7 +114,7 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 	%>
 
 	function <portlet:namespace />deleteEntries() {
-		if (<%= TrashUtil.isTrashEnabled(scopeGroupId) %> || confirm(' <%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-entries") %>')) {
+		if (<%= TrashUtil.isTrashEnabled(scopeGroupId) %> || confirm(' <%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-the-selected-entries") %>')) {
 			Liferay.fire(
 				'<%= renderResponse.getNamespace() %>editEntry',
 				{
@@ -137,7 +142,7 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
 				showAncestorScopes: true,
 				showManageTemplates: true,
-				title: '<%= UnicodeLanguageUtil.get(pageContext, "structures") %>'
+				title: '<%= UnicodeLanguageUtil.get(request, "structures") %>'
 			}
 		);
 	}
@@ -156,7 +161,7 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 				showAncestorScopes: true,
 				showHeader: false,
 				struts_action: '/dynamic_data_mapping/view_template',
-				title: '<%= UnicodeLanguageUtil.get(pageContext, "templates") %>'
+				title: '<%= UnicodeLanguageUtil.get(request, "templates") %>'
 			}
 		);
 	}

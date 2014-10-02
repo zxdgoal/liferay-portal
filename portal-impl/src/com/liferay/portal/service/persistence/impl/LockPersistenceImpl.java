@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.NoSuchLockException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -25,19 +27,15 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.MVCCModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.LockImpl;
 import com.liferay.portal.model.impl.LockModelImpl;
 import com.liferay.portal.service.persistence.LockPersistence;
@@ -46,7 +44,6 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +65,7 @@ import java.util.Set;
  * @see LockUtil
  * @generated
  */
+@ProviderType
 public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	implements LockPersistence {
 	/*
@@ -151,7 +149,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public List<Lock> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -271,7 +269,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock findByUuid_First(String uuid,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByUuid_First(uuid, orderByComparator);
 
 		if (lock != null) {
@@ -299,7 +297,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		List<Lock> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -318,8 +316,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 * @throws com.liferay.portal.NoSuchLockException if a matching lock could not be found
 	 */
 	@Override
-	public Lock findByUuid_Last(String uuid, OrderByComparator orderByComparator)
-		throws NoSuchLockException {
+	public Lock findByUuid_Last(String uuid,
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (lock != null) {
@@ -347,7 +345,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -374,7 +372,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock[] findByUuid_PrevAndNext(long lockId, String uuid,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = findByPrimaryKey(lockId);
 
 		Session session = null;
@@ -403,7 +401,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	protected Lock getByUuid_PrevAndNext(Session session, Lock lock,
-		String uuid, OrderByComparator orderByComparator, boolean previous) {
+		String uuid, OrderByComparator<Lock> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -671,7 +669,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public List<Lock> findByUuid_C(String uuid, long companyId, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<Lock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -801,7 +799,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByUuid_C_First(uuid, companyId, orderByComparator);
 
 		if (lock != null) {
@@ -833,7 +831,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByUuid_C_First(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		List<Lock> list = findByUuid_C(uuid, companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -854,7 +852,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByUuid_C_Last(uuid, companyId, orderByComparator);
 
 		if (lock != null) {
@@ -886,7 +884,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
@@ -915,7 +913,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock[] findByUuid_C_PrevAndNext(long lockId, String uuid,
-		long companyId, OrderByComparator orderByComparator)
+		long companyId, OrderByComparator<Lock> orderByComparator)
 		throws NoSuchLockException {
 		Lock lock = findByPrimaryKey(lockId);
 
@@ -945,7 +943,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	protected Lock getByUuid_C_PrevAndNext(Session session, Lock lock,
-		String uuid, long companyId, OrderByComparator orderByComparator,
+		String uuid, long companyId, OrderByComparator<Lock> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -1217,7 +1215,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public List<Lock> findByLtExpirationDate(Date expirationDate, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<Lock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1327,7 +1325,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock findByLtExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByLtExpirationDate_First(expirationDate,
 				orderByComparator);
 
@@ -1356,7 +1354,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByLtExpirationDate_First(Date expirationDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		List<Lock> list = findByLtExpirationDate(expirationDate, 0, 1,
 				orderByComparator);
 
@@ -1377,7 +1375,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock findByLtExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator) throws NoSuchLockException {
+		OrderByComparator<Lock> orderByComparator) throws NoSuchLockException {
 		Lock lock = fetchByLtExpirationDate_Last(expirationDate,
 				orderByComparator);
 
@@ -1406,7 +1404,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock fetchByLtExpirationDate_Last(Date expirationDate,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		int count = countByLtExpirationDate(expirationDate);
 
 		if (count == 0) {
@@ -1434,7 +1432,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public Lock[] findByLtExpirationDate_PrevAndNext(long lockId,
-		Date expirationDate, OrderByComparator orderByComparator)
+		Date expirationDate, OrderByComparator<Lock> orderByComparator)
 		throws NoSuchLockException {
 		Lock lock = findByPrimaryKey(lockId);
 
@@ -1464,8 +1462,8 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	}
 
 	protected Lock getByLtExpirationDate_PrevAndNext(Session session,
-		Lock lock, Date expirationDate, OrderByComparator orderByComparator,
-		boolean previous) {
+		Lock lock, Date expirationDate,
+		OrderByComparator<Lock> orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2518,7 +2516,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 */
 	@Override
 	public List<Lock> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<Lock> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -2654,25 +2652,6 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	 * Initializes the lock persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portal.model.Lock")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<Lock>> listenersList = new ArrayList<ModelListener<Lock>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<Lock>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -2691,11 +2670,11 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Lock exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Lock exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(LockPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(LockPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid", "key"
 			});
-	private static Lock _nullLock = new LockImpl() {
+	private static final Lock _nullLock = new LockImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -2707,7 +2686,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 			}
 		};
 
-	private static CacheModel<Lock> _nullLockCacheModel = new NullCacheModel();
+	private static final CacheModel<Lock> _nullLockCacheModel = new NullCacheModel();
 
 	private static class NullCacheModel implements CacheModel<Lock>, MVCCModel {
 		@Override

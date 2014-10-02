@@ -37,6 +37,37 @@ DDMTemplate ddmTemplate = (DDMTemplate)request.getAttribute("edit_article.jsp-te
 
 String defaultLanguageId = (String)request.getAttribute("edit_article.jsp-defaultLanguageId");
 String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageId");
+
+String requestedLanguageId = defaultLanguageId;
+
+if (Validator.isNotNull(toLanguageId)) {
+	requestedLanguageId = toLanguageId;
+}
+
+Fields ddmFields = null;
+
+if (article != null) {
+	String content = null;
+
+	if (Validator.isNotNull(toLanguageId)) {
+		content = JournalArticleImpl.getContentByLocale(article.getDocument(), toLanguageId);
+	}
+	else {
+		content = JournalArticleImpl.getContentByLocale(article.getDocument(), defaultLanguageId);
+	}
+
+	if (Validator.isNotNull(content)) {
+		ddmFields = JournalConverterUtil.getDDMFields(ddmStructure, content);
+	}
+}
+
+Locale[] availableLocales = new Locale[0];
+
+if (ddmFields != null) {
+	Set<Locale> availableLocalesSet = ddmFields.getAvailableLocales();
+
+	availableLocales = availableLocalesSet.toArray(new Locale[availableLocalesSet.size()]);
+}
 %>
 
 <liferay-ui:error-marker key="errorSection" value="content" />
@@ -90,7 +121,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 			<c:if test="<%= Validator.isNull(toLanguageId) %>">
 				<div class="article-structure-template-toolbar journal-metadata">
-					<span class="alert alert-block hide structure-message" id="<portlet:namespace />structureMessage">
+					<span class="alert alert-warning hide structure-message" id="<portlet:namespace />structureMessage">
 						<liferay-ui:message key="this-structure-has-not-been-saved" />
 
 						<liferay-ui:message arguments='<%= new Object[] {"journal-save-structure-trigger", "#"} %>' key="click-here-to-save-it-now" />
@@ -141,7 +172,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 									<span class="template-name-label" id="<portlet:namespace />templateNameLabel">
 										<c:if test="<%= (ddmTemplate != null) && ddmTemplate.isSmallImage() %>">
-											<img alt="" class="article-template-image" id="<portlet:namespace />templateImage" src="<%= HtmlUtil.escapeAttribute(_getTemplateImage(themeDisplay, ddmTemplate)) %>" />
+											<img alt="" class="article-template-image" id="<portlet:namespace />templateImage" src="<%= HtmlUtil.escapeAttribute(ddmTemplate.getTemplateImageURL(themeDisplay)) %>" />
 										</c:if>
 
 										<c:choose>
@@ -149,7 +180,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 												<aui:a href="javascript:;" id="editDDMTemplate" label="<%= HtmlUtil.escape(ddmTemplate.getName(locale)) %>" />
 											</c:when>
 											<c:otherwise>
-												<%= (ddmTemplate != null) ? HtmlUtil.escape(ddmTemplate.getName(locale)) : LanguageUtil.get(pageContext, "none") %>
+												<%= (ddmTemplate != null) ? HtmlUtil.escape(ddmTemplate.getName(locale)) : LanguageUtil.get(request, "none") %>
 											</c:otherwise>
 										</c:choose>
 									</span>
@@ -169,134 +200,11 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 				</div>
 			</c:if>
 
-			<div class="article-translation-toolbar journal-metadata">
-				<div class="alert alert-info hide" id="<portlet:namespace />translationsMessage">
-					<liferay-ui:message key="the-changes-in-your-translations-will-be-available-once-the-content-is-published" />
-				</div>
-
-				<div>
-					<c:choose>
-						<c:when test="<%= Validator.isNull(toLanguageId) %>">
-							<span for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" /></span>:
-
-							<span class="lfr-translation-manager-selector nobr">
-								<span class="article-default-language lfr-token lfr-token-primary" id="<portlet:namespace />defaultLanguage">
-									<img alt="<liferay-ui:message key="default-language" />" src='<%= HtmlUtil.escapeAttribute(themeDisplay.getPathThemeImages() + "/language/" + defaultLanguageId + ".png") %>' />
-
-									<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
-								</span>
-
-								<a href="javascript:;" id="<portlet:namespace />changeDefaultLanguage"><liferay-ui:message key="change" /></a>
-
-								<aui:select cssClass="hide" hideLabel="<%= true %>" id="defaultLanguageSelector" inlineField="<%= true %>" label="default-language" name="defaultLanguageId" title="default-language">
-
-									<%
-									Locale[] locales = LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId());
-
-									for (int i = 0; i < locales.length; i++) {
-									%>
-
-										<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= defaultLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
-
-									<%
-									}
-									%>
-
-								</aui:select>
-
-								<liferay-ui:icon-help message="default-language-help" />
-							</span>
-
-							<c:if test="<%= (article != null) && !article.isNew() %>">
-								<span class="lfr-translation-manager-add-menu">
-									<liferay-ui:icon-menu
-										cssClass="add-translations-menu"
-										direction="down"
-										icon="../aui/plus"
-										message='<%= LanguageUtil.get(pageContext, "add-translation") %>'
-										showArrow="<%= true %>"
-										showWhenSingleIcon="<%= true %>"
-									>
-
-										<%
-										Locale[] locales = LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId());
-
-										for (int i = 0; i < locales.length; i++) {
-											String taglibEditArticleURL = HttpUtil.addParameter(editArticleRenderPopUpURL.toString(), renderResponse.getNamespace() + "toLanguageId", LocaleUtil.toLanguageId(locales[i]));
-										%>
-
-											<liferay-ui:icon
-												cssClass='<%= ArrayUtil.contains(article.getAvailableLanguageIds(), LocaleUtil.toLanguageId(locales[i])) ? "hide" : StringPool.BLANK %>'
-												id='<%= "journal-article-translation-link-" + LocaleUtil.toLanguageId(locales[i]) %>'
-												image='<%= "../language/" + LocaleUtil.toLanguageId(locales[i]) %>'
-												linkCssClass="journal-article-translation"
-												message="<%= locales[i].getDisplayName(locale) %>"
-												method="get"
-												url="<%= taglibEditArticleURL %>"
-											/>
-
-										<%
-										}
-										%>
-
-									</liferay-ui:icon-menu>
-								</span>
-							</c:if>
-						</c:when>
-						<c:otherwise>
-							<aui:input id="defaultLanguageSelector" name="defaultLanguageId" type="hidden" value="<%= defaultLanguageId %>" />
-						</c:otherwise>
-					</c:choose>
-				</div>
-
-				<c:if test="<%= article != null %>">
-
-					<%
-					String[] translations = article.getAvailableLanguageIds();
-					%>
-
-					<div class='<%= (Validator.isNull(toLanguageId) && (translations.length > 1)) ? "contains-translations" :"" %>' id="<portlet:namespace />availableTranslationContainer">
-						<c:choose>
-							<c:when test="<%= Validator.isNotNull(toLanguageId) %>">
-								<liferay-util:buffer var="languageLabel">
-									<%= LocaleUtil.fromLanguageId(toLanguageId).getDisplayName(locale) %>
-
-									<img alt="" src='<%= HtmlUtil.escapeAttribute(themeDisplay.getPathThemeImages() + "/language/" + toLanguageId + ".png") %>' />
-								</liferay-util:buffer>
-
-								<%= LanguageUtil.format(pageContext, "translating-web-content-to-x", languageLabel, false) %>
-
-								<aui:input name="toLanguageId" type="hidden" value="<%= toLanguageId %>" />
-							</c:when>
-							<c:otherwise>
-								<span class='available-translations<%= (translations.length > 1) ? "" : " hide" %>' id="<portlet:namespace />availableTranslationsLinks">
-									<label><liferay-ui:message key="available-translations" /></label>
-
-										<%
-										for (int i = 0; i < translations.length; i++) {
-											if (translations[i].equals(defaultLanguageId)) {
-												continue;
-											}
-
-											String editTranslationURL = HttpUtil.addParameter(editArticleRenderPopUpURL.toString(), renderResponse.getNamespace() + "toLanguageId", translations[i]);
-										%>
-
-										<aui:a cssClass="journal-article-translation lfr-token" href="<%= editTranslationURL %>" id='<%= "journal-article-translation-link-" + translations[i] %>'>
-											<img alt="" src='<%= themeDisplay.getPathThemeImages() + "/language/" + translations[i] + ".png" %>' />
-
-											<%= LocaleUtil.fromLanguageId(translations[i]).getDisplayName(locale) %>
-										</aui:a>
-
-									<%
-									}
-									%>
-
-								</span>
-							</c:otherwise>
-						</c:choose>
-					</div>
-				</c:if>
-			</div>
+			<aui:translation-manager
+				availableLocales="<%= availableLocales %>"
+				defaultLanguageId="<%= defaultLanguageId %>"
+				id="translationManager"
+			/>
 		</div>
 
 		<div class="journal-article-general-fields">
@@ -308,31 +216,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 		</div>
 
 		<div class="journal-article-container" id="<portlet:namespace />journalArticleContainer">
-
-			<%
-			Fields ddmFields = null;
-
-			if (article != null) {
-				String content = null;
-
-				if (Validator.isNotNull(toLanguageId)) {
-					content = JournalArticleImpl.getContentByLocale(article.getDocument(), toLanguageId);
-				}
-				else {
-					content = JournalArticleImpl.getContentByLocale(article.getDocument(), defaultLanguageId);
-				}
-
-				if (Validator.isNotNull(content)) {
-					ddmFields = JournalConverterUtil.getDDMFields(ddmStructure, content);
-				}
-			}
-
-			String requestedLanguageId = defaultLanguageId;
-
-			if (Validator.isNotNull(toLanguageId)) {
-				requestedLanguageId = toLanguageId;
-			}
-			%>
+			<aui:input name="defaultLanguageId" type="hidden" value="<%= defaultLanguageId %>" />
 
 			<liferay-ddm:html
 				checkRequired="<%= classNameId == JournalArticleConstants.CLASSNAME_ID_DEFAULT %>"
@@ -389,15 +273,12 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 <aui:script use="liferay-journal-content">
 	var journalContent = new Liferay.Portlet.JournalContent(
 		{
-			changeDefaultLanguage: '#<portlet:namespace />changeDefaultLanguage',
 			'ddm.basePortletURL': '<%= PortletURLFactoryUtil.create(request, PortletKeys.DYNAMIC_DATA_MAPPING, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
 			'ddm.classNameId': '<%= PortalUtil.getClassNameId(DDMStructure.class) %>',
 			'ddm.classPK': <%= ddmStructure.getPrimaryKey() %>,
 			'ddm.groupId': <%= groupId %>,
 			'ddm.refererPortletName': '<%= PortletKeys.JOURNAL_CONTENT %>',
 			'ddm.templateId': <%= (ddmTemplate != null) ? ddmTemplate.getTemplateId() : 0 %>,
-			defaultLanguage: '#<portlet:namespace />defaultLanguage',
-			defaultLanguageSelector: '#<portlet:namespace />defaultLanguageSelector',
 			editStructure: '#<portlet:namespace />editDDMStructure',
 			editTemplate: '#<portlet:namespace />editDDMTemplate',
 			namespace: '<portlet:namespace />',
@@ -412,20 +293,3 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 	Liferay.Util.disableToggleBoxes('<portlet:namespace />autoArticleId','<portlet:namespace />newArticleId', true);
 </aui:script>
-
-<%!
-private String _getTemplateImage(ThemeDisplay themeDisplay, DDMTemplate ddmTemplate) {
-	String imageURL = null;
-
-	if (ddmTemplate.isSmallImage()) {
-		if (Validator.isNotNull(ddmTemplate.getSmallImageURL())) {
-			imageURL = ddmTemplate.getSmallImageURL();
-		}
-		else {
-			imageURL = themeDisplay.getPathImage() + "/journal/template?img_id=" + ddmTemplate.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(ddmTemplate.getSmallImageId());
-		}
-	}
-
-	return imageURL;
-}
-%>

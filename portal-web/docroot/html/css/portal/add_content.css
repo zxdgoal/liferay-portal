@@ -31,24 +31,23 @@
 			}
 		}
 
-		.btn-toolbar {
-			.form-group-inline {
-				display: inline;
-
-				.search-query {
-					margin-bottom: 0;
-				}
-
-				@include respond-to(phone, tablet) {
-					.search-query {
-						width: 65%;
-					}
-				}
+		.content-search {
+			.input-select-wrapper, .input-text-wrapper {
+				float: left;
 			}
 
-			.form-group-inline, .btn-group {
-				margin-right: 5px;
+			.input-select-wrapper {
+				padding-left: 10px;
+				width: 25%;
 			}
+
+			.input-text-wrapper {
+				width: 75%;
+			}
+		}
+
+		.navbar {
+			clear: left;
 		}
 
 		.display-style-buttons-container {
@@ -109,6 +108,7 @@
 
 			img {
 				max-height: 128px;
+				max-width: 100%;
 			}
 		}
 
@@ -181,11 +181,14 @@
 					margin-bottom: 5px;
 					margin-left: 0;
 					padding: 2px;
+
+					input[type="checkbox"], input[type="radio"] {
+						top: 5px;
+					}
 				}
 
-				.radio input {
-					margin-left: 6px;
-					margin-right: 6px;
+				.radio {
+					padding-left: 25px;
 				}
 
 				&.toggler-header-collapsed .lfr-page-template-description {
@@ -280,6 +283,14 @@
 					vertical-align: text-bottom;
 				}
 			}
+
+			.content-link {
+				border: 1px solid transparent;
+				display: inline-block;
+				font-size: 14px;
+				padding: 5px 7px;
+				vertical-align: bottom;
+			}
 		}
 
 		@include respond-to(phone) {
@@ -369,9 +380,12 @@
 
 			.toggler-header {
 				&.active {
-					&.lfr-page-template-title label {
+					&.lfr-page-template-title .radio {
 						background-color: #0DB5E7;
-						color: #FFF;
+
+						label {
+							color: #FFF;
+						}
 					}
 				}
 			}

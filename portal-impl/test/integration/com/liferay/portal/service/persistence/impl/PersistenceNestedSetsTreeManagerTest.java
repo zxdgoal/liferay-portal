@@ -26,8 +26,8 @@ import com.liferay.portal.log.CaptureAppender;
 import com.liferay.portal.log.Log4JLoggerTestUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.test.MainServletExecutionTestListener;
+import com.liferay.portal.test.listeners.MainServletExecutionTestListener;
+import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -712,10 +712,6 @@ public class PersistenceNestedSetsTreeManagerTest {
 	private static class SessionFactoryInvocationHandler
 		implements InvocationHandler {
 
-		SessionFactoryInvocationHandler(Object target) {
-			_target = target;
-		}
-
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
@@ -731,6 +727,10 @@ public class PersistenceNestedSetsTreeManagerTest {
 
 		public void setFailOpenSession(boolean failOpenSession) {
 			_failOpenSession = failOpenSession;
+		}
+
+		private SessionFactoryInvocationHandler(Object target) {
+			_target = target;
 		}
 
 		private boolean _failOpenSession;

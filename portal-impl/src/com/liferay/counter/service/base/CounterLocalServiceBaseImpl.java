@@ -14,6 +14,8 @@
 
 package com.liferay.counter.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.counter.model.Counter;
 import com.liferay.counter.service.CounterLocalService;
 import com.liferay.counter.service.persistence.CounterFinder;
@@ -59,6 +61,7 @@ import javax.sql.DataSource;
  * @see com.liferay.counter.service.CounterLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class CounterLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements CounterLocalService, IdentifiableBean {
 	/*
@@ -132,8 +135,7 @@ public abstract class CounterLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return counterPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -150,8 +152,8 @@ public abstract class CounterLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return counterPersistence.findWithDynamicQuery(dynamicQuery, start, end);
 	}
 
@@ -169,9 +171,8 @@ public abstract class CounterLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return counterPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -223,7 +224,7 @@ public abstract class CounterLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteCounter((Counter)persistedModel);
+		return counterLocalService.deleteCounter((Counter)persistedModel);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ editPageURL.setParameter("nodeId", String.valueOf(node.getNodeId()));
 editPageURL.setParameter("title", wikiPage.getTitle());
 
 PortalUtil.addPortletBreadcrumbEntry(request, wikiPage.getTitle(), viewPageURL.toString());
-PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "details"), currentURL);
+PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, "details"), currentURL);
 %>
 
 <liferay-util:include page="/html/portlet/wiki/top_links.jsp" />
@@ -134,7 +134,7 @@ PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "det
 			%>
 
 				<liferay-ui:icon
-					image='<%= "../file_system/small/" + conversion %>'
+					iconCssClass="<%= DLUtil.getFileIconCssClass(conversion) %>"
 					label="<%= true %>"
 					message="<%= StringUtil.toUpperCase(conversion) %>"
 					method="get"

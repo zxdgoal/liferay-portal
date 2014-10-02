@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -76,6 +78,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLFileEntryTypeLocalService,
 		IdentifiableBean {
@@ -152,8 +155,7 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return dlFileEntryTypePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -170,8 +172,8 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return dlFileEntryTypePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -190,9 +192,8 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return dlFileEntryTypePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -225,20 +226,6 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	@Override
 	public DLFileEntryType fetchDLFileEntryType(long fileEntryTypeId) {
 		return dlFileEntryTypePersistence.fetchByPrimaryKey(fileEntryTypeId);
-	}
-
-	/**
-	 * Returns the document library file entry type with the matching UUID and company.
-	 *
-	 * @param uuid the document library file entry type's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching document library file entry type, or <code>null</code> if a matching document library file entry type could not be found
-	 */
-	@Override
-	public DLFileEntryType fetchDLFileEntryTypeByUuidAndCompanyId(String uuid,
-		long companyId) {
-		return dlFileEntryTypePersistence.fetchByUuid_C_First(uuid, companyId,
-			null);
 	}
 
 	/**
@@ -350,7 +337,7 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteDLFileEntryType((DLFileEntryType)persistedModel);
+		return dlFileEntryTypeLocalService.deleteDLFileEntryType((DLFileEntryType)persistedModel);
 	}
 
 	@Override
@@ -359,19 +346,18 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 		return dlFileEntryTypePersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
-	/**
-	 * Returns the document library file entry type with the matching UUID and company.
-	 *
-	 * @param uuid the document library file entry type's UUID
-	 * @param  companyId the primary key of the company
-	 * @return the matching document library file entry type
-	 * @throws PortalException if a matching document library file entry type could not be found
-	 */
 	@Override
-	public DLFileEntryType getDLFileEntryTypeByUuidAndCompanyId(String uuid,
-		long companyId) throws PortalException {
-		return dlFileEntryTypePersistence.findByUuid_C_First(uuid, companyId,
-			null);
+	public List<DLFileEntryType> getDLFileEntryTypesByUuidAndCompanyId(
+		String uuid, long companyId) {
+		return dlFileEntryTypePersistence.findByUuid_C(uuid, companyId);
+	}
+
+	@Override
+	public List<DLFileEntryType> getDLFileEntryTypesByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<DLFileEntryType> orderByComparator) {
+		return dlFileEntryTypePersistence.findByUuid_C(uuid, companyId, start,
+			end, orderByComparator);
 	}
 
 	/**
@@ -527,7 +513,7 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	 */
 	@Override
 	public List<DLFileEntryType> getDLFolderDLFileEntryTypes(long folderId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end, OrderByComparator<DLFileEntryType> orderByComparator) {
 		return dlFolderPersistence.getDLFileEntryTypes(folderId, start, end,
 			orderByComparator);
 	}
@@ -673,7 +659,7 @@ public abstract class DLFileEntryTypeLocalServiceBaseImpl
 	@Override
 	public List<DLFileEntryType> getDDMStructureDLFileEntryTypes(
 		long structureId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryType> orderByComparator) {
 		return ddmStructurePersistence.getDLFileEntryTypes(structureId, start,
 			end, orderByComparator);
 	}

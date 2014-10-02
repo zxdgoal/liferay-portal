@@ -18,9 +18,11 @@ import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.captcha.CaptchaImpl;
 import com.liferay.portal.captcha.recaptcha.ReCaptchaImpl;
 import com.liferay.portal.captcha.simplecaptcha.SimpleCaptchaImpl;
+import com.liferay.portal.convert.ConvertException;
 import com.liferay.portal.convert.ConvertProcess;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
+import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
 import com.liferay.portal.kernel.captcha.Captcha;
 import com.liferay.portal.kernel.captcha.CaptchaUtil;
 import com.liferay.portal.kernel.cluster.Address;
@@ -39,6 +41,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.SanitizerLogWrapper;
 import com.liferay.portal.kernel.mail.Account;
 import com.liferay.portal.kernel.messaging.BaseAsyncDestination;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -70,11 +73,10 @@ import com.liferay.portal.kernel.util.ThreadUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.portal.kernel.xuggler.XugglerUtil;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.search.SearchEngineInitializer;
 import com.liferay.portal.search.lucene.LuceneHelperUtil;
-import com.liferay.portal.search.lucene.LuceneIndexer;
 import com.liferay.portal.search.lucene.cluster.LuceneClusterUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.lang.DoPrivilegedBean;
@@ -256,7 +258,7 @@ public class EditServerAction extends PortletAction {
 	}
 
 	protected void cacheSingle() throws Exception {
-		WebCachePoolUtil.clear();
+		SingleVMPoolUtil.clear();
 	}
 
 	protected String convertProcess(
@@ -296,6 +298,15 @@ public class EditServerAction extends PortletAction {
 			}
 
 			convertProcess.setParameterValues(values);
+		}
+
+		try {
+			convertProcess.validate();
+		}
+		catch (ConvertException ce) {
+			SessionErrors.add(actionRequest, ce.getClass(), ce);
+
+			return null;
 		}
 
 		String path = convertProcess.getPath();
@@ -380,12 +391,13 @@ public class EditServerAction extends PortletAction {
 		if (Validator.isNull(portletId)) {
 			for (long companyId : companyIds) {
 				try {
-					LuceneIndexer luceneIndexer = new LuceneIndexer(companyId);
+					SearchEngineInitializer searchEngineInitializer =
+						new SearchEngineInitializer(companyId);
 
-					luceneIndexer.reindex();
+					searchEngineInitializer.reindex();
 
 					usedSearchEngineIds.addAll(
-						luceneIndexer.getUsedSearchEngineIds());
+						searchEngineInitializer.getUsedSearchEngineIds());
 				}
 				catch (Exception e) {
 					_log.error(e, e);
@@ -415,7 +427,7 @@ public class EditServerAction extends PortletAction {
 			for (String searchEngineId : searchEngineIds) {
 				for (long companyId : companyIds) {
 					SearchEngineUtil.deletePortletDocuments(
-						searchEngineId, companyId, portletId);
+						searchEngineId, companyId, portletId, true);
 				}
 			}
 
@@ -517,7 +529,9 @@ public class EditServerAction extends PortletAction {
 			SessionErrors.add(
 				actionRequest, ScriptingException.class.getName(), se);
 
-			_log.error(se.getMessage());
+			Log log = SanitizerLogWrapper.allowCRLF(_log);
+
+			log.error(se.getMessage());
 		}
 	}
 
@@ -608,7 +622,9 @@ public class EditServerAction extends PortletAction {
 
 	protected void threadDump() throws Exception {
 		if (_log.isInfoEnabled()) {
-			_log.info(ThreadUtil.threadDump());
+			Log log = SanitizerLogWrapper.allowCRLF(_log);
+
+			log.info(ThreadUtil.threadDump());
 		}
 		else {
 			_log.error(

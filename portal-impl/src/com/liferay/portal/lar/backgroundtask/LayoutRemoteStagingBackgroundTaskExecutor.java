@@ -55,6 +55,11 @@ import java.util.Map;
 public class LayoutRemoteStagingBackgroundTaskExecutor
 	extends BaseStagingBackgroundTaskExecutor {
 
+	public LayoutRemoteStagingBackgroundTaskExecutor() {
+		setBackgroundTaskStatusMessageTranslator(
+			new LayoutStagingBackgroundTaskStatusMessageTranslator());
+	}
+
 	@Override
 	public BackgroundTaskResult execute(BackgroundTask backgroundTask)
 		throws PortalException {
@@ -81,7 +86,8 @@ public class LayoutRemoteStagingBackgroundTaskExecutor
 			(Map<String, String[]>)settingsMap.get("parameterMap");
 		long remoteGroupId = MapUtil.getLong(settingsMap, "remoteGroupId");
 		DateRange dateRange = ExportImportDateUtil.getDateRange(
-			exportImportConfiguration);
+			exportImportConfiguration,
+			ExportImportDateUtil.RANGE_FROM_LAST_PUBLISH_DATE);
 		HttpPrincipal httpPrincipal = (HttpPrincipal)taskContextMap.get(
 			"httpPrincipal");
 

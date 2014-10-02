@@ -35,17 +35,6 @@ import java.util.List;
 public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 
 	@Override
-	public void addBookItems(long groupId, long categoryId, String[] isbns)
-		throws PortalException {
-
-		ShoppingCategoryPermission.check(
-			getPermissionChecker(), groupId, categoryId, ActionKeys.ADD_ITEM);
-
-		shoppingItemLocalService.addBookItems(
-			getUserId(), groupId, categoryId, isbns);
-	}
-
-	@Override
 	public ShoppingItem addItem(
 			long groupId, long categoryId, String sku, String name,
 			String description, String properties, String fieldsQuantities,
@@ -97,7 +86,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 	@Override
 	public List<ShoppingItem> getItems(
 		long groupId, long categoryId, int start, int end,
-		OrderByComparator obc) {
+		OrderByComparator<ShoppingItem> obc) {
 
 		return shoppingItemPersistence.filterFindByG_C(
 			groupId, categoryId, start, end, obc);
@@ -110,7 +99,7 @@ public class ShoppingItemServiceImpl extends ShoppingItemServiceBaseImpl {
 
 	@Override
 	public ShoppingItem[] getItemsPrevAndNext(
-			long itemId, OrderByComparator obc)
+			long itemId, OrderByComparator<ShoppingItem> obc)
 		throws PortalException {
 
 		ShoppingItem item = shoppingItemPersistence.findByPrimaryKey(itemId);

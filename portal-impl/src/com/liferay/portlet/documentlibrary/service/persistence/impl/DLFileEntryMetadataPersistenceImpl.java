@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -24,17 +26,13 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
@@ -45,7 +43,6 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryMetada
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +63,7 @@ import java.util.Set;
  * @see DLFileEntryMetadataUtil
  * @generated
  */
+@ProviderType
 public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFileEntryMetadata>
 	implements DLFileEntryMetadataPersistence {
 	/*
@@ -153,7 +151,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public List<DLFileEntryMetadata> findByUuid(String uuid, int start,
-		int end, OrderByComparator orderByComparator) {
+		int end, OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -273,7 +271,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByUuid_First(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByUuid_First(uuid,
 				orderByComparator);
@@ -303,7 +301,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByUuid_First(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		List<DLFileEntryMetadata> list = findByUuid(uuid, 0, 1,
 				orderByComparator);
 
@@ -324,7 +322,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByUuid_Last(String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByUuid_Last(uuid,
 				orderByComparator);
@@ -354,7 +352,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByUuid_Last(String uuid,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
@@ -383,7 +381,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	@Override
 	public DLFileEntryMetadata[] findByUuid_PrevAndNext(
 		long fileEntryMetadataId, String uuid,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = findByPrimaryKey(fileEntryMetadataId);
 
@@ -414,7 +412,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 	protected DLFileEntryMetadata getByUuid_PrevAndNext(Session session,
 		DLFileEntryMetadata dlFileEntryMetadata, String uuid,
-		OrderByComparator orderByComparator, boolean previous) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -682,7 +681,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	@Override
 	public List<DLFileEntryMetadata> findByFileEntryTypeId(
 		long fileEntryTypeId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -792,7 +791,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileEntryTypeId_First(
-		long fileEntryTypeId, OrderByComparator orderByComparator)
+		long fileEntryTypeId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileEntryTypeId_First(fileEntryTypeId,
 				orderByComparator);
@@ -822,7 +822,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileEntryTypeId_First(
-		long fileEntryTypeId, OrderByComparator orderByComparator) {
+		long fileEntryTypeId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		List<DLFileEntryMetadata> list = findByFileEntryTypeId(fileEntryTypeId,
 				0, 1, orderByComparator);
 
@@ -843,7 +844,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileEntryTypeId_Last(
-		long fileEntryTypeId, OrderByComparator orderByComparator)
+		long fileEntryTypeId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileEntryTypeId_Last(fileEntryTypeId,
 				orderByComparator);
@@ -873,7 +875,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileEntryTypeId_Last(
-		long fileEntryTypeId, OrderByComparator orderByComparator) {
+		long fileEntryTypeId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		int count = countByFileEntryTypeId(fileEntryTypeId);
 
 		if (count == 0) {
@@ -902,7 +905,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	@Override
 	public DLFileEntryMetadata[] findByFileEntryTypeId_PrevAndNext(
 		long fileEntryMetadataId, long fileEntryTypeId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = findByPrimaryKey(fileEntryMetadataId);
 
@@ -935,7 +938,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 	protected DLFileEntryMetadata getByFileEntryTypeId_PrevAndNext(
 		Session session, DLFileEntryMetadata dlFileEntryMetadata,
-		long fileEntryTypeId, OrderByComparator orderByComparator,
+		long fileEntryTypeId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -1174,7 +1178,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public List<DLFileEntryMetadata> findByFileEntryId(long fileEntryId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1280,7 +1285,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileEntryId_First(fileEntryId,
 				orderByComparator);
@@ -1310,7 +1315,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileEntryId_First(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		List<DLFileEntryMetadata> list = findByFileEntryId(fileEntryId, 0, 1,
 				orderByComparator);
 
@@ -1331,7 +1336,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileEntryId_Last(fileEntryId,
 				orderByComparator);
@@ -1361,7 +1366,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileEntryId_Last(long fileEntryId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		int count = countByFileEntryId(fileEntryId);
 
 		if (count == 0) {
@@ -1390,7 +1395,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	@Override
 	public DLFileEntryMetadata[] findByFileEntryId_PrevAndNext(
 		long fileEntryMetadataId, long fileEntryId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = findByPrimaryKey(fileEntryMetadataId);
 
@@ -1421,7 +1426,9 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 	protected DLFileEntryMetadata getByFileEntryId_PrevAndNext(
 		Session session, DLFileEntryMetadata dlFileEntryMetadata,
-		long fileEntryId, OrderByComparator orderByComparator, boolean previous) {
+		long fileEntryId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1658,7 +1665,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public List<DLFileEntryMetadata> findByFileVersionId(long fileVersionId,
-		int start, int end, OrderByComparator orderByComparator) {
+		int start, int end,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1768,7 +1776,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileVersionId_First(long fileVersionId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileVersionId_First(fileVersionId,
 				orderByComparator);
@@ -1798,7 +1806,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileVersionId_First(long fileVersionId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		List<DLFileEntryMetadata> list = findByFileVersionId(fileVersionId, 0,
 				1, orderByComparator);
 
@@ -1819,7 +1827,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata findByFileVersionId_Last(long fileVersionId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = fetchByFileVersionId_Last(fileVersionId,
 				orderByComparator);
@@ -1849,7 +1857,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public DLFileEntryMetadata fetchByFileVersionId_Last(long fileVersionId,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		int count = countByFileVersionId(fileVersionId);
 
 		if (count == 0) {
@@ -1878,7 +1886,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	@Override
 	public DLFileEntryMetadata[] findByFileVersionId_PrevAndNext(
 		long fileEntryMetadataId, long fileVersionId,
-		OrderByComparator orderByComparator)
+		OrderByComparator<DLFileEntryMetadata> orderByComparator)
 		throws NoSuchFileEntryMetadataException {
 		DLFileEntryMetadata dlFileEntryMetadata = findByPrimaryKey(fileEntryMetadataId);
 
@@ -1909,7 +1917,8 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 	protected DLFileEntryMetadata getByFileVersionId_PrevAndNext(
 		Session session, DLFileEntryMetadata dlFileEntryMetadata,
-		long fileVersionId, OrderByComparator orderByComparator,
+		long fileVersionId,
+		OrderByComparator<DLFileEntryMetadata> orderByComparator,
 		boolean previous) {
 		StringBundler query = null;
 
@@ -2953,7 +2962,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 */
 	@Override
 	public List<DLFileEntryMetadata> findAll(int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<DLFileEntryMetadata> orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -3089,25 +3098,6 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	 * Initializes the document library file entry metadata persistence.
 	 */
 	public void afterPropertiesSet() {
-		String[] listenerClassNames = StringUtil.split(GetterUtil.getString(
-					com.liferay.portal.util.PropsUtil.get(
-						"value.object.listener.com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata")));
-
-		if (listenerClassNames.length > 0) {
-			try {
-				List<ModelListener<DLFileEntryMetadata>> listenersList = new ArrayList<ModelListener<DLFileEntryMetadata>>();
-
-				for (String listenerClassName : listenerClassNames) {
-					listenersList.add((ModelListener<DLFileEntryMetadata>)InstanceFactory.newInstance(
-							getClassLoader(), listenerClassName));
-				}
-
-				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
-		}
 	}
 
 	public void destroy() {
@@ -3126,11 +3116,11 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DLFileEntryMetadata exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DLFileEntryMetadata exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
-	private static Log _log = LogFactoryUtil.getLog(DLFileEntryMetadataPersistenceImpl.class);
-	private static Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
+	private static final Log _log = LogFactoryUtil.getLog(DLFileEntryMetadataPersistenceImpl.class);
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
 				"uuid"
 			});
-	private static DLFileEntryMetadata _nullDLFileEntryMetadata = new DLFileEntryMetadataImpl() {
+	private static final DLFileEntryMetadata _nullDLFileEntryMetadata = new DLFileEntryMetadataImpl() {
 			@Override
 			public Object clone() {
 				return this;
@@ -3142,7 +3132,7 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 			}
 		};
 
-	private static CacheModel<DLFileEntryMetadata> _nullDLFileEntryMetadataCacheModel =
+	private static final CacheModel<DLFileEntryMetadata> _nullDLFileEntryMetadataCacheModel =
 		new CacheModel<DLFileEntryMetadata>() {
 			@Override
 			public DLFileEntryMetadata toEntityModel() {

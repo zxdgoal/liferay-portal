@@ -14,7 +14,10 @@
 
 package com.liferay.portlet.bookmarks.service.impl;
 
-import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -36,7 +39,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.TreePathUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
@@ -54,8 +56,6 @@ import com.liferay.portlet.bookmarks.EntryURLException;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.model.BookmarksFolderConstants;
-import com.liferay.portlet.bookmarks.model.impl.BookmarksEntryModelImpl;
-import com.liferay.portlet.bookmarks.model.impl.BookmarksFolderModelImpl;
 import com.liferay.portlet.bookmarks.service.base.BookmarksEntryLocalServiceBaseImpl;
 import com.liferay.portlet.bookmarks.social.BookmarksActivityKeys;
 import com.liferay.portlet.bookmarks.util.comparator.EntryModifiedDateComparator;
@@ -234,7 +234,7 @@ public class BookmarksEntryLocalServiceImpl
 	@Override
 	public List<BookmarksEntry> getEntries(
 		long groupId, long folderId, int status, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BookmarksEntry> orderByComparator) {
 
 		return bookmarksEntryPersistence.findByG_F_S(
 			groupId, folderId, status, start, end, orderByComparator);
@@ -243,7 +243,7 @@ public class BookmarksEntryLocalServiceImpl
 	@Override
 	public List<BookmarksEntry> getEntries(
 		long groupId, long folderId, int start, int end,
-		OrderByComparator orderByComparator) {
+		OrderByComparator<BookmarksEntry> orderByComparator) {
 
 		return getEntries(
 			groupId, folderId, WorkflowConstants.STATUS_APPROVED, start, end,
@@ -288,7 +288,8 @@ public class BookmarksEntryLocalServiceImpl
 	public List<BookmarksEntry> getGroupEntries(
 		long groupId, long userId, int start, int end) {
 
-		OrderByComparator orderByComparator = new EntryModifiedDateComparator();
+		OrderByComparator<BookmarksEntry> orderByComparator =
+			new EntryModifiedDateComparator();
 
 		if (userId <= 0) {
 			return bookmarksEntryPersistence.findByG_S(
@@ -353,12 +354,8 @@ public class BookmarksEntryLocalServiceImpl
 
 			// Entry
 
-			TrashEntry trashEntry = entry.getTrashEntry();
-
-			TrashVersion trashVersion =
-				trashVersionLocalService.fetchVersion(
-					trashEntry.getEntryId(), BookmarksEntry.class.getName(),
-					entryId);
+			TrashVersion trashVersion = trashVersionLocalService.fetchVersion(
+				BookmarksEntry.class.getName(), entryId);
 
 			int status = WorkflowConstants.STATUS_APPROVED;
 
@@ -427,21 +424,8 @@ public class BookmarksEntryLocalServiceImpl
 	}
 
 	@Override
-	public void rebuildTree(long companyId) {
+	public void rebuildTree(long companyId) throws PortalException {
 		bookmarksFolderLocalService.rebuildTree(companyId);
-
-		Session session = bookmarksEntryPersistence.openSession();
-
-		try {
-			TreePathUtil.rebuildTree(
-				session, companyId, BookmarksEntryModelImpl.TABLE_NAME,
-				BookmarksFolderModelImpl.TABLE_NAME, "folderId", true);
-		}
-		finally {
-			bookmarksEntryPersistence.closeSession(session);
-
-			bookmarksEntryPersistence.clearCache();
-		}
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -499,6 +483,56 @@ public class BookmarksEntryLocalServiceImpl
 		queryConfig.setScoreEnabled(false);
 
 		return indexer.search(searchContext);
+	}
+
+	@Override
+	public void setTreePaths(
+			final long folderId, final String treePath, final boolean reindex)
+		throws PortalException {
+
+		ActionableDynamicQuery actionableDynamicQuery =
+			getActionableDynamicQuery();
+
+		actionableDynamicQuery.setAddCriteriaMethod(
+			new ActionableDynamicQuery.AddCriteriaMethod() {
+
+				@Override
+				public void addCriteria(DynamicQuery dynamicQuery) {
+					Property folderIdProperty = PropertyFactoryUtil.forName(
+						"folderId");
+
+					dynamicQuery.add(folderIdProperty.eq(folderId));
+
+					Property treePathProperty = PropertyFactoryUtil.forName(
+						"treePath");
+
+					dynamicQuery.add(treePathProperty.ne(treePath));
+				}
+
+			});
+
+		final Indexer indexer = IndexerRegistryUtil.getIndexer(
+			BookmarksEntry.class.getName());
+
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException {
+
+					BookmarksEntry entry = (BookmarksEntry)object;
+
+					entry.setTreePath(treePath);
+
+					updateBookmarksEntry(entry);
+
+					indexer.reindex(entry);
+				}
+
+			});
+
+		actionableDynamicQuery.performActions();
 	}
 
 	@Override

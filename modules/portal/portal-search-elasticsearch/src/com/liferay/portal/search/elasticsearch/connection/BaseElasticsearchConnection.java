@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.elasticsearch.connection;
 
+import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch.index.IndexFactory;
 
@@ -45,6 +46,7 @@ public abstract class BaseElasticsearchConnection
 		return _client;
 	}
 
+	@Override
 	public ClusterHealthResponse getClusterHealthResponse() {
 		AdminClient adminClient = _client.admin();
 
@@ -53,7 +55,15 @@ public abstract class BaseElasticsearchConnection
 		ClusterHealthRequestBuilder clusterHealthRequestBuilder =
 			clusterAdminClient.prepareHealth();
 
-		clusterHealthRequestBuilder.setTimeout(TimeValue.timeValueSeconds(30));
+		if (PortalRunMode.isTestMode()) {
+			clusterHealthRequestBuilder.setTimeout(
+				TimeValue.timeValueMillis(100));
+		}
+		else {
+			clusterHealthRequestBuilder.setTimeout(
+				TimeValue.timeValueSeconds(30));
+		}
+
 		clusterHealthRequestBuilder.setWaitForGreenStatus();
 		clusterHealthRequestBuilder.setWaitForNodes(">1");
 
@@ -77,6 +87,10 @@ public abstract class BaseElasticsearchConnection
 	}
 
 	public String getConfigFileName() {
+		if (PortalRunMode.isTestMode()) {
+			return _testConfigFileName;
+		}
+
 		return _configFileName;
 	}
 
@@ -103,6 +117,10 @@ public abstract class BaseElasticsearchConnection
 		_indexFactory = indexFactory;
 	}
 
+	public void setTestConfigFileName(String testConfigFileName) {
+		_testConfigFileName = testConfigFileName;
+	}
+
 	protected abstract Client createClient(ImmutableSettings.Builder builder);
 
 	protected IndexFactory getIndexFactory() {
@@ -117,5 +135,6 @@ public abstract class BaseElasticsearchConnection
 	private String _clusterName;
 	private String _configFileName;
 	private IndexFactory _indexFactory;
+	private String _testConfigFileName;
 
 }

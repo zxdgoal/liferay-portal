@@ -108,8 +108,10 @@ public class IntrabandProxyUtil {
 
 			validate(classLoader, clazz, false);
 
-			return generateStubClass(classLoader, clazz, skeletonId);
+			stubClass = generateStubClass(classLoader, clazz, skeletonId);
 		}
+
+		return stubClass;
 	}
 
 	public static <T> T newStubInstance(
@@ -599,8 +601,10 @@ public class IntrabandProxyUtil {
 
 			validate(classLoader, clazz, true);
 
-			return generateSkeletonClass(classLoader, clazz);
+			skeletonClass = generateSkeletonClass(classLoader, clazz);
 		}
+
+		return skeletonClass;
 	}
 
 	protected static Class<?> loadClass(
@@ -813,85 +817,6 @@ public class IntrabandProxyUtil {
 
 	}
 
-	protected static class TemplateStub {
-
-		public static final String[] PROXY_METHOD_SIGNATURES =
-			_getProxyMethodSignatures();
-
-		public TemplateStub(
-			String id, RegistrationReference registrationReference,
-			ExceptionHandler exceptionHandler) {
-
-			if (id == null) {
-				throw new NullPointerException("Id is null");
-			}
-
-			if (registrationReference == null) {
-				throw new NullPointerException(
-					"Registration reference is null");
-			}
-
-			_id = id;
-			_registrationReference = registrationReference;
-			_exceptionHandler = exceptionHandler;
-
-			_intraband = registrationReference.getIntraband();
-		}
-
-		private static String[] _getProxyMethodSignatures() {
-			return new String[0];
-		}
-
-		@SuppressWarnings("unused")
-		private void _send(Serializer serializer) {
-			_intraband.sendDatagram(
-				_registrationReference,
-				Datagram.createRequestDatagram(
-					_PROXY_TYPE, serializer.toByteBuffer()));
-		}
-
-		@SuppressWarnings("unused")
-		private <T extends Serializable> T _syncSend(Serializer serializer) {
-			try {
-				Datagram responseDatagram = _intraband.sendSyncDatagram(
-					_registrationReference,
-						Datagram.createRequestDatagram(
-							_PROXY_TYPE, serializer.toByteBuffer()));
-
-				Deserializer deserializer = new Deserializer(
-					responseDatagram.getDataByteBuffer());
-
-				RPCResponse rpcResponse = deserializer.readObject();
-
-				Exception e = rpcResponse.getException();
-
-				if (e != null) {
-					throw e;
-				}
-
-				return (T)rpcResponse.getResult();
-			}
-			catch (Exception e) {
-				if (_exceptionHandler != null) {
-					_exceptionHandler.onException(e);
-				}
-
-				return null;
-			}
-		}
-
-		private static final byte _PROXY_TYPE = SystemDataType.PROXY.getValue();
-
-		private final ExceptionHandler _exceptionHandler;
-
-		@SuppressWarnings("unused")
-		private String _id;
-
-		private Intraband _intraband;
-		private RegistrationReference _registrationReference;
-
-	}
-
 	protected static abstract class TemplateSkeleton
 		implements IntrabandProxySkeleton {
 
@@ -988,6 +913,85 @@ public class IntrabandProxyUtil {
 
 	}
 
+	protected static class TemplateStub {
+
+		public static final String[] PROXY_METHOD_SIGNATURES =
+			_getProxyMethodSignatures();
+
+		public TemplateStub(
+			String id, RegistrationReference registrationReference,
+			ExceptionHandler exceptionHandler) {
+
+			if (id == null) {
+				throw new NullPointerException("Id is null");
+			}
+
+			if (registrationReference == null) {
+				throw new NullPointerException(
+					"Registration reference is null");
+			}
+
+			_id = id;
+			_registrationReference = registrationReference;
+			_exceptionHandler = exceptionHandler;
+
+			_intraband = registrationReference.getIntraband();
+		}
+
+		private static String[] _getProxyMethodSignatures() {
+			return new String[0];
+		}
+
+		@SuppressWarnings("unused")
+		private void _send(Serializer serializer) {
+			_intraband.sendDatagram(
+				_registrationReference,
+				Datagram.createRequestDatagram(
+					_PROXY_TYPE, serializer.toByteBuffer()));
+		}
+
+		@SuppressWarnings("unused")
+		private <T extends Serializable> T _syncSend(Serializer serializer) {
+			try {
+				Datagram responseDatagram = _intraband.sendSyncDatagram(
+					_registrationReference,
+						Datagram.createRequestDatagram(
+							_PROXY_TYPE, serializer.toByteBuffer()));
+
+				Deserializer deserializer = new Deserializer(
+					responseDatagram.getDataByteBuffer());
+
+				RPCResponse rpcResponse = deserializer.readObject();
+
+				Exception e = rpcResponse.getException();
+
+				if (e != null) {
+					throw e;
+				}
+
+				return (T)rpcResponse.getResult();
+			}
+			catch (Exception e) {
+				if (_exceptionHandler != null) {
+					_exceptionHandler.onException(e);
+				}
+
+				return null;
+			}
+		}
+
+		private static final byte _PROXY_TYPE = SystemDataType.PROXY.getValue();
+
+		private final ExceptionHandler _exceptionHandler;
+
+		@SuppressWarnings("unused")
+		private String _id;
+
+		private Intraband _intraband;
+		private RegistrationReference _registrationReference;
+
+	}
+
 	private static final Type _DATAGRAM_TYPE = Type.getType(Datagram.class);
 
 	private static final Type _DESERIALIZER_TYPE = Type.getType(
@@ -1031,8 +1035,9 @@ public class IntrabandProxyUtil {
 	private static Set<String> _annotationDescriptors = new HashSet<String>(
 		Arrays.asList(
 			Type.getDescriptor(Id.class), Type.getDescriptor(Proxy.class)));
-
 	private static Method _defineClassMethod;
+	private static Comparator<Method> _methodComparator =
+		new MethodComparator();
 
 	static {
 		try {
@@ -1044,9 +1049,6 @@ public class IntrabandProxyUtil {
 			throw new ExceptionInInitializerError(e);
 		}
 	}
-
-	private static Comparator<Method> _methodComparator =
-		new MethodComparator();
 
 	private static class SkeletonDispatchTableSwitchGenerator
 		implements TableSwitchGenerator {
