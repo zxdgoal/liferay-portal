@@ -584,23 +584,24 @@ public class MBUtil {
 	}
 
 	public static long getMessageId(String mailId) {
-		int w = mailId.indexOf(CharPool.LESS_THAN) + 1;
-		int x = mailId.indexOf(CharPool.AT);
+		int index1 = mailId.indexOf(CharPool.LESS_THAN) + 1;
+		int index2 = mailId.indexOf(CharPool.AT);
 
 		long messageId = 0;
 
-		if ((w > 0) && (x != -1)) {
-			String target = mailId.substring(w, x);
+		if ((index1 > 0) && (index2 != -1)) {
+			String sub1 = mailId.substring(index1, index2);
 
-			int z = target.lastIndexOf(CharPool.PERIOD);
+			int index3 = sub1.lastIndexOf(CharPool.PERIOD);
 
-			if (z != -1) {
-				String temp = target.substring(0, z);
+			if (index3 != -1) {
+				String sub2 = sub1.substring(0, index3);
 
-				int y = temp.lastIndexOf(CharPool.PERIOD);
+				int index4 = sub2.lastIndexOf(CharPool.PERIOD);
 
-				if (y != -1) {
-					messageId = GetterUtil.getLong(temp.substring(y + 1, z));
+				if (index4 != -1) {
+					messageId = GetterUtil.getLong(
+						sub2.substring(index4 + 1, index3));
 				}
 			}
 		}
