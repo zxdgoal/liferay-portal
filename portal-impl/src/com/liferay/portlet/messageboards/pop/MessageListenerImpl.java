@@ -149,7 +149,7 @@ public class MessageListenerImpl implements MessageListener {
 			MBMessage parentMessage = null;
 
 			if (parentMessageId > 0) {
-				parentMessage = MBMessageLocalServiceUtil.getMessage(
+				parentMessage = MBMessageLocalServiceUtil.fetchMBMessage(
 					parentMessageId);
 			}
 
