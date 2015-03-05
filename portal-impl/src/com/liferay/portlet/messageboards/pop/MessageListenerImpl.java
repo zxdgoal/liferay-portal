@@ -140,7 +140,7 @@ public class MessageListenerImpl implements MessageListener {
 				_log.debug("Message id " + messageIdString);
 			}
 
-			long parentMessageId = MBUtil.getParentMessageId(messageIdString);
+			long parentMessageId = MBUtil.getMessageId(messageIdString);
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Parent message id " + parentMessageId);
