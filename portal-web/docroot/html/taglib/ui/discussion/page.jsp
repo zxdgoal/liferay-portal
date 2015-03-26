@@ -83,10 +83,6 @@ CommentsEditorDisplayContext commentsEditorDisplayContext = new CommentsEditorDi
 								<aui:input name="messageId0" type="hidden" value="<%= message.getMessageId() %>" />
 								<aui:input name="parentMessageId0" type="hidden" value="<%= message.getMessageId() %>" />
 							</div>
-
-							<c:if test="<%= messagesCount == 1 %>">
-								<liferay-ui:message key="no-comments-yet" />
-							</c:if>
 						</c:if>
 
 						<%
