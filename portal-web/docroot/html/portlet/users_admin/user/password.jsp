@@ -91,10 +91,10 @@ else {
 	<!-- /LPS-38289 -->
 
 	<c:if test="<%= portletName.equals(PortletKeys.MY_ACCOUNT) %>">
-		<aui:input autocomplete="off" label="current-password" name="password0" size="30" type="password" />
+		<aui:input autocomplete="off" label="current-password" name="password0" size="30" type="password" readonly="true" onClick="this.removeAttribute('readonly');"/>
 	</c:if>
 
-	<aui:input autocomplete="off" label="new-password" name="password1" size="30" type="password" />
+	<aui:input autocomplete="off" label="new-password" name="password1" size="30" type="password" readonly="true" onClick="this.removeAttribute('readonly');"/>
 
 	<aui:input autocomplete="off" label="enter-again" name="password2" size="30" type="password">
 		<aui:validator name="equalTo">
