@@ -3414,7 +3414,9 @@ public class PortalImpl implements Portal {
 
 		String localizedFriendlyURL = contextPath;
 
-		if (appendI18nPath) {
+		if (LanguageUtil.isAvailableLocale(layout.getGroupId(), locale) &&
+			appendI18nPath) {
+
 			localizedFriendlyURL += StringPool.SLASH + i18nPath;
 		}
 
