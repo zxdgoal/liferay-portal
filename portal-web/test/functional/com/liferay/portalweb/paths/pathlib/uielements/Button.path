@@ -109,6 +109,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ADD_USER</td>
+	<td>//button[contains(.,'Add Users')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ADD_WIKI</td>
 	<td>//a[contains(@id,'addNodeButton') and contains(.,'Add Wiki')]</td>
 	<td></td>
@@ -575,7 +580,7 @@
 </tr>
 <tr>
 	<td>SIGN_IN</td>
-	<td>//button[contains(.,'Sign In')] | //button[contains(.,'Acceder')] | //button[contains(.,'ログイン')] | //button[contains(.,'登录')]</td>
+	<td>//button[contains(.,'Sign In')] | //button[contains(.,'Acceder')] | //button[contains(.,'Anmelden')] | //button[contains(.,'ログイン')] | //button[contains(.,'登录')]</td>
 	<td></td>
 </tr>
 <tr>
