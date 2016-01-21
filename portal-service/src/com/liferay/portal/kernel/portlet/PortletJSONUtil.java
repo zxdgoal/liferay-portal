@@ -52,6 +52,18 @@ public class PortletJSONUtil {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		Set<String> portletResourceStaticURLs =
+			(Set<String>)request.getAttribute(
+				WebKeys.PORTLET_RESOURCE_STATIC_URLS);
+
+		if (portletResourceStaticURLs == null) {
+			portletResourceStaticURLs = new LinkedHashSet<>();
+
+			request.setAttribute(
+				WebKeys.PORTLET_RESOURCE_STATIC_URLS,
+				portletResourceStaticURLs);
+		}
+
 		Set<String> footerCssSet = new LinkedHashSet<>();
 		Set<String> footerJavaScriptSet = new LinkedHashSet<>();
 		Set<String> headerCssSet = new LinkedHashSet<>();
@@ -85,115 +97,41 @@ public class PortletJSONUtil {
 		if (!portletOnLayout && portlet.isAjaxable()) {
 			Portlet rootPortlet = portlet.getRootPortlet();
 
-			for (String footerPortalCss : portlet.getFooterPortalCss()) {
-				if (!HttpUtil.hasProtocol(footerPortalCss)) {
-					footerPortalCss =
-						PortalUtil.getPathContext() + footerPortalCss;
+			// Footer
 
-					footerPortalCss = PortalUtil.getStaticResourceURL(
-						request, footerPortalCss, rootPortlet.getTimestamp());
-				}
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getFooterPortalCss(),
+				footerCssSet, portletResourceStaticURLs);
 
-				footerCssSet.add(footerPortalCss);
-			}
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getFooterPortalJavaScript(),
+				footerJavaScriptSet, portletResourceStaticURLs);
 
-			for (String footerPortalJavaScript :
-					portlet.getFooterPortalJavaScript()) {
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getFooterPortletCss(),
+				footerCssSet, portletResourceStaticURLs);
 
-				if (!HttpUtil.hasProtocol(footerPortalJavaScript)) {
-					footerPortalJavaScript =
-						PortalUtil.getPathContext() + footerPortalJavaScript;
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getFooterPortletJavaScript(),
+				footerJavaScriptSet, portletResourceStaticURLs);
 
-					footerPortalJavaScript = PortalUtil.getStaticResourceURL(
-						request, footerPortalJavaScript,
-						rootPortlet.getTimestamp());
-				}
+			// Header
 
-				footerJavaScriptSet.add(footerPortalJavaScript);
-			}
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getHeaderPortalCss(),
+				headerCssSet, portletResourceStaticURLs);
 
-			for (String footerPortletCss : portlet.getFooterPortletCss()) {
-				if (!HttpUtil.hasProtocol(footerPortletCss)) {
-					footerPortletCss =
-						portlet.getStaticResourcePath() + footerPortletCss;
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getHeaderPortalJavaScript(),
+				headerCssSet, portletResourceStaticURLs);
 
-					footerPortletCss = PortalUtil.getStaticResourceURL(
-						request, footerPortletCss, rootPortlet.getTimestamp());
-				}
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getHeaderPortletCss(),
+				headerCssSet, portletResourceStaticURLs);
 
-				footerCssSet.add(footerPortletCss);
-			}
-
-			for (String footerPortletJavaScript :
-					portlet.getFooterPortletJavaScript()) {
-
-				if (!HttpUtil.hasProtocol(footerPortletJavaScript)) {
-					footerPortletJavaScript =
-						portlet.getStaticResourcePath() +
-							footerPortletJavaScript;
-
-					footerPortletJavaScript = PortalUtil.getStaticResourceURL(
-						request, footerPortletJavaScript,
-						rootPortlet.getTimestamp());
-				}
-
-				footerJavaScriptSet.add(footerPortletJavaScript);
-			}
-
-			for (String headerPortalCss : portlet.getHeaderPortalCss()) {
-				if (!HttpUtil.hasProtocol(headerPortalCss)) {
-					headerPortalCss =
-						PortalUtil.getPathContext() + headerPortalCss;
-
-					headerPortalCss = PortalUtil.getStaticResourceURL(
-						request, headerPortalCss, rootPortlet.getTimestamp());
-				}
-
-				headerCssSet.add(headerPortalCss);
-			}
-
-			for (String headerPortalJavaScript :
-					portlet.getHeaderPortalJavaScript()) {
-
-				if (!HttpUtil.hasProtocol(headerPortalJavaScript)) {
-					headerPortalJavaScript =
-						PortalUtil.getPathContext() + headerPortalJavaScript;
-
-					headerPortalJavaScript = PortalUtil.getStaticResourceURL(
-						request, headerPortalJavaScript,
-						rootPortlet.getTimestamp());
-				}
-
-				headerJavaScriptSet.add(headerPortalJavaScript);
-			}
-
-			for (String headerPortletCss : portlet.getHeaderPortletCss()) {
-				if (!HttpUtil.hasProtocol(headerPortletCss)) {
-					headerPortletCss =
-						portlet.getStaticResourcePath() + headerPortletCss;
-
-					headerPortletCss = PortalUtil.getStaticResourceURL(
-						request, headerPortletCss, rootPortlet.getTimestamp());
-				}
-
-				headerCssSet.add(headerPortletCss);
-			}
-
-			for (String headerPortletJavaScript :
-					portlet.getHeaderPortletJavaScript()) {
-
-				if (!HttpUtil.hasProtocol(headerPortletJavaScript)) {
-					headerPortletJavaScript =
-						portlet.getStaticResourcePath() +
-							headerPortletJavaScript;
-
-					headerPortletJavaScript = PortalUtil.getStaticResourceURL(
-						request, headerPortletJavaScript,
-						rootPortlet.getTimestamp());
-				}
-
-				headerJavaScriptSet.add(headerPortletJavaScript);
-			}
+			addStaticResourceToResourceSet(
+				request, rootPortlet, portlet.getHeaderPortletJavaScript(),
+				headerCssSet, portletResourceStaticURLs);
 		}
 
 		String footerCssPaths = JSONFactoryUtil.serialize(
@@ -292,6 +230,25 @@ public class PortletJSONUtil {
 			printWriter.print("<script src=\"");
 			printWriter.print(HtmlUtil.escape(value));
 			printWriter.println("\" type=\"text/javascript\"></script>");
+		}
+	}
+
+	private static void addStaticResourceToResourceSet(
+		HttpServletRequest request, Portlet rootPortlet,
+		List<String> portletResources, Set<String> resourceSet,
+		Set<String> portletResourceStaticURLs) {
+
+		for (String portletResource : portletResources) {
+			if (!HttpUtil.hasProtocol(portletResource)) {
+				portletResource = PortalUtil.getPathContext() + portletResource;
+
+				portletResource = PortalUtil.getStaticResourceURL(
+					request, portletResource, rootPortlet.getTimestamp());
+			}
+
+			if (portletResourceStaticURLs.add(portletResource)) {
+				resourceSet.add(portletResource);
+			}
 		}
 	}
 
