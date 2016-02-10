@@ -428,33 +428,31 @@ AUI.add(
 						}
 					}
 
-					if (modal.get('autoWidth')) {
-						var width;
+					var widthInitial = modal.get('width');
 
-						var widthInitial = modal.get('width');
+					if (widthInitial !== 'auto') {
+						if (modal.get('autoWidth')) {
+							var width;
 
-						if (widthInitial === 'auto') {
-							return;
-						}
+							if (autoSizeNode) {
+								width = autoSizeNode.get('offsetWidth');
+							}
+							else {
+								width = DOM.winWidth();
+							}
 
-						if (autoSizeNode) {
-							width = autoSizeNode.get('offsetWidth');
+							width *= modal.get('autoWidthRatio');
+
+							if (width != widthInitial) {
+								modal.set('width', width);
+							}
+							else {
+								setWidth(modal, widthInitial);
+							}
 						}
 						else {
-							width = DOM.winWidth();
+							setWidth(modal, modal.get('width'));
 						}
-
-						width *= modal.get('autoWidthRatio');
-
-						if (width != widthInitial) {
-							modal.set('width', width);
-						}
-						else {
-							setWidth(modal, widthInitial);
-						}
-					}
-					else {
-						setWidth(modal, modal.get('width'));
 					}
 				},
 
