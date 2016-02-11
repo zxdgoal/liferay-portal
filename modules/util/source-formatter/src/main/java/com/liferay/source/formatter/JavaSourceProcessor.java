@@ -555,8 +555,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			newContent, packagePath, className);
 
 		newContent = StringUtil.replace(
-			newContent, new String[] {";\n/**", "\t/*\n\t *", ";;\n"},
-			new String[] {";\n\n/**", "\t/**\n\t *", ";\n"});
+			newContent,
+			new String[] {";\n/**", "\t/*\n\t *", ";;\n", "\n/**\n *\n *"},
+			new String[] {";\n\n/**", "\t/**\n\t *", ";\n", "\n/**\n *"});
 
 		newContent = fixMissingEmptyLines(newContent);
 
@@ -3628,13 +3629,12 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			"**/test/**/*PersistenceTest.java", "**/source/formatter/**"
 		};
 		includes = new String[] {
-			"**/com/liferay/portal/service/ServiceContext*.java",
+			"**/com/liferay/portal/kernel/service/ServiceContext*.java",
 			"**/model/BaseModel.java", "**/model/impl/BaseModelImpl.java",
 			"**/portal-test/**/portal/service/**/*.java",
 			"**/portal-test-internal/**/portal/service/**/*.java",
 			"**/service/Base*.java",
 			"**/service/PersistedModelLocalService*.java",
-			"**/service/base/PrincipalBean.java",
 			"**/service/http/*HttpTest.java", "**/service/http/*SoapTest.java",
 			"**/service/http/TunnelUtil.java", "**/service/impl/*.java",
 			"**/service/jms/*.java", "**/service/permission/*.java",

@@ -22,18 +22,17 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapListene
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PredicateFilter;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Portlet;
-import com.liferay.portal.service.PortletLocalService;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -122,7 +121,8 @@ public class PanelAppRegistry {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
 			bundleContext, PanelApp.class, "(panel.category.key=*)",
 			new PanelCategoryServiceReferenceMapper(),
-			new ServiceRankingPropertyServiceReferenceComparator(),
+			Collections.reverseOrder(
+				new PropertyServiceReferenceComparator("service.ranking")),
 			new PanelAppsServiceTrackerMapListener());
 	}
 
@@ -150,23 +150,6 @@ public class PanelAppRegistry {
 		PanelAppRegistry.class);
 
 	private ServiceTrackerMap<String, List<PanelApp>> _serviceTrackerMap;
-
-	private static class ServiceRankingPropertyServiceReferenceComparator
-		extends PropertyServiceReferenceComparator<PanelApp> {
-
-		public ServiceRankingPropertyServiceReferenceComparator() {
-			super("service.ranking");
-		}
-
-		@Override
-		public int compare(
-			ServiceReference<PanelApp> serviceReference1,
-			ServiceReference<PanelApp> serviceReference2) {
-
-			return -(super.compare(serviceReference1, serviceReference2));
-		}
-
-	}
 
 	private class PanelAppsServiceTrackerMapListener
 		implements ServiceTrackerMapListener<String, PanelApp, List<PanelApp>> {

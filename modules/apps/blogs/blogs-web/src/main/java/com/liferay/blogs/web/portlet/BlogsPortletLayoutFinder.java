@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = {"model.class.name=com.liferay.portlet.blogs.model.BlogsEntry"},
+	property = {"model.class.name=com.liferay.blogs.kernel.model.BlogsEntry"},
 	service = PortletLayoutFinder.class
 )
 public class BlogsPortletLayoutFinder extends BasePortletLayoutFinder {
@@ -35,11 +35,6 @@ public class BlogsPortletLayoutFinder extends BasePortletLayoutFinder {
 		return _PORTLET_IDS;
 	}
 
-	// Order is important. See LPS-23770.
-
-	private static final String[] _PORTLET_IDS = {
-		BlogsPortletKeys.BLOGS_ADMIN, BlogsPortletKeys.BLOGS,
-		BlogsPortletKeys.BLOGS_AGGREGATOR
-	};
+	private static final String[] _PORTLET_IDS = {BlogsPortletKeys.BLOGS};
 
 }

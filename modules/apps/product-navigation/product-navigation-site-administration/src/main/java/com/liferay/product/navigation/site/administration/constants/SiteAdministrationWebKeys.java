@@ -15,7 +15,6 @@
 package com.liferay.product.navigation.site.administration.constants;
 
 /**
- *
  * @author Julio Camarero
  */
 public class SiteAdministrationWebKeys {
@@ -23,6 +22,8 @@ public class SiteAdministrationWebKeys {
 	public static final String GROUP_PROVIDER = "GROUP_PROVIDER";
 
 	public static final String GROUP_URL_PROVIDER = "GROUP_URL_PROVIDER";
+
+	public static final String ITEM_SELECTOR = "ITEM_SELECTOR";
 
 	public static final String RECENT_GROUP_MANAGER = "RECENT_GROUP_MANAGER";
 

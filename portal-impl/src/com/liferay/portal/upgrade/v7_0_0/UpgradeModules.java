@@ -15,9 +15,9 @@
 package com.liferay.portal.upgrade.v7_0_0;
 
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.model.ReleaseConstants;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.model.ReleaseConstants;
 
 import java.io.IOException;
 
@@ -187,12 +187,12 @@ public class UpgradeModules extends UpgradeProcess {
 		"com.liferay.portal.lock.service",
 		"com.liferay.portal.scheduler.quartz",
 		"com.liferay.portal.settings.web",
-		"com.liferay.portlet.configuration.web", "com.liferay.portlet.css.web",
-		"com.liferay.quick.note.web", "com.liferay.ratings.page.ratings.web",
-		"com.liferay.rss.web", "com.liferay.search.web",
-		"com.liferay.server.admin.web", "com.liferay.shopping.service",
-		"com.liferay.shopping.web", "com.liferay.site.browser.web",
-		"com.liferay.site.my.sites.web",
+		"com.liferay.portlet.configuration.css.web",
+		"com.liferay.portlet.configuration.web", "com.liferay.quick.note.web",
+		"com.liferay.ratings.page.ratings.web", "com.liferay.rss.web",
+		"com.liferay.search.web", "com.liferay.server.admin.web",
+		"com.liferay.shopping.service", "com.liferay.shopping.web",
+		"com.liferay.site.browser.web", "com.liferay.site.my.sites.web",
 		"com.liferay.site.navigation.breadcrumb.web",
 		"com.liferay.site.navigation.directory.web",
 		"com.liferay.site.navigation.language.web",

@@ -13,8 +13,8 @@ task buildLexiconIcons(type: Copy)
 task buildTheme
 task publishNodeModule(type: PublishNodeModuleTask)
 
-String alloyUIVersion = "3.0.3-deprecated.11"
-String lexiconVersion = "0.2.1"
+String alloyUIVersion = "3.0.3-deprecated.14"
+String lexiconVersion = "0.2.2"
 
 File themeDestinationDir = file("src/main/resources/META-INF/resources/_unstyled");
 
@@ -155,9 +155,9 @@ classes {
 }
 
 dependencies {
-	alloyUI group: "org.webjars.bower", name: "alloy-ui", transitive: false, version: alloyUIVersion
+	alloyUI group: "com.liferay.webjars", name: "com.liferay.webjars.alloy-ui", transitive: false, version: alloyUIVersion
 
-	lexicon group: "org.webjars.bower", name: "lexicon", transitive: false, version: lexiconVersion
+	lexicon group: "com.liferay.webjars", name: "com.liferay.webjars.lexicon", transitive: false, version: lexiconVersion
 
 	provided group: "com.liferay.portal", name: "portal-service", version: liferay.portalVersion
 	provided group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"

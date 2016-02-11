@@ -15,6 +15,7 @@
 package com.liferay.layout.admin.web.portlet;
 
 import com.liferay.application.list.GroupProvider;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.layout.admin.web.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.admin.web.constants.LayoutAdminWebKeys;
 import com.liferay.mobile.device.rules.model.MDRAction;
@@ -24,32 +25,60 @@ import com.liferay.mobile.device.rules.service.MDRActionService;
 import com.liferay.mobile.device.rules.service.MDRRuleGroupInstanceLocalService;
 import com.liferay.mobile.device.rules.service.MDRRuleGroupInstanceService;
 import com.liferay.portal.events.EventsProcessorUtil;
-import com.liferay.portal.exception.ImageTypeException;
-import com.liferay.portal.exception.LayoutFriendlyURLException;
-import com.liferay.portal.exception.LayoutFriendlyURLsException;
-import com.liferay.portal.exception.LayoutNameException;
-import com.liferay.portal.exception.LayoutParentLayoutIdException;
-import com.liferay.portal.exception.LayoutSetVirtualHostException;
-import com.liferay.portal.exception.LayoutTypeException;
-import com.liferay.portal.exception.NoSuchGroupException;
-import com.liferay.portal.exception.RequiredLayoutException;
-import com.liferay.portal.exception.SitemapChangeFrequencyException;
-import com.liferay.portal.exception.SitemapIncludeException;
-import com.liferay.portal.exception.SitemapPagePriorityException;
+import com.liferay.portal.kernel.exception.ImageTypeException;
+import com.liferay.portal.kernel.exception.LayoutFriendlyURLException;
+import com.liferay.portal.kernel.exception.LayoutFriendlyURLsException;
+import com.liferay.portal.kernel.exception.LayoutNameException;
+import com.liferay.portal.kernel.exception.LayoutParentLayoutIdException;
+import com.liferay.portal.kernel.exception.LayoutSetVirtualHostException;
+import com.liferay.portal.kernel.exception.LayoutTypeException;
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.RequiredLayoutException;
+import com.liferay.portal.kernel.exception.SitemapChangeFrequencyException;
+import com.liferay.portal.kernel.exception.SitemapIncludeException;
+import com.liferay.portal.kernel.exception.SitemapPagePriorityException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.ColorScheme;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutConstants;
+import com.liferay.portal.kernel.model.LayoutPrototype;
+import com.liferay.portal.kernel.model.LayoutRevision;
+import com.liferay.portal.kernel.model.LayoutSet;
+import com.liferay.portal.kernel.model.LayoutTypePortlet;
+import com.liferay.portal.kernel.model.Theme;
+import com.liferay.portal.kernel.model.ThemeSetting;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.LayoutLocalService;
+import com.liferay.portal.kernel.service.LayoutPrototypeLocalService;
+import com.liferay.portal.kernel.service.LayoutPrototypeService;
+import com.liferay.portal.kernel.service.LayoutRevisionLocalService;
+import com.liferay.portal.kernel.service.LayoutService;
+import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.LayoutSetService;
+import com.liferay.portal.kernel.service.PortletLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
+import com.liferay.portal.kernel.service.ThemeLocalService;
+import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.servlet.MultiSessionMessages;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -59,35 +88,8 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.ColorScheme;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutPrototype;
-import com.liferay.portal.model.LayoutRevision;
-import com.liferay.portal.model.LayoutSet;
-import com.liferay.portal.model.LayoutTypePortlet;
-import com.liferay.portal.model.Theme;
-import com.liferay.portal.model.ThemeSetting;
 import com.liferay.portal.model.impl.ThemeSettingImpl;
-import com.liferay.portal.service.GroupLocalService;
-import com.liferay.portal.service.GroupService;
-import com.liferay.portal.service.LayoutLocalService;
-import com.liferay.portal.service.LayoutPrototypeLocalService;
-import com.liferay.portal.service.LayoutPrototypeService;
-import com.liferay.portal.service.LayoutRevisionLocalService;
-import com.liferay.portal.service.LayoutService;
-import com.liferay.portal.service.LayoutSetLocalService;
-import com.liferay.portal.service.LayoutSetService;
-import com.liferay.portal.service.PortletLocalService;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.ServiceContextThreadLocal;
-import com.liferay.portal.service.ThemeLocalService;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.portlet.documentlibrary.service.DLAppLocalService;
 import com.liferay.portlet.sites.action.ActionUtil;
 import com.liferay.sites.kernel.util.SitesUtil;
 
@@ -121,6 +123,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = {
 		"com.liferay.portlet.add-default-resource=true",
 		"com.liferay.portlet.css-class-wrapper=portlet-layouts-admin",
+		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.icon=/icons/default.png",
 		"com.liferay.portlet.preferences-owned-by-group=true",
 		"com.liferay.portlet.private-request-attributes=false",
@@ -213,7 +216,8 @@ public class LayoutAdminPortlet extends MVCPortlet {
 				layoutPrototypeService.getLayoutPrototype(layoutPrototypeId);
 
 			boolean layoutPrototypeLinkEnabled = ParamUtil.getBoolean(
-				uploadPortletRequest, "layoutPrototypeLinkEnabled");
+				uploadPortletRequest,
+				"layoutPrototypeLinkEnabled" + layoutPrototype.getUuid());
 
 			serviceContext.setAttribute(
 				"layoutPrototypeLinkEnabled", layoutPrototypeLinkEnabled);
@@ -537,8 +541,6 @@ public class LayoutAdminPortlet extends MVCPortlet {
 			incompleteLayoutRevision.getIconImageId(),
 			incompleteLayoutRevision.getThemeId(),
 			incompleteLayoutRevision.getColorSchemeId(),
-			incompleteLayoutRevision.getWapThemeId(),
-			incompleteLayoutRevision.getWapColorSchemeId(),
 			incompleteLayoutRevision.getCss(), serviceContext);
 	}
 
@@ -548,6 +550,34 @@ public class LayoutAdminPortlet extends MVCPortlet {
 		throws IOException, PortletException {
 
 		super.processAction(actionRequest, actionResponse);
+
+		MultiSessionMessages.add(
+			actionRequest,
+			PortalUtil.getPortletId(actionRequest) + "requestProcessed");
+	}
+
+	public void resetCustomizationView(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		if (!LayoutPermissionUtil.contains(
+				themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
+				ActionKeys.CUSTOMIZE)) {
+
+			throw new PrincipalException();
+		}
+
+		LayoutTypePortlet layoutTypePortlet =
+			themeDisplay.getLayoutTypePortlet();
+
+		if ((layoutTypePortlet != null) && layoutTypePortlet.isCustomizable() &&
+			layoutTypePortlet.isCustomizedView()) {
+
+			layoutTypePortlet.resetUserPreferences();
+		}
 
 		MultiSessionMessages.add(
 			actionRequest,
@@ -598,6 +628,20 @@ public class LayoutAdminPortlet extends MVCPortlet {
 		if (mergeFailCountAfterMerge > 0) {
 			SessionErrors.add(actionRequest, "resetMergeFailCountAndMerge");
 		}
+	}
+
+	public void resetPrototype(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		SitesUtil.resetPrototype(themeDisplay.getLayout());
+
+		MultiSessionMessages.add(
+			actionRequest,
+			PortalUtil.getPortletId(actionRequest) + "requestProcessed");
 	}
 
 	protected void deleteThemeSettingsProperties(
@@ -665,11 +709,10 @@ public class LayoutAdminPortlet extends MVCPortlet {
 	}
 
 	protected String getColorSchemeId(
-			long companyId, String themeId, String colorSchemeId,
-			boolean wapTheme)
+			long companyId, String themeId, String colorSchemeId)
 		throws Exception {
 
-		Theme theme = themeLocalService.getTheme(companyId, themeId, wapTheme);
+		Theme theme = themeLocalService.getTheme(companyId, themeId);
 
 		if (!theme.hasColorSchemes()) {
 			colorSchemeId = StringPool.BLANK;
@@ -677,7 +720,7 @@ public class LayoutAdminPortlet extends MVCPortlet {
 
 		if (Validator.isNull(colorSchemeId)) {
 			ColorScheme colorScheme = themeLocalService.getColorScheme(
-				companyId, themeId, colorSchemeId, wapTheme);
+				companyId, themeId, colorSchemeId);
 
 			colorSchemeId = colorScheme.getColorSchemeId();
 		}
@@ -952,7 +995,6 @@ public class LayoutAdminPortlet extends MVCPortlet {
 				actionRequest, device + "ColorSchemeId");
 			String deviceCss = ParamUtil.getString(
 				actionRequest, device + "Css");
-			boolean deviceWapTheme = device.equals("wap");
 
 			boolean deviceInheritLookAndFeel = ParamUtil.getBoolean(
 				actionRequest, device + "InheritLookAndFeel");
@@ -966,12 +1008,11 @@ public class LayoutAdminPortlet extends MVCPortlet {
 			}
 			else if (Validator.isNotNull(deviceThemeId)) {
 				deviceColorSchemeId = getColorSchemeId(
-					companyId, deviceThemeId, deviceColorSchemeId,
-					deviceWapTheme);
+					companyId, deviceThemeId, deviceColorSchemeId);
 
 				updateThemeSettingsProperties(
 					actionRequest, companyId, typeSettingsProperties, device,
-					deviceThemeId, deviceWapTheme, true);
+					deviceThemeId, true);
 			}
 
 			long groupId = liveGroupId;
@@ -986,7 +1027,7 @@ public class LayoutAdminPortlet extends MVCPortlet {
 
 			layoutService.updateLookAndFeel(
 				groupId, privateLayout, layoutId, deviceThemeId,
-				deviceColorSchemeId, deviceCss, deviceWapTheme);
+				deviceColorSchemeId, deviceCss);
 		}
 	}
 
@@ -1006,16 +1047,14 @@ public class LayoutAdminPortlet extends MVCPortlet {
 				actionRequest, device + "ColorSchemeId");
 			String deviceCss = ParamUtil.getString(
 				actionRequest, device + "Css");
-			boolean deviceWapTheme = device.equals("wap");
 
 			if (Validator.isNotNull(deviceThemeId)) {
 				deviceColorSchemeId = getColorSchemeId(
-					companyId, deviceThemeId, deviceColorSchemeId,
-					deviceWapTheme);
+					companyId, deviceThemeId, deviceColorSchemeId);
 
 				updateThemeSettingsProperties(
 					actionRequest, companyId, typeSettingsProperties, device,
-					deviceThemeId, deviceWapTheme, false);
+					deviceThemeId, false);
 			}
 
 			long groupId = liveGroupId;
@@ -1026,7 +1065,7 @@ public class LayoutAdminPortlet extends MVCPortlet {
 
 			layoutSetService.updateLookAndFeel(
 				groupId, privateLayout, deviceThemeId, deviceColorSchemeId,
-				deviceCss, deviceWapTheme);
+				deviceCss);
 		}
 	}
 
@@ -1098,11 +1137,10 @@ public class LayoutAdminPortlet extends MVCPortlet {
 	protected UnicodeProperties updateThemeSettingsProperties(
 			ActionRequest actionRequest, long companyId,
 			UnicodeProperties typeSettingsProperties, String device,
-			String deviceThemeId, boolean wapTheme, boolean isLayout)
+			String deviceThemeId, boolean isLayout)
 		throws Exception {
 
-		Theme theme = themeLocalService.getTheme(
-			companyId, deviceThemeId, wapTheme);
+		Theme theme = themeLocalService.getTheme(companyId, deviceThemeId);
 
 		deleteThemeSettingsProperties(typeSettingsProperties, device);
 

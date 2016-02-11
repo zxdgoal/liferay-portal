@@ -16,11 +16,11 @@ package com.liferay.shopping.model;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.ModelWrapper;
-import com.liferay.portal.service.ServiceContext;
+import com.liferay.expando.kernel.model.ExpandoBridge;
 
-import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portal.kernel.model.ModelWrapper;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
@@ -602,7 +602,7 @@ public class ShoppingItemWrapper implements ShoppingItem,
 
 	@Override
 	public java.lang.String getShoppingItemImageURL(
-		com.liferay.portal.theme.ThemeDisplay themeDisplay) {
+		com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay) {
 		return _shoppingItem.getShoppingItemImageURL(themeDisplay);
 	}
 
@@ -883,7 +883,7 @@ public class ShoppingItemWrapper implements ShoppingItem,
 
 	@Override
 	public void setExpandoBridgeAttributes(
-		com.liferay.portal.model.BaseModel<?> baseModel) {
+		com.liferay.portal.kernel.model.BaseModel<?> baseModel) {
 		_shoppingItem.setExpandoBridgeAttributes(baseModel);
 	}
 
@@ -1224,7 +1224,7 @@ public class ShoppingItemWrapper implements ShoppingItem,
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<com.liferay.shopping.model.ShoppingItem> toCacheModel() {
+	public com.liferay.portal.kernel.model.CacheModel<com.liferay.shopping.model.ShoppingItem> toCacheModel() {
 		return _shoppingItem.toCacheModel();
 	}
 

@@ -36,7 +36,7 @@
 </tr>
 <tr>
 	<td>NAVIGATION_IMPORT</td>
-	<td>//ul[contains(@class,'nav') and contains(@class,'nav-tabs')]/li/a[contains(.,'Import')]</td>
+	<td>//ul[contains(@id,'navTag') and contains(@class,'navbar-nav')]/li/a[contains(.,'Import')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -316,7 +316,7 @@
 </tr>
 <tr>
 	<td>PLUS</td>
-	<td>//div[contains(@class,'container-fluid-1280')]//a[contains(@class,'btn') and span[contains(@class,'icon-plus')]]</td>
+	<td>//div[contains(@class,'container-fluid-1280')]//a[contains(@data-qa-id,'addButton')]</td>
 	<td></td>
 </tr>
 <!-- VALIDATION -->
