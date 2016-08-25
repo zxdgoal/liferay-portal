@@ -236,7 +236,9 @@ public class I18nFilter extends BasePortalFilter {
 				Locale locale = (Locale)session.getAttribute(
 					Globals.LOCALE_KEY);
 
-				if (userLanguageId.equals(LocaleUtil.toLanguageId(locale))) {
+				if (userLanguageId.equals(LocaleUtil.toLanguageId(locale)) ||
+					(locale == null)) {
+
 					return null;
 				}
 
