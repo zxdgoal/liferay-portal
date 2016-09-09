@@ -108,8 +108,8 @@ GroupSearch groupSearch = siteBrowserDisplayContext.getGroupSearch();
 			<%
 			Map<String, Object> data = new HashMap<String, Object>();
 
-			data.put("groupdescriptivename", group.getDescriptiveName(locale));
-			data.put("groupid", group.getGroupId());
+			data.put("entityid", group.getGroupId());
+			data.put("entityname", group.getDescriptiveName(locale));
 			data.put("grouptarget", target);
 			data.put("grouptype", LanguageUtil.get(request, group.getTypeLabel()));
 			data.put("url", group.getDisplayURL(themeDisplay));
@@ -128,7 +128,7 @@ GroupSearch groupSearch = siteBrowserDisplayContext.getGroupSearch();
 							<c:choose>
 								<c:when test="<%= Validator.isNull(p_u_i_d) || SiteMembershipPolicyUtil.isMembershipAllowed((selUser != null) ? selUser.getUserId() : 0, group.getGroupId()) %>">
 									<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
-										<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>
+										<%= HtmlUtilk.escape(group.getDescriptiveName(locale)) %>
 									</aui:a>
 								</c:when>
 								<c:otherwise>
