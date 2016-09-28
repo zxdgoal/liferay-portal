@@ -117,7 +117,7 @@ AUI.add(
 								{
 									node: node,
 									checked: checked,
-									forceChildrenState: true
+									forceChildrenState: false
 								}
 							);
 						}
@@ -236,7 +236,8 @@ AUI.add(
 						instance._updateCheckedNodes(
 							{
 								node:target,
-								checked: newVal
+								checked: newVal,
+								forceChildrenState: true
 							}
 						);
 					},
@@ -249,7 +250,7 @@ AUI.add(
 						if (node.get('checked')) {
 							instance._updateCheckedNodes(
 								{
-									node: node, 
+									node: node,
 									checked: true,
 									forceChildrenState: true
 								}
@@ -346,7 +347,7 @@ AUI.add(
 						var children = node.get('children');
 
 						if (children.length) {
-							var childrenChecked = (force) ? undefined : checked;
+							var checked = (forceChildrenState) ? checked : undefined;
 
 							A.each(
 								children,
@@ -354,7 +355,8 @@ AUI.add(
 									instance._updateCheckedNodes(
 										{
 											node: child,
-											checked: childrenChecked
+											checked: checked,
+											forceChildrenState: forceChildrenState
 										}
 									);
 								}
